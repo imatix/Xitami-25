@@ -1,0 +1,16 @@
+*.o
+*.a
+gsl/gslgen
+studio/fxdemo
+studio/fxdemo2
+studio/fxdemo3
+studio/testbro
+xiopen/logs/access.log
+xiopen/logs/console.log
+xiopen/logs/errors.log
+xiopen/logs/xitami.log
+xiopen/xilite
+xiopen/xitami
+xiopen/xiwtp
+xiopen/xixlat
+

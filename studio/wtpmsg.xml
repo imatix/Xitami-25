@@ -1,0 +1,101 @@
+<!--
+     WTP/1.0 messages 
+     Written: 97/06/06
+     Revised: 99/06/27
+     -->
+     
+<APPLICATION TITLE = "WTP/1.0 standard messages" script = "smtexdr.gsl" MODULE = "wtpmsg" >
+
+<AGENT NAME = "wtpman" TITLE = "WTP/1.0 Standard Messages" >
+
+<MESSAGE  NAME = "WTP_MSG"       TYPE = "exdr" >
+    <FIELD NAME = "type"         TYPE = "byte"   TITLE = "Message type" />
+</MESSAGE>
+
+<MESSAGE  NAME = "WTP_MSG_CONNECT" TYPE = "exdr" >
+    <FIELD NAME = "type"         TYPE = "byte"   TITLE = "Message type" />
+    <FIELD NAME = "callback_key" TYPE = "string" TITLE = "Callback key" />
+    <FIELD NAME = "signature"    TYPE = "qbyte"  TITLE = "ATP signature" />
+</MESSAGE>
+
+<MESSAGE  NAME = "WTP_MSG_REGISTER" TYPE = "exdr" >
+    <FIELD NAME = "type"         TYPE = "byte"   TITLE = "Message type" />
+    <FIELD NAME = "program"      TYPE = "string" TITLE = "Program to register" />
+    <FIELD NAME = "is_root"      TYPE = "byte"   TITLE = "Root program?" />
+</MESSAGE>
+
+<MESSAGE  NAME = "WTP_MSG_READY" TYPE = "exdr" >
+    <FIELD NAME = "type"         TYPE = "byte"   TITLE = "Message type" />
+</MESSAGE>
+
+<MESSAGE  NAME = "WTP_MSG_DISCONNECT" TYPE = "exdr" >
+    <FIELD NAME = "type"         TYPE = "byte"   TITLE = "Message type" />
+</MESSAGE>
+
+<MESSAGE  NAME = "WTP_MSG_OK"    TYPE = "exdr" >
+    <FIELD NAME = "type"         TYPE = "byte"   TITLE = "Message type" />
+</MESSAGE>
+
+<MESSAGE  NAME = "WTP_MSG_ERROR" TYPE = "exdr" >
+    <FIELD NAME = "type"         TYPE = "byte"   TITLE = "Message type" />
+    <FIELD NAME = "error_code"   TYPE = "dbyte"  TITLE = "Error code" />
+    <FIELD NAME = "error_text"   TYPE = "string" TITLE = "Error message text" />
+</MESSAGE>
+
+<MESSAGE  NAME = "WTP_MSG_DO" TYPE = "exdr" >
+    <FIELD NAME = "type"          TYPE = "byte"   TITLE = "Message type" />
+    <FIELD NAME = "signature"     TYPE = "qbyte"  TITLE = "ATP signature" />
+    <FIELD NAME = "program"       TYPE = "string" TITLE = "Program to execute" />
+    <FIELD NAME = "entry_code"    TYPE = "byte"   TITLE = "Program entry code" />
+    <FIELD NAME = "http_uri"      TYPE = "string" TITLE = "URI for hyperlinks" />
+    <FIELD NAME = "http_data"     TYPE = "string" TITLE = "Encoded HTTP data" />
+    <FIELD NAME = "args_size"     TYPE = "hsize"  TITLE = "Return arguments size" />
+    <FIELD NAME = "args_data"     TYPE = "hbody"  TITLE = "Return arguments data" />
+    <FIELD NAME = "call_result"   TYPE = "byte"   TITLE = "Result of last call" />
+    <FIELD NAME = "env_size"      TYPE = "hsize"  TITLE = "Environment size" />
+    <FIELD NAME = "env_data"      TYPE = "hbody"  TITLE = "Environment block" />
+    <FIELD NAME = "global_size"   TYPE = "hsize"  TITLE = "Global context size" />
+    <FIELD NAME = "global_data"   TYPE = "hbody"  TITLE = "Global context block" />
+    <FIELD NAME = "local_size"    TYPE = "hsize"  TITLE = "Local context size" />
+    <FIELD NAME = "local_data"    TYPE = "hbody"  TITLE = "Local context block" />
+</MESSAGE>
+<MESSAGE  NAME = "WTP_MSG_DONESHOW" TYPE = "exdr" >
+    <FIELD NAME = "type"          TYPE = "byte"   TITLE = "Message type" />
+    <FIELD NAME = "html_data"     TYPE = "string" TITLE = "HTML screen data" />
+    <FIELD NAME = "global_size"   TYPE = "hsize"  TITLE = "Global context size" />
+    <FIELD NAME = "global_data"   TYPE = "hbody"  TITLE = "Global context block" />
+    <FIELD NAME = "local_size"    TYPE = "hsize"  TITLE = "Local context size" />
+    <FIELD NAME = "local_data"    TYPE = "hbody"  TITLE = "Local context block" />
+</MESSAGE>
+
+<MESSAGE  NAME = "WTP_MSG_DONECALL" TYPE = "exdr" >
+    <FIELD NAME = "type"          TYPE = "byte"   TITLE = "Message type" />
+    <FIELD NAME = "program"       TYPE = "string" TITLE = "Program to call" />
+    <FIELD NAME = "args_size"     TYPE = "hsize"  TITLE = "Call arguments size" />
+    <FIELD NAME = "args_data"     TYPE = "hbody"  TITLE = "Call arguments data" />
+    <FIELD NAME = "global_size"   TYPE = "hsize"  TITLE = "Global context size" />
+    <FIELD NAME = "global_data"   TYPE = "hbody"  TITLE = "Global context block" />
+    <FIELD NAME = "local_size"    TYPE = "hsize"  TITLE = "Local context size" />
+    <FIELD NAME = "local_data"    TYPE = "hbody"  TITLE = "Local context block" />
+</MESSAGE>
+
+<MESSAGE  NAME = "WTP_MSG_DONERETURN" TYPE = "exdr" >
+    <FIELD NAME = "type"          TYPE = "byte"   TITLE = "Message type" />
+    <FIELD NAME = "args_size"     TYPE = "hsize"  TITLE = "Call arguments size" />
+    <FIELD NAME = "args_data"     TYPE = "hbody"  TITLE = "Call arguments data" />
+    <FIELD NAME = "global_size"   TYPE = "hsize"  TITLE = "Global context size" />
+    <FIELD NAME = "global_data"   TYPE = "hbody"  TITLE = "Global context block" />
+</MESSAGE>
+
+<MESSAGE  NAME = "WTP_MSG_DONEEXIT" TYPE = "exdr" >
+    <FIELD NAME = "type"          TYPE = "byte"   TITLE = "Message type" />
+</MESSAGE>
+
+<MESSAGE  NAME = "WTP_MSG_DONEERROR" TYPE = "exdr" >
+    <FIELD NAME = "type"          TYPE = "byte"   TITLE = "Message type" />
+    <FIELD NAME = "error_text"    TYPE = "string" TITLE = "Error message text" />
+</MESSAGE>
+
+</AGENT>
+</APPLICATION>
+

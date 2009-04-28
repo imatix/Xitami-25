@@ -1,0 +1,939 @@
+#!/bin/sh
+#
+#   Boom builder for Xitami Administration Console 2.5
+#   Generated from standard.pwl on 2004/07/22
+#   See www.imatix.com for more information.
+#   Copyright (c) 1991-2003 iMatix Corporation
+#
+#   Force environment variables to point to install location
+#   Start by using final IBASE, then handle local -install path
+self=$0
+_IBASE=$IBASE
+if [ -z "$_IBASE" ]; then
+    _IBASE=/usr/local/imatix
+fi
+INCDIR=$_IBASE/xitami-25/include
+LIBDIR=$_IBASE/xitami-25/lib
+PATH=.:$_IBASE/xitami-25/bin:$PATH
+PERLLIB=.:$_IBASE/xitami-25/bin:$PERLLIB
+_LOCAL=0
+export INCDIR LIBDIR PATH PERLLIB
+if [ "$1" = "-install" ]; then
+    _IBASE=$2
+    _LOCAL=1
+    PATH=$_IBASE/xitami-25/bin:$PATH
+    PERLLIB=$_IBASE/xitami-25/bin:$PERLLIB
+    INCDIR_ALT=$_IBASE/xitami-25/include
+    LIBDIR_ALT=$_IBASE/xitami-25/lib
+    export PATH PERLLIB INCDIR_ALT LIBDIR_ALT
+    shift;
+    shift;
+fi
+
+# --------------------------   BUILD BINARY FILES   ---------------------------
+
+a_build_binary_files() {
+:
+    echo "Building application..."
+    COPTS=-g
+    if [ ! -z "$INCDIR_ALT" ]; then
+        COPTS="$COPTS -li . -li $INCDIR_ALT"
+    fi
+    if [ ! -z "$LIBDIR_ALT" ]; then
+        COPTS="$COPTS -ll $LIBDIR_ALT"
+    fi
+    c $COPTS xiadmin
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xiadmin' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libxac xiadmin
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libxac xiadmin' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# -------------------------   BUILD SOURCE PACKAGES   -------------------------
+
+a_build_source_packages() {
+:
+    rm -f _package.lst
+    if [ -f "xiadmin/version.h" ]; then
+        echo xiadmin/version.h>>_package.lst
+    fi
+    if [ -f "xiadmin/xiadmin.c" ]; then
+        echo xiadmin/xiadmin.c>>_package.lst
+    fi
+    if [ -f "xiadmin/xiadmin.fdl" ]; then
+        echo xiadmin/xiadmin.fdl>>_package.lst
+    fi
+    if [ -f "xiadmin/xiadmin.rc" ]; then
+        echo xiadmin/xiadmin.rc>>_package.lst
+    fi
+    if [ "`echo xiadmin/*.gif`" != "xiadmin/*.gif" ]; then
+        for file in `echo xiadmin/*.gif`; do
+            echo $file>>_package.lst
+        done
+    fi
+    if [ "`echo xiadmin/xiadm??.htm`" != "xiadmin/xiadm??.htm" ]; then
+        for file in `echo xiadmin/xiadm??.htm`; do
+            echo $file>>_package.lst
+        done
+    fi
+    if [ "`echo xiadmin/xiadm??.h`" != "xiadmin/xiadm??.h" ]; then
+        for file in `echo xiadmin/xiadm??.h`; do
+            echo $file>>_package.lst
+        done
+    fi
+    if [ -f "xiadmin/xiadmin.log" ]; then
+        echo xiadmin/xiadmin.log>>_package.lst
+    fi
+    if [ -f "xiadmin/prelude.pdl" ]; then
+        echo xiadmin/prelude.pdl>>_package.lst
+    fi
+    if [ -f "xiadmin/license.gpl" ]; then
+        echo xiadmin/license.gpl>>_package.lst
+    fi
+    if [ -f "xiadmin/project.pdl" ]; then
+        echo xiadmin/project.pdl>>_package.lst
+    fi
+    if [ -f "xiadmin/readme.txt" ]; then
+        echo xiadmin/readme.txt>>_package.lst
+    fi
+    if [ -f "xiadmin/xiadmin.l" ]; then
+        echo xiadmin/xiadmin.l>>_package.lst
+    fi
+    if [ -f "xiadmin/xiadmin.i" ]; then
+        echo xiadmin/xiadmin.i>>_package.lst
+    fi
+    if [ -f "xiadmin/xiadmin.d" ]; then
+        echo xiadmin/xiadmin.d>>_package.lst
+    fi
+    if [ -f "xiadmin/boomake" ]; then
+        echo xiadmin/boomake>>_package.lst
+    fi
+    if [ -f "xiadmin/boomake.bat" ]; then
+        echo xiadmin/boomake.bat>>_package.lst
+    fi
+    if [ -f "xiadmin/makefile" ]; then
+        echo xiadmin/makefile>>_package.lst
+    fi
+    echo "Building xac_2_5_src.tar.gz..."
+    tar -czf xac_2_5_src.tar.gz -T _package.lst
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'tar -czf xac_2_5_src.tar.gz -T _package.lst' failed with exit status $status. Stop.
+        exit 1
+    fi
+    rm _package.lst
+}
+
+# -----------------------   CHECK BINARY FILES EXIST   ------------------------
+
+a_check_binary_files_exist() {
+:
+    if [ ! -f "libxac.a" ]; then
+        echo "libxac.a is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# ------------------------   CHECK OPERATING CONTEXT   ------------------------
+
+a_check_operating_context() {
+:
+    event=source
+    if [ -d "CVS" ]; then
+        event=rawcvs
+    fi
+}
+
+# -----------------------   CHECK PROJECT FILES EXIST   -----------------------
+
+a_check_project_files_exist() {
+:
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.c" ]; then
+        echo "xiadmin.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.fdl" ]; then
+        echo "xiadmin.fdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.rc" ]; then
+        echo "xiadmin.rc is missing, cannot continue"
+        exit 1
+    fi
+    if [ "`echo *.gif`" = "*.gif" ]; then
+        echo "*.gif is missing, cannot continue"
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.l" ]; then
+        echo "xiadmin.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "makefile" ]; then
+        echo "makefile is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -----------------------   CHECK SOURCE FILES EXIST   ------------------------
+
+a_check_source_files_exist() {
+:
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.c" ]; then
+        echo "xiadmin.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.fdl" ]; then
+        echo "xiadmin.fdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.rc" ]; then
+        echo "xiadmin.rc is missing, cannot continue"
+        exit 1
+    fi
+    if [ "`echo *.gif`" = "*.gif" ]; then
+        echo "*.gif is missing, cannot continue"
+    fi
+    if [ "`echo xiadm??.htm`" = "xiadm??.htm" ]; then
+        echo "xiadm??.htm is missing, cannot continue"
+    fi
+    if [ "`echo xiadm??.h`" = "xiadm??.h" ]; then
+        echo "xiadm??.h is missing, cannot continue"
+    fi
+    if [ ! -f "xiadmin.log" ]; then
+        echo "xiadmin.log is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.l" ]; then
+        echo "xiadmin.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.i" ]; then
+        echo "xiadmin.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.d" ]; then
+        echo "xiadmin.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "makefile" ]; then
+        echo "makefile is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -------------------------   INSTALL DELIVERABLES   --------------------------
+
+a_install_deliverables() {
+:
+    TARGET=$_IBASE/xitami-25
+    echo "Installing Xitami Administration Console into $TARGET..."
+    if [ ! -d "$TARGET" ]; then
+        if mkdir -p $TARGET; then
+            :
+        else
+            echo "Could not create directory \"$TARGET\". Stop."
+            exit 1
+        fi
+    fi
+    mkdir -p $TARGET/lib/
+    cp libxac.a $TARGET/lib/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp libxac.a $TARGET/lib/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/lib/libxac.a
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/lib/libxac.a' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/bin/
+    mkdir -p $TARGET/doc/Xitami_Administration_Console/
+    cp readme.txt $TARGET/doc/Xitami_Administration_Console/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp readme.txt $TARGET/doc/Xitami_Administration_Console/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/doc/Xitami_Administration_Console/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/doc/Xitami_Administration_Console/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+
+    if [ ! -f "$TARGET/bin/setvars.sh" ]; then
+        echo "Creating $TARGET/bin/setvars.sh..."
+        echo "if [ -z \"\$INCDIR\" ]; then"          >$TARGET/bin/setvars.sh
+        echo "    INCDIR=$TARGET/include"            >>$TARGET/bin/setvars.sh
+        echo "    LIBDIR=$TARGET/lib"                >>$TARGET/bin/setvars.sh
+        echo "    PATH=$TARGET/bin:\$PATH"           >>$TARGET/bin/setvars.sh
+        echo "    PERLLIB=$TARGET/bin:\$PATH"        >>$TARGET/bin/setvars.sh
+        echo "    export INCDIR LIBDIR PATH PERLLIB" >>$TARGET/bin/setvars.sh
+        echo "fi"                                    >>$TARGET/bin/setvars.sh
+    fi
+}
+
+# ------------------------   PRODUCE GENERATED FILES   ------------------------
+
+a_produce_generated_files() {
+:
+    wsxrc @xiadmin.rc
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'wsxrc @xiadmin.rc' failed with exit status $status. Stop.
+        exit 1
+    fi
+    fdlgen xiadmin
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'fdlgen xiadmin' failed with exit status $status. Stop.
+        exit 1
+    fi
+    fmlgen xiadmin
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'fmlgen xiadmin' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr xiadmin.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr xiadmin.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# -----------------------   REMOVE GENERATED BINARIES   -----------------------
+
+a_remove_generated_binaries() {
+:
+    rm -f libxac.a
+    rm -f xiadmin.o
+}
+
+# -----------------------   REMOVE GENERATED SOURCES   ------------------------
+
+a_remove_generated_sources() {
+:
+    rm -f xiadm??.htm
+    rm -f xiadm??.h
+    rm -f xiadmin.log
+    rm -f xiadmin.i
+    rm -f xiadmin.d
+}
+
+# ------------------------   REPORT HELP INFORMATION   ------------------------
+
+a_report_help_information() {
+:
+    echo "boomake - Boom! builder for Xitami Administration Console 2.5"
+    echo "Copyright (c) 1991-2003 iMatix Corporation"
+    echo ""
+    echo "This script acts as a project 'make' tool.  Boom! uses an XML-based"
+    echo "project description and generates various make tools (including this"
+    echo "one) from it.  To find out more about Boom!, visit www.imatix.com."
+    echo ""
+    eval "actions_$state"
+}
+
+# -------------------------   RUN REGRESSION TESTS   --------------------------
+
+a_run_regression_tests() {
+:
+    :
+}
+
+actions_initial() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_initial_check() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_rawcvs() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the raw project sources, produces all generated files, and"
+    echo "    compiles all source files."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the raw project sources, removes all generated"
+    echo "    source and binary files from the project directory."
+    return
+}
+
+actions_source() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the packaged sources, compiles all source files without any"
+    echo "    code generation."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the packaged sources, removes all generated"
+    echo "    source files from the project directory."
+    return
+}
+
+actions_default() {
+    echo "The actions you can use in this state are:"
+echo "test:"
+    echo "  "
+    echo "    Runs regression tests for the project."
+echo "help:"
+    echo "  "
+    echo "    Shows a list of the available builder commands."
+    return
+}
+
+#   State machine starts here
+#
+firsttime=true
+while [ "$1" -o "$firsttime" ]; do
+  firsttime=
+  state=initial
+  event=ok
+  debug=
+  export state event debug
+  while [ -n "$state" ]; do
+    if [ "$inherit_state" ]; then
+        check_state=$inherit_state
+        inherit_state=
+    else
+        check_state=$state
+    fi
+    case "$check_state" in
+    initial)
+        if [ -n "$debug" ]; then
+            echo "State: initial"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        ok)
+            if [ -n "$debug" ]; then 
+                echo "Event: ok"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check operating context"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_operating_context
+            fi
+            state=initial_check
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    initial_check)
+        if [ -n "$debug" ]; then
+            echo "State: initial check"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        rawcvs)
+            if [ -n "$debug" ]; then 
+                echo "Event: rawcvs"
+            fi
+            event=
+            exception=
+            state=rawcvs
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        source)
+            if [ -n "$debug" ]; then 
+                echo "Event: source"
+            fi
+            event=
+            exception=
+            state=source
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    rawcvs)
+        if [ -n "$debug" ]; then
+            echo "State: rawcvs"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated sources"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_sources
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    source)
+        if [ -n "$debug" ]; then
+            echo "State: source"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    default)
+        if [ -n "$debug" ]; then
+            echo "State: default"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        test)
+            if [ -n "$debug" ]; then 
+                echo "Event: test"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: run regression tests"
+            fi
+            if [ -z "$exception" ]; then
+                a_run_regression_tests
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        help)
+            if [ -n "$debug" ]; then 
+                echo "Event: help"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        empty)
+            if [ -n "$debug" ]; then 
+                echo "Event: empty"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    esac
+  done
+done

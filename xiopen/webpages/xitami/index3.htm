@@ -1,0 +1,444 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Administration</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index2.htm">&lt;</A>
+ | <A href="index4.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+
+<H2><A NAME="TOC17">Administration</A></H2>
+
+<H3><A NAME="TOC18">Xitami Under Windows</A></H3>
+
+<P>The Windows version of Xitami provides a simple control panel that lets
+you start, stop, and monitor the web server. The service version is easily
+installed as an NT service, or can be run as a command-line program. It then
+accepts the command-line switches described later.
+
+<H3><A NAME="TOC19">Xitami Under UNIX</A></H3>
+
+<P>Under UNIX, Xitami can run as a foreground process or a daemon. You can
+run it interactively to test your configuration, and then configure your
+system <TT>inittab</TT> or start-up scripts to run it automatically.
+
+<A NAME="syntax">&nbsp;</A>
+<P>This is the command-line syntax for Xitami:
+
+<PRE>Syntax: xitami [options...]
+Options:
+  -r directory     Root directory for web pages (webpages).
+  -c directory     Directory for CGI programs (cgi-bin).
+  -b portbase      Shift HTTP port 80 by this value.  E.g. to run
+                   Xitami on port 7080, do 'xitami -b 7000'.
+  -l filename      Log file for output (xitami.log).
+  -a filename      Authentication file (xitami.aut).
+  -q               Quite mode: no messages or log.
+  -s               Server mode: run as background job.
+  -t               Trace all socket i/o operations to log file.
+  -v               Show Xitami version information.
+  -h               Show summary of command-line options.
+</PRE>
+
+<P>The -s option has no effect on Windows systems; under UNIX it
+does the following: Xitami recreates itself as a background
+process, ignoring the SIGHUP signal.
+
+<H3><A NAME="TOC20">Testing Xitami</A></H3>
+
+<P>Run Xitami as described in the installation section. Connect with a
+browser to the URL: <TT>http://<EM>hostname</EM>/</TT> or
+<TT>http://<EM>hostname</EM>:5080/</TT>. If Xitami is correctly installed,
+you should see a page entitled: "Welcome To Xitami". Please read this page
+and try the various links and buttons to ensure that Xitami is working
+correctly. If you install your own web pages, you can still access the
+Xitami Welcome page by using the URL:
+<TT>http://<EM>hostname</EM>/default.htm</TT>.
+
+<H3><A NAME="TOC21">Using Xitami</A></H3>
+
+<UL>
+<LI>Xitami assumes that all web pages are in a subdirectory called
+'webpages'.
+<LI>CGI scripts and programs are in a subdirectory called
+'cgi-bin'.
+<LI>Directories can be protected by editing the file 'xitami.aut'.
+<LI>Logging information is stored in two files: 'xitami.log' logs
+information and error messages; 'access.log' logs HTTP requests.
+</UL>
+<P>These options can be changed. The webpages directory can be any relative
+(depending on the directory where Xitami is run) or absolute directory (with
+a full path name).
+
+<P>The cgi-bin directory can be specified in various ways - see the section
+on <A href="index5.htm#cgidir">CGI programming</A> in Xitami.
+
+<P>Xitami will negotiate with the web browser to find a file when the URL
+does not specify a filename. It will search for an HTML file called
+index.htm, index.html, default.htm, or default.html, in that order. If none
+of these files are found, Xitami returns the directory listing, formatted as
+an HTML page.  Note that Xitami automatically looks for files with an
+extension .html if a file with the .htm extension could not be found, and
+vice-versa.
+
+<P>You should install a file called 'index.htm' in the webpages directory,
+to override the 'default.htm' file used by Xitami.
+
+<H3><A NAME="TOC22">User Authentication</A></H3>
+
+<P>Xitami supports the HTTP/1.0 Basic Authentication protocol. This is a
+minimalistic security approach that is quick and supported by all browsers,
+but which should not be used for very sensitive data, since the user name
+and password can be extracted from the TCP/IP packets sent by the browser.
+
+<P>The xitami.aut file holds the authentication information. This file is
+not encoded, but is not accessible by browsers unless you place it in the
+webpages directory. You can modify this file on the fly; Xitami will reload
+it after a short delay (the server:refresh option).
+
+<P>Protection is applied to directories or individual URLs. This is what
+an authentication file looks like:
+
+<PRE>#  Authorization file for XITAMI
+#  Each [Entry] defines a protected URL or directory.
+#  The directory name is followed by user=password pairs
+#
+[/Admin]
+    admin=top secret
+    realm=On-Line Administration
+[stats/index.htm]
+    root=PakYupTon
+    admin=QzeCat96
+    webmask=local
+[/private]
+    jacky="funny;password"
+    sarah=arabica
+    jonas=realtime
+</PRE>
+
+<P>Each section name specifies an URI or a directory name; the leading slash
+is optional. When checking a resource called "/pub/mypages/file", Xitami will
+look for entries in this order:
+<PRE>[/pub/mypages/file]
+[pub/mypages/file]
+[/pub/mypages]
+[pub/mypages]
+[/pub]
+[pub]
+[/]
+</PRE>
+
+<P>The directory or URL name is not case-sensitive; Xitami always treats it
+as lower-case. On systems where filenames are case-sensitive, "PRIVATE" and
+"private" are treated as equal by Xitami, and are both handled by the
+authentication data for [Private]. The user name is also case-insensitive.
+The password is case-insensitive if the option security:password-case is set
+to 0.
+
+<P>Passwords can contain any printable character except ' and ". If you edit
+or create the password file by hand or using scripts, use double quotes
+around passwords to make sure that special characters like ; and # (which
+indicate comments) are treated as part of the password.
+
+<P>The entry 'webmask=' is treated in a special manner; this defines the
+set of valid IP addresses for clients trying to access the directory.
+The section on <A href="index4.htm#webmasks">webmasks</A> provides more details.  If you define an entry
+consisting only of 'webmask=', Xitami will treat this as a resource that is
+protected (has an entry) but has no valid users.
+
+<P>The entry 'realm=' is also treated in a special manner; this defines the
+'Realm' for the authentication.  The realm is returned to the browser, and
+is the basis upon which it will remember user names and passwords.  If you
+use the same realm for several directories or URLs, make sure that the user
+names and passwords also match.  If no realm is defined, Xitami returns the
+[Entry] name as the realm.
+
+<P>The entry 'http-update=' is used to determine whether the HTTP PUT, COPY,
+MOVE, and DELETE methods are allowed for the URL. By default these are not
+permitted. To allow them, add 'http-update=1' to the authorisation file.
+
+<P>A password "-" is treated as meaning 'not allowed' for that user. If
+there is only one user defined, the resource will be inaccessible. This is
+used, for example, in the default xitami.aut file to indicate that the
+administration URL '/admin' is not accessibly until a non-default password
+has been entered.  An empty password is treated as meaning 'non required'
+for that user.
+
+<P>The entry 'all=*' allows access to all users without a user id/password
+check.  You can combine this with the webmask option to restrict access by
+webmask without requiring user id/password entry at the same time.
+
+<P>When using Xitami/Pro's SSL connection, you can allow access to a
+protected resource to users who have a valid certificate.  Certified users
+will bypass the 'user/password' prompt, and access the protected resource
+directly.  For this to work, you must define the password for each such user
+as '*SSL'.  This is taken to mean: allow this user access if they have a
+valid certificate.
+
+<H3><A NAME="TOC23">Xitami Log Files</A></H3>
+
+<H4><A NAME="TOC24">The Xitami Server Log File</A></H4>
+
+<P>Xitami logs errors and information to the file 'xitami.log'. This file is
+always opened in append mode. It looks something like this:
+<PRE>96/12/05 20:19:41: I: OPEN port=80
+96/12/06 07:22:03: I: OPEN port=80
+</PRE>
+To configure the server log, see the <A href="index4.htm#config_serverlog">[Serverlog]</A>
+configuration entry.
+
+<P>By default, Xitami logs all HTTP requests to the file 'access.log', which
+follows the common CERN/NCSA standard for web server log files. The log file
+format consists of lines in this format:
+<PRE>host - user [DD/Mon/YYYY:hh:mm:ss] "request" ddd bbbb "referer" "agent"
+</PRE>
+<TABLE BORDER=1 WIDTH=80%>
+<TR NOWRAP><TH>This field:<TH>Has this purpose:
+<TR NOWRAP><TD>host       <TD>IP number of requesting host
+<TR NOWRAP><TD>user       <TD>Userid sent for authentication, or -
+<TR NOWRAP><TD>request    <TD>HTTP request sent by client
+<TR NOWRAP><TD>ddd        <TD>Status code returned by server
+<TR NOWRAP><TD>bbbb       <TD>Size of data sent, excluding HTTP header
+<TR NOWRAP><TD>referer    <TD>Referer document, or ""
+<TR NOWRAP><TD>agent      <TD>User agent (browser), or ""
+</TABLE>
+
+<P>The access log files are automatically cycled: when Xitami starts, it
+will save any existing file before starting a new access log. The old access
+log file is given a name based on the date when it was last modified.
+
+<H4><A NAME="TOC25">Extended Logging</A></H4>
+
+<P>Xitami has an extended logging function that is much richer than the
+standard access logging function. The extended logging function gives you
+more control over the way that log files are cycled, over the log file
+names, and over the log file format. The extended logging function also does
+reverse-DNS translation of IP addresses.
+
+The extended logging function works with access logs and error logs, and is
+controlled by a number of additional configuration options in the
+[ServerLog], [AccessLog], [ErrorLog], [FTPLog], and [FTPErrLog] sections:
+
+
+<DL>
+<DT><TT><B>format</B></TT>
+<DD>Specifies the log file format.  You can use one of a number of
+predefined formats, or build your own format using any of these symbols:
+<TABLE BORDER=1 WIDTH=80%>
+<TR><TH>Symbol:     <TH>Expands to give:
+<TR><TD>$(client)  <TD>client address, as translated string
+<TR><TD>$(ipcli)   <TD>client address, as dotted number
+<TR><TD>$(ipsrv)   <TD>server address, as dotted number
+<TR><TD>$(request) <TD>request line (HTTP only)
+<TR><TD>$(query)   <TD>query string, if any (HTTP only)
+<TR><TD>$(method)  <TD>HTTP method or FTP command
+<TR><TD>$(status)  <TD>response code, 3 digits
+<TR><TD>$(recd)    <TD>request size, in bytes
+<TR><TD>$(sent)    <TD>response size, in bytes
+<TR><TD>$(time_ms) <TD>request duration, in msecs
+<TR><TD>$(time_s)  <TD>request duration, in seconds (n.nnn)
+<TR><TD>$(file)    <TD>filename to which request was translated
+<TR><TD>$(agent)   <TD>HTTP user agent (browser name)
+<TR><TD>$(referer) <TD>HTTP referer field
+<TR><TD>$(user)    <TD>user name, if any, else -
+<TR><TD>$(service) <TD>name of service (HTTP, FTP)
+<TR><TD>$(vhost)   <TD>virtual host name, if any, else -
+<TR><TD>$(datetime)<TD>date/time in NCSA format
+<TR><TD>$(yy)      <TD>year as two digits
+<TR><TD>$(year)    <TD>year as four digits
+<TR><TD>$(mon)     <TD>month
+<TR><TD>$(day)     <TD>day
+<TR><TD>$(hh)      <TD>hour, using 24-hour clock
+<TR><TD>$(mm)      <TD>minutes
+<TR><TD>$(ss)      <TD>seconds
+<TR><TD>$(XXX)     <TD>environment variable XXX (XXX is in uppercase)
+</TABLE>
+Xitami has these built-in formats:
+<TABLE BORDER=1 WIDTH=80%>
+<TR><TH>Format: <TH>Description:
+<TR><TD>CLF     <TD>Common-log format, as used by the NCSA httpd server.
+                <BR>$(client) - $(user) [$(datetime)] "$(request)"
+                $(status) $(sent)
+<TR><TD>CLFX    <TD>Extended CLF, as used by Apache and Xitami.
+                <BR>$(client) - $(user) [$(datetime)] "$(request)"
+                $(status) $(sent) "$(referer)" "$(agent)"
+<TR><TD>MS      <TD>Microsoft IIS format.
+                <BR>$(client), $(user), $(mon)/$(day)/$(year),
+                $(hh):$(mm):$(ss), $(service), Xitami, $(ipsrv),
+                $(stime), $(recd), $(sent), $(status), 0, $(method),
+                $(file)
+<TR><TD>LML     <TD>iMatix Logfile Markup Language, an XML format.
+                <BR>&lt;LOG DATE="$(datetime)" CLIENT="$(client)"
+                REQUEST="$(request)" METHOD="$(method)"
+                STATUS="$(status)" SENT="$(sent)" FILENAME="$(file)"
+                USERNAME="$(user)" SERVICE="$(service)" /&gt;
+<TR><TD>XLML    <TD>iMatix Extended LML, a richer XML format.
+                <BR>&lt;LOG DATE="$(datetime)" CLIENT="$(client)"
+                CLIENTIP="$(ipcli)" SERVERIP="$(ipsrv)"
+                REQUEST="$(request)" METHOD="$(method)"
+                STATUS="$(status)" RECEIVED="$(recd)" SENT="$(sent)"
+                DURATION="$(time_ms)" FILENAME="$(file)"
+                USERAGENT="$(agent)" REFERER="$(referer)"
+                USERNAME="$(user)" SERVICE="$(service)"
+                VHOST="$(vhost)" /&gt;
+</TABLE>
+<DD>Default: CLFX (compatible with standard Xitami).
+<P>Note that the XML-based format are easy to work with using iMatix's GSLgen
+tool.  GSLgen lets you create arbitrary reports, statistics, and HTML analyses
+of access log data.
+
+<DT><TT><B>cycle</B></TT>
+<DD>Specifies when to cycle the log file.  Can be one of:
+<UL>
+<LI>startup, or 0 - cycle log when the server is starts;
+<LI>hourly, or 1 - cycle log each hour
+<LI>daily, or 2 - cycle log each day
+<LI>weekly, or 3 - cycle log each week
+<LI>monthly, or 4 - cycle log each month
+<LI>manual, or 5 - manual cycling only
+<LI>size, or 6 - cycle the log file when it exceeds some size in Kbytes
+<LI>lines, or 7 - cycle the log file when it exceeds some size in lines
+</UL>
+<DD>Default: daily.
+
+<DT><TT><B>cycle-how</B></TT>
+<DD>Specifies how to cycle the log file.  Can be one of:
+<UL>
+<LI>rename - rename the old log file, and create a new file.
+<LI>delete - delete the old log file, and create a new file.
+<LI>move - move the old log file to some directory, and create a new file.
+<LI>concat - append the old log file to some file, and create a new file.
+<LI>process - run an arbitrary command to process the file, then create a
+new file.
+</UL>
+<DD>Default: rename.
+
+<DT><TT><B>cycle-time</B></TT>
+<DD>Specifies what time to cycle the log file.  This is used for the
+'hourly', 'daily', 'weekly', and 'monthly' cycle options.  It can specify a
+number of minutes (past the hour), or a time in hours and minutes formatted
+like this: 'hh:mm'.  For instance, if this is set to '03:30' and the cycle
+option is 'daily', then the log file will be cycled at 3.30am each day.
+<DD>Default: 00:00 (cycle at midnight).
+
+<DT><TT><B>cycle-day</B></TT>
+<DD>Specifies the day of the week (for cycle=weekly) or the day of the month
+(for cycle=monthly) to cycle the log file.  0 is Sunday, 1 is Monday, etc.
+<DD>Default: 0.
+
+<DT><TT><B>cycle-size</B></TT>
+<DD>Specifies the limit, in whole Kbytes, for the cycle=size option.  When
+the log file exceeds this size, it will be cycled.
+<DD>Default: 0.
+
+<DT><TT><B>cycle-lines</B></TT>
+<DD>Specifies the limit, in lines, for the cycle=lines option.  When the log
+file exceeds this size, it will be cycled.
+<DD>Default:
+
+<DT><TT><B>cycle-arg</B></TT>
+<DD>Specifies an argument used for the various cycle-how options:
+<TABLE BORDER=1 WIDTH=80%>
+<TR><TH>Cycle-how:  <TH>Uses argument like this:
+<TR><TD>Rename      <TD>As time-stamped filename.
+<TR><TD>Delete      <TD>Does not use argument.
+<TR><TD>Move        <TD>As target directory name.
+<TR><TD>Concat      <TD>As time-stamped filename.
+<TR><TD>Process     <TD>As time-stamped command to execute.
+</TABLE>
+The time-stamping function expands symbols in the argument as follows:
+<TABLE BORDER=1 WIDTH=80%>
+<TR><TH>Symbol:     <TH>Expands to give this:
+<TR><TD>%y          <TD>day of year, 001-366
+<TR><TD>%yy         <TD>year 2 digits, 00-99
+<TR><TD>%yyyy       <TD>year 4 digits, 0100-9999
+<TR><TD>%mm         <TD>month, 01-12
+<TR><TD>%mmm        <TD>month, Jan
+<TR><TD>%mmmm       <TD>month, January
+<TR><TD>%MMM        <TD>month, JAN
+<TR><TD>%MMMM       <TD>month, JANUARY
+<TR><TD>%dd         <TD>day, 01-31
+<TR><TD>%ddd        <TD>day of week, Sun
+<TR><TD>%dddd       <TD>day of week, Sunday
+<TR><TD>%DDD        <TD>day of week, SUN
+<TR><TD>%DDDD       <TD>day of week, SUNDAY
+<TR><TD>%w          <TD>day of week, 1-7 (1=Sunday)
+<TR><TD>%ww         <TD>week of year, 01-53
+<TR><TD>%q          <TD>year quarter, 1-4
+<TR><TD>%h          <TD>hour, 00-23
+<TR><TD>%m          <TD>minute, 00-59
+<TR><TD>%s          <TD>second, 00-59
+<TR><TD>%c          <TD>centisecond, 00-99
+<TR><TD>%%          <TD>literal character %
+</TABLE>
+Additionally, when used for cycle-how=process, the argument can also contain
+'%f', which is expanded to give the name of the old log file.
+<DD>Default: ac%yy%mm%dd.log for the access log and er%yy%mm%dd.log for the
+error log.
+
+<DT><TT><B>translate</B></TT>
+<DD>Specifies whether the log file IP addresses are translated or not.
+This can slow-down the server, especially if reverse-DNS lookups are not
+working correctly, so always test this carefully before using it.  Note that
+if translation is enabled, that you must configure the RDNS setup as
+described in the section on <A href="index4.htm#config_rdns">RDNS configuration</A>.
+<DD>Default: 0 (not enabled).
+</DL>
+
+<H3><A NAME="TOC26">Building Multilanguage Web Sites</A></H3>
+
+<P>Xitami accepts the HTTP Accept-Language field and tries to do something
+useful with it.  Not all browsers let you set this field, but some do.
+This field lets users specify their preferences for particular versions of
+documents.  For instance, if a user specifies that they prefer documents in
+French, then English, the Accept-Language field will contain "fr, en".
+Xitami handles this as follows, for a document URL "file.htm":
+<UL>
+<LI>If the file "file.htm" exists and is readable, Xitami returns it to the
+browser as usual.
+<LI>If the file does not exist, Xitami will search for "file.html",
+"file.htm.fr", "file.htm_fr", "file.html.fr", "file.html_fr", "file.htm.en",
+"file.htm_en", "file.html.en", and "file.html_en" in that order.
+<LI>If the file is still not found, Xitami returns a 404 error status.
+</UL>
+<P>The same applies to default pages and to CGI scripts, and filters.  Note
+that Xitami will only do the extra checking for alternative htm/html files
+for .htm and .html files.
+
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index2.htm">&lt;</A>
+ | <A href="index4.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <EM>Administration</EM>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

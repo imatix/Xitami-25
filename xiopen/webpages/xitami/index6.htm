@@ -1,0 +1,96 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Server-Side Includes (SSI)</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index5.htm">&lt;</A>
+ | <A href="index7.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+<A NAME="using_ssi">&nbsp;</A>
+
+<H2><A NAME="TOC77">Server-Side Includes (SSI)</A></H2>
+
+<P>SSI (server-side includes) is a fairly standard syntax which you can read
+about on the <A href="http://hoohoo.ncsa.uiuc.edu/docs/tutorials/includes.html">NCSA site</A>. By default, Xitami parses any document with
+extension '.ssi', '.shtm', or '.shtml' as an SSI document. This is defined
+in the <A href="index4.htm#config_wsx">[WSX]</A> section of the configuration files, where the
+SSI WSX agent is xixssi. You can add SSI support to other file types, e.g.
+for .html files. SSI documents are placed in the normal web pages directory,
+and are recognised purely by their extension, not the path.
+
+<P>Xitami supports these SSI tags:
+<TABLE>
+<TR><TH>Element syntax:<TH>Effect:
+<TR><TD>#config errmsg="<I>text</I>"
+    <TD>Specify the SSI error message.
+<TR><TD>#config sizefmt="<I>format</I>"
+    <TD>Specify whether file sizes are shown in full, or abbreviated.  Use
+    the format 'abbrev' to show abbreviated sizes.
+<TR><TD>#config timefmt="<I>format</I>"
+    <TD>Specify the format used for file times.  By default this is:
+    "%A, %d-%b-%y %H:%M:%S %Z".
+<TR><TD>#echo var="<I>variable</I>"
+    <TD>Output the value of the specified variable.  Xitami recognises these
+    variables: DOCUMENT_NAME, DOCUMENT_URI, DATE_GMT, DATE_LOCAL,
+    LAST_MODIFIED, and any environment variable (including the standard CGI
+    environment variables).
+<TR><TD>#exec cgi="<I>pathname</I>"
+    <TD>Outputs the result of the CGI program, which must be in the CGI
+    binary directory (it cannot be on a CGI alias directory).  Note that the
+    CGI program runs in the main Xitami directory.
+<TR><TD>#exec cmd="<I>command</I>"
+    <TD>Executes a native command and includes the output of this command.
+    Note that the command runs in the main Xitami directory.  This SSI
+    command - which is a potential security risk for your system - is only
+    accepted if the ssi:exec configuration option is enabled.
+<TR><TD>#include virtual="<I>filename</I>"
+    <TD>Includes the contents of the specified URI, which is assumed to be
+    within the webpages root.
+<TR><TD>#include file="<I>filename</I>"
+    <TD>Includes the contents of the specified file, which may be anywhere
+    in the file system space.
+<TR><TD>#flastmod {virtual|file}="<I>filename</I>"
+    <TD>Outputs the time that the specified file was last modified.  The
+    file can be a URI within the webpages root, or an absolute filename,
+    depending on whether 'virtual' or 'file' is specified.
+<TR><TD>#fsize {virtual|file}="<I>filename</I>"
+    <TD>Outputs the size of the specified URL or file, using the sizefmt.
+</TABLE>
+
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index5.htm">&lt;</A>
+ | <A href="index7.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <EM>Server-Side Includes (SSI)</EM>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

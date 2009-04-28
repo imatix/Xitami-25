@@ -1,0 +1,293 @@
+Cache-control: no-cache
+Expires: 0
+
+<HTML>
+<HEAD><TITLE>Xitami Administration</TITLE>
+<script type="text/javascript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function submit(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+function focus() {
+    if ("#(_focus)" != "jsaction")
+        document.forms[0].#(_focus).focus();
+}
+</script>
+</HEAD>
+<BODY onLoad="focus()" style="font-family: sans-serif" BGCOLOR="#87CEFA">
+<SCRIPT LANGUAGE="JavaScript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function subform(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+</SCRIPT>
+<TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100%>
+<FORM METHOD=POST ACTION="#(proto)#(host)#(uri)">
+<INPUT TYPE=HIDDEN NAME=jsaction VALUE="">
+<TR><TD ALIGN=LEFT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Back231 LABEL="/admin/$back.gif" EVENT=back_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/backa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$back.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Save232 LABEL="/admin/$save.gif" EVENT=save_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/savea.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$save.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Default233 LABEL="/admin/$default.gif" EVENT=default_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/defaulta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$default.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Undo234 LABEL="/admin/$undo.gif" EVENT=undo_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/undoa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$undo.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<A HREF="/xitami/index4.htm#config_serverlog" TARGET="Help" TITLE="Help"
+onMouseOver="show('Help','/admin/helpa.gif')"
+onMouseOut="show('Help','/admin/$help.gif')"><IMG SRC="/admin/$help.gif" ALT="" BORDER=0 ALIGN=MIDDLE NAME="Help"
+WIDTH=40 HEIGHT=39></A><IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+<TD ALIGN=CENTER><FONT SIZE=+1>#(config) - Log File Properties </FONT>
+<TD ALIGN=RIGHT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Console235 LABEL="/admin/$console.gif" EVENT=console_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/consolea.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$console.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Halt236 LABEL="/admin/$halt.gif" EVENT=halt_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/halta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$halt.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Restart237 LABEL="/admin/$restart.gif" EVENT=restart_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/restarta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$restart.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Exit238 LABEL="/admin/$exit.gif" EVENT=exit_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/exita.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$exit.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+</TABLE><p>
+<FONT SIZE=-1>
+<!--FML ACTION=Ok LABEL="Ok" EVENT=save_event CONFIRM="" ATTR="" TYPE=PLAIN -->
+<A HREF=# >Ok</A>
+<!--FML /ACTION-->
+<!--FML ACTION=Cancel LABEL="Cancel" EVENT=back_event CONFIRM="" ATTR="" TYPE=PLAIN -->
+<A HREF=# >Cancel</A>
+<!--FML /ACTION-->
+</FONT><HR>
+
+<!--FML FIELD=rich-logging NUMERIC BLANK SIZE=4 VALUE=1-->
+<!--FML /FIELD-->
+<TABLE WIDTH="100%">
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F420 TEXTUAL LABEL NAME=L_log-type VALUE="Type of log file:&nbsp;&nbsp;" -->
+Type of log file:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F421 TEXTUAL TITLE NAME=log-type
+SIZE=40 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F422 TEXTUAL LABEL NAME=L_enabled VALUE="Logging enabled:&nbsp;&nbsp;" -->
+Logging enabled:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F423 BOOLEAN INPUT NAME=enabled
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F424 TEXTUAL LABEL NAME=L_filename VALUE="Log file name:&nbsp;&nbsp;" -->
+Log file name:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F425 TEXTUAL INPUT NAME=filename
+SIZE=40 MAX=80 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+<!--FML IF=rich-logging VALUE=1-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F426 TEXTUAL LABEL NAME=L_inc_local VALUE="Include local requests?&nbsp;&nbsp;" -->
+Include local requests?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F427 BOOLEAN INPUT NAME=inc_local
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F428 TEXTUAL LABEL NAME=L_translate VALUE="Translate IP addresses?&nbsp;&nbsp;" -->
+Translate IP addresses?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F429 BOOLEAN INPUT NAME=translate
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F430 TEXTUAL LABEL NAME=L_format VALUE="Log file format:&nbsp;&nbsp;" -->
+Log file format:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F431 SELECT INPUT NAME=format SIZE=0 VALUE=0
+CHANGE=no ATTR="" TYPE=dynamic 0="No selection"  -->
+<SELECT SIZE=0 >
+<OPTION>No selection
+</SELECT>
+<!--FML /FIELD-->
+<!--FML ACTION=Show LABEL="Show" EVENT=show_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Show" VALUE="Show" >
+<!--FML /ACTION-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F432 TEXTUAL LABEL NAME=L_custom VALUE="Log file format string:&nbsp;&nbsp;" -->
+Log file format string:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F433 TEXTBOX INPUT NAME=custom
+ROWS=7 COLS=70 MAX=1000 UPPER=0 ATTR="" VALUE="" -->
+<TEXTAREA ROWS=7 COLS=70 WRAP="VIRTUAL" ></TEXTAREA>
+<!--FML /FIELD-->
+<!--FML /IF-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F434 TEXTUAL LABEL NAME=L_header VALUE="Log file header:&nbsp;&nbsp;" -->
+Log file header:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F435 TEXTBOX INPUT NAME=header
+ROWS=4 COLS=70 MAX=500 UPPER=0 ATTR="" VALUE="" -->
+<TEXTAREA ROWS=4 COLS=70 WRAP="VIRTUAL" ></TEXTAREA>
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F436 TEXTUAL LABEL NAME=L_cycle VALUE="Cycle log file:&nbsp;&nbsp;" -->
+Cycle log file:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F437 SELECT INPUT NAME=cycle SIZE=0 VALUE=0
+CHANGE=no ATTR="" TYPE=dynamic 0="No selection"  -->
+<SELECT SIZE=0 >
+<OPTION>No selection
+</SELECT>
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F438 TEXTUAL LABEL NAME=L_cycle-time VALUE="Cycle at time (HH:MM):&nbsp;&nbsp;" -->
+Cycle at time (HH:MM):&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F439 TEXTUAL INPUT NAME=cycle-time
+SIZE=5 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=5 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F440 TEXTUAL LABEL NAME=L_cycle-day VALUE="&nbsp;&nbsp;on day of week or month:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;on day of week or month:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F441 NUMERIC INPUT NAME=cycle-day
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=3 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=3 VALUE="" >
+<!--FML /FIELD-->
+0=Sunday, 1=Monday... or 0-31
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F442 TEXTUAL LABEL NAME=L_cycle-size VALUE="Max. kbytes for log file:&nbsp;&nbsp;" -->
+Max. kbytes for log file:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F443 NUMERIC INPUT NAME=cycle-size
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=6 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=6 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F444 TEXTUAL LABEL NAME=L_cycle-lines VALUE="&nbsp;&nbsp;max. lines for log file:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;max. lines for log file:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F445 NUMERIC INPUT NAME=cycle-lines
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=9 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=9 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F446 TEXTUAL LABEL NAME=L_cycle-how VALUE="How to cycle old log file:&nbsp;&nbsp;" -->
+How to cycle old log file:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F447 SELECT INPUT NAME=cycle-how SIZE=0 VALUE=0
+CHANGE=no ATTR="" TYPE=? 0="Rename to path/filename as specified below" 1="Delete old log file" 2="Move log file to path specified below" 3="Append log file to path/filename specified below" 4="Process log file using command specified below" -->
+<SELECT SIZE=0 >
+<OPTION>Rename to path/filename as specified below
+<OPTION>Delete old log file
+<OPTION>Move log file to path specified below
+<OPTION>Append log file to path/filename specified below
+<OPTION>Process log file using command specified below
+</SELECT>
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F448 TEXTUAL LABEL NAME=L_cycle-arg VALUE="Argument for cycle operation&nbsp;&nbsp;" -->
+Argument for cycle operation&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F449 TEXTUAL INPUT NAME=cycle-arg
+SIZE=40 MAX=80 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F450 TEXTUAL LABEL NAME=L_cycle_data VALUE="Log file data:&nbsp;&nbsp;" -->
+Log file data:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML ACTION=cycle_data239 LABEL="Cycle now" EVENT=cycle_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="cycle_data239" VALUE="Cycle now" >
+<!--FML /ACTION-->
+<!--FML ACTION=clear_data240 LABEL="Wipe logfile" EVENT=clear_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="clear_data240" VALUE="Wipe logfile" >
+<!--FML /ACTION-->
+</TD></TR>
+</TABLE>
+
+<!--FML FIELD=message_to_user SIZE=120 TEXTUAL HIDDEN -->
+<!--FML /FIELD -->
+</FORM>
+<SCRIPT LANGUAGE="JavaScript">
+    if ("#(_focus)" != "jsaction" && document.forms[0].#(_focus))
+        document.forms[0].#(_focus).focus();
+</SCRIPT>
+<HR>
+<TABLE WIDTH=100%><TR>
+<TD><IMG SRC="/admin/imatix.gif"
+WIDTH=96 HEIGHT=41>
+<TD ALIGN=CENTER><FONT SIZE=-1>Copyright &#169 1996-2002 iMatix Corporation
+<BR>Powered by iMatix Studio 2.5
+<TD ALIGN=RIGHT><FONT SIZE=-1>#(date) #(time)
+<BR>#(product) v2.5c2
+</TABLE>
+</BODY></HTML>

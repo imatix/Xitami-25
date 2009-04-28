@@ -1,0 +1,402 @@
+#! /usr/bin/perl
+#
+#   Name:       perlssi
+#   Title:      Implementation of SSI as a Perl filter
+#   Package:    Xitami web server
+#
+#   Written:    96/11/02  Xitami team <xitami@imatix.com>
+#   Revised:    99/06/07  Xitami team <xitami@imatix.com>
+#
+#   Copyright:  Copyright (c) 1991-99 iMatix
+#   License:    This is free software; you can redistribute it and/or modify
+#               it under the terms of the License Agreement as provided
+#               in the file LICENSE.TXT.  This software is distributed in
+#               the hope that it will be useful, but without any warranty.
+#
+#   This program is based on the FakeSSI program, documented at:
+#   <URL:http://sw.cse.bris.ac.uk/WebTools/fakessi.html>
+#
+#   Server side include documentation at NCSA:
+#   <URL:http://hoohoo.ncsa.uiuc.edu/docs/tutorials/includes.html>
+#
+#   In defaults.cfg:
+#   [Filter]
+#       shtml=perlssi               #   Parse files with .shtml extension
+#
+#   This script is a quick and dirty SSI solution, not meant to be used for
+#   heavy work, but at least something until we build SSI into Xitami the
+#   proper way.  It's also a useful demo of a filter program.
+#
+require 5;
+
+$BINDIR  = $ENV {CGI_ROOT};         #   Location of CGI programs
+$BINURL  = $ENV {CGI_URL};          #   CGI URL prefix
+$DOCROOT = $ENV {DOCUMENT_ROOT};    #   Location of web pages
+$DOCPATH = $ENV {PATH_TRANSLATED};  #   Document root, cut before '/'
+$DOCPATH = $1 if $DOCPATH =~ /(.*)\//;
+
+$errno = 0;
+
+# Set the default error message you want, the size format, time format and
+# timezone here.
+$errmsg   = '<P>[perlssi: "#%s" produced errors]';
+$sizefmt  = 'bytes';
+# Default time format: eg Mon, 05-Jan-98 15:25:05 NZST
+$timefmt  = "%A, %d-%b-%y %H:%M:%S %Z";
+$timezone = $ENV {'TZ'};
+$timezone = "" if (!defined($timezone));           # Empty if not set
+@timezones = split(/-?\d+/, $timezone);            # Get Timezones
+if (defined($timezones[0]) && (!defined($timezones[1])))
+{ $timezones[1] = $timezones[0]; }
+
+@DAYS_OF_WEEK = ('Sunday', 'Monday', 'Tuesday', 'Wednesday',
+                 'Thursday', 'Friday', 'Saturday');
+
+@MONTH_NAME   = ('January', 'February', 'March', 'April', 'May', 'June',
+                 'July', 'August', 'September', 'October', 'November',
+                 'December');
+
+# OK, now to work!!!
+print ("Content-type: text/html\n\n");
+
+# Convert the target file name from WWW form into explicit form
+
+$sent = $ENV {SCRIPT_NAME};
+$ENV {'HTTP_REFERER'} = $sent
+    unless $ENV {'HTTP_REFERER'};
+
+$infile = $sent;
+&MakePathname;
+$target = $outfile;
+
+# Read in target WWW page, and make into one long line.
+$bigline = join ('', <STDIN>);
+
+# Go thru the line until we reach the end, looking for SSI's.
+$len = length ($bigline);
+while ($len > 0) {
+    if ($bigline =~ /<!--\s*#\s*/) {
+        print ($`);
+        if ($' =~ /-->/) {
+            $ssi = $`;
+            $bigline = $';
+            &HandleSSI;
+            $len = length ($bigline);
+        }
+    }
+    else {
+        $len = 0;
+        print ($bigline);
+    }
+}
+
+0;   #   Return code 0 -> everything okay
+
+
+#----------------------------------------------------------------------
+
+sub HandleSSI {
+    if ($ssi =~ /^config/i) {
+        @var1 = split ('="', $ssi);
+        @var2 = split ('"', $var1 [1]);
+        $var  = $var2 [0];
+        if ($ssi =~ /errmsg/i) {
+            $errmsg = $var;
+        }
+        elsif ($ssi =~ /sizefmt/i) {
+            $sizefmt = $var;
+        }
+        elsif ($ssi =~ /timefmt/i) {
+            $timefmt = $var;
+        }
+        else {
+            print "<P>Unrecognised #config variable";
+            &GiveErrMsg;
+        }
+    }
+    elsif ($ssi =~ /^echo\s+var="([^"]+)"/i) {
+        $var = $1;
+        if ($var eq "DOCUMENT_NAME") {
+            @output = split ('/', substr ($target, rindex ($target, '/')));
+            print ($output [1]);
+        }
+        elsif ($var eq "DOCUMENT_URI") {
+            print $sent;
+        }
+        elsif ($var eq "DATE_GMT") {
+            &strftime (time (), 0);
+        }
+        elsif ($var eq "DATE_LOCAL") {
+            &strftime (time (), 1);
+        }
+        elsif ($var eq "LAST_MODIFIED") {
+            &strftime ( (stat ($target))[9], 1);
+        }
+        elsif ($ENV {$var}) {
+            print $ENV {$var};
+        }
+        else {
+            print "<P>Unrecognised #echo variable: $var";
+            &GiveErrMsg;
+        }
+    }
+    elsif ($ssi =~ /^exec/i) {
+        if ($ssi =~ /cgi="([^"?]+)(\??([^"]*))"/i) {
+            $infile = $1;
+            $args   = $3;
+            &MakePathname;
+            $var = $outfile;
+            if ($errno == 0) {
+                #   We can now execute the CGI script in $var
+                $ENV {"QUERY_STRING"} = $3;
+
+                #   First, handle MS-DOS systems
+                if (defined ($ENV {"COMSPEC"})) {
+                    $var =~ s/\//\\/g;
+                    #   Try normal executable programs first
+                    if ($var =~ /\.exe$|\.com$|\.bat$/i) {
+                        $_ = `$var $args`;
+                    }
+                    else {
+                        #   Check file header to see if it's a script
+                        #   We're looking for '#! xxxx' or '/*! xxxx'
+                        open (FOO, $var);
+                        $_ = <FOO>;
+                        chop;
+                        close (FOO);
+
+                        if (/^\#\!\s*(.+)|^\/\*\!\s*([^*]+)\*\//) {
+                             $_ = `$1 "$var" $args`;
+                        }
+                        else {
+                            print "<P>Cannot execute $var";
+                            &GiveErrMsg;
+                        }
+                    }
+                }
+                #   Handle other systems (OS/2 may need to be handled as DOS)
+                else {
+                    $_ = `$var $args`;
+                }
+
+                #   If output has HTTP header fields, skip to blank line
+                if (/^[A-Z-]+: /i) {
+                    /\n\n/;
+                    print $';
+                }
+                else {
+                    print $_;
+                }
+            }
+        }
+        elsif ($ssi =~ /cmd="([^"]+)"/i) {
+            print `$1`;
+        }
+        else {
+            print "<P>#exec command not understood";
+            &GiveErrMsg;
+        }
+    }
+    elsif ($ssi =~ /^include/i) {
+        &WhichFile;
+        if ($errno == 0) {
+            open (FOO, $filename);
+            $bigline = join ('', <FOO>).$bigline;
+            close (FOO);
+        }
+        else {
+            print "<P>#include file not found: $filename";
+            &GiveErrMsg;
+        }
+    }
+    elsif ($ssi =~ /^flastmod/i) {
+        &WhichFile;
+        if ($errno == 0) {
+            &strftime ((stat ($filename))[9], 1);
+        }
+        else {
+            print "<P>#flastmod file not found: $filename";
+            &GiveErrMsg;
+        }
+    }
+    elsif ($ssi =~ /^fsize/i) {
+        &WhichFile;
+        if ($errno == 0) {
+            $size = -s $filename;
+            if ($sizefmt =~ /abbrev/i) {
+                print (int ( ($size / 1024) + 1), "Kbytes");
+            }
+            else {
+                print ("$size bytes");
+            }
+        }
+        else {
+            print "<P>#fsize file not found: $filename";
+            &GiveErrMsg;
+        }
+    }
+    else {
+        print "<P>Unrecognised SSI command";
+        &GiveErrMsg;
+    }
+}
+
+sub MakePathname {
+    $errno = 1;
+    $info = $infile;
+    if ($info =~ /^$BINURL\//) {
+        @split1 = split (/$BINURL\//, $info);
+        $info = join ('/', $BINDIR, $split1 [1]);
+    }
+    else {
+        $info = $DOCROOT.$info;
+    }
+    $outfile = $info;
+    if (!-e $outfile) {
+        print "<P>File not found: $outfile";
+        &GiveErrMsg;
+    }
+    else {
+        $errno = 0;
+    }
+}
+
+sub GiveErrMsg {
+    printf ($errmsg, $ssi);
+}
+
+sub WhichFile {
+    $errno = 1;
+    if ($ssi =~ /virtual="\/?([^"]+)"/i) {
+        $filename = "$DOCROOT/$1";
+    }
+    elsif ($ssi =~ /file="([^"]+)"/i) {
+        #  If the SSI is a "#include file=", then prepend the filename
+        #  with the invoking document's absolute path - DH 98/06/20
+        $filename = "$DOCPATH/$1";
+    }
+    if (-e $filename) {
+        $errno = 0;
+    }
+}
+
+# Usage:
+#   strftime ( seconds-since-epoch, local-flag )
+#
+# Where local-flag is 0 for GMT
+#   and               1 for local time
+#
+# Defaults to: current time, and local time format
+#
+# Display the time specified as either a GMT time string, or a local time
+# string in the format specified by the global variable $timefmt, using
+# the time zone in $timezone.
+
+sub strftime {
+    local ($nowtime, $timetype) = @_;
+    $nowtime = time() if (! defined($nowtime));
+    $timetype = 1     if (! defined($timetype));
+    defined($timefmt) || ($timefmt = "%A, %d-%b-%y %H:%M:%S %Z");
+
+    if ($timetype == 0) {
+        ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst)
+           = gmtime ($nowtime);
+    }
+    else {
+        ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst)
+           = localtime ($nowtime);
+    }
+
+    # Setup day and month names, and year, for later use.
+    $lday = $DAYS_OF_WEEK[$wday];
+    $lmon = $MONTH_NAME[$mon];
+    $year += 1900;                    # Add in offset to get 4 digit year
+
+    defined($lday) || ($lday = "");
+    defined($lmon) || ($lmon = "");
+
+    local ($i) = (0, "");
+    for ($i = 0; $i < length($timefmt); $i++)
+    {
+      if (substr($timefmt, $i, 1) eq "%")
+      { # A magic value in the format string, expand the item
+        $i++;                         # Skip the percent
+        local ($pad) = "02";          # Pad with "0" by default
+        if (substr($timefmt, $i, 1) eq "-") {$i++; $pad = ""}  # No padding
+        if (substr($timefmt, $i, 1) eq "_") {$i++; $pad = "2"} # Pad with spaces
+
+        local ($ch) = substr($timefmt, $i, 1);   # Format character
+
+        # Poor man's switch:
+        # The recognised symbols are the ones recognised by GNU date.
+
+        # Ideally these would be defined into a table of subroutines to
+        # call, but I'll have to check if Perl 4 can handle references to
+        # subroutines.
+
+        # symbols
+        $ch eq "%" && do { print "%";                               next; };
+        $ch eq "n" && do { print "\n";                              next; };
+        $ch eq "t" && do { print "\t";                              next; };
+
+        # Time format fields
+        $ch eq "H" && do { printf("%${pad}d", $hour);               next; };
+        $ch eq "I" && do { printf("%${pad}d", ($hour % 12) +1);     next; };
+        $ch eq "k" && do { printf("%2d",       $hour);              next; };
+        $ch eq "l" && do { printf("%2d",       ($hour % 12) +1);    next; };
+        $ch eq "M" && do { printf("%${pad}d", $min);                next; };
+        $ch eq "p" && do { print ($hour < 12 ? "AM" : "PM");        next; };
+        $ch eq "r" && do { printf("%${pad}d:%${pad}d:%${pad}d %s",
+                                  (($hour % 12) + 1), $min, $sec,
+                                  ($hour < 12 ? "AM" : "PM"));      next; };
+        $ch eq "s" && do { print $nowtime;                          next; };
+        $ch eq "S" && do { printf("%${pad}d", $sec);                next; };
+        $ch eq "T" && do { printf("%${pad}d:%${pad}d:%${pad}d",
+                                  $hour, $min, $sec);               next; };
+        # This one is supposed to be the locale's time format, but
+        # we'll just have to have military time for now.
+        $ch eq "X" && do { printf("%${pad}d:%${pad}d:%${pad}d",
+                                  $hour, $min, $sec);               next; };
+        $ch eq "Z" && do { print ($timetype? ($timezones[$isdst ? 1 : 0])
+                                  : "GMT");                         next; };
+
+        # Date format fields
+        $ch eq "a" && do { print substr($lday, 0, 3);               next; };
+        $ch eq "A" && do { print $lday;                             next; };
+        $ch eq "b" && do { print substr($lmon, 0, 3);               next; };
+        $ch eq "B" && do { print $lmon;                             next; };
+        # This one works only with perl 5; we'd have to emulate it in
+        # perl 4.  Prints out the time like ctime().
+        $ch eq "c" && do { print scalar localtime($nowtime);        next; };
+        $ch eq "d" && do { printf("%${pad}d", $mday);               next; };
+        $ch eq "D" && do { printf("%${pad}d/%${pad}d/%${pad}d",
+                                  $mday, ($mon + 1), ($year % 100));next; };
+        $ch eq "h" && do { print substr($lmon, 0, 3);               next; };
+        $ch eq "j" && do { local ($pd) = $pad;  $pd =~ s/2/3/;
+                           printf("%${pd}d", $yday);                next; };
+        $ch eq "m" && do { printf("%${pad}d", ($mon + 1));          next; };
+        # This should be week number of year with Sunday as first day of
+        # the week, but we cheat and just go mod 7, for now.
+        $ch eq "U" && do { printf("%${pad}d", int($lday / 7));      next; };
+        $ch eq "w" && do { print $wday;                             next; };
+        # This should be week number of year with Monday as first day of
+        # the week, but we cheat and just go mod 7, for now.
+        $ch eq "W" && do { printf("%${pad}d", int($lday / 7));      next; };
+        # This is supposed to be the locale's time format, but we cheat
+        # and just print mm/dd/yy for now.
+        $ch eq "x" && do { printf("%${pad}d/%${pad}d/%${pad}d",
+                                  ($mon + 1), $mday, ($year % 100));next; };
+        $ch eq "y" && do { printf("%${pad}d", ($year % 100));       next; };
+        $ch eq "Y" && do { local ($pd) = $pad;  $pd =~ s/2/4/;
+                           printf("%${pd}d", $year);                next; };
+
+        # If we fall through this far, then it wasn't matched so we'll
+        # print it out literally.
+        print "%" . ($pad ne "02" ? ($pad eq "2" ? "_" : "-") : "") . $ch;
+      } # Twas a magic code
+      else
+      { # Not a magic code, print literally
+        print substr($timefmt, $i, 1);
+      }
+    }
+}

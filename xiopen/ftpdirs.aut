@@ -1,0 +1,36 @@
+#
+#   Directory-level control of FTP access.  The definitions in this file
+#   override any access rights defined in the ftpusers.aut file.  Each
+#   entry defines access rights for uses in a directory.  Definitions for
+#   a directory cover all subdirectories unless these are specified also.
+#
+#   The directory name must be specified without a leading slash, unless
+#   you really want to refer to an absolute directory name.   The ftproot
+#   is [], not [/] (yes, this has changed from earlier releases).
+#
+#   Directory names are not case sensitive, and hyphens and underlines are
+#   treated as the same character in directory names.
+#
+#   Eg. [pub/upload]
+#           anonymous=P             #  Upload files but not download
+#       [pub]
+#           anonymous=GP            #  Upload and download
+#
+#   Access right codes (order and case is not important):
+#      G = get file
+#      P = put file
+#      D = delete file
+#      M = make new directory
+#      R = remove directory
+#
+#   To protect an alias, specify the full path from the ftproot.  E.g. for
+#   an alias 'cdrom' for a user 'mandy' who's root directory is 'pub/mandy'
+#   protect the url [pub/mandy/cdrom].
+#
+#   [pub/mandy/cdrom]
+#       mandy=G         #   Read access
+#
+#*END
+
+[]
+    Admin=*

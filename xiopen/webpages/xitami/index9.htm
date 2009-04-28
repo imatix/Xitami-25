@@ -1,0 +1,81 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Server-Side GSL Scripting</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index8.htm">&lt;</A>
+ | <A href="index10.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+<A NAME="using_gsl">&nbsp;</A>
+
+<H2><A NAME="TOC84">Server-Side GSL Scripting</A></H2>
+
+<P>GSL is the iMatix code generation language.  You can use GSL to do
+fast server-side scripting, using an approach similar server-side includes
+(SSI).  GSL supports many commands including XML-driven output.
+
+<P>Server-side GSL scripting is similar to <A href="index8.htm#using_xml">XML processing</A>,
+but the GSL script invoked directly (e.g. http://hostname/somefile.gsl)
+instead indirectly through an XML file.  GSL files must have the extension
+'.gsl'.
+
+<H3><A NAME="TOC85">Why use GSL Scripts?</A></H3>
+
+<P>For many cases, GSL scripting is faster and simpler than SSI or CGI.
+A GSL script can load and manipulate arbitrarily-complex XML data, and
+convert this into usable HTML using a simple but powerful template
+language.  GSL is several years ahead of similar approaches like XSLT
+(the XML Stylesheet Language Transformation language), and works today
+directly from your Xitami web server.
+
+<H3><A NAME="TOC86">Predefined Attributes</A></H3>
+
+<P>As well as the standard attributes (date, time, filename, script), the
+GSL script can access all the environment variables normally passed to a
+CGI program, such as REMOTE_USER.  These are defined as attributes of the
+root item, as well as 'argument' items attached to the root item.
+
+<H3><A NAME="TOC87">Passing Arguments to The GSL Script</A></H3>
+
+<P>You can pass arguments to the the GSL script by using the
+query string syntax:
+<PRE>http://xx.xx.xx.xx/myfile.xml?arg=value;arg=value;...</PRE>
+<P>All arguments passed in the query string are defined as attributes
+of the XML root item.
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index8.htm">&lt;</A>
+ | <A href="index10.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <EM>Server-Side GSL Scripting</EM>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<pdl
+    name      = "Xitami Administration Console"
+    acronym   = "xac"
+    install   = "xitami-25"
+    version   = "2.5"
+    copyright = "Copyright (c) 1991-2003 iMatix Corporation"
+    workflow  = "standard.pwl"
+    library   = "libxac">
+    
+<include filename = "prelude.pdl" />
+<file name = "version.h"     class = "c version"       >Project version file</file>
+
+<file name = "xiadmin.c"     class = "c/libero"        >Administration Console</file>
+<file name = "xiadmin.fdl"   class = "private resource">Studio forms definition</file>
+<file name = "xiadmin.rc"    class = "private resource">Graphic resource list</file>
+<file name = "*.gif"         class = "private binary"  >Graphic resources</file>
+<file name = "xiadm??.htm"   class = "generated"       >Generated form pages</file>
+<file name = "xiadm??.h"     class = "generated"       >Generated form headers</file>
+<file name = "xiadmin.log"   class = "generated"       >FMLgen log file</file>
+
+<actions>
+  <generate>
+    <execute command = "wsxrc @xiadmin.rc" />
+    <execute command = "fdlgen xiadmin"    />
+    <execute command = "fmlgen xiadmin"    />
+  </generate>
+</actions>
+
+<!-- Deliverables -->
+<file name = "libxac"       class = "public library"  >Xitami admin library</file>
+
+<use>
+    <library name = "libstu" />
+    <library name = "libsmt" />
+    <library name = "libsfl" />
+</use>
+
+</pdl>

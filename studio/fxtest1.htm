@@ -1,0 +1,344 @@
+Cache-control: no-cache
+Expires: 0
+
+<HTML>
+<HEAD>
+<TITLE>Formatix Test Form 1</TITLE>
+<META http-equiv=Content-Language content=en>
+<META http-equiv=Content-Type content="text/html">
+</HEAD>
+<BODY onLoad="focus()">
+<H1>Formatix Test Form 1</H1>
+<SCRIPT LANGUAGE="JavaScript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function subform(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+</SCRIPT>
+
+
+<P>This is the first of several test forms.  Please fill in
+some fields and use the action buttons to call further forms
+or quit the <A HREF="#(uri)&~Llink1=1">application</A>.
+<!--FML ACTION=Test-2x LABEL="Test-2x" EVENT=test_2_event CONFIRM="" ATTR="" TYPE=PLAIN -->
+<A HREF=# >Test-2x</A>
+<!--FML /ACTION-->
+
+<FORM METHOD=POST ACTION="#(proto)#(host)#(uri)">
+<INPUT TYPE=HIDDEN NAME=jsaction VALUE="">
+<TABLE WIDTH="750">
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F1 TEXTUAL TITLE NAME=L_counter VALUE="Counter:&nbsp;&nbsp;" -->
+Counter:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F2 NUMERIC INPUT NAME=counter
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=5 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=5 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F3 TEXTUAL TITLE NAME=L_back-used VALUE="Form back used?&nbsp;&nbsp;" -->
+Form back used?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F4 BOOLEAN INPUT NAME=back-used
+TRUE=yes FALSE=no ATTR="" VALUE=false -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F5 TEXTUAL TITLE NAME=L_money VALUE="Decimal field:&nbsp;&nbsp;" -->
+Decimal field:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F6 NUMERIC INPUT NAME=money
+SIGN=? DECS=2 DECFMT=? FILL=? BLANK=0
+COMMA=1 SIZE=12 MAX=? ATTR="" VALUE="123.45" -->
+<INPUT TYPE=TEXT SIZE=12 VALUE="123.45" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F7 TEXTUAL TITLE NAME=L_event VALUE="Form event:&nbsp;&nbsp;" -->
+Form event:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F8 NUMERIC PROTECT NAME=event
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=3 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=3 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F9 TEXTUAL TITLE NAME=L_click_field VALUE="&nbsp;&nbsp;click field:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;click field:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F10 NUMERIC PROTECT NAME=click_field
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=3 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=3 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F11 TEXTUAL TITLE NAME=L_click_index VALUE="&nbsp;&nbsp;click index:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;click index:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F12 NUMERIC PROTECT NAME=click_index
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=3 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=3 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F13 TEXTUAL TITLE NAME=L_image_x VALUE="&nbsp;&nbsp;image_x:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;image_x:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F14 NUMERIC PROTECT NAME=image_x
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=3 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=3 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F15 TEXTUAL TITLE NAME=L_image_y VALUE="&nbsp;&nbsp;image_y:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;image_y:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F16 NUMERIC PROTECT NAME=image_y
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=3 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=3 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F17 TEXTUAL TITLE NAME=L_show_ssl VALUE="&nbsp;&nbsp;ssl:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;ssl:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F18 BOOLEAN PROTECT NAME=show_ssl
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD COLSPAN=99 ALIGN=LEFT VALIGN=TOP CLASS=tdbody>
+<HR>
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F19 TEXTUAL TITLE NAME=L_noname1 VALUE="BEFORE IF EVENT&nbsp;&nbsp;" -->
+BEFORE IF EVENT&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML IF=event VALUE=1-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F20 TEXTUAL TITLE NAME=L_noname2 VALUE="BEGIN IF EVENT&nbsp;&nbsp;" -->
+BEGIN IF EVENT&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F21 TEXTUAL TITLE NAME=L_params VALUE="Parameters&nbsp;&nbsp;" -->
+Parameters&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F22 TEXTUAL INPUT NAME=params
+SIZE=40 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F23 TEXTUAL TITLE NAME=L_noname3 VALUE="END IF EVENT&nbsp;&nbsp;" -->
+END IF EVENT&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML /IF-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F24 TEXTUAL TITLE NAME=L_noname4 VALUE="AFTER IF EVENT&nbsp;&nbsp;" -->
+AFTER IF EVENT&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+</TD></TR>
+<TR><TD COLSPAN=99 ALIGN=LEFT VALIGN=TOP CLASS=tdbody>
+<HR>
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F25 TEXTUAL TITLE NAME=L_noname5 VALUE="BEFORE UNLESS EVENT&nbsp;&nbsp;" -->
+BEFORE UNLESS EVENT&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML UNLESS=event VALUE=1-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F26 TEXTUAL TITLE NAME=L_noname6 VALUE="BEGIN UNLESS EVENT&nbsp;&nbsp;" -->
+BEGIN UNLESS EVENT&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F27 TEXTUAL TITLE NAME=L_params1 VALUE="Parameters&nbsp;&nbsp;" -->
+Parameters&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F28 TEXTUAL INPUT NAME=params1
+SIZE=40 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F29 TEXTUAL TITLE NAME=L_noname7 VALUE="END UNLESS EVENT&nbsp;&nbsp;" -->
+END UNLESS EVENT&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML /UNLESS-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F30 TEXTUAL TITLE NAME=L_noname8 VALUE="AFTER UNLESS EVENT&nbsp;&nbsp;" -->
+AFTER UNLESS EVENT&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+</TD></TR>
+<TR><TD COLSPAN=99 ALIGN=LEFT VALIGN=TOP CLASS=tdbody>
+<HR>
+</TD></TR>
+<TR><TD></TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F31 TEXTUAL OPTION NAME=click1
+SIZE=11 MAX=? UPPER=0 ATTR="" VALUE="Click Here!" -->
+<INPUT TYPE=TEXT SIZE=11 VALUE="Click Here!" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD></TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F32 TEXTUAL OPTION NAME=click2
+SIZE=80 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=80 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F33 TEXTUAL TITLE NAME=L_mark1 VALUE="Context check: &nbsp;&nbsp;" -->
+Context check: &nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F34 TEXTUAL INPUT NAME=mark1
+SIZE=1 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=1 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F35 TEXTUAL TITLE NAME=L_mark2 VALUE=":" -->
+:
+<!--FML /FIELD-->
+<!--FML FIELD=F36 TEXTUAL INPUT NAME=mark2
+SIZE=1 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=1 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F37 TEXTUAL TITLE NAME=L_mark3 VALUE=":" -->
+:
+<!--FML /FIELD-->
+<!--FML FIELD=F38 TEXTUAL INPUT NAME=mark3
+SIZE=1 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=1 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F39 TEXTUAL TITLE NAME=L_mark4 VALUE=":" -->
+:
+<!--FML /FIELD-->
+<!--FML FIELD=F40 TEXTUAL INPUT NAME=mark4
+SIZE=1 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=1 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F41 TEXTUAL TITLE NAME=L_mark5 VALUE=":" -->
+:
+<!--FML /FIELD-->
+<!--FML FIELD=F42 TEXTUAL INPUT NAME=mark5
+SIZE=1 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=1 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+</TABLE>
+<HR>
+
+<TABLE WIDTH=60% BORDER=1>
+<TR>
+<TD>The following Hotels were found for the dates you selected. Price is based
+on 2 people sharing a standard room. Any suplements which may apply will be
+indicated before confirmation. Select a hotel to view.</TD>
+</TR><TR><TD>
+
+<TABLE WIDTH="100%" >
+<TR>
+<TH ALIGN=CENTER VALIGN=TOP>
+<!--FML FIELD=F43 TEXTUAL LABEL NAME=L_currency VALUE="Selection" -->
+Selection
+<!--FML /FIELD-->
+</TH>
+<!--FML REPEAT=hotels ROWS=5 -->
+</TR>
+<TR>
+<TD ALIGN=CENTER VALIGN=TOP CLASS=tdfield>
+<!--FML FIELD=F44 SELECT INPUT NAME=currency SIZE=0 VALUE=0
+CHANGE=no ATTR="" TYPE=dynamic 0="No selection"  -->
+<SELECT SIZE=0 >
+<OPTION>No selection
+</SELECT>
+<!--FML /FIELD-->
+</TD>
+</TR>
+<!--FML /REPEAT--></TABLE>
+
+</TD></TR><TR><TD>
+RQ indicates we will need to contact the hotel to request the room.  We
+will need your credit card details to do this.
+<!--FML ACTION=WHY_CCARD EVENT=test_2_event TYPE=PLAIN
+        VALUE="Click here to see why?" --><A HREF="/">Click here to see why?</A>
+<!--FML /ACTION-->
+</TD></TR>
+</TABLE>
+<H1><A NAME="TOC1">Form Symbols</A></H1>
+<P>Server software: #(SERVER_SOFTWARE) #(SERVER_VERSION)
+<BR>Server URL:     #(SERVER_URL)
+<BR>Server Name:    #(SERVER_NAME)
+<HR>
+
+<TABLE WIDTH="750">
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F45 TEXTUAL TITLE NAME=L_Quit VALUE="Choose an action&nbsp;&nbsp;" -->
+Choose an action&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML ACTION=Quit LABEL="Quit" EVENT=return_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Quit" VALUE="Quit" >
+<!--FML /ACTION-->
+<!--FML ACTION=Test-2 LABEL="Test-2" EVENT=test_2_event CONFIRM="" ATTR="" TYPE=PLAIN -->
+<A HREF=# >Test-2</A>
+<!--FML /ACTION-->
+<!--FML ACTION=Test-3 LABEL="Test-3" EVENT=test_3_event CONFIRM="" ATTR="" TYPE=PLAIN -->
+<A HREF=# >Test-3</A>
+<!--FML /ACTION-->
+<!--FML ACTION=Create LABEL="Create" EVENT=create_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Create" VALUE="Create" >
+<!--FML /ACTION-->
+<!--FML ACTION=Secure LABEL="Secure" EVENT=secure_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Secure" VALUE="Secure" >
+<!--FML /ACTION-->
+<!--FML ACTION=Insecure LABEL="Insecure" EVENT=insecure_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Insecure" VALUE="Insecure" >
+<!--FML /ACTION-->
+<!--FML ACTION=Cancel LABEL="Cancel" EVENT=cancel_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Cancel" VALUE="Cancel" >
+<!--FML /ACTION-->
+<!--FML ACTION=Loop LABEL="Loop" EVENT=loop_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Loop" VALUE="Loop" >
+<!--FML /ACTION-->
+</TD></TR>
+</TABLE>
+
+<!--FML FIELD=address NUMERIC BLANK SIZE=4 VALUE=1-->
+<!--FML /FIELD-->
+<!--FML FIELD=hotels NUMERIC BLANK SIZE=4 VALUE=5-->
+<!--FML /FIELD-->
+<!--FML FIELD=message_to_user SIZE=120 TEXTUAL HIDDEN -->
+<!--FML /FIELD -->
+</FORM>
+<SCRIPT LANGUAGE="JavaScript">
+    if ("#(_focus)" != "jsaction" && document.forms[0].#(_focus))
+        document.forms[0].#(_focus).focus();
+</SCRIPT>
+</BODY></HTML>
+<!--FML CONST=maxsize VALUE=255 -->
+<!--FML /CONST -->

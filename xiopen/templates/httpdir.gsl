@@ -1,0 +1,100 @@
+.-----------------------------------------------------------------------------
+.-
+.-  httpdir.gsl - GSL script to format HTTP directory listings
+.-
+.-  Written:  1999/05/29  Xitami team
+.-  Revised:  2000/02/18  Xitami team
+.-
+.-  If you want to modify this script, copy it, and modify the copy.  Then
+.-  change the server:dir-script option to refer to your new script.
+.-
+.-  The data tree for the directory listing is:
+.-      <directory>
+.-          <file> 0 or more times
+.-
+.-  Directory has these attributes:
+.-      tempfile            name of temporary output file
+.-      date                current date, 'yyyy/mm/dd'
+.-      time                current time, 'hh:mm:ss'
+.-      files               number of files in directory
+.-      size                total size of files, in bytes
+.-      script              name of script
+.-      urlbase             base URL for directory
+.-    [ urlparent           base URL for parent directory, if any ]
+.-      order               sort order, e.g. 'nx'
+.-      server_software     name of the web server
+.-      server_version      the server version in use
+.-      server_name         the current host name
+.-      server_url          full url back to the server
+.-      server_port         port on which the web server is running
+.-      server_protocol     HTTP version in use (currently "HTTP/1.1").
+.-      remote_user         authorised username, if any, else "-"
+.-      remote_host         remote host name, "xxx.xxx.xxx.xxx"
+.-      Additionally, for each HTTP header field, an attribute HTTP_xxxx
+.-      where xxxx is the header field name. 
+.-
+.-  File has these attributes:
+.-      name                name of file with extension
+.-      nameurl             name of file escaped for use in URL
+.-      type                extension only
+.-      directory           1, if file is a directory  
+.-      size                file size, if not a directory
+.-      units               file size units, 'bytes', 'Kb', 'Mb', 'Gb'
+.-      date                file date, 'yyyy/mm/dd'
+.-      time                file time, 'hh:mm:ss'  
+.-      mimetime            file date/time in MIME format
+.-
+.-  To debug changes to this script, start Xitami in debug mode (server:debug
+.-  option) and show a directory listing.  This creates a file 'httpdir.xml'
+.-  that you can feed to gslgen by hand:
+.-
+.-      gslgen -script:templates/myfile.gsl httpdir.xml
+.-
+.-----------------------------------------------------------------------------
+.output "$(tempfile?httpdir.lst)"
+<HTML><TITLE>Directory listing of $(urlbase:)</TITLE><BODY>
+<H3>
+.if defined (urlparent)
+<A HREF="$(urlparent:)">
+<IMG SRC="/images/dir_up.gif" BORDER=0 ALT="Up to $(urlparent:)"></A>
+.endif
+$(urlbase:)</H3></TD>
+<HR>
+.-  We want the first character of the sort order
+.directory.order = substr (order,0,,1)
+.name_reorder = "nx"
+.size_reorder = "snx"
+.time_reorder = "Tnx"
+.if order = "n"
+.   name_reorder = "Nx"
+.elsif order = "s"
+.   size_reorder = "Snx"
+.elsif order = "T"
+.   time_reorder = "tnx"
+.endif
+.-
+<TABLE BORDER=0 WIDTH="700" CELLSPACING=0>
+<TR><TH ALIGN=LEFT><A HREF="$(urlbase:)?order=$(name_reorder:)">Name</A></TH>
+    <TH ALIGN=RIGHT><A HREF="$(urlbase:)?order=$(size_reorder:)">Size</A></TH>
+    <TH ALIGN=RIGHT><A HREF="$(urlbase:)?order=$(time_reorder:)">Modified</A></TH></TR>
+.for file
+<TR><TD>
+.   if defined (directory)
+.       icon = "/images/dir_dir.gif"
+.   elsif exists ("webpages/images/dir$(type?).gif")
+.       icon = "/images/dir$(type).gif"
+.   else
+.       icon = "/images/dir_any.gif"
+.   endif
+<A HREF="$(urlbase:)$(nameurl:)"><IMG SRC="$(icon)" BORDER=0>$(name:)</A></TD>
+.   if defined (directory)
+    <TD></TD>
+.   else
+    <TD ALIGN=RIGHT>$(size) $(units:)</TD>
+.   endif
+    <TD ALIGN=RIGHT>$(date) $(time)</TD></TR>
+.endfor
+</TABLE><HR>
+<P><I>Powered by <A HREF="http://www.xitami.com">Xitami!</A></I>
+</BODY></HTML>
+

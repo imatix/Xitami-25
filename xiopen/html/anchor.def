@@ -1,0 +1,278 @@
+#  Anchor definitions - created by htmlpp
+#  Delete this file to reset all anchors
+v_1                  index18.htm  What exactly do I need to define for a Virtual Host?
+i_5                  index18.htm  I installed Xitami two days ago, and now I can't connect to it!
+f_2                  index18.htm  How do I use my D: drive for additional FTP space?
+w_40                 index18.htm  Why does Win95 insist on running 'service.bat'?
+w_22                 index18.htm  Win95 crashes with a GPF in WINMM.DLL
+c_18                 index18.htm  How does Xitami handle its CGI stdio?
+history              index21.htm  
+getting_support      index19.htm  
+faqlink              index18.htm  
+c_23                 index18.htm  Why is the HTTP_REFERER not correctly filled-in?
+config_alias         index4.htm   
+vms                  index2.htm   
+c_20                 index18.htm  My BASIC .exe CGI does not work
+w_37                 index18.htm  Do you know of a good free e-mail server for Windows?
+w_26                 index18.htm  When I access my local site, it takes 3-4 minutes to load!
+f_9                  index18.htm  How do I set-up FTP virtual hosts?
+i_20                 index18.htm  Do I need two computers to use Xitami?
+i_46                 index18.htm  No-one can connect to my server through the firewall!
+w_12                 index18.htm  How do I debug my Windows network connection?
+i_43                 index18.htm  Does Xitami support http://ipaddress/~username?
+f_10                 index18.htm  Can I remotely browse my hard drives using Xitami?
+w_3                  index18.htm  'Could not open HTTP port 80 - Protocol not known'
+c_28                 index18.htm  How do I set-up a web site counter?
+w_33                 index18.htm  Windows says 'URL.DLL not found' when I choose 'Setup'
+w_30                 index18.htm  Xitami is reporting errors on its control panel
+config_main          index4.htm   
+i_41                 index18.htm  How do I make my server secure?
+w_42                 index18.htm  I'd like to run an abitrary Windows program from a browser
+c_47                 index18.htm  I've discovered a limit of 252 LRWP servers under Unix
+l_5                  index18.htm  My log file has this strange URL: webpages/http://hostname/file.htm
+c_10                 index18.htm  Why does my Perl CGI not run?
+config_ftp_alias     index12.htm  
+config_cgi_environment index4.htm   
+using_ssi            index6.htm   
+o_3                  index18.htm  Xitami aborts when my site is very heavily used
+c_31                 index18.htm  How do I use an URL like '/cgi/script'?
+i_36                 index18.htm  After running a script that modifies defaults.aut, how do I get the same script to restart the server?
+i_45                 index18.htm  No-one can get to my server. I can get in, but no-one else can
+c_4                  index18.htm  I can't get PHP to run with Xitami!
+3_3                  index18.htm  Are there still plans to introduce CGI for Win 3.x?
+3_2                  index18.htm  'Could not open HTTP port 80 - Protocol not known'
+i_3                  index18.htm  Can I refer to an environment variable in the webpages setting?
+i_15                 index18.htm  I can connect to http://127.0.0.1/ but not http://127.0.0.1/admin
+w_39                 index18.htm  Any hints for boosting Xitami's performance?
+c_34                 index18.htm  Can I trap the user id to subset data?
+n_7                  index18.htm  I defined a new VH and now my NT service won't run
+l_1                  index18.htm  How do I use the Xitami log files?
+syntax               index3.htm   
+i_40                 index18.htm  How do I make my server run faster?
+c_6                  index18.htm  Would you recommend CGI or WSX for a simple e-mail application?
+m_4                  index18.htm  Why is the Xitami mailing list not a newsgroup?
+i_26                 index18.htm  How do I tell Xitami to use my domain name?
+u_4                  index18.htm  Does Xitami support .htaccess with per-directory access control?
+v_4                  index18.htm  And how about their CGI scripts?
+c_39                 index18.htm  My CGI program can't connect to ODBC under Windows NT; it works from the command line
+config_ftplog        index12.htm  
+config_ssl_http      index4.htm   
+c_24                 index18.htm  When I generate images in my CGI program, LF becomes CRLF!
+os2                  index2.htm   
+u_8                  index18.htm  Why does the documentation always use DOS-style slashes?
+c_44                 index18.htm  Can I use Java servlets with Xitami?
+domain_logcycle      index4.htm   
+w_15                 index18.htm  I get 'Not authorized to access this resource' on other URLs
+u_2                  index18.htm  I need to search /usr/src/linux/include/ at build time
+user_authentication  index18.htm  
+i_9                  index18.htm  Why does the installation replace my xitami.cfg and .aut files?
+unix                 index2.htm   
+m_14                 index18.htm  Why are there bugs in Xitami?
+f_6                  index18.htm  How do I create an alias under the /pub directory?
+config_ftperrlog     index12.htm  
+n_6                  index18.htm  How do I remove the Xitami icon in my control panel area?
+w_7                  index18.htm  How can I tell what TCP/IP ports are assigned?
+config_win32         index4.htm   
+w_6                  index18.htm  'Your browser sent a malformed request'
+i_30                 index18.htm  Why does 'http://address/directory' does not work?
+filters              index7.htm   
+c_19                 index18.htm  Why does my Perl 'flush' command not work under Xitami?
+i_24                 index18.htm  How do I change my IP address?
+vhosts               index11.htm  
+wsx                  index16.htm  
+f_3                  index18.htm  When exactly does Xitami read the FTP user file?
+m_17                 index18.htm  Do you have any plans to incorporate SSL into Xitami?
+ddns                 index13.htm  
+i_16                 index18.htm  Why does 127.0.0.1 not work with proxy servers?
+w_8                  index18.htm  My URLs starting with file:// don't work across the network
+w_14                 index18.htm  I get 'Not authorized to access this resource' on aliases
+i_8                  index18.htm  Is there some way to disable the WBA completely?
+www.imatix.com       index2.htm   
+i_42                 index18.htm  I want each user to have FTP access to their personal web pages
+c_1                  index18.htm  How do I write CGIs?
+w_27                 index18.htm  Why does Xitami use all my CPU?
+w_2                  index18.htm  Can I use ASP (Active Server Pages) with Xitami?
+i_52                 index18.htm  How does Xitami work with subdomains?
+i_39                 index18.htm  Why does my webmask (!xx.xx.*) not work?
+c_22                 index18.htm  Why is the REMOTE_USER not correctly filled-in?
+f_7                  index18.htm  Helloftp.txt does not show up under web-based FTP access
+config_ftp_users     index12.htm  
+c_5                  index18.htm  Does Xitami have an API like ISAPI or NSAPI?
+i_11                 index18.htm  Can I install Xitami on a system that already has a web server?
+config_wsx           index4.htm   
+c_33                 index18.htm  Can I redirect users to different pages using the .aut file?
+m_19                 index18.htm  Is Xitami year 2000 compatible?
+c_14                 index18.htm  When I try to run a Perl CGI, my browser says 'Save to disk?'
+w_18                 index18.htm  Can I run RealServer on the same system as Xitami?
+c_2                  index18.htm  What's a good source for CGI programs?
+i_49                 index18.htm  I get the wrong default page, even if I change the webpages root!
+w_11                 index18.htm  Ping will find 127.0.0.1 but not <I>myhost</I>.com
+config_accesslog     index4.htm   
+c_7                  index18.htm  How do I tell Xitami which files are CGI programs?
+w_43                 index18.htm  Can I stop Xitami from the command line or a batch script?
+i_1                  index18.htm  When I try to use the /admin setup, Xitami asks for a password!
+3_5                  index18.htm  Why does xiwin16.exe use all my CPU?
+w_36                 index18.htm  Do you know of a good free proxy server for Windows?
+How_1                index18.htm  do I know that my personal config 'xxx.cfg' is being loaded?
+v_3                  index18.htm  How do I provide space for individual users on my system?
+m_13                 index18.htm  I compiled Xitami with lcc-win32 but it always aborts
+i_35                 index18.htm  Why is Xitami.aut not encoded?
+w_21                 index18.htm  Win95 crashes with a GPF in VxD IFSMGR(01)
+reset-default        index18.htm  
+config_errorlog      index4.htm   
+m_3                  index18.htm  Can you recommend a search engine for Xitami?
+l_6                  index18.htm  I can't access the log files while Xitami is writing to them!
+u_5                  index18.htm  How can I run Xitami and have it listen on port 80 under Unix?
+i_10                 index18.htm  How do I install a new version of Xitami without losing my config?
+domain_cyclehow      index4.htm   
+c_38                 index18.htm  How do I access ODBC databases under Windows?
+o_1                  index18.htm  Xitami does not start, and 'ping 127.0.0.1' does not work
+config_redirect      index4.htm   
+l_2                  index18.htm  Does the FTP server log logins, uploads, and downloads?
+i_2                  index18.htm  Help - I don't understand how to define users and passwords!
+i_27                 index18.htm  How do I move my web site to an Internet domain name?
+c_37                 index18.htm  How do I write a shopping-card CGI program?
+win32                index2.htm   
+c_43                 index18.htm  My SSI page says '#exec command not permitted for security reasons'
+config_lrwp_application index4.htm   
+v_6                  index18.htm  My virtual host setup does not work - what can I try?
+emx                  index2.htm   
+win16                index2.htm   
+m_7                  index18.htm  Why is the password file not encrypted?
+i_28                 index18.htm  Can I set my hostname in xitami.cfg or defaults.cfg?
+i_21                 index18.htm  Can I run Xitami on stand-alone machine?
+w_13                 index18.htm  Xitami just sits there blinking between 'Running' and 'Suspended'
+w_31                 index18.htm  Can I run multiple instances under Windows?
+n_5                  index18.htm  Can I restart the Xitami service from a batch file?
+i_31                 index18.htm  My images don't load, and various links give 'Not found'
+w_17                 index18.htm  My web server address is 'http://default/' - why?
+config_server        index4.htm   
+i_48                 index18.htm  The browser is not showing my new pages
+w_35                 index18.htm  What's CGI/Win?
+i_7                  index18.htm  Why do web servers want to use port 80 by default?
+w_10                 index18.htm  Tips for using a dial-up IP connection
+m_9                  index18.htm  I want to write a great Xitami addon...
+m_16                 index18.htm  Where can I get older versions of Xitami?
+w_9                  index18.htm  Tips for using Xitami with dynamic IP addresses
+m_11                 index18.htm  I'm building a Windows app based on Xitami, but it aborts
+i_17                 index18.htm  Why does my server address switch between 127.0.0.1 and 253.239.42.1?
+download             index2.htm   
+i_29                 index18.htm  My server keeps starting on port 160, why?
+c_13                 index18.htm  Every time my SSI page uses #exec, Xitami scans the floppy drive!
+n_2                  index18.htm  The Xitami service can't access a network drive
+w_5                  index18.htm  'How do I run PWS and Xitami on the same system?'
+c_25                 index18.htm  Must I use /cgi-bin in CGI URLs?
+i_44                 index18.htm  In FTP, 'ls' fails from a remote system (it works locally)
+i_53                 index18.htm  Where can I get (just) primary & secondary DNS hosting for cheap?
+c_16                 index18.htm  I get "Can't locate ./lib/cgi-lib.pl in @INC at C:Program
+m_18                 index18.htm  What is the future for Xitami?
+i_38                 index18.htm  What is defaults.cfg? I can't find it anywhere!
+pipes                index14.htm  
+i_25                 index18.htm  Xitami is reporting the wrong server address!
+l_8                  index18.htm  My computer crashed and now my log files are full of junk
+u_6                  index18.htm  What are the security implications of running Xitami as root?
+3_4                  index18.htm  When will FTP work in the Win 3.x version?
+l_7                  index18.htm  My log files do not get updated until Xitami is restarted
+i_33                 index18.htm  How can I change the error 404 message in Xitami?
+f_8                  index18.htm  FTP aliases don't show-up when I do a browser directory listing
+c_32                 index18.htm  My CGI '/somedir/cgi-bin/script' does not work
+c_8                  index18.htm  How do I debug CGI programs?
+c_30                 index18.htm  I tried compiling testcgi.c but it wants sfl.h?
+c_42                 index18.htm  How do I do file uploads through CGI?
+i_22                 index18.htm  Can I run Xitami under DOS?
+l_3                  index18.htm  Why does access.log contain only numeric addresses?
+w_28                 index18.htm  When I run a CGI, I get a blank screen for several seconds
+c_40                 index18.htm  When I run a heavy ODBC CGI program, I get "Server Overloaded"
+l_4                  index18.htm  Can I use Microsoft's WINS protocol for analysing my log files?
+i_6                  index18.htm  What is a 'HTTP port', actually?
+3_1                  index18.htm  Xitami does not work - why not?
+m_12                 index18.htm  How do I rebuild Xitami under Windows using lcc-win32?
+beginners            index15.htm  
+c_46                 index18.htm  What plans do you have for server-side JavaScript?
+w_25                 index18.htm  Xitami crashes as soon as I try to start it
+win32_console        index2.htm   
+m_2                  index18.htm  What are the main problems with Xitami today?
+n_4                  index18.htm  The Xitami service still fails to start!
+f_4                  index18.htm  If I give a user only 'P' access to a directory they can't list it
+c_36                 index18.htm  How do I allow CGIs in any regular HTML directory?
+i_19                 index18.htm  What's the 'document root'?
+w_32                 index18.htm  IE sometimes fails with multiframe documents
+toc                  index1.htm   
+config_security      index4.htm   
+n_9                  index18.htm  Can I use 'srvany' with Xitami?
+v_2                  index18.htm  How do I set-up a virtual host on another port?
+license              license.htm  
+using_xml            index8.htm   
+c_29                 index18.htm  How do I make a CGI file executable for DOS?
+i_13                 index18.htm  When I'm not connected to the network, Xitami is VERY slow!
+i_50                 index18.htm  I want several 'sites' on the same IP address, on different ports
+w_38                 index18.htm  Do you know of a mail client for Windows?
+w_23                 index18.htm  Win95 gives me an error 10055 - Out of buffer space
+config_ssi           index4.htm   
+c_11                 index18.htm  How can I find-out what directory a script is called from?
+m_10                 index18.htm  How do I rebuild the SFL under Windows using MSVC?
+w_41                 index18.htm  I installed MSIE 5 and uninstalled it, and now Xitami crashes whenever I try to start it up.
+win32_service        index2.htm   
+v_5                  index18.htm  Can I run two versions of Xitami, e.g. on ports 80 and 1010?
+cgidir               index5.htm   
+c_17                 index18.htm  I get "Document contains no data" when running a Perl CGI
+f_5                  index18.htm  I'm having problems getting my FTP permissions right
+i_23                 index18.htm  Can I use Xitami over an ISDN or dial-in connection?
+c_27                 index18.htm  How do I use a CGI program as a default page?
+config_cgi           index4.htm   
+o_2                  index18.htm  Xitami reports 'too many open files'
+m_8                  index18.htm  Do I need a special license to use/sell/modify Xitami at work?
+using_gsl            index9.htm   
+m_1                  index18.htm  How do you pronounce Xitami?
+f_1                  index18.htm  People can't transfer files or see directories on my FTP server
+i_37                 index18.htm  Can I use 'home.html' instead of 'default.htm'?
+c_12                 index18.htm  Can I restrict the commands that a Perl CGI uses?
+config_ftp           index12.htm  
+n_1                  index18.htm  My 16-bit CGI program does not output anything
+c_9                  index18.htm  Can you give me a checklist for installing Perl for Windows?
+group                index19.htm  
+m_6                  index18.htm  Can I customise the directory listings?
+w_20                 index18.htm  How do I use the FrontPage extensions with Xitami?
+webmasks             index4.htm   
+i_47                 index18.htm  Why does the Restart function not work?
+config_console       index4.htm   
+i_32                 index18.htm  Why do my aliases not work?
+config_lrwp          index4.htm   
+i_34                 index18.htm  What's 'Vanilla' Xitami?
+w_4                  index18.htm  'Port is already used by another server (WSEADDRINUSE)'
+w_34                 index18.htm  Why is Windows ignoring my changes to the hosts.sam file?
+c_41                 index18.htm  My images don't load when my CGI uses extra PATH_INFO
+i_14                 index18.htm  'ping 127.0.0.1' works but I can't connect to http://127.0.0.1/
+w_16                 index18.htm  How do I change my 'web server address'?
+lrwp                 index17.htm  
+u_3                  index18.htm  Can I run Xitami from my ISP telnet account?
+config_cgi_alias     index4.htm   
+w_29                 index18.htm  How do I reinstall just one file from the Xitami kit?
+n_8                  index18.htm  When I try to install Xitami on NT 4 I get a dialog box that says "Corrupt installation detected"
+config_mime          index4.htm   
+start_service        index18.htm  
+w_24                 index18.htm  Win95 still gives me errors when I use Xitami
+c_15                 index18.htm  A require() or use() command in my Perl CGI script fails
+config_serverlog     index4.htm   
+c_21                 index18.htm  Why do I get 'HTTP/1.0 502: Service temporarily overloaded'?
+config_rdns          index4.htm   
+c_48                 index18.htm  How do I do user authentication in a CGI script?
+config_ddns          index4.htm   
+w_19                 index18.htm  My 16-bit CGI program does not output anything
+c_45                 index18.htm  Can I use LRWP peers with another web server?
+domain_logformat     index4.htm   
+i_51                 index18.htm  How do I use Xitami on several different web projects?
+m_15                 index18.htm  Why is Xitami free, and will it remain this way?
+c_26                 index18.htm  I want to put some CGIs in another directory, e.g. /htdocs/myscripts
+w_1                  index18.htm  Can I use my Win95 system as a real server?
+i_12                 index18.htm  How do I change the HTTP port but leave the FTP port at 21?
+i_18                 index18.htm  I want to test a site but my browser can't find 'www.myhost.com'
+c_35                 index18.htm  I want to limit CGIs, but not HTML pages, to certain IP addresses
+m_5                  index18.htm  Why do I get errors on 'robots.txt'? What is this?
+i_4                  index18.htm  I've screwed-up my installation and nothing works - Help!
+config_filter        index4.htm   
+u_1                  index18.htm  Xitami does not build on my XXXX system
+config_virtual_hosts index4.htm   
+u_7                  index18.htm  What's the best Linux operating system? RedHat, Debian, FreeBSD...?
+n_3                  index18.htm  The Xitami service fails to start, saying 'Access is denied'.
+c_3                  index18.htm  When I run a CGI program, I don't get any response

@@ -1,0 +1,41 @@
+<!-----------------------------------------------------------------------
+    pipedef.xml - Pipe (throttle) definitions
+
+    Written: 99/08/23   Xitami team xitami@imatix.com
+    Revised: 99/08/23   Xitami team xitami@imatix.com
+
+    How to use this file:
+
+    The case-sensitive XML structure is:
+        DATA 
+          PIPE
+            INSTANCE
+
+    The pipe definition is applied to zero or more 'instances', which
+    are the throttle pipes that the application can use.  A pipe with
+    no instances is not used.
+    
+    PIPE has these attributes:
+        NAME       Name of pipe
+        RATE       Input/output rate, bytes per second           
+        OUTRATE    Output rate, specified seperately
+        INRATE     Input rate, specified seperately
+        UNITS      Rate multiplication factor (1)
+    INSTANCE has these attributes:
+        NAME       Instance name
+    --------------------------------------------------------------------->
+<DATA>
+
+<PIPE NAME = "32k"   RATE = "32"    UNITS = "1024"  >
+    <INSTANCE NAME = "32k pipe" />
+</PIPE>
+<PIPE NAME = "64k"   RATE = "64"    UNITS = "1024"  >
+    <INSTANCE NAME = "64k pipe A" />
+    <INSTANCE NAME = "64k pipe B" />
+</PIPE>
+<PIPE NAME = "128k"  RATE = "128"   UNITS = "1024"  >
+    <INSTANCE NAME = "128k pipe A" />
+    <INSTANCE NAME = "128k pipe B" />
+</PIPE>
+
+</DATA>

@@ -1,0 +1,146 @@
+.---------------------------------------------------------------------
+.-  prelude.def   Definitions for Xitami documentation
+.-
+.---------------------------------------------------------------------
+
+.define version_no      25b6
+.define version         2.5b6
+
+.-  The complete $(SERVER) tree is mirrored at $(LOCAL)
+.define SERVER          ""
+.define LOCAL           i:/site
+.define imatix          http://www.imatix.com/
+.define ph              /html/pieter.htm
+.define tools           $(imatix)pub/tools/
+.define smt             $(imatix)html/smt/
+.define sfl             $(imatix)html/sfl/
+.define htmlpp          $(imatix)html/htmlpp/
+.define libero          $(imatix)html/libero/
+.define xitami          /pub/xitami
+.define info            mailto:info@imatix.com
+.define liberetto       mailto:liberetto@imatix.com
+.define register        mailto:register-xitami@imatix.com
+.define support         mailto:support@imatix.com
+.define hotline         mailto:hotline@imatix.com
+.define sales           mailto:sales@imatix.com
+.define mailist         mailto:xitami-request@isonline.com
+.define archlist        http://www.isonline.com/xitami/1998
+.define archsearch      http://www.isonline.com/xitami/search.html
+.define faq             xitami/$(faqlink)
+.define gsl             $(imatix)html/gslgen/
+.define swish           $(imatix)pub/tools/swish11.exe
+.define sendmail        $(imatix)pub/tools/sendmail.zip
+
+.define info-zip        http://www.cdrom.com/pub/infozip/
+.define altavista       http://www.altavista.com/
+.define perl            http://www.activestate.com/
+.define ssi -
+     http://hoohoo.ncsa.uiuc.edu/docs/tutorials/includes.html
+
+.block header
+<HTML><HEAD><!--Revised: $(revised) By: $(author)-->
+<TITLE>$(TITLE)</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | $(*imatix=iMatix home page)<BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | $(*FIRST_PAGE=&lt;&lt;) | $(*PREV_PAGE=&lt;)
+ | $(*NEXT_PAGE=&gt;) | $(*LAST_PAGE=&gt;&gt;)
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version $(version)
+</TABLE>
+<HR>
+.endblock
+
+.block footer
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | $(*FIRST_PAGE=&lt;&lt;) | $(*PREV_PAGE=&lt;)
+ | $(*NEXT_PAGE=&gt;) | $(*LAST_PAGE=&gt;&gt;)
+<BR><FONT SIZE=2>
+.build index
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>
+.endblock
+
+.block pipe_header
+<HTML><HEAD><!--Revised: $(revised) By: $(author)-->
+<TITLE>$(PIPE_TITLE)</TITLE></HEAD>
+<TABLE WIDTH=100%><TR>
+<TD ALIGN=LEFT>$(*imatix=iMatix home page)
+<TD ALIGN=RIGHT><FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version $(version)
+</TABLE>
+<HR>
+.endblock
+
+.block pipe_footer
+<HR><FONT SIZE=2>Copyright &#169; 1996-99 iMatix Corporation
+</BODY></HTML>
+.endblock
+
+.block anchor
+<A NAME="$(ANCHOR)">&nbsp;</A>
+.end
+
+.block dir_open
+<PRE>
+.block dir_entry
+$(*DIR_HREF="$(DIR_NAME)") $(DIR_SIZE) $(DIR_DATE) $(DIR_TIME)  $($(DIR_EXT))
+.block dir_close
+</PRE>
+.end
+
+.block index_open
+.block index_entry
+.if "$(INDEX_PAGE)" eq "$(PAGE)"
+| <EM>$(INDEX_TITLE)</EM>
+.else
+| $(*INDEX_PAGE="$(INDEX_TITLE)")
+.endif
+.endblock
+
+.include filetype.def
+.include macros.def
+
+.macro linkto <A HREF="http://$1">$1</A>
+
+.macro file -
+.if -e "$(LOCAL)$(xitami)/$1" -
+<TD BGCOLOR=#D3D3D3> -
+<A HREF="$2/$1">$1</A><BR>[&file_size\("$(LOCAL)$(xitami)/$1","K") Kb] -
+.else -
+<TD>$1<BR>N/A -
+.endif
+
+.macro file_table -
+<TABLE BORDER=1 BORDERCOLORDARK=WHITE BORDERCOLORLIGHT=WHITE> -
+<TR BGCOLOR=#B0C4DE ALIGN=CENTER> -
+  <TD BGCOLOR=#FFEFD5> -
+  <TD>Win 3.x -
+  <TD>Win 95/NT<BR>standard -
+  <TD>Win 95<BR>console -
+  <TD>Win NT<BR>service -
+  <TD>Win NT<BR>Alpha/AXP -
+  <TD>OS/2 -
+  <TD>Unix, OpenVMS -
+<TR> -
+  <TD BGCOLOR=#B0C4DE>Install package -
+  <.file bw16$1.exe $2> -
+  <.file bw32$1.exe $2> -
+  <.file bc32$1.exe $2> -
+  <.file bs32$1.exe $2> -
+  <.file baxp$1.zip $2> -
+  <.file bos2$1.zip $2> -
+  <.file suni$1.tgz $2> -
+<TR> -
+  <TD BGCOLOR=#B0C4DE>Source package<BR>(if separate) -
+  <TD> -
+  <TD> -
+  <.file swin$1.zip $2> -
+  <TD> -
+  <TD> -
+  <.file swin$1.zip $2> -
+  <TD> -
+</TABLE>

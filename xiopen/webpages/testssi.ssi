@@ -1,0 +1,30 @@
+<HTML><HEAD><!--Revised: 2 Jan 1999 By: iMatix Corporation-->
+<TITLE>Server-Side Includes</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="/xitami/index.htm"> Xitami home page</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami"
+ WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+</TABLE>
+<HR>
+<H1>Server-Side Includes</H1>
+
+<P>If SSI is working and enabled, you will see the various SSI tags
+correctly translated below.
+<!--#include file="testssi.inc"-->
+
+
+
+
+<HR>
+<TABLE WIDTH=100%>
+<TR>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="http://www.imatix.com/index.htm">
+<IMG SRC="/images/imatix.gif"
+ WIDTH=96 HEIGHT=40 ALT="iMatix" BORDER=0>
+</A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix</TABLE>
+</BODY></HTML>

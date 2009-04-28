@@ -1,0 +1,185 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "Xitami Console"=".\Xitami_Console.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name gsl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name sfl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name smt
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name studio
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name xiadmin
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Xitami Control Panel"=".\Xitami_Control_Panel.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name gsl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name sfl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name smt
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name studio
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name xiadmin
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Xitami Service"=".\Xitami_Service.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name gsl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name sfl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name smt
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name studio
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name xiadmin
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Xitami Win32"=".\Xitami_Win32.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name gsl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name sfl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name smt
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name studio
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name xiadmin
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "gsl"=".\gsl.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "sfl"=".\sfl.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "smt"=".\smt.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "studio"=".\studio.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "xiadmin"=".\xiadmin.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

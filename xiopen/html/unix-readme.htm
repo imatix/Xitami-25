@@ -1,0 +1,115 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Xitami installation for UNIX</TITLE></HEAD>
+<TABLE WIDTH=100%><TR>
+<TD ALIGN=LEFT><A href="http://www.imatix.com/">iMatix home page</A>
+<TD ALIGN=RIGHT><FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+<H3><A NAME="TOC15">Source Installation For UNIX</A></H3>
+
+
+
+<P>With an ANSI C compiler, you can rebuild Xitami on your system. Note that
+
+the Xitami sources are ANSI C/POSIX compatible, and should build cleanly on
+
+the majority of UNIX systems.  We and other people have tested Xitami on
+
+these systems:
+
+<UL>
+
+<LI>Linux
+
+<LI>IBM RS/6000 AIX
+
+<LI>HP/UX
+
+<LI>Digital UNIX (OSF/1)
+
+<LI>SunOS and Solaris
+
+<LI>SCO UNIXWare and OpenServer
+
+<LI>SGI Irix
+
+<LI>FreeBSD, BSD/OS, NetBSD
+
+</UL>
+
+
+
+<P>To install the source kit you need about 15Mb of disk space. You can
+
+download the Xitami sources as a compressed tar file (.tgz). To unpack
+
+a tgz file you need GNU gunzip.  Download the
+
+<A href="http://users.skynet.be/sky95044/suni.tgz">suni.tgz</A> source kit.  To unpack the compressed file,
+
+give these commands:
+
+<PRE>gunzip suni.tgz
+
+tar -xvf suni.tar
+
+</PRE>
+
+
+
+<P>The resulting directory structure includes the full sources for Xitami
+
+(basically the <A href="http://www.imatix.com/html/sfl/">SFL</A> and <A href="http://www.imatix.com/html/smt/">SMT</A> packages), plus a build script,
+
+<TT>xibuild</TT>, plus the directories and web pages you need to get started
+
+with Xitami.
+
+
+
+<P>The <TT>xibuild</TT> script compiles Xitami and installs the executable
+
+program in the top directory (where <TT>xibuild</TT> is located). To run
+
+<TT>xibuild</TT>, give these commands:
+
+
+
+<PRE>chmod +x xibuild
+
+./xibuild</PRE>
+
+
+
+<P>When you have built Xitami, run xitami, then connect with any web
+
+browser. You should see the "Welcome To Xitami" test page. If Xitami cannot
+
+run on its normal port (80), it shows an error message: this can happen if
+
+another server is using port 80. To use an alternative HTTP port, use the
+
+'-b' option. This shifts the standard HTTP and FTP ports by some 'base'. For
+
+example, '-b 5000' runs the Xitami HTTP service on port 5080 and the FTP
+
+service on port 5021. You would then connect using
+
+<TT>http://localhost:5080/</TT>.
+
+
+
+<P>If Xitami does not build cleanly on your system, the problem will usually
+
+lie in non-standard code in the SFL library upon which Xitami is based. It's
+
+possible that your system (or compiler) does not do what SFL expects. In
+
+general the only file which you may need to change is the prelude.h file in
+
+the SFL directory. Read the SFL doc if you think you want to make changes to
+
+this library (it's pretty simple, really, and many people done this).
+
+<HR><FONT SIZE=2>Copyright &#169; 1996-99 iMatix Corporation
+</BODY></HTML>

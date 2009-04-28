@@ -1,0 +1,517 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral (Default) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUD)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_POPUP_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "xxx"
+    BEGIN
+        MENUITEM "&Properties...",              IDFM_PROPERTIES
+        MENUITEM "&Setup",                      IDFM_SETUP
+        MENUITEM "&Running",                    IDFM_ACTIVE, CHECKED
+        MENUITEM "&Terminate",                  IDFM_TERMINATE
+        MENUITEM SEPARATOR
+        MENUITEM "&About",                      IDFM_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_ON                  BITMAP  DISCARDABLE     "On.bmp"
+IDB_OFF                 BITMAP  DISCARDABLE     "Off.bmp"
+#endif    // Neutral (Default) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_ACTIVE              BITMAP  DISCARDABLE     "active.bmp"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral (Sys. Default) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUSD)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_SYS_DEFAULT
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAIN MENU DISCARDABLE 
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Exit",                        IDR_EXIT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_HTTP DIALOG DISCARDABLE  0, 0, 227, 191
+STYLE WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "A&bout",IDC_ABOUT,119,169,45,14
+    PUSHBUTTON      "&Help",IDC_HELPS,171,169,45,14
+    CONTROL         "&Autorun at login:",IDC_STARTUP,"Button",
+                    BS_AUTOCHECKBOX | BS_LEFTTEXT | BS_NOTIFY | WS_GROUP | 
+                    WS_TABSTOP,142,17,67,10
+    PUSHBUTTON      "&Start",IDC_START,69,33,42,14,WS_GROUP
+    PUSHBUTTON      "Sus&pend",IDC_SUSPEND,118,33,42,14
+    PUSHBUTTON      "&Terminate",IDC_TERMINATE,167,33,42,14
+    PUSHBUTTON      "",IDC_COPY,202,83,7,9
+    PUSHBUTTON      "&Reset",IDC_RESET,167,122,42,14,WS_GROUP
+    DEFPUSHBUTTON   "&Close",IDOK,9,169,45,14,WS_GROUP
+    PUSHBUTTON      "Set&up...",IDC_SETUP,64,169,45,14
+    GROUPBOX        "",IDC_STATIC,7,6,211,47
+    CTEXT           "Running",IDC_SERVER_STATE,13,36,49,11
+    CONTROL         "",IDC_HOSTNAME,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,
+                    71,67,138,11
+    CONTROL         "",IDC_CUR_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,71,97,31,11
+    CONTROL         "",IDC_TRANSFERRED,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,71,112,31,11
+    CONTROL         "",IDC_ERRORS,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,71,
+                    127,31,11
+    LTEXT           "Hostname:",IDC_STATIC,17,67,52,8,NOT WS_GROUP
+    GROUPBOX        "Statistics",IDC_STATIC,7,54,211,107
+    LTEXT           "Connections:",IDC_STATIC,17,97,47,8,NOT WS_GROUP
+    LTEXT           "Kb transferred:",IDC_STATIC,17,112,49,8,NOT WS_GROUP
+    LTEXT           "HTTP errors:",IDC_STATIC,17,127,50,8,NOT WS_GROUP
+    CONTROL         "",IDC_MAX_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,126,97,30,11
+    LTEXT           "Max:",IDC_STATIC,108,97,18,8,NOT WS_GROUP
+    CONTROL         "",IDC_TOTAL_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,179,97,30,11
+    LTEXT           "Hits:",IDC_STATIC,161,97,16,8,NOT WS_GROUP
+    CONTROL         "",IDC_IPADDRESS,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,
+                    71,82,125,11
+    LTEXT           "IP address(es):",IDC_STATIC,17,82,52,8,NOT WS_GROUP
+    ICON            IDI_ICON_ON,IDC_STATE_ON,23,17,18,20
+    ICON            IDI_ICON_OFF,IDC_STATE_OFF,23,17,18,20
+    ICON            IDI_ICON_ACTIVE,IDC_STATE_ACTIVE,23,17,18,20
+    CONTROL         "",IDC_MEMORY,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,71,
+                    142,31,11
+    LTEXT           "Kb allocated:",IDC_STATIC,17,142,50,8,NOT WS_GROUP
+END
+
+IDD_MAIN_SERVICE DIALOG DISCARDABLE  200, 200, 225, 190
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_CAPTION
+CAPTION "Xitami Web Server Properties"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "A&bout",IDC_ABOUT,118,168,45,14
+    PUSHBUTTON      "&Help",IDC_HELPS,173,168,45,14
+    PUSHBUTTON      "&Start",IDC_START,69,33,42,14,WS_GROUP
+    PUSHBUTTON      "Sus&pend",IDC_SUSPEND,118,33,42,14
+    PUSHBUTTON      "&Terminate",IDC_TERMINATE,167,33,42,14,WS_DISABLED
+    PUSHBUTTON      "",IDC_COPY,202,83,7,9
+    PUSHBUTTON      "&Reset",IDC_RESET,167,122,42,14,WS_GROUP
+    DEFPUSHBUTTON   "&Close",IDOK,8,168,45,14,WS_GROUP
+    PUSHBUTTON      "Set&up...",IDC_SETUP,63,168,45,14
+    GROUPBOX        "",IDC_STATIC,7,6,211,47
+    CTEXT           "Running",IDC_SERVER_STATE,12,37,47,13
+    CONTROL         "",IDC_HOSTNAME,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,
+                    71,67,138,11
+    CONTROL         "",IDC_CUR_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,71,97,31,11
+    CONTROL         "",IDC_TRANSFERRED,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,71,112,31,11
+    CONTROL         "",IDC_ERRORS,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,71,
+                    127,31,11
+    LTEXT           "Hostname:",IDC_STATIC,17,67,52,8,NOT WS_GROUP
+    GROUPBOX        "Statistics",IDC_STATIC,7,54,211,106
+    LTEXT           "Connections:",IDC_STATIC,17,97,47,8,NOT WS_GROUP
+    LTEXT           "Kb transferred:",IDC_STATIC,17,112,49,8,NOT WS_GROUP
+    LTEXT           "HTTP errors:",IDC_STATIC,17,127,50,8,NOT WS_GROUP
+    CONTROL         "",IDC_MAX_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,126,97,30,11
+    LTEXT           "Max:",IDC_STATIC,108,97,18,8,NOT WS_GROUP
+    CONTROL         "",IDC_TOTAL_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,179,97,30,11
+    LTEXT           "Hits:",IDC_STATIC,161,97,16,8,NOT WS_GROUP
+    ICON            IDI_ICON_ON,IDC_STATE_ON,23,17,18,20
+    ICON            IDI_ICON_OFF,IDC_STATE_OFF,23,17,18,20
+    LTEXT           "IP address(es):",IDC_STATIC,17,82,52,8,NOT WS_GROUP
+    ICON            IDI_ICON_ACTIVE,IDC_STATE_ACTIVE,23,17,18,20
+    CONTROL         "&Autorun at login:",IDC_STARTUP,"Button",
+                    BS_AUTOCHECKBOX | BS_LEFTTEXT | BS_NOTIFY | WS_DISABLED | 
+                    WS_GROUP | WS_TABSTOP,142,17,67,10
+    CONTROL         "",IDC_MEMORY,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,71,
+                    142,31,11
+    LTEXT           "Kb allocated:",IDC_STATIC,17,142,50,8,NOT WS_GROUP
+    CONTROL         "",IDC_IPADDRESS,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,
+                    71,82,126,11
+END
+
+IDD_CRASH DIALOGEX 0, 0, 294, 174
+STYLE DS_MODALFRAME | DS_SETFOREGROUND | DS_CENTER | WS_POPUP | WS_VISIBLE | 
+    WS_CAPTION
+CAPTION "Xitami Crash Recovery"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "&Restart",IDC_RESTART,83,148,58,14
+    PUSHBUTTON      "&Debug",IDC_DEBUG,223,148,58,14
+    CONTROL         129,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE | 
+                    SS_SUNKEN | WS_BORDER,11,8,69,49
+    EDITTEXT        IDC_MESSAGE,11,67,270,75,ES_MULTILINE | ES_READONLY | 
+                    NOT WS_TABSTOP
+    CTEXT           "Check-out the server:recover option if you want Xitami to recover silently and automatically.",
+                    IDC_STATIC,93,38,188,19,0,WS_EX_TRANSPARENT
+    PUSHBUTTON      "&Abort",IDC_ABORT,153,148,58,14
+    CTEXT           "Xitami Crash Recovery has detected a bug.  Please e-mail the message below to bugs@xitami.com, and tell us what you were doing when this happened.",
+                    IDC_STATIC,93,8,188,27,0,WS_EX_TRANSPARENT
+END
+
+IDD_ABOUT_PRO DIALOGEX 0, 0, 294, 173
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "The Xitami/Pro Web Server"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&Ok",IDOK,130,140,150,20
+    PUSHBUTTON      "www.imatix.com",IDC_IMATIX,22,40,80,15
+    CTEXT           "Version info",IDC_VERSION,15,117,95,15,SS_CENTERIMAGE
+    CTEXT           "iMatix Corporation ----------------------------------- Copyright © 1991-2002",
+                    IDC_STATIC,15,137,95,25,0,WS_EX_TRANSPARENT
+    EDITTEXT        IDC_QUOTES,130,10,152,120,ES_MULTILINE | ES_READONLY | 
+                    WS_VSCROLL | NOT WS_TABSTOP
+    CONTROL         130,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN | 
+                    WS_BORDER,28,62,69,49
+    CONTROL         131,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,22,10,81,
+                    26
+END
+
+IDD_PRO_SERVICE DIALOG DISCARDABLE  200, 200, 232, 207
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_CAPTION
+CAPTION "Xitami/Pro Web Server Properties"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "A&bout",IDC_ABOUT,118,186,45,14
+    PUSHBUTTON      "&Help",IDC_HELPS,173,186,45,14
+    PUSHBUTTON      "&Start",IDC_START,173,31,42,14,WS_GROUP
+    PUSHBUTTON      "Sus&pend",IDC_SUSPEND,174,50,42,14
+    PUSHBUTTON      "",IDC_COPY,202,103,7,9
+    PUSHBUTTON      "&Reset",IDC_RESET,167,142,42,14,WS_GROUP
+    DEFPUSHBUTTON   "&Close",IDOK,8,186,45,14,WS_GROUP
+    PUSHBUTTON      "Set&up...",IDC_SETUP,63,186,45,14
+    GROUPBOX        "",IDC_STATIC,7,6,215,63
+    CTEXT           "Running",IDC_SERVER_STATE,99,52,47,10
+    CONTROL         "",IDC_HOSTNAME,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,
+                    71,87,138,11
+    CONTROL         "",IDC_CUR_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,71,117,31,11
+    CONTROL         "",IDC_TRANSFERRED,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,71,132,31,11
+    CONTROL         "",IDC_ERRORS,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,71,
+                    147,31,11
+    LTEXT           "Hostname:",IDC_STATIC,17,87,52,8,NOT WS_GROUP
+    GROUPBOX        "Statistics",IDC_STATIC,7,74,216,106
+    LTEXT           "Connections:",IDC_STATIC,17,117,47,8,NOT WS_GROUP
+    LTEXT           "Kb transferred:",IDC_STATIC,17,132,49,8,NOT WS_GROUP
+    LTEXT           "HTTP errors:",IDC_STATIC,17,147,50,8,NOT WS_GROUP
+    CONTROL         "",IDC_MAX_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,126,117,30,11
+    LTEXT           "Max:",IDC_STATIC,108,117,18,8,NOT WS_GROUP
+    CONTROL         "",IDC_TOTAL_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,179,117,30,11
+    LTEXT           "Hits:",IDC_STATIC,161,117,16,8,NOT WS_GROUP
+    ICON            IDI_ICON_ON,IDC_STATE_ON,111,28,21,20
+    ICON            IDI_ICON_OFF,IDC_STATE_OFF,111,28,21,20
+    LTEXT           "IP address(es):",IDC_STATIC,17,102,52,8,NOT WS_GROUP
+    ICON            IDI_ICON_ACTIVE,IDC_STATE_ACTIVE,111,28,21,20
+    CONTROL         "",IDC_MEMORY,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,71,
+                    162,31,11
+    LTEXT           "Kb allocated:",IDC_STATIC,17,162,50,8,NOT WS_GROUP
+    CONTROL         "",IDC_IPADDRESS,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,
+                    71,102,126,11
+    CONTROL         130,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN | 
+                    WS_BORDER,13,13,69,49
+    LTEXT           "Xitami/Pro Secure Server",IDC_STATIC,89,16,124,13
+END
+
+IDD_HTTP_PRO DIALOG DISCARDABLE  0, 0, 227, 244
+STYLE WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "A&bout",IDC_ABOUT,119,222,45,14
+    PUSHBUTTON      "&Help",IDC_HELPS,171,222,45,14
+    CONTROL         "&Autorun at login:",IDC_STARTUP,"Button",
+                    BS_AUTOCHECKBOX | BS_LEFTTEXT | BS_NOTIFY | WS_GROUP | 
+                    WS_TABSTOP,142,70,67,10
+    PUSHBUTTON      "&Start",IDC_START,69,86,42,14,WS_GROUP
+    PUSHBUTTON      "Sus&pend",IDC_SUSPEND,118,86,42,14
+    PUSHBUTTON      "&Terminate",IDC_TERMINATE,167,86,42,14
+    PUSHBUTTON      "",IDC_COPY,202,136,7,9
+    PUSHBUTTON      "&Reset",IDC_RESET,167,175,42,14,WS_GROUP
+    DEFPUSHBUTTON   "&Close",IDOK,9,222,45,14,WS_GROUP
+    PUSHBUTTON      "Set&up...",IDC_SETUP,64,222,45,14
+    GROUPBOX        "",IDC_STATIC,7,59,211,47
+    CTEXT           "Running",IDC_SERVER_STATE,13,89,49,11
+    CONTROL         "",IDC_HOSTNAME,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,
+                    71,120,138,11
+    CONTROL         "",IDC_CUR_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,71,150,31,11
+    CONTROL         "",IDC_TRANSFERRED,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,71,165,31,11
+    CONTROL         "",IDC_ERRORS,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,71,
+                    180,31,11
+    LTEXT           "Hostname:",IDC_STATIC,17,120,52,8,NOT WS_GROUP
+    GROUPBOX        "Statistics",IDC_STATIC,7,107,211,107
+    LTEXT           "Connections:",IDC_STATIC,17,150,47,8,NOT WS_GROUP
+    LTEXT           "Kb transferred:",IDC_STATIC,17,165,49,8,NOT WS_GROUP
+    LTEXT           "HTTP errors:",IDC_STATIC,17,180,50,8,NOT WS_GROUP
+    CONTROL         "",IDC_MAX_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,126,150,30,11
+    LTEXT           "Max:",IDC_STATIC,108,150,18,8,NOT WS_GROUP
+    CONTROL         "",IDC_TOTAL_CONNECTS,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_SUNKEN,179,150,30,11
+    LTEXT           "Hits:",IDC_STATIC,161,150,16,8,NOT WS_GROUP
+    CONTROL         "",IDC_IPADDRESS,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,
+                    71,135,125,11
+    LTEXT           "IP address(es):",IDC_STATIC,17,135,52,8,NOT WS_GROUP
+    ICON            IDI_ICON_ON,IDC_STATE_ON,23,70,21,20
+    ICON            IDI_ICON_OFF,IDC_STATE_OFF,23,70,21,20
+    ICON            IDI_ICON_ACTIVE,IDC_STATE_ACTIVE,23,70,21,20
+    CONTROL         "",IDC_MEMORY,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN,71,
+                    195,31,11
+    LTEXT           "Kb allocated:",IDC_STATIC,17,195,50,8,NOT WS_GROUP
+    CONTROL         130,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN | 
+                    WS_BORDER,7,7,69,49
+    RTEXT           "Xitami/Pro Secure Server from iMatix Corporation",
+                    IDC_STATIC,126,36,90,22
+END
+
+IDD_ABOUT DIALOGEX 0, 0, 294, 173
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "The Xitami Open Source Web Server"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&Ok",IDOK,130,140,150,20
+    PUSHBUTTON      "www.imatix.com",IDC_IMATIX,22,40,80,15
+    CTEXT           "Version info",IDC_VERSION,15,117,95,15,SS_CENTERIMAGE
+    CTEXT           "iMatix Corporation ----------------------------------- Copyright © 1991-2002",
+                    IDC_STATIC,15,137,95,25,0,WS_EX_TRANSPARENT
+    EDITTEXT        IDC_QUOTES,130,10,152,120,ES_MULTILINE | ES_READONLY | 
+                    WS_VSCROLL | NOT WS_TABSTOP
+    CONTROL         111,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN | 
+                    WS_BORDER,28,62,69,49
+    CONTROL         131,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,22,10,81,
+                    26
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_HTTP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 216
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 184
+    END
+
+    IDD_MAIN_SERVICE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 223
+        BOTTOMMARGIN, 183
+    END
+
+    IDD_CRASH, DIALOG
+    BEGIN
+        LEFTMARGIN, 11
+        RIGHTMARGIN, 281
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 162
+    END
+
+    IDD_ABOUT_PRO, DIALOG
+    BEGIN
+        LEFTMARGIN, 11
+        RIGHTMARGIN, 281
+        TOPMARGIN, 11
+        BOTTOMMARGIN, 160
+    END
+
+    IDD_PRO_SERVICE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 230
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 200
+    END
+
+    IDD_HTTP_PRO, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 216
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 237
+    END
+
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 11
+        RIGHTMARGIN, 281
+        TOPMARGIN, 11
+        BOTTOMMARGIN, 160
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_ERR_REGISTER_CLASS  "Error registering window class"
+    IDS_ERR_CREATE_WINDOW   "Window creation failed!"
+END
+
+#endif    // Neutral (Sys. Default) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.K.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP  DISCARDABLE     "Xitami1.bmp"
+IDB_BITMAP2             BITMAP  DISCARDABLE     "imatix1.bmp"
+IDB_BITMAP3             BITMAP  DISCARDABLE     "Bug100.bmp"
+IDB_BITMAP4             BITMAP  DISCARDABLE     "bitmap4.bmp"
+IDB_BITMAP5             BITMAP  DISCARDABLE     "bitmap5.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON_ON             ICON    DISCARDABLE     "on.ico"
+IDI_ICON_ACTIVE         ICON    DISCARDABLE     "about.ico"
+IDI_ICON_OFF            ICON    DISCARDABLE     "off.ico"
+#endif    // English (U.K.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// French (Belgium) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRB)
+#ifdef _WIN32
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH_BELGIAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // French (Belgium) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

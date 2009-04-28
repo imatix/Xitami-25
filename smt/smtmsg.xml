@@ -1,0 +1,406 @@
+<?xml version="1.0" ?>
+<!--
+     SMT messages for standard SMT agents
+     Written: 1998/05/30
+     Revised: 2000/02/16
+     -->
+     
+<application title = "SMT standard messages" script = "smtexdr.gsl" module = "smtmsg" >
+  <!--
+        Messages for the SMTOPER agent
+    -->
+  <agent        name = "smtopen"        title = "Operator agent" >
+    <message    name = "SMT_OPER_LOG"   type = "request" >
+      <field    name = "agent_name"     type = "string" title = "Name of logging agent" />
+      <field    name = "thread_name"    type = "string" title = "Name of logging thread" />
+      <method   name = "SET_LOG"        title = "Specify logging agent" />
+    </message>
+  </agent>
+  <!--
+        Messages for the SMTSOCK agent
+    -->
+  <agent        name = "smtsock"        title = "Socket i/o agent" >
+    <message    name = "SMT_SOCK_READ"  type = "request" >
+      <field    name = "timeout"        type = "dbyte"  title = "Timeout in seconds, zero = none" />
+      <field    name = "socket"         type = "qbyte"  title = "Socket to read from" />
+      <field    name = "max_size"       type = "dbyte"  title = "Size of receiving buffer" />
+      <field    name = "min_size"       type = "dbyte"  title = "Minimum data to read, zero = all" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "READ"           title = "Read socket data" />
+      <method   name = "READR"          title = "Read, repeat for ever" />
+    </message>
+    <message    name = "SMT_SOCK_WRITE" type = "request" >
+      <field    name = "timeout"        type = "dbyte"  title = "Timeout in seconds, zero = none" />
+      <field    name = "socket"         type = "qbyte"  title = "Socket to write to" />
+      <field    name = "size"           type = "size"   title = "Amount of data to write" />
+      <field    name = "data"           type = "body"   title = "Block of data to write" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "WRITE"          title = "Write socket data" />
+    </message>
+    <message    name = "SMT_SOCK_READH" type = "request" >
+      <field    name = "timeout"        type = "dbyte"  title = "Timeout in seconds, zero = none" />
+      <field    name = "socket"         type = "qbyte"  title = "Socket to read from" />
+      <field    name = "max_size"       type = "qbyte"  title = "Size of receiving buffer" />
+      <field    name = "min_size"       type = "qbyte"  title = "Minimum data to read, zero = all" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "READH"          title = "Read huge socket data" />
+      <method   name = "READRH"         title = "Read huge, repeat for ever" />
+    </message>
+    <message    name = "SMT_SOCK_WRITEH" type = "request" >
+      <field    name = "timeout"        type = "dbyte"  title = "Timeout in seconds, zero = none" />
+      <field    name = "socket"         type = "qbyte"  title = "Socket to write to" />
+      <field    name = "size"           type = "hsize"  title = "Amount of data to write" />
+      <field    name = "data"           type = "hbody"  title = "Block of data to write" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "WRITEH"         title = "Write huge socket data" />
+    </message>
+    <message    name = "SMT_SOCK_INPUT" type = "request" >
+      <field    name = "timeout"        type = "dbyte"  title = "Timeout in seconds, zero = none" />
+      <field    name = "socket"         type = "qbyte"  title = "Socket to wait on" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "INPUT"          title = "Wait for input" />
+      <method   name = "INPUTR"         title = "Wait input, repeat" />
+    </message>
+    <message    name = "SMT_SOCK_OUTPUT" type = "request" >
+      <field    name = "timeout"        type = "dbyte"  title = "Timeout in seconds, zero = none" />
+      <field    name = "socket"         type = "qbyte"  title = "Socket to wait on" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "OUTPUT"         title = "Wait for output" />
+    </message>
+    <message    name = "SMT_SOCK_CONNECT" type = "request" >
+      <field    name = "timeout"        type = "dbyte"  title = "Timeout in seconds, zero = none" />
+      <field    name = "type"           type = "string" title = "Type, UDP or TCP" />
+      <field    name = "host"           type = "string" title = "Host, name or dotted address, or NULL" />
+      <field    name = "service"        type = "string" title = "Service, as name or port in ASCII, or NULL" />
+      <field    name = "port"           type = "dbyte"  title = "16-bit host port, or 0" />
+      <field    name = "address"        type = "qbyte"  title = "32-bit host address, or 0" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "CONNECT"        title = "Connect to host" />
+    </message>
+    <message    name = "SMT_SOCK_FLUSH" type = "request" >
+      <field    name = "socket"         type = "qbyte"  title = "Socket to flush requests for" />
+      <method   name = "FLUSH"          title = "Flush requests" />
+    </message>
+    <message    name = "SMT_SOCK_READ_OK" type = "reply" >
+      <field    name = "timeout"        type = "dbyte"  title = "Timeout from read request" />
+      <field    name = "socket"         type = "qbyte"  title = "Socket used for i/o" />
+      <field    name = "size"           type = "size"   title = "Amount of data read" />
+      <field    name = "data"           type = "body"   title = "Block of data read" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "SOCK_READ_OK"   title = "Read OK reply" />
+      <method   name = "SOCK_CLOSED"    title = "Closed reply"  />
+      <method   name = "SOCK_TIMEOUT"   title = "Timeout reply" />
+    </message>
+    <message    name = "SMT_SOCK_READH_OK" type = "reply">
+      <field    name = "timeout"        type = "dbyte"  title = "Timeout from read request" />
+      <field    name = "socket"         type = "qbyte"  title = "Socket used for i/o" />
+      <field    name = "size"           type = "hsize"  title = "Amount of data read" />
+      <field    name = "data"           type = "hbody"  title = "Block of data read" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "SOCK_READH_OK"  title = "Read OK reply" />
+    </message>
+    <message    name = "SMT_SOCK_OK"    type = "reply">
+      <field    name = "socket"         type = "qbyte"  title = "Socket used for i/o, or new socket" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "SOCK_WRITE_OK"  title = "Write OK reply" />
+      <method   name = "SOCK_WRITEH_OK" title = "Write OK reply" />
+      <method   name = "SOCK_INPUT_OK"  title = "Input OK reply" />
+      <method   name = "SOCK_OUTPUT_OK" title = "Output OK reply" />
+    </message>
+    <message    name = "SMT_SOCK_ERROR" type = "reply">
+      <field    name = "message"        type = "string" title = "Error message" />
+      <field    name = "socket"         type = "qbyte"  title = "Socket for i/o, or new socket" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "SOCK_ERROR"     title = "Error reply" />
+    </message>
+  </agent>
+  <!--
+        Messages for the SMTTIME agent
+    -->
+  <agent        name = "smttime"        title = "Timer agent" >
+    <message    name = "SMT_TIME_ALARM" type = "request" >
+      <field    name = "days"           type = "qbyte"  title = "Time/delay in days" />
+      <field    name = "csecs"          type = "qbyte"  title = "Time/delay in 1/100th seconds" />
+      <field    name = "tag_size"       type = "size"   title = "User-defined data size" />
+      <field    name = "tag_data"       type = "body"   title = "User-defined data block" />
+      <method   name = "ALARM"  title = "Ask for single alarm" />
+    </message>
+    <message    name = "SMT_TIME_CLOCK" type = "request" >
+      <field    name = "days"           type = "qbyte"  title = "Time/delay in days" />
+      <field    name = "csecs"          type = "qbyte"  title = "Time/delay in 1/100th seconds" />
+      <field    name = "cycles"         type = "word"   title = "Cycle count; zero = forever" />
+      <field    name = "tag_size"       type = "size"   title = "User-defined data size" />
+      <field    name = "tag_data"       type = "body"   title = "User-defined data block" />
+      <method   name = "CLOCK"          title = "Ask for repeated alarm" />
+    </message>
+    <message    name = "SMT_TIME_REPLY" type = "reply" >
+      <field    name = "tag_size"       type = "size"   title = "User-defined data size" />
+      <field    name = "tag_data"       type = "body"   title = "User-defined data block" />
+      <method   name = "TIME_REPLY"     title = "Alarm signal" />
+    </message>
+  </agent>
+  <!--
+        Messages for the SMTSLOT agent
+    -->
+  <agent        name = "smtslot"        title = "Time slot agent" >
+    <message    name = "SMT_SLOT_SPEC"  type = "request" >
+      <field    name = "specification"  type = "string" title = "Time slot specification" />
+      <method   name = "SPECIFY"        title = "Specify a time slot" />
+    </message>
+  </agent>
+  <!--
+        Messages for the SMTTRAN agent
+    -->
+  <agent        name = "smttran"        title = "Transfer agent" >
+    <message    name = "SMT_TRAN_PUTB"  type = "request" >
+      <field    name = "socket"         type = "qbyte"  title = "Socket for output" />
+      <field    name = "size"           type = "size"   title = "Amount of data to send" />
+      <field    name = "data"           type = "body"   title = "Block of data to send" />
+      <field    name = "pipe"           type = "string" title = "Transfer pipe, if any" />
+      <method   name = "PUT_BLOCK"      title = "Write block to socket" />
+    </message>
+    <message    name = "SMT_TRAN_GETB"  type = "request" >
+      <field    name = "socket"         type = "qbyte"  title = "Socket for input" />
+      <field    name = "pipe"           type = "string" title = "Transfer pipe, if any" />
+      <method   name = "GET_BLOCK"      title = "Read block from socket" />
+    </message>
+    <message    name = "SMT_TRAN_PUTH"  type = "request" >
+      <field    name = "socket"         type = "qbyte"  title = "Socket for output" />
+      <field    name = "size"           type = "hsize"  title = "Amount of data to send" />
+      <field    name = "data"           type = "hbody"  title = "Block of data to send" />
+      <field    name = "pipe"           type = "string" title = "Transfer pipe, if any" />
+      <method   name = "PUT_HUGE"       title = "Write huge block to socket" />
+    </message>
+    <message    name = "SMT_TRAN_GETH"  type = "request" >
+      <field    name = "socket"         type = "qbyte"  title = "Socket for input" />
+      <field    name = "pipe"           type = "string" title = "Transfer pipe, if any" />
+      <method   name = "GET_HUGE"       title = "Read huge block from socket" />
+    </message>
+    <message    name = "SMT_TRAN_PUTF"  type = "request" >
+      <field    name = "socket"         type = "qbyte"  title = "Socket for output" />
+      <field    name = "filename"       type = "string" title = "Name of file to send" />
+      <field    name = "filetype"       type = "dbyte"  title = "0=binary, 1=ASCII" />
+      <field    name = "start"          type = "qbyte"  title = "Starting offset; 0 = start" />
+      <field    name = "end"            type = "qbyte"  title = "Ending offset; 0 = end" />
+      <field    name = "pipe"           type = "string" title = "Transfer pipe, if any" />
+      <method   name = "PUT_FILE"       title = "Write file to socket" />
+    </message>
+    <message    name = "SMT_TRAN_GETF"  type = "request" >
+      <field    name = "socket"         type = "qbyte"  title = "Socket for input" />
+      <field    name = "filename"       type = "string" title = "Name of file to receive" />
+      <field    name = "filetype"       type = "dbyte"  title = "0=binary, 1=ASCII" />
+      <field    name = "start"          type = "qbyte"  title = "Starting offset; 0 = start" />
+      <field    name = "end"            type = "qbyte"  title = "Ending offset; 0 = end" />
+      <field    name = "append"         type = "Bool"   title = "1 = append existing" />
+      <field    name = "maxsize"        type = "qbyte"  title = "Max. size, -1 = no limit" />
+      <field    name = "pipe"           type = "string" title = "Transfer pipe, if any" />
+      <method   name = "GET_FILE"       title = "Read file from socket" />
+    </message>
+    <message    name = "SMT_TRAN_PUTB_OK" type = "reply" >
+      <field    name = "size"           type = "dbyte"  title = "Amount of transmitted data" />
+      <method   name = "TRAN_PUTB_OK"   title = "Block written okay" />
+    </message>
+    <message    name = "SMT_TRAN_GETB_OK" type = "reply" >
+      <field    name = "size"           type = "size"   title = "Amount of data received" />
+      <field    name = "data"           type = "body"   title = "Block of data received" />
+      <method   name = "TRAN_GETB_OK"   title = "Block read okay" />
+    </message>
+    <message    name = "SMT_TRAN_PUTH_OK" type = "reply" >
+      <field    name = "size"           type = "qbyte"  title = "Amount of transmitted data" />
+      <method   name = "TRAN_PUTH_OK"   title = "Block written okay" />
+    </message>
+    <message    name = "SMT_TRAN_GETH_OK" type = "reply" >
+      <field    name = "size"           type = "hsize"  title = "Amount of data received" />
+      <field    name = "data"           type = "hbody"  title = "Block of data received" />
+      <method   name = "TRAN_GETH_OK"   title = "Block read okay" />
+    </message>
+    <message    name = "SMT_TRAN_PUTF_OK" type = "reply" >
+      <field    name = "size"           type = "qbyte"  title = "Amount of transmitted data" />
+      <method   name = "TRAN_PUTF_OK"   title = "File written okay" />
+    </message>
+    <message    name = "SMT_TRAN_GETF_OK" type = "reply" >
+      <field    name = "size"           type = "qbyte"  title = "Amount of transmitted data" />
+      <method   name = "TRAN_GETF_OK"   title = "File received okay" />
+    </message>
+    <message    name = "SMT_PIPE_CREATE"  type = "request" >
+      <field    name = "name"           type = "string" title = "Name of pipe" />
+      <field    name = "input_rate"     type = "qbyte"  title = "Input rate, bytes/s" />
+      <field    name = "output_rate"    type = "qbyte"  title = "Output rate, bytes/s" />
+      <method   name = "PIPE_CREATE"    title = "Create or modify pipe" />
+    </message>
+    <message    name = "SMT_CLEAR_PIPES" type = "request" >
+      <method   name = "CLEAR_PIPES"    title = "Delete all pipes" />
+    </message>
+    <message    name = "SMT_TRAN_COMMIT" type = "request" >
+      <method   name = "TRAN_COMMIT"     title = "Commit transfer requests" />
+    </message>
+    <message    name = "SMT_TRAN_CLOSED" type = "reply" >
+      <method   name = "TRAN_CLOSED"     title = "Socket closed or commit done" />
+    </message>
+    <message    name = "SMT_TRAN_ERROR"  type = "reply" >
+      <field    name = "reason"          type = "string" title = "Error message" />
+      <method   name = "TRAN_ERROR"      title = "Socket error" />
+    </message>
+  </agent>
+  <!--
+        Messages for the SMTFTPD agent
+    -->
+  <agent        name = "smtftpd"        title = "FTP data transfer agent" >
+    <message    name = "SMT_FTPD_PUTF"  type = "request" >
+      <field    name = "id"             type = "qbyte"  title = "ID for connection" />
+      <field    name = "passive"        type = "dbyte"  title = "0/1 = active/passive connection" />
+      <field    name = "filetype"       type = "dbyte"  title = "Type of file to transfer" />
+      <field    name = "filename"       type = "string" title = "Name of file to transfer" />
+      <field    name = "start_position" type = "qbyte"  title = "Start offset for file" />
+      <field    name = "host_address"   type = "qbyte"  title = "IP address for host" />
+      <field    name = "port_number"    type = "dbyte"  title = "Port on remote host" />
+      <field    name = "pipe"           type = "string" title = "Transfer pipe, if any" />
+      <method   name = "FTPD_PUT_FILE"  title = "Send file to host" />
+    </message>
+    <message    name = "SMT_FTPD_GETF"  type = "request" >
+      <field    name = "id"             type = "qbyte"  title = "ID for connection" />
+      <field    name = "passive"        type = "dbyte"  title = "0/1 = passive/active connection" />
+      <field    name = "filetype"       type = "dbyte"  title = "Type of file to transfer" />
+      <field    name = "filename"       type = "string" title = "Name of file to transfer" />
+      <field    name = "start_position" type = "qbyte"  title = "Start offset for file" />
+      <field    name = "host_address"   type = "qbyte"  title = "IP address for host" />
+      <field    name = "port_number"    type = "dbyte"  title = "Port on remote host" />
+      <field    name = "maxsize"        type = "qbyte"  title = "Max. size, -1 = no limit" />
+      <field    name = "pipe"           type = "string" title = "Transfer pipe, if any" />
+      <method   name = "FTPD_GET_FILE"  title = "Receive file from host" />
+    </message>
+    <message    name = "SMT_FTPD_APPEND" type = "request" >
+      <field    name = "id"             type = "qbyte"  title = "ID for connection" />
+      <field    name = "passive"        type = "dbyte"  title = "0/1 = passive/active connection" />
+      <field    name = "filetype"       type = "dbyte"  title = "Type of file to transfer" />
+      <field    name = "filename"       type = "string" title = "Name of file to transfer" />
+      <field    name = "host_address"   type = "qbyte"  title = "IP address for host" />
+      <field    name = "port_number"    type = "dbyte"  title = "Port on remote host" />
+      <field    name = "maxsize"        type = "qbyte"  title = "Max. size, -1 = no limit" />
+      <field    name = "pipe"           type = "string" title = "Transfer pipe, if any" />
+      <method   name = "FTPD_APPEND_FILE"               title = "Append file from host" />
+    </message>
+    <message    name = "SMT_FTPD_PASSIVE" type = "request" >
+      <field    name = "id"             type = "qbyte"  title = "ID for control connection" />
+      <field    name = "first_port"     type = "dbyte"  title = "First port to listen on" />
+      <field    name = "ip_address"     type = "qbyte"  title = "IP address to listen on" />
+      <method   name = "FTPD_PASSIVE"   title = "Request passive connection" />
+    </message>
+    <message    name = "SMT_FTPD_ABORT" type = "request" >
+      <field    name = "id"             type = "qbyte"  title = "ID for control connection" />
+      <method   name = "FTPD_ABORT"     title = "Abort file transfer" />
+    </message>
+    <message    name = "SMT_FTPD_CLOSECTRL" type = "request" >
+      <field    name = "id"             type = "qbyte"  title = "ID for control connection" />
+      <method   name = "FTPD_CLOSECTRL" title = "Close control connection" />
+    </message>
+    <message    name = "SMT_FTPD_PASS_OK" type = "reply" >
+      <field    name = "host_address"   type = "qbyte"  title = "IP address for host" />
+      <field    name = "port_number"    type = "dbyte"  title = "Port on remote host" />
+      <method   name = "FTPD_PASS_OK"   title = "Agent request handled ok" />
+    </message>
+  </agent>
+  <!--
+        Messages for WSX agents
+    -->
+  <agent        name = "WSX"    title = "WSX agent" >
+    <message    name = "SMT_WSX_INSTALL" type = "request" >
+      <field    name = "virtual_host"   type = "string" title = "Virtual host name" />
+      <field    name = "path"           type = "string" title = "URL pattern to match" />
+      <field    name = "agent"          type = "string" title = "Name of WSX agent" />
+      <method   name = "WSX_INSTALL"    title = "Install SMT_WSX alias" />
+    </message>
+    <message    name = "SMT_WSX_CANCEL" type = "request" >
+      <field    name = "virtual_host"   type = "string" title = "Virtual host name" />
+      <field    name = "path"           type = "string" title = "URL pattern to match" />
+      <method   name = "WSX_CANCEL"     title = "Cancel SMT_WSX alias" />
+    </message>
+    <message    name = "SMT_WSX_REQUEST" type = "request" short = "WSXREQ" >
+      <field    name = "request_url"    type = "string" title = "URL for WSX request" />
+      <field    name = "arguments"      type = "string" title = "URL arguments, if any" />
+      <field    name = "virtual_host"   type = "string" title = "Virtual host, if any" />
+      <field    name = "filename"       type = "string" title = "Physical filename for URL" />
+      <field    name = "post_data"      type = "string" title = "POSTed data, if any" />
+      <field    name = "symbols_size"   type = "size"   title = "HTTP symbol table size" />
+      <field    name = "symbols_data"   type = "body"   title = "HTTP symbol table data" />
+      <field    name = "config_size"    type = "size"   title = "HTTP config table size" />
+      <field    name = "config_data"    type = "body"   title = "HTTP config table data" />
+      <method   name = "WSX_REQUEST"    title = "SMT_WSX request" />
+    </message>
+    <message    name = "SMT_WSX_REQBIN" type = "request" >
+      <field    name = "request_url"    type = "string" title = "URL for WSX request" />
+      <field    name = "arguments"      type = "string" title = "URL arguments, if any" />
+      <field    name = "virtual_host"   type = "string" title = "Virtual host, if any" />
+      <field    name = "post_size"      type = "size"   title = "POSTed data size" />
+      <field    name = "filename"       type = "string" title = "Physical filename for URL" />
+      <field    name = "post_data"      type = "body"   title = "POSTed data" />
+      <field    name = "symbols_size"   type = "size"   title = "HTTP symbol table size" />
+      <field    name = "symbols_data"   type = "body"   title = "HTTP symbol table data" />
+      <field    name = "config_size"    type = "size"   title = "HTTP config table size" />
+      <field    name = "config_data"    type = "body"   title = "HTTP config table data" />
+      <method   name = "WSX_REQBIN"     title = "SMT_WSX binary request" />
+    </message>
+    <message    name = "SMT_WSX_OK"     type = "reply" >
+      <field    name = "html_data"      type = "string" title = "HTML response data" />
+      <method   name = "WSX_OK"         title = "Agent request handled ok" />
+    </message>
+    <message    name = "SMT_WSX_BIN"    type = "reply" >
+      <field    name = "html_size"      type = "hsize"  title = "HTML response size" />
+      <field    name = "html_data"      type = "body"   title = "HTML response data" />
+      <method   name = "WSX_BIN"        title = "Agent request handled ok" />
+    </message>
+    <message    name = "SMT_WSX_MULTIPART" type = "reply" >
+      <field    name = "html_data"      type = "string" title = "HTML response data" />
+      <method   name = "WSX_MULTIPART"  title = "Agent multipart response" />
+    </message>
+    <message    name = "SMT_WSX_MBIN"   type = "reply" >
+      <field    name = "html_size"      type = "hsize"  title = "HTML response size" />
+      <field    name = "html_data"      type = "body"   title = "HTML response data" />
+      <method   name = "WSX_MBIN"       title = "Agent multipart response" />
+    </message>
+    <message    name = "SMT_WSX_RESTART" type = "reply" >
+      <field    name = "html_data"      type = "string" title = "HTML response data" />
+      <method   name = "WSX_RESTART"    title = "Agent requested restart" />
+    </message>
+    <message    name = "SMT_WSX_KILL"   type = "reply" >
+      <field    name = "html_data"      type = "string" title = "HTML response data" />
+      <method   name = "WSX_KILL"       title = "Agent requested shutdown" />
+    </message>
+    <message    name = "SMT_WSX_ERROR"  type = "reply" >
+      <field    name = "error_code"     type = "dbyte"  title = "HTTP response code" />
+      <method   name = "WSX_ERROR"      title = "Agent request failed" />
+    </message>
+    <message    name = "SMT_WSX_REDIRECT" type = "reply" >
+      <field    name = "new_url"        type = "string" title = "Redirect location" />
+      <method   name = "WSX_REDIRECT"   title = "Agent redirected request" />
+    </message>
+  </agent>
+  <!--
+        Messages for the SMTRDNS agent
+    -->
+  <agent        name = "smtrdns"        title = "Reverse DNS agent" >
+    <message    name = "SMT_GET_HOST_NAME" type = "request" >
+      <field    name = "ip_address"     type = "qbyte"  title = "IP address in network order" />
+      <field    name = "ip_string"      type = "string" title = "Alternative address in string format" />
+      <field    name = "request_tag"    type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "GET_HOST_NAME"  title = "Get host name for address" />
+    </message>
+    <message    name = "SMT_GET_HOST_IP" type = "request" >
+      <field    name = "host_name"      type = "string" title = "Host name to look-up" />
+      <field    name = "request_tag"    type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "GET_HOST_IP"    title = "Get host address for name" />
+    </message>
+    <message    name = "SMT_HOST_NAME"  type = "reply" >
+      <field    name = "ip_address"     type = "qbyte"  title = "IP address in network order" />
+      <field    name = "host_name"      type = "string" title = "Host name" />
+      <field    name = "request_tag"    type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "HOST_NAME"      title = "Return host name" />
+    </message>
+    <message    name = "SMT_HOST_IP"    type = "reply" >
+      <field    name = "ip_address"     type = "qbyte"  title = "IP address in network order" />
+      <field    name = "host_name"      type = "string" title = "Host name" />
+      <field    name = "request_tag"    type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "HOST_IP"        title = "Return host IP address" />
+    </message>
+  </agent>
+</application>

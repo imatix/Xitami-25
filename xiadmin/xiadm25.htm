@@ -1,0 +1,273 @@
+Cache-control: no-cache
+Expires: 0
+
+<HTML>
+<HEAD><TITLE>Xitami Administration</TITLE>
+<script type="text/javascript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function submit(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+function focus() {
+    if ("#(_focus)" != "jsaction")
+        document.forms[0].#(_focus).focus();
+}
+</script>
+</HEAD>
+<BODY onLoad="focus()" style="font-family: sans-serif" BGCOLOR="#87CEFA">
+<SCRIPT LANGUAGE="JavaScript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function subform(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+</SCRIPT>
+<TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100%>
+<FORM METHOD=POST ACTION="#(proto)#(host)#(uri)">
+<INPUT TYPE=HIDDEN NAME=jsaction VALUE="">
+<TR><TD ALIGN=LEFT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Back197 LABEL="/admin/$back.gif" EVENT=back_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/backa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$back.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<A HREF="/xitami/index4.htm#config_console" TARGET="Help" TITLE="Help"
+onMouseOver="show('Help','/admin/helpa.gif')"
+onMouseOut="show('Help','/admin/$help.gif')"><IMG SRC="/admin/$help.gif" ALT="" BORDER=0 ALIGN=MIDDLE NAME="Help"
+WIDTH=40 HEIGHT=39></A><IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+<TD ALIGN=CENTER><FONT SIZE=+1>Virtual Host Wizard </FONT>
+<TD ALIGN=RIGHT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Console198 LABEL="/admin/$console.gif" EVENT=console_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/consolea.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$console.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Halt199 LABEL="/admin/$halt.gif" EVENT=halt_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/halta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$halt.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Restart200 LABEL="/admin/$restart.gif" EVENT=restart_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/restarta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$restart.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Exit201 LABEL="/admin/$exit.gif" EVENT=exit_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/exita.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$exit.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+</TABLE><p>
+
+<HR>
+<H2><A NAME="TOC2">Virtual Host Wizard</A></H2>
+
+<TABLE WIDTH="100%">
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F328 TEXTUAL LABEL NAME=L_host-file VALUE="Create virtual host profile:&nbsp;&nbsp;" -->
+Create virtual host profile:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F329 TEXTUAL INPUT NAME=host-file
+SIZE=30 MAX=80 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=30 VALUE="" >
+<!--FML /FIELD-->
+.cfg extension is assumed
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F330 TEXTUAL LABEL NAME=L_overwrite VALUE="Overwrite existing?&nbsp;&nbsp;" -->
+Overwrite existing?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F331 BOOLEAN INPUT NAME=overwrite
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD COLSPAN=99 ALIGN=LEFT VALIGN=TOP CLASS=tdbody>
+<HR>
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F332 TEXTUAL LABEL NAME=L_host-addr VALUE="Select IP address:&nbsp;&nbsp;" -->
+Select IP address:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F333 SELECT INPUT NAME=host-addr SIZE=0 VALUE=0
+CHANGE=no ATTR="" TYPE=dynamic 0="No selection"  -->
+<SELECT SIZE=0 >
+<OPTION>No selection
+</SELECT>
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F334 TEXTUAL LABEL NAME=L_host-name VALUE="Or, enter DNS host name:&nbsp;&nbsp;" -->
+Or, enter DNS host name:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F335 TEXTUAL INPUT NAME=host-name
+SIZE=50 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=50 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD COLSPAN=99 ALIGN=LEFT VALIGN=TOP CLASS=tdbody>
+<HR>
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F336 TEXTUAL LABEL NAME=L_webpages VALUE="Web page root directory:&nbsp;&nbsp;" -->
+Web page root directory:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F337 TEXTUAL INPUT NAME=webpages
+SIZE=50 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=50 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F338 TEXTUAL LABEL NAME=L_cgi-bin VALUE="CGI-bin directory:&nbsp;&nbsp;" -->
+CGI-bin directory:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F339 TEXTUAL INPUT NAME=cgi-bin
+SIZE=50 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=50 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F340 TEXTUAL LABEL NAME=L_ftproot VALUE="FTP root directory:&nbsp;&nbsp;" -->
+FTP root directory:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F341 TEXTUAL INPUT NAME=ftproot
+SIZE=50 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=50 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F342 TEXTUAL LABEL NAME=L_makedirs VALUE="Create directories if necessary?&nbsp;&nbsp;" -->
+Create directories if necessary?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F343 BOOLEAN INPUT NAME=makedirs
+TRUE=yes FALSE=no ATTR="" VALUE=yes -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F344 TEXTUAL LABEL NAME=L_superuser VALUE="Superuser password:&nbsp;&nbsp;" -->
+Superuser password:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F345 TEXTUAL INPUT NAME=superuser
+SIZE=20 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=20 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F346 TEXTUAL LABEL NAME=L_sharelogs VALUE="Uses shared logfiles?&nbsp;&nbsp;" -->
+Uses shared logfiles?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F347 BOOLEAN INPUT NAME=sharelogs
+TRUE=yes FALSE=no ATTR="" VALUE=no -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F348 TEXTUAL LABEL NAME=L_use-admin VALUE="Can use full WBA?&nbsp;&nbsp;" -->
+Can use full WBA?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F349 BOOLEAN INPUT NAME=use-admin
+TRUE=yes FALSE=no ATTR="" VALUE=no -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F350 TEXTUAL LABEL NAME=L_admin-user VALUE="If so, user id:&nbsp;&nbsp;" -->
+If so, user id:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F351 TEXTUAL INPUT NAME=admin-user
+SIZE=20 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=20 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F352 TEXTUAL LABEL NAME=L_admin-pass VALUE="&nbsp;&nbsp;password:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;password:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F353 TEXTUAL INPUT NAME=admin-pass
+SIZE=20 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=20 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F354 TEXTUAL LABEL NAME=L_use-vhwba VALUE="Can use VH WBA (limited)?&nbsp;&nbsp;" -->
+Can use VH WBA (limited)?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F355 BOOLEAN INPUT NAME=use-vhwba
+TRUE=yes FALSE=no ATTR="" VALUE=yes -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F356 TEXTUAL LABEL NAME=L_vhwba-user VALUE="If so, user id:&nbsp;&nbsp;" -->
+If so, user id:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F357 TEXTUAL INPUT NAME=vhwba-user
+SIZE=20 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=20 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F358 TEXTUAL LABEL NAME=L_vhwba-pass VALUE="&nbsp;&nbsp;password:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;password:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F359 TEXTUAL INPUT NAME=vhwba-pass
+SIZE=20 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=20 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD COLSPAN=99 ALIGN=LEFT VALIGN=TOP CLASS=tdbody>
+<P>
+</TD></TR>
+<TR><TD></TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML ACTION=Create LABEL="Create" EVENT=define_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Create" VALUE="Create" >
+<!--FML /ACTION-->
+<!--FML ACTION=Cancel LABEL="Cancel" EVENT=back_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Cancel" VALUE="Cancel" >
+<!--FML /ACTION-->
+</TD></TR>
+</TABLE>
+
+<!--FML FIELD=message_to_user SIZE=120 TEXTUAL HIDDEN -->
+<!--FML /FIELD -->
+</FORM>
+<SCRIPT LANGUAGE="JavaScript">
+    if ("#(_focus)" != "jsaction" && document.forms[0].#(_focus))
+        document.forms[0].#(_focus).focus();
+</SCRIPT>
+<HR>
+<TABLE WIDTH=100%><TR>
+<TD><IMG SRC="/admin/imatix.gif"
+WIDTH=96 HEIGHT=41>
+<TD ALIGN=CENTER><FONT SIZE=-1>Copyright &#169 1996-2002 iMatix Corporation
+<BR>Powered by iMatix Studio 2.5
+<TD ALIGN=RIGHT><FONT SIZE=-1>#(date) #(time)
+<BR>#(product) v2.5c2
+</TABLE>
+</BODY></HTML>

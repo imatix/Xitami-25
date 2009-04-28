@@ -1,0 +1,508 @@
+The Form Markup Language (FML)
+******************************
+
+Author:
+  Pieter Hintjens <ph@imatix.com>
+Revised:
+  2003-1012
+
+The iMatix Studio Forms system provides a high-level programmed
+interface to HTML forms.  FML is an extension to standard HTML that provides
+advanced form-management capabilities.  FML was designed to be generated
+automatically from an FDL file, or to be built by hand using any HTML editor
+or text editor.  FML is fully compatible with any HTML editor.
+
+Introduction
+************
+
+The FML Process
+===============
+
+FML is a set of HTML extensions that enhance the simple HTML form mechanisms,
+so that a program can easily work with form data.  The Studio Forms compiler
+(called "fmlgen") translates the FML file into native 'C' language code (an
+include file).  The programmer then uses the Forms i/o runtime
+module to convert the form data to and from pure HTML text.  FML can only be
+used in combination with the Forms i/o runtime module.
+
+You can write an FML file by hand, or generate it from FDL using fdlgen.
+We recommend the latter technique for all except exceptional cases, since
+FDL is much shorter, and simpler to write and maintain than FML.
+
+Command-line Syntax
+===================
+
+To run fmlgen, use the following syntax:
+
+    fmlgen filename ...
+
+Where 'filename' is assumed to have an extension '.FML' if necessary.
+
+Installation
+============
+
+Refer to the iMatix Studio Installation Guide for details.
+
+FML Programmer's Reference
+**************************
+
+This section is meant for the programmer who wants to write FML, or build
+tools that generate FML.
+
+Keywords
+========
+
+An FML keyword is encapsulated as an HTML comment:
+
+    <!--FML keyword>
+        ...
+    <!--FML /keyword>
+
+The text between the start and end tags is handled as comment; ie. it is
+thrown-away during the compile process.  For example, this is how a typical
+field is defined:
+
+    <!--FML FIELD=1 NAME=field-1 TEXTUAL INPUT SIZE=5 MAX=? VALUE="">
+    <INPUT TYPE=TEXT SIZE=5 VALUE="">
+    <!--FML /FIELD>
+
+The <INPUT..> tag appears on the HTML page, and helps to visualise the form.
+However, it is not used by FML, which rebuilds an <INPUT> tag at runtime
+from the information in the field definition.
+
+These are the FML keywords:
+
+Keyword:   Has this purpose:
+FIELD:     Define a named form field (input or output)
+IF:        Define a conditional block of HTML and/or field definitions
+UNLESS:    Define a conditional block of HTML and/or field definitions
+REPEAT:    Define a repeated block of HTML and/or field definitions
+ACTION:    Define a push-button action
+
+Defining a Field
+================
+
+To define a field, use this syntax:
+
+    <!--FML FIELD=name type attribute options...> <!--FML /FIELD>
+
+These are the possible field types:
+
+This field type:     Has this meaning:
+TEXTUAL:             Field shows ordinary text (default)
+FILE:                Field refers to upload/download file
+NUMERIC:             Field shows a number
+DATE:                Field shows a date
+TIME:                Field shows a time
+BOOLEAN:             Field shows a True/False value
+TEXTBOX:             Field shows multiline text
+SELECT:              Field shows a select list
+RADIO:               Field shows a radio list
+
+These are the possible field attributes:
+
+This attribute:      Has this meaning:
+LABEL:               Field appears as normal text (defualt)
+TITLE:               Field appears as bold or emphasised text
+HILITE:              Field appears as reverse or bold text
+MESSAGE:             Field appears as strong text
+OPTION:              Field appears as clickable text
+INPUT:               Field accepts input
+REQUIRE:             Field accepts input and must be filled-in
+ERROR:               Field accepts input; shown as error, changed to INPUT
+ABSENT:              Field accepts input; shown as error, chanegd to REQUIRE
+SECURE:              Field accepts input; shown as password
+PROTECT:             Field accepts input; but is protected at present
+HIDDEN:              Field does not appear on form
+BLANK:               Field appears as spaces
+
+Note that:
+
+- Options can be specified as <name>=? where ? means 'default'.
+  The default value is chosen by fmlgen.  This has the same effect as
+  omitting the option altogether.
+
+- Field names must consist of letters, digits, and embedded hyphens
+  or underlines.
+
+- Except for radio fields, fields must be unique on the form.
+
+Textual Fields
+--------------
+
+    <!--FML FIELD=name TEXTUAL attribute options...> <!--FML /FIELD>
+
+Text fields are shown on a single line, but can hold more data than is shown
+on the screen - the browser will scroll within the field as required.  These
+options are allowed for a textual field:
+
+This option:    Has this meaning:
+NAME=longname:  Name used by programmer (default is field name)
+SIZE=chars:     Size of field on screen (required)
+MAX=chars:      Max. size of field (default is size)
+VALUE=value:    Initial value for field (default is empty)
+UPPER=0|1:      Require uppercase processing?
+ATTRS=value     HTML attributes for field
+
+
+File Fields
+-----------
+
+    <!--FML FIELD=name FILE attribute options...> <!--FML /FIELD>
+
+File fields are shown as text field, but are handled by RFC1867-capable
+browsers as form-based upload fields.  These options are allowed for file fields:
+
+This option:    Has this meaning:
+NAME=longname:  Name used by programmer (default is field name)
+SIZE=chars:     Size of field on screen (required)
+MAX=chars:      Max. size of field (default is size)
+VALUE=value:    Initial value for field (default is empty)
+ATTRS=value     HTML attributes for field
+
+
+Numeric Fields
+--------------
+
+    <!--FML FIELD=name NUMERIC attribute options...> <!--FML /FIELD>
+
+A numeric field allows the Forms i/o module to validate and reject user
+input that is not acceptable.  Numeric fields can be shown with a variety of
+sign and formatting options.  These options are allowed for a numeric field:
+
+This option:    Has this meaning:
+NAME=longname:  Name used by programmer (default is field name)
+SIZE=digits:    Size of field on screen (required)
+DECS=digits:    Number of decimal digits, 0 or more
+MAX=chars:      Max. size of field (default is size)
+VALUE=value:    Initial value for field (default is zero).
+SIGN=sign:      Explained below.
+DECFMT=format:  Explained below.
+FILL=filler:    Explained below.
+BLANK=0|1       If 0, show zero as '0'; if 1, show zero as empty field.
+COMMA=0|1       If 0, show number as 12345.00; if 1, show as 12,345.00.
+ATTRS=value     HTML attributes for field
+
+Numeric fields are always stored internally using the format
+"[sign]digits[.digits]".
+
+These are the possible values for the SIGN= option:
+
+This value:     Has this meaning:
+NONE:           Do not show any sign
+POST:           Show only negative sign, after digits
+PRE:            Show only negative sign, before digits
+POST+:          Show non-zero sign, after digits
+PRE+:           Show non-zero sign, before digits
+FIN:            Financial: negative numbers are (123)
+
+These are the possible values for the DECFMT= option:
+
+This value:     Has this meaning:
+NONE:           Do not show decimals (default if DECS = 0)
+ALL:            Show all decimals (123.40) (default if DECS > 0)
+DROP:           Drop zero decimals (123.4)
+
+These are the possible values for the FILL= option:
+
+This value:     Has this meaning:
+NONE:           Left-justify, removing zeroes (default)
+SPACE:          Right-justify, show leading spaces
+ZERO:           Right-justify, show leading zeroes
+
+Date Fields
+-----------
+
+    <!--FML FIELD=name DATE attribute options...> <!--FML /FIELD>
+
+A date field allows the Forms i/o module to validate and reject user input
+that is not acceptable.  When you use a date field only for output, you can
+explicitly specify the date formatting using a picture string.  When a date
+field is used for input and output, this is not a good idea, since the
+year-month-date order can depend on the user language, and should not be
+hard-coded through the use of a picture.  These options are allowed for a
+date field:
+
+This option:    Has this meaning:
+NAME=longname   Name used by programmer (default is field name)
+SIZE=chars      Size of field on screen (required)
+VALUE=value     Initial value for field, YYYYMMDD (default is zero)
+PICTURE=string  Date picture string - explained below
+SHOW=what       Explained below.
+FORMAT=format   Explained below.
+YEAR=option     Explained below.
+MONTH=option    Explained below.
+DAY=option      Explained below.
+ATTRS=value     HTML attributes for field
+
+Date fields are always stored internally using the format "YYYYMMDD".
+
+To define the formatting for a date explicitly, use a picture string.  This
+can consist of any combination of the following:
+
+Picture element:  Has this meaning:
+cc:               century 2 digits, 01-99
+y:                day of year, 1-366
+yy:               year 2 digits, 00-99
+yyyy:             year 4 digits, 100-9999
+m:                month, 1-12
+mm:               month, 01-12
+mmm:              month, 3 letters
+mmmm:             month, full name
+MMM:              month, 3 letters, ucase
+MMMM:             month, full name, ucase
+d:                day, 1-31
+dd:               day, 01-31
+ddd:              day of week, Sun-Sat
+dddd:             day of week, Sunday-Saturday
+DDD:              day of week, SUN-SAT
+DDDD:             day of week, SUNDAY-SATURDAY
+w:                day of week, 1-7 (1=Sunday)
+ww:               week of year, 1-53
+q:                year quarter, 1-4
+\x:               literal character x
+other:            literal character
+
+Alternatively you can define dates using a combination of some or any of
+the SHOW, FORMAT, YEAR, MONTH, and DAY options, in which case the current
+form date_order is used to determine the year/month/day order
+on the external form:
+
+These are the possible values for the SHOW= option:
+
+This value:     Has this meaning:
+YMD:            Show the full date (default)
+YM:             Show only the year and month
+MD:             Show only the month
+
+These are the possible values for the FORMAT= option:
+
+This value:     Has this meaning:
+compact:        Show date as 'yymmdd'
+slash:          Show date as 'yy/mm/dd' (default)
+space:          Show date as 'yy mm dd'
+comma:          Show date as 'yy mm,dd'
+
+These are the possible values for the YEAR= option:
+
+This value:     Has this meaning:
+full:           Show year as 'yyyy'
+short:          Show year as 'yy' (default)
+
+These are the possible values for the MONTH= option:
+
+This value:     Has this meaning:
+numeric:        Show month as '02' (default)
+counter:        Show month as '2'
+alpha:          Show month as 'Feb'
+upper:          Show month as 'FEB'
+
+These are the possible values for the DAY= option:
+
+This value:     Has this meaning:
+numeric:        Show day as '02' (default)
+counter:        Show day as '2'
+
+Time Fields
+-----------
+
+    <!--FML FIELD=name TIME attribute options...> <!--FML /FIELD>
+
+A time field allows the Forms i/o module to validate and reject user input
+that is not acceptable.  These options are allowed for a time field:
+
+This option:    Has this meaning:
+NAME=longname   Name used by programmer (default is field name)
+SIZE=chars      Size of field on screen (required)
+VALUE=value     Initial value for field, YYYYMMDD (default is zero)
+PICTURE=string  Time picture string - explained below
+ATTRS=value     HTML attributes for field
+
+Time fields are always stored internally using the format "HHMMSSCC".
+
+To define the formatting for a time, use a picture string. This can consist
+of any combination of the following:
+
+Picture element:  Has this meaning:
+h:                hour, 0-23
+hh:               hour, 00-23
+m:                minute, 0-59
+mm:               minute, 00-59
+s:                second, 0-59
+ss:               second, 00-59
+c:                centisecond, 0-99
+cc:               centisecond, 00-99
+a:                a/p indicator - use 12-hour clock
+aa:               am/pm indicator - use 12-hour clock
+A:                A/P indicator - use 12-hour clock
+AA:               AM/PM indicator - use 12-hour clock
+\x:               literal character x
+other:            literal character
+
+Boolean Fields
+--------------
+
+    <!--FML FIELD=name BOOLEAN attribute options...> <!--FML /FIELD>
+
+A boolean field is shown by the browser as a checkbox on input, and as 'yes'
+or 'no' on output.  You can override these values using the TRUE and FALSE
+options.  These options are allowed for a boolean field:
+
+This option:    Has this meaning:
+NAME=longname:  Name used by programmer (default is field name)
+TRUE=text:      Show output field as this, if true (default "Yes")
+FALSE=text:     Show output field as this, if false (default "No")
+VALUE=value:    Initial value for field (default is FALSE)
+ATTRS=value     HTML attributes for field
+
+Boolean fields are stored internally as "1" (true) or "0" (false).
+
+Textbox Fields
+--------------
+
+    <!--FML FIELD=name TEXTBOX attribute options...> <!--FML /FIELD>
+
+Textbox fields are shown with a scrollable area, depending on the browser and
+the specified textbox size. These options are allowed for a textbox field:
+
+This option:    Has this meaning:
+NAME=longname:  Name used by programmer (default is field name)
+ROWS=rows:      Size of field on screen (default is 4)
+COLS=columns:   Width of field on screen (default is 30)
+MAX=chars:      Max. size of field (default is rows x columns)
+VALUE=value:    Initial value for field (default is empty)
+UPPER=option:   Require uppercase processing (yes or ?)
+ATTRS=value     HTML attributes for field
+
+Select Fields
+-------------
+
+    <!--FML FIELD=name SELECT attribute options 0=... 1=...> <!--FML /FIELD>
+
+Defines a selection list field.  If the 'size' option is 1, the list displays
+as a pop-down list, otherwise it looks like a normal scrollable list.  On
+output, the currently-selected item is shown, or 'No selection' if none.  You
+can override this text by specifying a value for '0='. These options are
+allowed for a select field:
+
+This option:    Has this meaning:
+NAME=longname:  Name used by programmer (default is field name)
+SIZE=lines:     If 1, shows as pop-up box.  If > 1, as select list
+VALUE=value:    Initial value for selection (default is 1)
+TYPE=option:    Explained below
+CHANGE=text:    Javascript function to handle on_change event, or "no"
+ATTRS=value     HTML attributes for field
+0=value:        Value shown when select field is 0 or empty.
+1=...           List of values for selection, for fixed select fields.
+
+These are the possible values for the TYPE= option:
+
+This value:     Has this meaning:
+fixed:          Select table has fixed values, supplied in the form (default).
+dynamic:        Select table will be populated at run-time.  The API for
+                doing this is not described here.
+
+Radio Fields
+------------
+
+    <!--FML FIELD=10 NAME=size RADIO INPUT VALUE=1 0=... 1=...><!--FMT /FIELD>
+
+Defines a radio field.  Radio fields work like selection fields, but show the
+values as a multiple option choice either across or in a column.
+
+These options are allowed for a radio field:
+
+This option:    Has this meaning:
+NAME=longname:  Name used by programmer (default is field name)
+VALUE=value:    Initial value for radio field (default is 1)
+COLUMN=yes:     Show radio fields in a column; default = no
+TYPE=option:    As for select fields
+CHANGE=text:    Javascript function to handle on_change event, or "no"
+ATTRS=value     HTML attributes for field
+0=value:        Value shown when select field is 0 or empty
+1=...           List of values for selection, for fixed select fields
+
+
+Conditional Blocks
+==================
+
+The IF and UNLESS keywords define blocks of HTML text and FML fields that
+are output under condition of a runtime variable.  The syntax is:
+
+    <!--FML IF=name [VALUE=number]> ... <!--FML /IF>
+    <!--FML UNLESS=name [VALUE=number]> ... <!--FML /UNLESS>
+
+'name' is a field on the form (disregarding upper/lower-case). The field
+is compared with the value, which is 1 by default. If 'name' is not a
+defined field, fmlgen generates a hidden field with the specified name.
+The field is maniuplated by the programmer like other form fields. You
+can refer to a field in a table; the first (index = 0) is always used.
+
+IF and UNLESS blocks cannot be nested in the current version of fmlgen.
+You can put an IF or UNLESS block inside a REPEAT block, and vice-versa.
+This is an example of an IF block:
+
+    <!--FML IF=message_to_user>
+    <P>
+    <!--FML FIELD=message_to_user MESSAGE>
+    <EM>Message Shown Here If Form Has Errors</EM>
+    <!--FML /FIELD><!--FML /IF>
+
+Repeating Blocks
+================
+
+The REPEAT keyword defines a block of HTML text and FML fields that is
+repeated zero or more times.
+
+    <!--FML REPEAT=name options...> <!--FML /REPEAT>
+
+'name' is a field on the form (disregarding upper/lower-case).  The field
+must contain a numeric value.  If 'name' is not a defined field, fmlgen
+generates a hidden field with the specified name.  The field is used by
+the programmer like other form fields.  These options are allowed for a repeat k
+
+This option:        Has this meaning:
+ROWS=occurences     Defines maximum number of occurences; default is 1.
+
+Within a repeated block, FML fields are created with multiple values.
+These are accessed at runtime via an index [0..max-1].  The HTML text
+that encloses the fields is generated one time only.  REPEAT blocks cannot
+be nested in the current version of fmlgen.
+
+Defining an Action Block
+========================
+
+The ACTION keyword defines an action, implemented as a push-button, image, or
+text hyperlinks.
+
+    <!--FML ACTION=name options...> <!--FML /ACTION>
+
+These options are allowed for an action keyword:
+
+This option:      Has this meaning:
+EVENT=eventname   Defines dialog event name for action.
+TYPE=button-type  See below.
+ATTRS=value       HTML attributes for field
+LABEL=...         Label for button, if not same as name
+SHOW=mode         See below.
+HEIGHT=size       In pixels, if type=image
+WIDTH=size        In pixels, if type=image
+
+The code generated for an action refers directly to the specified event
+name.  The action will generate the corresponding dialog event automagically;
+it returns the value in the form-> event variable, where it is picked-up
+by the dialog manager code.
+
+These are the possible values for the TYPE= option:
+
+This value:     Has this meaning:
+BUTTON:         Define button action
+PLAIN:          Define plain text action
+IMAGE:          Define image action
+
+These are the possible values for the SHOW= option:
+
+This value:     Has this meaning:
+ENABLED:        Button shown (default)
+DISABLED:       Button shown but not active
+HIDDEN:         Button not shown

@@ -1,0 +1,3 @@
+The Guest Directory
+
+This directory is for guest accesses.

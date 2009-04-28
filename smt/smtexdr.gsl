@@ -1,0 +1,363 @@
+.----------------------------------------------------------------------------#
+.-                                                                           #
+.-  smtexdr.gsl - Generate EXDR wrappers for SMT messages                    #
+.-                                                                           #
+.-  Copyright (c) 1991-2003 iMatix Corporation                               #
+.-                                                                           #
+.-  ------------------ GPL Licensed Source Code ------------------           #
+.-  iMatix makes this software available under the GNU General               #
+.-  Public License (GPL) license for open source projects.  For              #
+.-  details of the GPL license please see www.gnu.org or read the            #
+.-  file license.gpl provided in this package.                               #
+.-                                                                           #
+.-  This program is free software; you can redistribute it and/or            #
+.-  modify it under the terms of the GNU General Public License as           #
+.-  published by the Free Software Foundation; either version 2 of           #
+.-  the License, or (at your option) any later version.                      #
+.-                                                                           #
+.-  This program is distributed in the hope that it will be useful,          #
+.-  but WITHOUT ANY WARRANTY; without even the implied warranty of           #
+.-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            #
+.-  GNU General Public License for more details.                             #
+.-                                                                           #
+.-  You should have received a copy of the GNU General Public                #
+.-  License along with this program in the file 'license.gpl'; if            #
+.-  not, write to the Free Software Foundation, Inc., 59 Temple              #
+.-  Place - Suite 330, Boston, MA 02111-1307, USA.                           #
+.-                                                                           #
+.-  You can also license this software under iMatix's General Terms          #
+.-  of Business (GTB) for commercial projects.  If you have not              #
+.-  explicitly licensed this software under the iMatix GTB you may           #
+.-  only use it under the terms of the GNU General Public License.           #
+.-                                                                           #
+.-  For more information, send an email to info@imatix.com.                  #
+.-  --------------------------------------------------------------           #
+.----------------------------------------------------------------------------# 
+.-
+.-  EXDR data types
+.-
+.define datatype_char     = "char  "
+.define datatype_byte     = "byte  "
+.define datatype_word     = "word  "
+.define datatype_dbyte    = "dbyte "
+.define datatype_qbyte    = "qbyte "
+.define datatype_long     = "qbyte "
+.define datatype_string   = "char *"
+.define datatype_bool     = "Bool  "
+.define datatype_size     = "word  "
+.define datatype_body     = "byte *"
+.define datatype_hsize    = "qbyte "
+.define datatype_hbody    = "byte *"
+.-
+.-
+.-  EXDR data formats
+.-
+.define dataformat_char   = "c"
+.define dataformat_byte   = "b"
+.define dataformat_word   = "w"
+.define dataformat_dbyte  = "d"
+.define dataformat_qbyte  = "q"
+.define dataformat_long   = "l"
+.define dataformat_string = "s"
+.define dataformat_bool   = "B"
+.define dataformat_size   = "m"
+.define dataformat_body   = "M"
+.define dataformat_hsize  = "h"
+.define dataformat_hbody  = "H"
+.-
+.-
+.-  Start header file
+.-
+.output "$(module).h"
+.echo "Generating $(module).h..."
+/*---------------------------------------------------------------------------
+ *  $(module).h - prototypes for $(title:).
+ *
+ *  Generated on $(date), $(time) from $(filename)
+ *  by $(script) using GSLgen.
+ *  DO NOT MODIFY THIS FILE.
+ *
+ *  For documentation and updates see http://www.imatix.com.
+ *---------------------------------------------------------------------------*/
+#ifndef INCLUDE_$(MODULE)
+#define INCLUDE_$(MODULE)
+
+.for agent
+/*---------------------------------------------------------------------------
+ *  Definitions and prototypes for $(agent.name:) - $(title:).
+ *---------------------------------------------------------------------------*/
+
+.for message
+.-
+.-  Define format string for message
+.-
+.define format = ""
+.for field
+.define format = "$(format:)$(dataformat_$(type:):)"
+.endfor field
+#define $(MESSAGE.NAME:c) "$(format:)"
+
+.-
+.-  Define structure to hold message data
+.-
+.if count (message.field) > 0
+typedef struct {
+.for field
+.define dt = "$(datatype_$(type:):)"
+    $(dt:)$(name);                      /*  $(title:)                        */
+.endfor field
+} struct_$(message.name:c);
+.endif
+
+.if defined (short)
+typedef struct_smt_wsx_request $(short:);
+.endif
+.if count (message.field) > 0
+
+.define args = ""
+.for field
+.define dt = "$(datatype_$(type:):)"
+.if index (field) < count (message.field)
+.define args = "$(args:)$(dt:)$(name), "
+.else
+.define args = "$(args:)$(dt:)$(name)"
+.endif
+.endfor field
+int  get_$(message.name:c)   (byte *_buffer, struct_$(message.name:c) **params);
+void free_$(message.name:c)  (struct_$(message.name:c) **params);
+int  put_$(message.name:c)   (byte **_buffer, $(args:));
+
+.endif
+.for method
+#define declare_$(method.name:c)(_event, _priority)                          \\
+    method_declare (agent, "$(METHOD.NAME)", _event, _priority)
+
+/*  Send event - $(title:)                                                   */
+
+int lsend_$(method.name:c) (QID *_to, QID *_from,
+        char *_accept,
+        char *_reject,
+        char *_expire,
+.if count (message.field) > 0
+        word _timeout,
+.for message.field
+.define dt = "$(datatype_$(type:):)"
+.if index (field) < count (message.field)
+        $(dt:)$(field.name),            /*  $(title:)                        */
+.else
+        $(dt:)$(field.name));           /*  $(title:)                        */
+.endif
+.endfor field
+.else
+        word _timeout);
+.endif
+
+.-
+.-  Define quick send macro
+.-
+.define indent = " " * (string.length('$(method.name:c)') + 14)
+.if count (message.field) > 0
+#define send_$(method.name:c)(_to,                                           \\
+.for message.field
+.if index (field) < count (message.field)
+$(indent)$(field.name),                                                      \\
+.else
+$(indent)$(field.name))                                                      \\
+.endif
+.endfor field
+       lsend_$(method.name:c)(_to,                                           \\
+$(indent)&thread-> queue-> qid,                                              \\
+$(indent)NULL, NULL, NULL, 0,                                                \\
+.for message.field
+.if index (field) < count (message.field)
+$(indent)$(field.name),                                                      \\
+.else
+$(indent)$(field.name))
+.endif
+.endfor field
+.else
+#define send_$(method.name:c)(_to)                                           \\
+       lsend_$(method.name:c)(_to,                                           \\
+$(indent)&thread-> queue-> qid,                                              \\
+$(indent)NULL, NULL, NULL, 0)
+.endif
+
+.endfor method
+
+.endfor message
+.endfor agent
+
+#endif                                  /*  Included                         */
+.-
+.output "$(module).c"
+.echo "Generating $(module).c..."
+/*---------------------------------------------------------------------------
+ *  $(module).c - functions for $(title:).
+ *
+ *  Generated on $(date), $(time) from $(filename)
+ *  by $(script) using GSLgen.
+ *  DO NOT MODIFY THIS FILE.
+ *
+ *  For documentation and updates see http://www.imatix.com.
+ *---------------------------------------------------------------------------*/
+
+#include "sfl.h"                        /*  SFL header file                  */
+#include "smtlib.h"                     /*  SMT header file                  */
+#include "$(module).h"                  /*  Definitions & prototypes         */
+
+.for agent
+/*---------------------------------------------------------------------------
+ *  Message functions for $(agent.name:) - $(title:).
+ *---------------------------------------------------------------------------*/
+.for message
+.define field_list = ""
+.for field
+.if index (field) < count (message.field)
+.define field_list = "$(field_list:)$(name), "
+.else
+.define field_list = "$(field_list:)$(name)"
+.endif
+.endfor field
+
+.if count (message.field) > 0
+/*  ---------------------------------------------------------------------[<]-
+    Function: put_$(message.name:c)  
+
+    Synopsis: Formats a $(message.name:) message, allocates a new buffer,
+    and returns the formatted message in the buffer.  You should free the
+    buffer using mem_free() when finished.  Returns the size of the buffer
+    in bytes.
+    ---------------------------------------------------------------------[>]-*/
+
+int
+put_$(message.name:c) (
+    byte **_buffer,
+.for field
+.define dt = "$(datatype_$(type:):)"
+.if index (field) < count (message.field)
+    $(dt:)$(name),                      /*  $(title:)                        */
+.else
+    $(dt:)$(name))                      /*  $(title:)                        */
+.endif
+.endfor field
+{
+    int _size;
+
+    _size = exdr_write (NULL, $(MESSAGE.NAME:c), $(field_list));
+    *_buffer = mem_alloc (_size);
+    if (*_buffer)
+        exdr_write (*_buffer, $(MESSAGE.NAME:c), $(field_list));
+    else
+        _size = 0;
+    return (_size);
+}
+
+
+/*  ---------------------------------------------------------------------[<]-
+    Function: get_$(message.name:c)  
+
+    Synopsis: Accepts a buffer containing a $(message.name:) message,
+    and unpacks it into a new struct$(message.name:c) structure. Free the
+    structure using free_$(message.name:c)() when finished.
+    ---------------------------------------------------------------------[>]-*/
+
+int
+get_$(message.name:c) (
+    byte *_buffer,
+    struct_$(message.name:c) **params)
+{
+    *params = mem_alloc (sizeof (struct_$(message.name:c)));
+    if (*params)
+      {
+.for field
+.if type = "string" | type = "body" | type = "hbody"
+        (*params)-> $(field.name) = NULL;
+.endif
+.endfor field
+        return (exdr_read (_buffer, $(MESSAGE.NAME:c),
+.for field
+.if index (field) < count (message.field)
+                   &(*params)-> $(field.name),
+.else
+                   &(*params)-> $(field.name)));
+.endif
+.endfor field
+      }
+    else
+        return -1;
+}
+
+
+/*  ---------------------------------------------------------------------[<]-
+    Function: free_$(message.name:c)  
+
+    Synopsis: frees a structure allocated by get_$(message.name:c)().
+    ---------------------------------------------------------------------[>]-*/
+
+void
+free_$(message.name:c) (
+    struct_$(message.name:c) **params)
+{
+.for field
+.if type = "string" | type = "body" | type = "hbody"
+    mem_free ((*params)-> $(field.name));
+.endif
+.endfor field
+    mem_free (*params);
+    *params = NULL;
+}
+
+.endif
+.for method
+/*  ---------------------------------------------------------------------[<]-
+    Function: send_$(name:c)  
+
+    Synopsis: Sends a $(name:) ($(title:) event to
+    the $(agent.name:) agent
+    ---------------------------------------------------------------------[>]-*/
+
+int
+lsend_$(name:c) (QID *_to, QID *_from,
+    char *_accept,
+    char *_reject,
+    char *_expire,
+.if count (message.field) > 0
+    word _timeout,
+.for message.field 
+.define dt = "$(datatype_$(type:):)"
+.if index (field) < count (message.field)
+    $(dt:)$(name),                      /*  $(title:)                        */
+.else
+    $(dt:)$(name))                      /*  $(title:)                        */
+.endif
+.endfor field
+.else
+    word _timeout)
+.endif
+{
+.if count (message.field) > 0
+    byte *_body;
+    int   _size,
+          _rc;
+
+    _size = put_$(message.name:c) (&_body, $(field_list));
+    if (_size)
+      {
+        _rc = event_send (_to, _from, "$(METHOD.NAME:c)",
+                          _body, _size,
+                          _accept, _reject, _expire, _timeout);
+        mem_free (_body);
+        return _rc;
+      }
+    else
+        return -1;
+.else
+    return (event_send (_to, _from, "$(METHOD.NAME:c)", NULL, 0, _accept,
+            _reject, _expire, _timeout));
+.endif
+}
+
+.endfor method
+.endfor message
+.endfor agent
+

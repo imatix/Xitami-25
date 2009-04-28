@@ -1,0 +1,134 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>The Dynamic DNS Feature</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index12.htm">&lt;</A>
+ | <A href="index14.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+<A NAME="ddns">&nbsp;</A>
+
+<H2><A NAME="TOC102">The Dynamic DNS Feature</A></H2>
+
+<H3><A NAME="TOC103">What is Dynamic DNS?</A></H3>
+
+<P>Dynamic DNS is a way of registering your computer on the Internet
+domain-name system (DNS) even when you have a dial-up line or cable modem,
+with an IP address that changes each time you connect. Without a DDNS
+service, people using your server must know and type its IP number. With a
+DDNS service, they can use the domain name.
+
+<P>Dynamic DNS services vary a lot in qualty.  Free services, like the now
+defunct Monolith service, are often heavily loaded and can be slow to
+update.  Commercial services cost from $25 upwards per year, and offer two
+main advantages over free services.  Firstly, generally better performance
+and secondly, a commercial DDNS service has more incentive to continue than
+a free service, so your domain name has a long-term security.  We work with
+one DDNS provider, tzo.com, to provide dynamic domains under the
+<A HREF="http://xitami.net">xitami.net</A> domain.
+
+<P>A DDNS service works as follows: when you've connected to the Internet,
+you need to run some client software that talks to the DDNS server, and
+tells it your current IP address.  The DDNS server updates its own DNS
+tables and broadcasts update records to other DNS servers on the Internet,
+so that your users can eventually use this information to find your server.
+For most DDNS services, some client software is available, either as a
+Windows program, a Perl script, or a Unix shell script.
+
+<H3><A NAME="TOC104">The Xitami Dynamic DDNS Client</A></H3>
+
+<P>Xitami contains all the code needed to act as a DDNS client for the most
+popular DDNS services, including Xitami.Net, tzo.com, dyndns.org, ns1.net,
+yi.org, and PengiunPowered.com (surprise, it's intended for Linux owners.
+But Xitami lets you use it on any platform).  Furthermore, you can add
+support for new DDNS services by editing the file 'ddnsdef.xml', an XML
+configuration file. The file contains its own comments. If you add DDNS
+services, let us know the details so we can provide them as standard.
+
+<P>As delivered, Xitami supports: localhost, <A HREF="http://xitami.net">xitami.net</A>,
+<A HREF="http://tzo.com">tzo.com</A>, <linkto yi.org>, <linkto ns1.net>, <A HREF="http://dyndns.org">dyndns.org</A>,
+and <A HREF="http://penguinpowered.com">penguinpowered.com</A>. If you need to, you can define other DDNS
+services in the file ddnsdef.xml.  Xitami supports both HTTP and proprietary
+DDNS protocols.
+
+<H3><A NAME="TOC105">The ddnsdef.xml Definition File</A></H3>
+
+<P>This file, supplied with Xitami, defines the various DDNS services and
+the client protocols needed to register and unregister from them.
+
+<P>The XML structure of this file is:
+<PRE>DDNS
+  SERVICE
+    [SIGNON]
+    [SIGNOFF]
+</PRE>
+
+<P>The SERVICE item has these attributes:
+<UL>
+<LI>NAME    (required) - Name of service, used in Xitami config file.
+<LI>TITLE   (optional) - Descriptive title, shown in WBA.
+<LI>HOST    (optional) - Name of host to connect to (default localhost).
+<LI>PORT    (optional) - Port number to connect to (default 80, HTTP port).
+<LI>VERBOSE (optional) - If 1, show progress (default 1).
+<LI>TRACE   (optional) - If 1, show communications (default 0).
+<LI>URL     (optional) - Home-page URL.
+</UL>
+
+<P>SIGNON and SIGNOFF have these attributes:
+<UL>
+<LI>SEND    (required) - String to send to SERVICE.
+<LI>EXPECT  (optional) - Expected response from SERVICE ("HTTP/1.? 200*").
+</UL>
+
+<P>In the SEND string, you can use these symbols:
+<UL>
+<LI>$(username)    - User name or e-mail from Xitami config file.
+<LI>$(password)    - User name or key from Xitami config file.
+<LI>$(domain)      - Dynamic domain name from Xitami config file.
+<LI>$(ipaddr)      - Current local IP address.
+<LI>$(httpauth)    - HTTP 'Authorisation:' header string.
+<LI>$(httpheaders) - Other standard HTTP headers.
+<LI>$(xxxx)        - Any other attribute defined in SIGNON or SIGNOFF.
+</UL>
+
+<P>The send and expect strings can contain the escaped characters \\n and
+\\r. The expect string is matched against the SERVICE response, if any. The
+wildcard character ? matches any character in the response string and the
+wildcard character * matches the remainder of the response string.
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index12.htm">&lt;</A>
+ | <A href="index14.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <EM>The Dynamic DNS Feature</EM>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

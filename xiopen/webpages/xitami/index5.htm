@@ -1,0 +1,383 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Using The Common Gateway Interface (CGI)</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index4.htm">&lt;</A>
+ | <A href="index6.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+
+<H2><A NAME="TOC62">Using The Common Gateway Interface (CGI)</A></H2>
+
+<P>Xitami supports CGI programs in Perl, C, or any other language
+that your system supports.  In general, CGI program written for
+web servers such as Apache and NCSA httpd will run unchanged with
+Xitami.
+
+<P>A 'CGI' program is considered to be any URL with '/cgi-bin'
+somewhere in the path name.  These are all examples of valid
+CGI program URLs:
+<PRE>http://localhost/cgi-bin/myprog
+http://localhost/cgi-bin/myprog.pl
+http://localhost/products/install/cgi-bin/myprog</PRE>
+
+<P>Xitami defines these CGI environment variables:
+<UL>
+<LI>For each HTTP header field, inserts a symbol called HTTP_xxxx
+where xxxx is the header field name.  The field names are put
+into uppercase, and hyphens replaced by underlines.
+<LI>For each variable in the query string, inserts a symbol
+called FORM_xxxx where xxxx is the variable name.
+<LI>SERVER_SOFTWARE is the name of the web server.
+<LI>SERVER_VERSION is the version of the web server (2.5b6).
+<LI>SERVER_NAME is the current host name.  This can be overridden by
+defining a value for server:hostname.
+<LI>SERVER_URL holds the full URL to the server.
+<LI>SERVER_PORT is the port on which the current request was sent.
+<LI>SERVER_HTTP_PORT is the current HTTP port (usually 80).
+<LI>SERVER_HTTPS_PORT is the current HTTPS port (usually 443).
+<LI>SERVER_PROTOCOL is the HTTP version in use (e.g. "HTTP/1.0").
+<LI>SERVER_SECURITY is "SSL" for SSL connections, else "-".
+<LI>SERVER_SSL_PORT is the port on which the web server is running
+in SSL (HTTPS) mode, if SERVER_SECURITY is "SSL".
+<LI>GATEWAY_INTERFACE is the CGI version in use (e.g. "CGI/1.1").
+<LI>REQUEST_METHOD is the HTTP method used, "GET" or "POST".
+<LI>QUERY_METHOD is same as the REQUEST_METHOD.
+<LI>CONTENT_TYPE is the Content-Type: HTTP field.
+<LI>CONTENT_LENGTH is the Content-Length: HTTP field.
+<LI>REMOTE_USER is the authorised username, if any, else "-"; this
+will only be set if the user has accessed a protected URL.
+<LI>REMOTE_HOST is the same as REMOTE_ADDR.  Xitami does not
+translate host addresses into names.
+<LI>REMOTE_ADDR is the address of the remote host, "x.x.x.x".
+<LI>SCRIPT_PATH is the path of the script being executed.
+<LI>SCRIPT_NAME is the URI of the script being executed.
+<LI>QUERY_STRING is the query string following the URL.
+<LI>PATH_INFO is any path data following the CGI URL.
+<LI>PATH_TRANSLATED is the full translated path with URL arguments.
+<LI>CGI_ROOT is the CGI binary directory.
+<LI>CGI_STDIN is the CGI standard input filename.
+<LI>CGI_STDOUT is the CGI standard output filename.
+<LI>CGI_STDERR is the CGI standard error filename, if any.
+<LI>DOCUMENT_ROOT is the main webpages root directory.
+</UL>
+<P>A CGI program can get arguments from a number of places, depending on how
+Xitami is configured and how the HTTP request is made.
+<UL>
+<LI>For GET requests, it is usual to follow the URL with '?' and some
+arguments. These are passed to the CGI program in the QUERY_STRING variable.
+The standard format for passing a number of variables in this way is (e.g.):
+<PRE>http://hostname/cgi-bin/someprog?var1=value1&var2=value2...
+</PRE>
+<LI>If the arguments do not contain '=', they are broken into separate
+arguments and passed to the CGI program that way too.  Each '+' in the query
+string is used as a separator.  This may be used in a URL like this:
+<PRE>http://hostname/cgi-bin/someprog?arg1+arg2+arg3...
+</PRE>
+<LI>Larger amounts of data should be passed using the POST method, in which
+case the CGI program reads the data from its stdin stream.  (You can also
+configure Xitami to pass these in the QUERY_STRING variable if the data is
+not too large).
+</UL>
+
+<H3><A NAME="TOC63">CGI Programs Under 16-bit Windows</A></H3>
+
+<P>The 16-bit Windows version of Xitami does not support CGI.
+
+<H3><A NAME="TOC64">CGI Programs Under 32-bit Windows</A></H3>
+
+<P>Under Windows 95 and NT, you can run different types of CGI programs:
+
+<UL>
+<LI>16-bit executable .exe files. You do not need to specify the .exe file
+extension; Windows will correctly locate an .exe file. A bug in Windows 95
+(we think) prevents 16-bit CGI programs from working when the Xitami server
+is installed in a directory containing a long filename.
+
+<LI>32-bit executable .exe files. The files do not actually need an .exe.
+extension; Xitami will execute a file with any name so long as it is in the
+CGI directory and 'looks' like an executable file (precisely: it must start
+with the letters "MZ").
+
+<LI>Perl programs. The first line of the program must start with the
+characters "#!" followed by a space and the perl filename. The '.exe'
+extension is optional. Perl must be installed on your system. For example,
+if your Perl interpreter is located in c:\tools\perl you could start your
+Perl program like this:
+<PRE>#! c:\tools\perl</PRE>
+You can use '\' or '/' in the path name.  The Perl script should be
+fully specified; Xitami does not assume any kind of extension.  Perl
+programs sometimes end in '.pl'; we recommend you use no extension.
+To provide compatibility with Perl scripts coming from UNIX, Xitami
+will handle a path like '/usr/bin/perl' by removing '/usr/bin/' and
+looking for PERL.EXE on the PATH, if /usr/bin/perl does not actually
+exist as a file.
+You can increase the speed of Perl CGI programs under Windows 95
+by adding this definition to your system.ini file (this may also work
+under NT; we've not tested it):
+<PRE>[NonWindowsApp]
+    CommandEnvSize=4096
+</PRE>
+This reserves memory for DOS applications, and you should make this
+setting higher if you have plenty of RAM.
+
+<LI>Awk scripts, and scripts in other UNIX-type languages that accept
+comments starting with '#'. Start the script with '#! <interpreter name>' as
+for Perl.
+
+<LI>Visual Basic programs. Use the CGI_STDIN and CGI_STDOUT environment
+variables to read the HTTP form data, and write the HTML output. You may
+want to set cgi:form-fields to 0, since you can pick-up the HTTP form data
+from the stdin file instead of the environment. Set cgi:form-query to 1 so
+that you have access to the URL arguments if any. Set cgi:stdio to 0 so that
+your CGI program has full access to the input and output files.
+
+<LI>Rexx programs. The first line of the program must start with the
+characters "/*!" followed by a space and the full filename for Rexx. The
+'.exe' extension is optional. You can close the comment on the same line,
+but the '*/' must be the last text on the line.
+
+<LI>Batch files, although their usefulness is limited, since MS-DOS has
+trouble with the HTML characters '&lt;' and '&gt;'. </UL>
+
+<P>.com files should run correctly under 32-bit Windows. We recommend that
+you use 32-bit executable programs, also called 'console programs'. The
+Windows 32-bit interface is more robust and controlled than the 16-bit
+interface. One example: if a CGI program loops, Xitami will kill it after a
+timeout. But: a 16-bit DOS program will not respond to a kill request, and
+will eventually bring the system down.
+
+<H3><A NAME="TOC65">CGI Programs Under UNIX</A></H3>
+
+<P>Under UNIX you can run any file that UNIX recognizes as an executable
+file. This includes linked files, Perl scripts, shell scripts, etc.
+
+<H3><A NAME="TOC66">CGI Programs Under OS/2</A></H3>
+
+<P>Under OS/2, you can run different types of CGI programs:
+
+<UL>
+<LI>32-bit (and 16-bit) command-line based executable ".exe" files. You do
+not need to specify the ".exe" file extension in the URL; Xitami for OS/2
+will correctly locate an ".exe" CGI program. Starting PM-based executable
+files through CGI is not supported.
+
+<LI>REXX (and CMD) scripts. These files must have a ".cmd" extension, but
+this does not have to be specified in the URL unless there is an executable
+(".exe") of the same name in the directory (see the details of the search
+order below). By default the script will be run by running the program
+specified in the COMSPEC environment variable, followed by "/c scriptname",
+so if your COMSPEC variable is set to "d:\os2\cmd.exe" then it will be run
+as:
+
+<PRE>d:\os2\cmd.exe /c scriptname</PRE>
+
+<P>Optionally you can specify a different interpreter for the script by
+using either:
+<UL>
+  <LI>The OS/2 EXTPROC syntax:
+      <PRE>EXTPROC full-path-to-interpreter flags</PRE>
+      in the first line of the script file (Xitami will accept flags at
+      the end of the EXTPROC line by some other programs may not; test
+      carefully); or
+  <LI>A special REXX comment:
+      <PRE>/*! full-path-to-interpreter flags */</PRE>
+      in the first line of the script file.  You can use the standard OS/2
+      command interpreter (CMD.EXE) as the interpreter for REXX, but if you
+      do then you must specify "/c" as one of the flags to ensure
+      the command interpreter exits as soon as the CGI script finishes
+      running.
+</UL>
+
+<P>Remember the REXX scripts are identified by the "/*" comment in their
+first line. The full-path-to-interpreter should specify the full filename
+(drive (if it is not on the same drive as everything else), path, and
+filename) of the interpreter to use.
+
+<LI>Perl programs. The first line of the program must start with the
+characters "#!" followed by a space and the full filename for Perl. For
+example if your perl interpreter is "c:\tools\perl.exe" you should start
+your Perl program like this:
+<PRE>#! c:\tools\perl.exe</PRE>
+or
+<PRE>#! c:\tools\perl</PRE>
+You can use '\' or '/' in the path name. The programs are best stored in a
+file without an extension, or in a file with a ".cmd" extension; if you use
+another extension you will need to specify the whole filename (including the
+extension) in the URL. Perl must be installed on your system. Perl 5.004 is
+recommended. If your perl script uses special features make sure you are
+running the correct perl executable (check the Perl 5.004 for OS/2
+documentation) for the features you require.
+
+<LI>Awk scripts, and scripts in other UNIX-type languages that accept
+comments starting with '#'. Begin the script with '#! <interpreter name>' as
+for Perl.
+</UL>
+
+<P>When searching for a CGI program to run, if the program specified has no
+extension Xitami for OS/2 first tries adding a ".exe" extension, then if
+that fails it tries adding a ".cmd;" extension. If both of those fail, or
+the program name already has an extension, the name is tried as is; it will
+be considered executable if it has a ".exe" extension, a ".cmd" extension or
+the file starts with a "#!" comment line. (REXX scripts and CMD scripts must
+be stored in files with a ".cmd" extension because that is all the command
+interpter (CMD.EXE) will accept.)
+
+<P>It is not possible to run DOS executables (".exe" or ".com") or DOS batch
+files (".bat") under Xitami for OS/2. Nor is it possible to run PM-based
+programs as CGI programs.
+
+<A NAME="cgidir">&nbsp;</A>
+<H3><A NAME="TOC67">CGI Directories</A></H3>
+
+<P>You can specify an alternate CGI directory. By default, Xitami will
+search a subdirectory called 'cgi-bin'. This is how Xitami translates a URL
+into an absolute file path, when looking for the CGI program:
+
+<TABLE BORDER=1 WIDTH=80%>
+<TR NOWRAP>
+    <TH>'cgi-bin' option:
+    <TH>URL:
+    <TH>Final pathname:
+<TR NOWRAP>
+    <TD><EM>Default</EM>
+    <TD>/cgi-bin/myprog
+    <TD>./cgi-bin/myprog
+<TR NOWRAP>
+    <TD><EM>Default</EM>
+    <TD>/cgi-bin/products/myprog
+    <TD>./cgi-bin/products/myprog
+<TR NOWRAP>
+    <TD><EM>Default</EM>
+    <TD>/products/cgi-bin/myprog
+    <TD>./webpages/products/cgi-bin/myprog
+<TR NOWRAP>
+    <TD>/web/cgibin
+    <TD>/cgi-bin/myprog
+    <TD>/web/cgibin/myprog
+<TR NOWRAP>
+    <TD>/web/cgibin
+    <TD>/cgi-bin/products/myprog
+    <TD>/web/cgibin/products/myprog
+<TR NOWRAP>
+    <TD>/web/cgibin
+    <TD>/products/cgi-bin/myprog
+    <TD>./webpages/products/cgi-bin/myprog
+<TR NOWRAP>
+    <TD>.
+    <TD>/cgi-bin/myprog
+    <TD>./myprog
+<TR NOWRAP>
+    <TD>.
+    <TD>/cgi-bin/products/myprog
+    <TD>./products/myprog
+<TR NOWRAP>
+    <TD>.
+    <TD>/products/cgi-bin/myprog
+    <TD>./webpages/products/cgi-bin/myprog
+</TABLE>
+
+<P>This translation works as follows:
+<UL>
+<LI>If the URL starts with '/cgi-bin' this text is removed, and
+the remainder of the path is attached to the 'cgi-bin' option to
+give a full path name.
+<LI>If the URL does not start with '/cgi-bin', the complete URL
+path is attached to the 'webpages' directory to give a file path.
+</UL>
+<P>Only one of these translations can be done.  By consequence,
+any value you specify for the 'cgi-bin' option is ignored if you
+place the '/cgi-bin' directory at some deeper level in the URL.
+This is useful if you intend to mix CGI programs with your HTML
+files, as complete directories.
+
+<H3><A NAME="TOC68">CGI Error Messages</A></H3>
+
+<P>Xitami tries to explain why a CGI program fails; these are the different
+messages you may see for a 500 error, with an explanation for each.
+
+<H4><A NAME="TOC69">Insufficient resources to run this CGI program</A></H4>
+<P>There is not enough memory available.  This is a bad sign; it means
+that the virtual memory available to Xitami is all full.  Stop the
+web server, modify your systems' virtual memory settings, and start it
+up again.  This problem is very rare, really, especially since Xitami
+is a tiny piece of software.
+
+<H4><A NAME="TOC70">CGI arguments are too long - request was refused</A></H4>
+<P>The CGI URL argument (text following a '?' after the URL) was too
+long.  Whatever you are trying to do, stop it.  (Actually, since release
+1.2a, Xitami allocates such buffers dynamically, so this error will not
+occur, and it is now rather difficult to hack Xitami by using buffer
+overruns.)
+
+<H4><A NAME="TOC71">Cannot create stdin stream for CGI</A></H4>
+<P>Xitami communicates with CGI processes using simple text files; if
+the file it wants to use already exists and is unavailable to Xitami, it
+will not be able to run the CGI process.  Cure: make sure that you only
+run one instance of Xitami from one directory.  Delete any files called
+'tmp...'.  Make sure no CGI process is still hanging around, looping but
+unkillable (typically under Windows 95 or NT with 16-bit CGIs).
+
+<H4><A NAME="TOC72">Cannot create CGI process - program not found</A></H4>
+<P>The CGI program exists (otherwise you get a 402 Not Found), but could
+not be started correctly.  The most common cause of this error is a Perl
+script which has a misformed magic header line.  Make sure that the Perl
+script starts with "#! perlpath" where <EM>perlpath</EM> is the full
+path name of the Perl executable, e.g. "C:\Perl\Perl.exe".
+
+<H4><A NAME="TOC73">CGI process ended with an error status</A></H4>
+<P>The CGI program ran, but returned an error code.  Most servers ignore
+this, but Xitami treats this as an error.  Cure: make sure your CGI
+programs end correctly with a 'return (0)' or equivalent.  If you cannot
+do this, set the configuration option cgi:exit-ok to 0.
+
+<H4><A NAME="TOC74">CGI process was interrupted before ending</A></H4>
+<P>Someone or something interrupted the CGI process before it ended.
+This can happen when a CGI process takes too long to run, and the system
+administrator decides that enough is enough, and kills it.  Cure: ask
+your sysadmin to be nice, or write faster CGIs.
+
+<H4><A NAME="TOC75">Internal server error while running CGI</A></H4>
+<P>Something unexpected happened inside Xitami's guts when it tried to
+run your CGI.  Aaaagh!  What did you do?!  If this happens, let us know
+how to reproduce it.
+
+<H4><A NAME="TOC76">Undetermined error</A></H4>
+<P>Something else happened.  Cure: tell us about it.
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index4.htm">&lt;</A>
+ | <A href="index6.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <EM>Using The Common Gateway Interface (CGI)</EM>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

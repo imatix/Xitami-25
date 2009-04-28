@@ -1,0 +1,218 @@
+<!-----------------------------------------------------------------------
+    ddnsdef.xml - Dynamic DNS Hosts handled by Xitami
+
+    Written: 99/06/18   Xitami team xitami@imatix.com
+    Revised: 99/11/28   Xitami team xitami@imatix.com
+
+    ****  If you make changes to this file, please let us have them  ****
+
+    How to use this file:
+
+    The case-sensitive XML structure is:
+        DDNS
+          SERVICE
+            [SIGNON]
+            [SIGNOFF]
+
+    SERVICE has these attributes:
+        NAME    (required)  Name of service, used in Xitami config file
+        TITLE   (optional)  Descriptive title, shown in WBA
+        HOST    (optional)  Name of host to connect to (default localhost)
+        PORT    (optional)  Port number to connect to (default 80, HTTP port)
+        VERBOSE (optional)  If 1, show progress (default 1)
+        TRACE   (optional)  If 1, show communications (default 0)
+        URL     (optional)  Home-page URL
+
+    SIGNON and SIGNOFF have these attributes:
+        SEND    (required)  String to send to SERVICE
+        EXPECT  (optional)  Expected response from SERVICE ("HTTP/1.? 200*")
+
+    In the SEND string, you can use these symbols:
+        $(username)         User name or e-mail from Xitami config file
+        $(password)         User name or key from Xitami config file
+        $(domain)           Dynamic domain name from Xitami config file
+        $(ipaddr)           Current local IP address
+        $(httpauth)         HTTP 'Authorisation:' header string
+        $(httpheaders)      Other standard HTTP headers
+        $(xxxx)             Any other attribute defined in SIGNON or SIGNOFF
+
+    The send and expect strings can contain the escaped characters \n and \r.
+    The expect string is matched against the SERVICE response, if any.  The 
+    wildcard character ? matches any character in the response string and the
+    wildcard character * matches the remainder of the response string.
+
+    DDNS services: these are the DDNS services that we found in a few hours'
+    poking around the Internet.  We stuck to free services, except for
+    Xitami.Net and tzo.com, and also those that seemed to actually work.  If
+    anyone ever finds-out how to get dhs.org to do something useful, let us
+    know, okay? -- The Xitami Team @imatix.com
+    --------------------------------------------------------------------->
+<DDNS>
+
+
+<!-----------------------------------------------------------------------
+    localhost
+    
+    Simply loops back to http://localhost/cgi-bin/testcgi.
+    --------------------------------------------------------------------->
+<SERVICE
+  NAME  = "localhost"
+  TITLE = "DDNS test using localhost"
+  HOST  = "localhost" >
+  <SIGNON
+    URL  = "/cgi-bin/testcgi/signon"
+    ARGS = "name=$(username)&password=$(password)&domain=$(domain)&ipaddr=$(ipaddr)"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpauth)$(httpheaders)" />
+  <SIGNOFF
+    URL  = "/cgi-bin/testcgi/signoff"
+    ARGS = "name=$(username)&password=$(password)&domain=$(domain)&ipaddr=$(ipaddr)"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpauth)$(httpheaders)" />
+</SERVICE>
+
+
+<!-----------------------------------------------------------------------
+    Xitami.Net
+    
+    Service for xitami.net domains, handled by tzo.com.  TZO uses an e-mail
+    address as username, and a generated key as password.  Fast DNS updates.
+    --------------------------------------------------------------------->
+<SERVICE
+  NAME  = "xitami.net"
+  TITLE = "Xitami.Net (by tzo.com)"
+  HOST  = "rh.tzo.com" 
+  URL   = "tzo.com"
+  PORT  = "21333" >
+  <SIGNON
+    URL  = "/webclient/rhsignedon.html"
+    ARGS = "TZOName=$(domain)&Email=$(username)&TZOKey=$(password)&CType=6&B1=Sign+On+to+TZO+DDNS+Servers"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpheaders)" />
+  <SIGNOFF
+    URL  = "/webclient/signedoff.html"
+    ARGS = "B1=Sign+Me+Off+from+TZO"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpheaders)" />
+</SERVICE>
+
+
+<!-----------------------------------------------------------------------
+    tzo.com
+
+    Service for tzo.com domains.  TZO uses an e-mail address as the username,
+    and a generated key as password.  Fast DNS updates.
+    --------------------------------------------------------------------->
+<SERVICE
+  NAME  = "tzo.com"
+  TITLE = "tzo.com"
+  HOST  = "rh.tzo.com" 
+  URL   = "tzo.com"
+  PORT  = "21333" >
+  <SIGNON
+    URL  = "/webclient/rhsignedon.html"
+    ARGS = "TZOName=$(domain)&Email=$(username)&TZOKey=$(password)&CType=6&B1=Sign+On+to+TZO+DDNS+Servers"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpheaders)" />
+  <SIGNOFF
+    URL  = "/webclient/signedoff.html"
+    ARGS = "B1=Sign+Me+Off+from+TZO"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpheaders)" />
+</SERVICE>
+
+
+<!-----------------------------------------------------------------------
+    yi.org
+
+    Free DDNS service, awfully slow to update.  Not recommended unless it
+    gets better.
+    --------------------------------------------------------------------->
+<SERVICE
+  NAME  = "yi.org"
+  TITLE = "yi.org (Your Internet)"
+  HOST  = "www.yi.org" >
+  URL   = "yi.org"
+  <SIGNON
+    URL  = "/bin/dyndns.fcgi"
+    ARGS = "ipaddr=$(ipaddr)"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpauth)$(httpheaders)" />
+  <SIGNOFF
+    URL  = "/bin/dyndns.fcgi"
+    ARGS = "ipaddr=0.0.0.0"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpauth)$(httpheaders)" />
+</SERVICE>
+
+
+<!-----------------------------------------------------------------------
+    ns1.net
+
+    Free DDNS service, fast updates.
+    --------------------------------------------------------------------->
+<SERVICE
+  NAME  = "ns1.net"
+  TITLE = "ns1.net"
+  HOST  = "ns1.net" >
+  URL   = "ns1.net"
+  <SIGNON
+    URL  = "/dynmanager.cgi"
+    ARGS = "username=$(username)&password=$(password)&updatehost=$(ipaddr)"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpheaders)" />
+  <SIGNOFF
+    URL  = "/dynmanager.cgi"
+    ARGS = "username=$(username)&password=$(password)&updatehost=0.0.0.0"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpheaders)" />
+</SERVICE>
+
+
+<!-----------------------------------------------------------------------
+    dyndns.org
+    
+    Free DDNS service, fast updates.
+    --------------------------------------------------------------------->
+<SERVICE
+  NAME  = "dyndns.org"
+  TITLE = "dyndns.org"
+  HOST  = "www.dyndns.org" >
+  URL   = "www.dyndns.org"
+  <SIGNON
+    URL  = "/dynmod/dynname.cgi"
+    ARGS = "func=set&wildcard=checked"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpauth)$(httpheaders)" />
+</SERVICE>
+
+
+<!-----------------------------------------------------------------------
+    PenguinPowered.com
+
+    Free DDNS service run by justlinux.com, fast updates.  Uses a proprietary
+    DDNS protocol.  The EXPECT string may need updating from time to time.
+    Yeah, regular expressions *would* make this easier.
+    --------------------------------------------------------------------->
+<SERVICE
+  NAME  = "penguinpowered.com"
+  TITLE = "PenguinPowered.com (by justlinux.com)"
+  HOST  = "dyndns.justlinux.com"
+  URL   = "justlinux.com"
+  PORT  = "2345" >
+  <SIGNON
+    SEND   = "VER 1.0\nUSER $(username)\nPASS $(password)\nHOST $(domain)\nOPER update\nIP $(ipaddr)\nDONE\n" 
+    EXPECT = "OK justlinux.com Dynamic DNS SERVICE v?.?\nOK\nOK\nOK\nOK\nOK\nOK*" />
+  <SIGNOFF
+    SEND   = "VER 1.0\nUSER $(username)\nPASS $(password)\nHOST $(domain)\nOPER delete\nDONE\n" 
+    EXPECT = "OK justlinux.com Dynamic DNS SERVICE v?.?\nOK\nOK\nOK\nOK\nOK*" />
+</SERVICE>
+
+
+<!-----------------------------------------------------------------------
+    dyns
+
+    Free service from dyns.cx
+    Provided by: Itzchak Rehberg <izzy@qumran.org>
+    --------------------------------------------------------------------->
+<SERVICE
+  NAME  = "dyns"
+  TITLE = "DDNS at dyns.cx"
+  HOST  = "www.dyns.cx" >
+  <SIGNON
+    URL  = "/postscript.php3"
+    ARGS = "username=$(username)&password=$(password)&host=$(domain)&ip=$(ipaddr)"
+    SEND = "GET $(url)?$(args) HTTP/1.0\r\n$(httpauth)$(httpheaders)" />
+  <SIGNOFF />
+</SERVICE>
+
+</DDNS>

@@ -1,0 +1,2030 @@
+<?xml version="1.0" ?>
+<!-----------------------------------------------------------------------
+    xiconfig.xml - Xitami configuration fields
+
+    To build the various source components from this file, run the command:
+    'glsgen xiconfig'.  Assumes that 'xitami' directory is sibling of the
+    current directory, or that this is run in the 'xitami' directory, and
+    that the Xitami directory contains a subdirectory called 'html'.
+    --------------------------------------------------------------------->
+
+<config script = "xiconfig.gsl">
+
+<!-- SERVER ------------------------------------------------------------->
+
+<section name = "Server"
+         type = "DETAIL"
+         vhost = "1" >
+This section defines general parameters for the web server.
+
+<item name = "webpages"
+      default = "./webpages"
+      domain = "DIRECTORY" >
+Specifies the directory root where web pages are located. This can be an
+absolute directory or a relative directory.
+</item>
+
+<item name = "cgi-bin"
+      info = "CGI_directories"
+      default = "./cgi-bin"
+      domain = "DIRECTORY" >
+Specifies the directory where CGI programs are located. This can be an
+absolute directory (starting with '/' or '\', if you prefer) or a relative
+directory (not starting with '/' or '\'). 
+</item>
+
+<item name = "cgi-url"
+      info = "CGI_directories"
+      default = "/cgi-bin"
+      domain = "URLPREFIX" >
+Specifies the string that Xitami uses to detect that a URL is to be treated as a
+CGI. This value must start with '/', and can consist of one or more paths. For
+instance: '/cgi', '/script', '/scripts/cgi'. This string does not actually refer
+to a real disk directory; it is translated into a real filename using the
+cgi-bin option, and a heuristic.
+</item>
+
+<item name = "refresh"
+      default = "60"
+      domain = "TIMER" >
+Specifies the delay in seconds between each server refresh. At each refresh, the
+server does a number of administrative tasks: reload the configuration file if
+changed; reopen the file xitami.aut in any case; cycle the log files if
+necessary. The refresh rate has a minimum of 10 seconds, unless it is set to 0
+in which case no refresh occurs at all. (This can be used to determine if the
+refresh is causing sporadic problems.)
+</item>
+
+<item name = "debug"
+      default = "0"
+      domain = "FLAG" >
+If 1, the server creates various debugging log files. The file request.log
+contains every incoming request. The file 'debug.log' in particular logs the
+processing of the requests. The file 'header.log' contains every response sent
+back to the browser. Use this to debug a virtual host configuration that gives
+problems, or to determine the cause of a recurrent problem.
+</item>
+
+<item name = "debug-dir"
+      default = "debug"
+      domain = "DIRECTORY" >
+Specifies a directory for debug log files. Xitami interprets this value as an
+environment variable if possible, else as a literal directory name. If you want
+it to refer only to a directory name, end it in '/'.
+</item>
+
+<item name = "temp-dir"
+      default = "temp"
+      domain = "DIRECTORY" >
+Specifies a directory for temporary files. The server creates these to pass
+information to and from CGI programs, and if debugging is enabled, you may find
+that these accumulate. Xitami interprets this value as an environment variable
+if possible, else as a literal directory name. If you want it to refer only to a
+directory name, end it in '/'.
+</item>
+
+<item name = "log-dir"
+      default = "./logs"
+      domain = "DIRECTORY" >
+Specifies the directory for log files. This option applies to all log files that
+Xitami creates, except debug log files. You can leave this option empty, and
+specify a full path name for each log file: this allows you to put different log
+files where you like.
+</item>
+
+<item name = "header-dir"
+      default = "./headers"
+      domain = "DIRECTORY" >
+Specifies the directory for header files. Header files contain custom HTTP
+headers, used for all files of some type. For instance, you can ask Xitami to
+output the HTTP header 'Cache-Control: no-cache' for all files with the
+extension '.txt' by creating a file called 'header.txt' in this directory, and
+containing the HTTP header line. Each header file matches all files with the
+same extension.
+</item>
+
+<item name = "limit"
+      default = "0"
+      domain = "COUNT" >
+Specifies the maximum number of concurrent HTTP connections. On systems that can
+handle lots of open sockets (e.g. Unix, OS/2, WinNT, Win98), you may want to set
+this high. Xitami does not impose any fixed limit. If you set this value to 0,
+it means 'no limit'. 
+</item>
+
+<item name = "pipe"
+      default = ""
+      domain = "PIPE" >
+Specifies the HTTP throttle pipe.  With a throttle pipe you can restrict the
+throughput of a website to some fixed maximum, e.g. 64Kbps.  This can be
+useful if several websites share a single line, and you need to share this
+on a quality-of-service basis.  The HTTP throttle pipe is applied to all
+download and upload requests to the website.  You can apply a throttle pipe
+to the entire HTTP server or to specific virtual hosts.
+</item>
+
+<item name = "pipedef"
+      default = "pipedef.xml"
+      domain = "FILENAME" >
+Specifies the throttle pipe definition file. This is an XML file that
+follows a specific format - look at pipedef.xml for an explanation. If you
+define your own throttle pipes, it's a good idea to copy pipedef.xml to
+something else (e.g. 'mypipes.xml') and then change that.  This avoids
+unpleasant surprises when you upgrade your Xitami version.  Note that we
+may change the format of the pipe definition file in the future.
+</item>
+
+<item name = "background"
+      default = "0"
+      domain = "FLAG" >
+If 1, the server runs as a background process, on operating systems that support
+this functionality. If 0, the server runs as a foreground process. Background
+processes are detached from their controlling terminal and must be halted by a
+system 'kill process' request. Foreground processes send their output to the
+controlling terminal and can be halted by an interrupt key (e.g. Ctrl-C).
+Currently, only implemented on UNIX systems.
+</item>
+
+<item name = "autostart"
+      default = "0"
+      domain = "FLAG" >
+If 1, the server will run even if it cannot open the HTTP port. It will retry
+every 5 seconds until you stop the server (which must be done manually if the
+HTTP service cannot start). The autostart option applies both to the HTTP and
+the FTP service. This option is useful for systems where the network is not
+initially active, but comes 'up' after some action (e.g. dialing-up). Currently
+it is implemented only in the 32-bit Windows version of Xitami, mostly because
+this is the only platform that actually needs it.
+</item>
+
+<item name = "recover"
+      default = "0"
+      domain = "FLAG" >
+If 1, the server will try to recover from fatal errors using an internal crash
+recovery system. This currently only works under Windows. When this option is 0,
+Xitami will show a fatal error message and (under Windows) allow the web
+administrator to continue. 
+</item>
+
+<item name = "dirsort"
+      default = "n"
+      domain = "DIRSORT" >
+Specifies the sort order for directory listings.
+</item>
+
+<item name = "dir-script"
+      default = "templates/httpdir.gsl"
+      domain = "SCRIPT" >
+Specifies the GSL script that is used to format HTTP directory listings.
+</item>
+
+<item name = "supervisor"
+      default = "0"
+      domain = "FLAG" >
+Enables or disables the supervisor agent.  When enabled, the supervisor
+agent will regularly check for old log files and temporary files, and remove
+these.  Temporary files are deleted when they are over one day old, and log
+files are deleted when they are more than two weeks old.
+</item>
+
+<item name = "keep-alive-max"
+      default = "50"
+      domain = "COUNT" >
+A number greater than 1; Xitami will allow this many requests
+on a persistent connection before closing it.  Setting this to 1 has
+the same effect as disabling persistent connections (not recommended).
+</item>
+
+<item name = "timeout"
+      default = "30"
+      domain = "TIMER" >
+A persistent connection will last this long before Xitami closes
+it.  The timeout is specified in seconds.  You can actually put
+this value quite high if wanted: the cost of an open connection is
+low and does not degrade the server performance.  Anything more than
+a minute or so is probably not worth it.
+</item>
+
+<item name = "default1"
+      default = "index.htm"
+      domain = "FILENAME" >
+Specifies the default files. Up to 32 default files can be specified.
+When the user specifies a URL without filename, the server searches the
+directory for the default files, in order, from default1 to default32, until
+a matching file is found or the default sequence ends.  Note that Xitami
+automatically looks for .html extensions if a .htm file is not found.
+</item>
+
+<item name = "default2"
+      default = "default.htm"
+      domain = "FILENAME" >
+Specifies the default files. Up to 32 default files can be specified.
+When the user specifies a URL without filename, the server searches the
+directory for the default files, in order, from default1 to default32, until
+a matching file is found or the default sequence ends.  Note that Xitami
+automatically looks for .html extensions if a .htm file is not found.
+</item>
+
+<item name = "cache-defaults"
+      default = "1"
+      domain = "FLAG" >
+Normally, defaults pages are cached like any other. This means that if
+the browser has already loaded the page, it will add a HTTP request header
+'If-Modified-Since'. Xitami uses this date to determine whether to send the
+page or not.  In most cases, it is appropriate to leave this option enabled.
+However, if you are developing several sites, you may find that the browser
+shows the default page from one site when you look at another.  You can
+clear the browser cache and reload, but this is usually pretty tiresome.
+To fix this disable this option and Xitami will never cache defaults pages.
+</item>
+
+<item name = "use-error-script"
+      default = "0"
+      domain = "FLAG" >
+Specifies whether you want to use an error script or not.  When enabled, Xitami
+will pass all HTTP errors to the specified GSL script for processing.  This is
+an easy and powerful way to customise error messages in a single place.  By
+default this is disabled, for compatability with earlier releases of Xitami, but
+an error script is supplied as standard, and used if you enable this option.
+</item>
+
+<item name = "error-script"
+      default = "templates/errors.gsl"
+      domain = "SCRIPT" >
+Specifies the GSL script that is used to format HTTP error messages. If you use
+this option, Xitami ignores error-header, text-xxx, and error-footer options.
+</item>
+
+<item name = "error-header"
+      default = "@errors/header.htm"
+      domain = "HTMLBLOCK" >
+Specifies the text used to preface an HTTP error message.  The
+text may either be HTML, or a filename prefaced by '@'.  If the text
+comes from a file, Xitami will re-read this file each time it sends
+an error response.
+</item>
+
+<item name = "error-footer"
+      default = "@errors/footer.htm"
+      domain = "HTMLBLOCK" >
+Specifies the text used to end an HTTP error message.  The
+text may either be HTML, or a filename prefaced by '@'.  If the text
+comes from a file, Xitami will re-read this file each time it sends
+an error response.
+</item>
+
+<item name = "text-400"
+      default = "@errors/text-400.htm"
+      domain = "HTMLTEXT" >
+Specifies the text used for the HTTP error 'Bad request'.  This text can
+either be HTML, or be a filename prefaced by '@'.  The text is always
+prefixed by the error header and suffixed by the error footer.
+</item>
+
+<item name = "text-401"
+      default = "@errors/text-401.htm"
+      domain = "HTMLTEXT" >
+Specifies the text used for the HTTP error 'Unauthorized'.
+</item>
+
+<item name = "text-402"
+      default = "@errors/text-402.htm"
+      domain = "HTMLTEXT" >
+Specifies the text used for the HTTP error 'Payment required'.
+</item>
+
+<item name = "text-403"
+      default = "@errors/text-403.htm"
+      domain = "HTMLTEXT" >
+Specifies the text used for the HTTP error 'Forbidden'.
+</item>
+
+<item name = "text-404"
+      default = "@errors/text-404.htm"
+      domain = "HTMLTEXT" >
+Specifies the text used for the HTTP error 'Not found'.
+</item>
+
+<item name = "text-412"
+      default = "@errors/text-412.htm"
+      domain = "HTMLTEXT" >
+Specifies the text used for the HTTP error 'Precondition failed'.
+</item>
+
+<item name = "text-413"
+      default = "@errors/text-413.htm"
+      domain = "HTMLTEXT" >
+Specifies the text used for the HTTP error 'Request entity too large'.
+</item>
+
+<item name = "text-500"
+      default = "@errors/text-500.htm"
+      domain = "HTMLTEXT" >
+Specifies the text used for the HTTP error 'Internal error'.
+</item>
+
+<item name = "text-501"
+      default = "@errors/text-501.htm"
+      domain = "HTMLTEXT" >
+Specifies the text used for the HTTP error 'Not implemented'.
+</item>
+
+<item name = "text-502"
+      default = "@errors/text-502.htm"
+      domain = "HTMLTEXT" >
+Specifies the text used for the HTTP error 'Service temporarily overloaded'.
+</item>
+
+<item name = "priority"
+      default = "1"
+      domain = "COUNT" >
+Specifies the server priority, on systems where this is possible
+(currently only Windows NT and 95).  1=normal, 2=low, 3=high.  You can set
+the priority to 'low' for systems where the server should not interfere with
+other processes.  You can set the priority to 'high' for systems where the
+server is the main process.
+</item>
+
+<item name = "ipaddress"
+      default = "*"
+      domain = "IPADDRESS" >
+Specifies the IP address on which Xitami should open its HTTP
+connection. If this is *, Xitami will open its connection on all available
+IP addresses. This is normally a Good Idea, since it makes configuration
+much simpler on a multihomed system, and is completely correct on a
+single-homed system (i.e. a system with just one IP address, which is pretty
+common). If you have multiple IP addresses and want to run Xitami on just
+one of these, you can specify it here using the standard dotted network
+address format. This will effectively disable IP-based virtual hosting.
+</item>
+
+<item name = "portbase"
+      default = "0"
+      domain = "IPPORT" >
+Defines the IP port base for the server.  Add 80 to this to
+calculate the actual port used for the HTTP service.  For
+example, to run the server on port 6080, define portbase
+as 6000.  We use a portbase in place of an absolute address so
+that multiple protocols (e.g. the FTP server embedded into Xitami)
+can be managed as one unit.
+</item>
+
+<item name = "base-host"
+      default = "basehost.cfg"
+      domain = "FILENAME" >
+Specifies the name of the configuration file used for the base virtual
+host. You may need this option when you have virtual hosts that all inherit
+values from defaults.cfg, but where the base host needs different values.
+</item>
+
+<item name = "hostname"
+      default = ""
+      domain = "HOSTNAME" >
+Specifies your fully-qualified domain name for the server. This name is
+used whenever the server needs to redirect a request (e.g. for image maps).
+You may want to provide this when configuring a virtual host. It is not
+usually necessary on single-hosted systems.  The default for this value is
+the system host name, or virtual host name for virtual hosts.
+</item>
+
+<item name = "defaults"
+      default = "defaults.cfg"
+      domain = "FILENAME" >
+Specifies the name of the local configuration file. This file provides
+the defaults that are used for all virtual hosts. Anything in the defaults
+file overrides the contents of xitami.cfg.
+</item>
+</section>
+
+
+<!-- ALIAS -------------------------------------------------------------->
+
+<section name = "Alias"
+         type = "LIST" >
+This section lets you define HTTP aliases. An alias is a virtual directory that
+points to some arbitrary directory on the server computer. This can be outside
+the normal webpages directory, e.g. on another drive. Aliases can be structured
+into multiple levels, e.g. /pub and /pub/documents can both be defined as
+individual aliases. HTTP aliases always come at the start of the URL. An HTTP
+alias can also refer to a complete filename, in which case that file will act as
+the default file for the alias. To define an alias, specify the alias name and
+the directory it refers to.
+
+<example>
+[Alias]
+    cdrom=G:\html
+    private/pub=i:\pub
+    private/doc=i:\docs\current
+</example>
+</section>
+
+
+<!-- REDIRECT  ---------------------------------------------------------->
+
+<section name = "Redirect" 
+         type = "LIST" >
+This section lets you define redirections.  A redirection is like an alias
+that points to some arbitrary URL on the same or another server. The symbol
+'$' gets the text that followed the alias, also called the script name.  For
+example, if you define a redirection alias 'go' and the user requests the URL
+'/go/this/place', the script name is 'this/place' (without a leading slash).
+
+<example>
+[redirect]
+    go=/cgi-bin/login?where=$
+</example>
+</section>
+
+
+<!-- VIRTUAL-HOSTS ------------------------------------------------------>
+
+<section name = "Virtual-Hosts"
+         info = "virtual_hosts"
+         type = "LIST" >
+This section lets you define virtual hosts. A virtual host can be specified in
+two ways: by IP address (if your system has multiple IP addresses) or by name
+(if your system has multiple names). To define a virtual host, specify the
+virtual IP address or host name and the name of a configuration file .
+
+<example>
+[Virtual-Hosts]
+    www.rnd.imatix.com=research.cfg
+    253.112.23.51=home.cfg
+</example>
+</section>
+
+
+<!-- FILTER ------------------------------------------------------------->
+
+<section name = "Filter"
+         info = "filters"
+         type = "LIST" >
+This section lets you define filter programs. To define a filter, specify a file
+extension with a leading dot and the filter command. The command may be with a
+full path, or without, if the program is on the PATH. 
+
+<example>
+[Filter]
+    .php=c:\php3\php.exe
+</example>
+</section>
+
+
+<!-- CGI ---------------------------------------------------------------->
+
+<section name = "CGI"
+         type = "DETAIL" >
+This section controls the CGI protocol.
+
+<item name = "enabled"
+      default = "1"
+      domain = "FLAG" >
+Allows you to disable CGI handling in one stroke.  If this is 1, URLs
+that translate to a CGI are allowed.  If this is 0, URLs that translate to a
+CGI are rejected with a code 501 (Not implemented).
+</item>
+
+<item name = "workdir"
+      default = "-"
+      domain = "DIRECTORY" >
+Defines the directory where CGI programs will run. The web server must
+have write access to this directory. You can tell Xitami to always use the
+script directory by specifying "-". (This is useful if you put scripts in
+various subdirectories.)  This option applies to filters too.
+</item>
+
+<item name = "wildcard"
+      default = "0"
+      domain = "FLAG" >
+Defines whether the CGI URL indicator ('/cgi-bin') is allowed anywhere
+in the URL, or only at the start.  If 1, it is allowed anywhere in the URL.
+If 0, it may come only at the start of the URL.  Note that setting this to
+1 opens a significant security hole, if you also allow people to FTP files
+into the HTTP area.  As soon as someone creates a directory called /cgi-bin,
+they can upload, and execute, CGI programs.  In some configurations this is
+desirable.  In other configurations (e.g. if you allow your users to upload
+CGI scripts, or if you do not do FTP uploads into the HTTP space) it can be
+desirable.
+</item>
+
+<item name = "timeout"
+      default = "60"
+      domain = "TIMER" >
+The maximum time, in seconds, that a CGI program may run. This option
+prevents looping CGI programs from blocking the server system for more than
+a short period. However, you will want to tune it if you run exceptionally
+slow CGIs, e.g. large database searches. (Which we do not recommend; you
+should always aim for a response time of less than 2 seconds, and 5 seconds
+for 'heavy' processing.)  If you set this to zero, Xitami lets CGIs run for
+an arbitrarily long time (actually one hour) before killing them.
+</item>
+
+<item name = "monitor"
+      default = "200"
+      domain = "FINETIMER" >
+The frequency, in milliseconds, at which Xitami monitors the progress of
+CGI programs. If you raise this time to 500, for example, Xitami will check
+the CGI program's progress every 1/2 second. Anything less than 100 is not a
+good idea, probably, since it will slow-down the server.
+</item>
+
+<item name = "dirlist"
+      default = "0"
+      domain = "FLAG" >
+If 1, the server will generate a directory listing for any URL that
+refers to a CGI directory not containing a default file. If 0, such accesses
+result in a 403 Forbidden response.
+</item>
+
+<item name = "msdos-style"
+      default = "0"
+      domain = "FLAG" >
+If 1, CGI programs and scripts get all filenames passed through the
+environment and on the command line in MS-DOS format (using backslashes);
+otherwise they get filenames in Unix format (using forward slashes).
+</item>
+
+<item name = "debug"
+      default = "0"
+      domain = "FLAG" >
+If 1, the server creates files containing the CGI input and output
+streams, called tmpxxxxx.cgi and tmpxxxxx.cgo. You can use
+these to debug CGI programs' output.
+</item>
+
+<item name = "stdio"
+      default = "1"
+      domain = "FLAG" >
+If 1, the server uses standard input/output streams to pass CGI input
+and output data. This is suitable for languages such as C, Perl, etc. that
+have access to stdin and stdout streams. When using languages that cannot
+read from stdin or write to stdout, you must set this value to 0, and refer
+to the CGI_STDIN and CGI_STDOUT environment variables.
+</item>
+
+<item name = "mixed-url"
+      default = "1"
+      domain = "FLAG" >
+If 1, allows images, HTML, and other files in the cgi-bin directory. The
+CGI program can refer to these using relative addressing. If 0, such files
+are not permitted. Note that in any case, executable files (such as Perl
+scripts) are always executed, never downloaded.
+</item>
+
+<item name = "errlog"
+      default = "cgierr.log"
+      domain = "FILENAME" >
+Specifies a filename for output of CGI program errors. A CGI program can
+send error messages to the stderr stream; these are captured in this log
+file.
+</item>
+
+<item name = "environment"
+      default = "1"
+      domain = "FLAG" >
+If 1, the CGI program gets the full web server environment, including
+values such as PATH. If 0, does not have access to such data. The
+environment data can assist a hostile attack on the host system.
+</item>
+
+<item name = "passargs"
+      default = "0"
+      domain = "FLAG" >
+If 1, the server will pass URL arguments (?arg1+arg2+...)to CGI programs.
+If 0, these are not passed.  Under some systems, this can pose a security
+problem if devious hackers manage to pass arguments to shell scripts that are
+interpreted as commands or filters.  In any case, Xitami replaces these
+'dangerous' characters: |, &gt;, &lt; by spaces.
+</item>
+
+<item name = "http-fields"
+      default = "1"
+      domain = "FLAG" >
+Defines whether the HTTP request header fields are passed to the CGI
+program or not.
+</item>
+
+<item name = "http-prefix"
+      default = "HTTP_"
+      domain = "FIELDNAME" >
+Specifies the prefix used to identify HTTP header fields in the CGI
+program environment. Note that this should be different from the
+form-prefix, so that there is no chance of an overlap in field names. To
+specify 'no prefix', use http-prefix="".
+</item>
+
+<item name = "form-fields"
+      default = "1"
+      domain = "FLAG" >
+If 1, the form data (coming from a GET or POST method) is supplied as
+environment variables. This can be required by some CGI programs. However,
+when large forms are used, this may cause the environment to be over-filled.
+Since the form data is also available to the CGI program on its standard
+input device, it can be useful to set this option to 0.
+</item>
+
+<item name = "form-prefix"
+      default = "FORM_"
+      domain = "FIELDNAME" >
+Specifies the prefix used to identify form data fields in the CGI
+program environment. To specify 'no prefix', use form-prefix="".
+</item>
+
+<item name = "form-query"
+      default = "0"
+      domain = "FLAG" >
+If 1, the form data (coming from a POST method) is supplied as the
+environment variable QUERY_STRING. If 0, this data is supplied as separate
+environment variables, and on the standard input device but not as a
+QUERY_STRING environment variable. Some CGI products (we know of Progress
+Webspeed) will barf if this is turned-on, since they do not expect input in
+both this string and on stdin.
+</item>
+</section>
+
+
+<!-- CGI-ENVIRONMENT ---------------------------------------------------->
+
+<section name = "CGI-Environment"
+         type = "LIST" >
+This section lets you define specific CGI environment variables. Each definition
+is taken literally and passed to the CGI program. This can be useful when using
+virtual hosts.
+
+<example>
+[CGI-Environment]
+    HOSTNAME=sales
+</example>
+</section>
+
+
+<!-- CGI-ALIAS ---------------------------------------------------------->
+
+<section name = "CGI-Alias"
+         type = "LIST" >
+This section lets you define CGI aliases. A CGI alias is a virtual directory
+that points to some arbitrary directory on the server computer and contains CGI
+scripts or programs. This combines the functions of the CGI url '/cgi-bin' and
+an HTTP alias. To define a CGI alias, specify the alias name and the directory
+it refers to.
+
+<example>
+[CGI-Alias]
+    demos=G:\site\demos
+</example>
+</section>
+
+
+<!-- SSI ---------------------------------------------------------------->
+
+<section name = "SSI"
+         info = "using_ssi"
+         type = "DETAIL" >
+This section controls Xitami's built-in server-side includes (SSI) handling.
+
+<item name = "enabled"
+      default = "1"
+      domain = "FLAG" >
+Lets you enable/disable SSI handling.
+</item>
+
+<item name = "timefmt"
+      default = "%A, %d-%b-%y %H:%M:%S %Z"
+      domain = "TIMEFMT" >
+Specifies the format for times shown by SSI pages.
+</item>
+
+<item name = "sizefmt"
+      default = "bytes"
+      domain = "SIZEFMT" >
+Specifies whether size should be shown as bytes or as abbreviations (Kb,
+Mg).  Anything other than the string "bytes" is taken to mean that sizes are
+shown as abbreviations.
+</item>
+
+<item name = "timeout"
+      default = "30"
+      domain = "TIMER" >
+The timeout for CGI programs called from the SSI agent.
+</item>
+
+<item name = "errmsg"
+      default = "<p>[xitami SSI: %s]"
+      domain = "MESSAGE" >
+Error message shown when an SSI command fails.  The %s symbol is replaced
+by the cause of the problem.
+</item>
+
+<item name = "exec"
+      default = "0"
+      domain = "FLAG" >
+If 1, allows CGIs to be executed using the #exec command.  Since this is
+a security weakness, this option is switched-off by default.
+</item>
+</section>
+
+
+<!-- SECURITY ----------------------------------------------------------->
+
+<section name = "Security"
+         type = "DETAIL" >
+This section defines HTTP server security options.
+
+<item name = "filename"
+      default = "xitami.aut"
+      domain = "FILENAME" >
+Specifies the Basic Authentication file.
+</item>
+
+<item name = "password-case"
+      default = "1"
+      domain = "FLAG" >
+If 1, passwords are case-sensitive. If 0, passwords are always converted to
+lower-case before validation. If you set this to 0, be sure to use lower-case
+passwords in the password file.
+</item>
+
+<item name = "dirlist"
+      default = "1"
+      domain = "FLAG" >
+If 1, the server will generate a directory listing for any URL that refers to a
+directory not containing a default file. If 0, such accesses result in a 403
+Forbidden response. If the directory URL is followed by '?sort=', then the
+following string is used to sort the directory, and override the dirsort option.
+For instance: 'http://www.imatix.com/pub/xitami/?sort=T'.
+</item>
+
+<item name = "admin"
+      default = "1"
+      domain = "FLAG" >
+If 1, the server will allow access to the web-based administration pages
+(WBA). If 0, the WBA agent will not be started. This is a safe way to
+disable WBA access, for sites where this is not needed and poses a potential
+security hole.
+</item>
+
+<item name = "superuser"
+      default = ""
+      domain = "PASSWORD" >
+Specifies the Superuser password. If this is "" or "-", no superuser access is
+allowed. Anything else is accepted as a password for all protected resources,
+including the online administration functions. This password overrides the
+webmask for any resource. So, be really careful. It does not override the
+webmask for the entire server.
+</item>
+
+<item name = "safepaths"
+      default = "1"
+      domain = "FLAG" >
+If 1, the server will refuse access to 'unsafe' URLs, which is a notion
+that Microsoft invented when they allowed the same file to have a short and
+a long filename.  When this is enabled, Xitami rejects any URLs that contain
+a directory name which can be translated to a different long name and the
+user receives a 403 error message.  If 0, this check is not done.
+</item>
+
+<item name = "webmask"
+      default = "*"
+      domain = "WEBMASK" >
+Limits the set of clients that can connect to the HTTP server.  This provides
+an easy way of creating an extranet web service - you can put your server on the
+Internet, but allow access to a fixed set of IP addresses.
+</item>
+
+<item name = "setuid"
+      default = "0"
+      domain = "FLAG" >
+Specifies whether the server switches to a safe user id and group at startup.
+This only works under Unix systems. When you use this option, you can be certain
+that the server runs with the minimum necessary privileges.
+</item>
+
+<item name = "setuid-user"
+      default = "nobody"
+      domain = "USERNAME" >
+When the security:setuid option is enabled, switches to this user id after
+opening its HTTP and FTP ports. You should ensure that the user id exists and
+has suitable authority to write to log files, etc.
+</item>
+
+<item name = "setuid-group"
+      default = "nogroup"
+      domain = "GROUPNAME" >
+When the security:setuid option is enabled, switches to this group id after
+opening its HTTP and FTP ports. You should ensure that the group id exists and
+has suitable authority to write to log files, etc. If you set this option to an
+empty value, e.g. "", Xitami does not change the group id.
+</item>
+
+<item name = "cgi-username"
+      default = ""
+      domain = "USERNAME" >
+Specifies the username under which CGIs will be run.  If blank, runs under the
+same user id as started Xitami.
+</item>
+
+<item name = "cgi-password"
+      default = ""
+      domain = "PASSWORD" >
+Specifies a password to start CGIs under the specified user id.  This is
+required under Windows only.
+</item>
+
+<item name = "cgi-groupname"
+      default = ""
+      domain = "" >
+Specifies the group name under which CGIs will be run.  If blank, runs under
+the same group name as started Xitami.
+</item>
+      
+</section>
+
+
+<!-- SERVERLOG ---------------------------------------------------------->
+
+<section name = "ServerLog"
+         type = "DETAIL" >
+This section controls the server error and information log.
+
+<item name = "enabled"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether server logging is enabled or not.
+</item>
+<item name = "filename"
+      default = "xitami.log"
+      domain = "FILENAME" >
+Specifies the name of the server log file. 
+</item>
+
+<item name = "cycle"       domain = "LOGCYCLE" />
+<item name = "cycle-how"   domain = "CYCLEHOW" />
+<item name = "cycle-time"  domain = "CYCLETIME" />
+<item name = "cycle-day"   domain = "CYCLEDAY" />
+<item name = "cycle-size"  domain = "CYCLESIZE" />
+<item name = "cycle-lines" domain = "CYCLELINES" />
+<item name = "cycle-arg"   domain = "CYCLEARG"
+                           default = "xi%yy%mm%dd.log" />
+</section>
+
+
+<!-- ACCESSLOG ---------------------------------------------------------->
+
+<section name = "AccessLog"
+         type = "DETAIL" >
+This section controls the server access log, recording HTTP hits.
+
+<item name = "enabled"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether logging is enabled or not.
+</item>
+<item name = "filename"
+      default = "access.log"
+      domain = "FILENAME" >
+Specifies the name of the log file.
+</item>
+<item name = "local"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether to include local addresses or not.
+</item>
+
+<item name = "format"      domain = "LOGFORMAT" />
+<item name = "custom"      domain = "LOGCUSTOM" />
+<item name = "translate"   domain = "LOGTRANSLATE" />
+<item name = "header"      domain = "LOGHEADER" />
+<item name = "cycle"       domain = "LOGCYCLE" />
+<item name = "cycle-how"   domain = "CYCLEHOW" />
+<item name = "cycle-time"  domain = "CYCLETIME" />
+<item name = "cycle-day"   domain = "CYCLEDAY" />
+<item name = "cycle-size"  domain = "CYCLESIZE" />
+<item name = "cycle-lines" domain = "CYCLELINES" />
+<item name = "cycle-arg"   domain = "CYCLEARG"
+                           default = "ac%yy%mm%dd.log" />
+</section>
+
+
+<!-- ERRORLOG ----------------------------------------------------------->
+
+<section name = "ErrorLog"
+         type = "DETAIL" >
+This section controls the server error log, recording HTTP errors.
+
+<item name = "enabled"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether logging is enabled or not.
+</item>
+<item name = "filename"
+      default = "errors.log"
+      domain = "FILENAME" >
+Specifies the name of the log file.
+</item>
+<item name = "local"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether to include local addresses or not.
+</item>
+
+<item name = "format"      domain = "LOGFORMAT" />
+<item name = "custom"      domain = "LOGCUSTOM" />
+<item name = "translate"   domain = "LOGTRANSLATE" />
+<item name = "header"      domain = "LOGHEADER" />
+<item name = "cycle"       domain = "LOGCYCLE" />
+<item name = "cycle-how"   domain = "CYCLEHOW" />
+<item name = "cycle-time"  domain = "CYCLETIME" />
+<item name = "cycle-day"   domain = "CYCLEDAY" />
+<item name = "cycle-size"  domain = "CYCLESIZE" />
+<item name = "cycle-lines" domain = "CYCLELINES" />
+<item name = "cycle-arg"   domain = "CYCLEARG"
+                           default = "er%yy%mm%dd.log" />
+</section>
+
+
+<!-- DDNS --------------------------------------------------------------->
+
+<section name = "Ddns"
+         info = "ddns"
+         type = "DETAIL" >
+This section configures the Xitami dynamic DNS (DDNS) client.  You can define
+multiple DDNS registrations by duplicating this section of the configuration
+file and naming the extra sections [Ddns1], [Ddns2], etc.  Xitami looks for
+these in order, and stops when it can't find one.
+<example>
+[Ddns]              
+    enabled=1            
+    refresh=3600
+    service=localhost    
+    domain=my.ddns.test  
+    username=me@localhost
+    password=FurkYFurt
+[Ddns1]              
+    enabled=1         
+    service=xitami.net
+    domain=myhost.xitami.net        
+    username=joe23@aol.com          
+    password=TZO-xxxx-xxxx-xxxx-xxxx
+</example>
+
+<item name = "enabled"
+      default = "0"
+      domain = "FLAG" >
+Tells Xitami whether to sign-on to the DDNS service at start-up or not.
+This is normally switched off when you don't use DDNS and switched on when
+you do.
+</item>
+
+<item name = "filename"
+      default = "ddnsdef.xml"
+      domain = "FILENAME" >
+Specifies the DDNS definition file. This is an XML file that follows a
+specific format - look at ddnsdef.xml for an explanation. If you define
+your own customised DDNS services, it's a good idea to copy ddnsdef.xml to
+something else (e.g. 'myddnss.xml') and then change that. This avoids
+unpleasant surprises when you upgrade your Xitami version. Note that we may
+change the format of the DDNS definition file in the future.
+</item>
+
+<item name = "refresh"
+      default = "3600"
+      domain = "TIMER" >
+Xitami will automatically refresh its DDNS connections if you set this to a
+non-zero value.  This delay is measured in seconds.
+</item>
+
+<item name = "service"
+      default = "localhost"
+      domain = "HOSTNAME" >
+Defines the DDNS service to use.
+</item>
+
+<item name = "domain"
+      default = "-"
+      domain = "HOSTNAME" >
+Defines the dynamic domain name you are using.  This must be the
+complete domain name, for instance 'myhost.xitami.net'.
+</item>
+
+<item name = "username"
+      default = "-"
+      domain = "USERNAME" >
+Defines your username.  Usually you define this when you register your
+DDNS name.  For Xitami.Net and tzo.com, it is an e-mail address.
+</item>
+
+<item name = "password"
+      default = "-"
+      domain = "PASSWORD" >
+Defines your password.  Usually you define this when you register your
+DDNS name.  For Xitami.Net and tzo.com, this is a key of the form
+"TZO-xxxx-xxxx-xxxx-xxxx".  For ns1.net, the password is sent to you when
+you register.
+</item>
+
+</section>
+
+
+<!-- RDNS --------------------------------------------------------------->
+
+<section name = "Rdns"
+         type = "DETAIL" >
+This section defines the configuration of the reverse-DNS lookups used by
+Xitami to translate IP addresses for its access log files.
+
+<item name = "primary-server"
+      default = "127.0.0.1"
+      domain = "IPADDRESS" >
+Defines the primary DNS server used for lookups. This value is mandatory for
+RDNS lookups. Specify it as an dotted IP address.
+</item>
+
+<item name = "secondary-server"
+      default = ""
+      domain = "IPADDRESS" >
+Defines a secondary DNS server, if one is available. This will provide a backup
+RDNS server if the primary server does not respond. Specify it as an dotted IP
+address.
+</item>
+
+<item name = "recurse-lookups"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether Xitami uses recursive lookups or not. Depending on the DNS
+configuration, this can be faster or slower than non-recursive lookups. 
+</item>
+
+<item name = "debug"
+      default = "0"
+      domain = "FLAG" >
+Specifies whether Xitami should output trace entries for its RDNS work.
+If 1, each RDNS lookup sends trace information to debug.log.  Use this if
+you are having problems getting reverse-DNS lookups to work.
+</item>
+</section>
+
+
+<!-- MIME --------------------------------------------------------------->
+
+<section name = "Mime"
+         type = "LIST" >
+This section lets you define MIME types. A MIME type is information sent to the
+browser with each file, telling the browser how to handle the file. Specify each
+MIME type as a file extension and the corresponding MIME type. Note that a large
+set of MIME types are loaded as standard. The MIME type 'default' is used for
+file extensions that don't match anything else. The file extension and MIME type
+must be specified in lowercase. To specify a MIME type for files with no
+extension, use ".=xxx/xxx".
+<example>
+[Mime]
+    default=*/*                #   Default MIME type
+    htm=text/html
+    html=text/html
+    .=text/plain               #   Files with no extension
+    gif=image/gif
+    jpeg=image/jpeg
+    jpg=image/jpeg
+    doc=application/msword
+</example>
+ 
+<preload name = "Default MIME type">
+<item name = "default"  value = "*/*" />
+</preload>
+
+<preload name = "Text MIME types">
+<item name = "etx"      value = "text/x-setext" />
+<item name = "htm"      value = "text/html" />
+<item name = "htp"      value = "text/html" />
+<item name = "html"     value = "text/html" />
+<item name = "rtx"      value = "text/richtext" />
+<item name = "tsv"      value = "text/tab-separated-values" />
+<item name = "txt"      value = "text/plain" />
+<item name = "."        value = "text/plain" />
+</preload>
+
+<preload name = "Image MIME types">
+<item name = "gif"      value = "image/gif" />
+<item name = "fh"       value = "image/x-freehand" />
+<item name = "fh4"      value = "image/x-freehand" />
+<item name = "fh5"      value = "image/x-freehand" />
+<item name = "fh7"      value = "image/x-freehand" />
+<item name = "fhc"      value = "image/x-freehand" />
+<item name = "ief"      value = "image/ief" />
+<item name = "jpe"      value = "image/jpeg" />
+<item name = "jpeg"     value = "image/jpeg" />
+<item name = "jpg"      value = "image/jpeg" />
+<item name = "pbm"      value = "image/x-portable-bitmap" />
+<item name = "pgm"      value = "image/x-portable-graymap" />
+<item name = "png"      value = "image/png" />
+<item name = "pnm"      value = "image/x-portable-anymap" />
+<item name = "ppm"      value = "image/x-portable-pixmap" />
+<item name = "ras"      value = "image/x-cmu-raster" />
+<item name = "rgb"      value = "image/x-rgb" />
+<item name = "tif"      value = "image/tiff" />
+<item name = "tiff"     value = "image/tiff" />
+<item name = "xbm"      value = "image/x-xbitmap" />
+<item name = "xpm"      value = "image/x-xpixmap" />
+<item name = "xwd"      value = "image/x-xwindowdump" />
+</preload>
+
+<preload name = "Video MIME types">
+<item name = "avi"      value = "video/msvideo" />
+<item name = "mov"      value = "video/quicktime" />
+<item name = "movie"    value = "video/x-sgi-movie" />
+<item name = "mpe"      value = "video/mpeg" />
+<item name = "mpeg"     value = "video/mpeg" />
+<item name = "mpg"      value = "video/mpeg" />
+<item name = "qt"       value = "video/quicktime" />
+<item name = "qtv"      value = "video/quicktime" />
+</preload>
+
+<preload name = "Audio MIME types">
+<item name = "aif"      value = "audio/x-aiff" />
+<item name = "aifc"     value = "audio/x-aiff" />
+<item name = "aiff"     value = "audio/x-aiff" />
+<item name = "au"       value = "audio/basic" />
+<item name = "snd"      value = "audio/basic" />
+<item name = "wav"      value = "audio/wav" />
+<item name = "mid"      value = "audio/midi" />
+<item name = "rmi"      value = "audio/midi" />
+<item name = "ram"      value = "audio/x-pn-realaudio" />
+<item name = "rpm"      value = "audio/x-pn-realaudio-plugin" />
+<item name = "ra"       value = "audio/x-realaudio" />
+<item name = "rm"       value = "audio/x-pn-realaudio" />
+<item name = "mp3"      value = "audio/mpeg" />
+<item name = "m3u"      value = "audio/mpegurl" />
+<item name = "mp3url"   value = "audio/mpegurl" />
+</preload>
+
+<preload name = "Application MIME types">
+<item name = "aab"      value = "application/x-authorware-bin" />
+<item name = "aam"      value = "application/x-authorware-map" />
+<item name = "aas"      value = "application/x-authorware-seg" />
+<item name = "ai"       value = "application/postscript" />
+<item name = "bcpio"    value = "application/x-bcpio" />
+<item name = "bin"      value = "application/octet-stream" />
+<item name = "cdf"      value = "application/x-netcdf" />
+<item name = "cpio"     value = "application/x-cpio" />
+<item name = "csh"      value = "application/x-csh" />
+<item name = "dcr"      value = "application/x-director" />
+<item name = "dir"      value = "application/x-director" />
+<item name = "doc"      value = "application/msword" />
+<item name = "dvi"      value = "application/x-dvi" />
+<item name = "dxr"      value = "application/x-director" />
+<item name = "eps"      value = "application/postscript" />
+<item name = "exe"      value = "application/octet-stream" />
+<item name = "gtar"     value = "application/x-gtar" />
+<item name = "gz"       value = "application/x-gzip" />
+<item name = "hdf"      value = "application/x-hdf" />
+<item name = "jar"      value = "application/java-archive" />
+<item name = "js"       value = "application/x-javascript" />
+<item name = "latex"    value = "application/x-latex" />
+<item name = "ltx"      value = "application/x-latex" />
+<item name = "lzh"      value = "application/x-lzh" />
+<item name = "man"      value = "application/x-troff-man" />
+<item name = "me"       value = "application/x-troff-me" />
+<item name = "ms"       value = "application/x-troff-ms" />
+<item name = "nc"       value = "application/x-netcdf" />
+<item name = "oda"      value = "application/oda" />
+<item name = "pdf"      value = "application/pdf" />
+<item name = "ps"       value = "application/postscript" />
+<item name = "roff"     value = "application/x-troff" />
+<item name = "rtf"      value = "application/rtf" />
+<item name = "sh"       value = "application/x-sh" />
+<item name = "shar"     value = "application/x-shar" />
+<item name = "spl"      value = "application/futuresplash" />
+<item name = "src"      value = "application/x-wais-source" />
+<item name = "sv4cpio"  value = "application/x-sv4cpio" />
+<item name = "sv4crc"   value = "application/x-sv4crc" />
+<item name = "swf"      value = "application/x-shockwave-flash" />
+<item name = "t"        value = "application/x-troff" />
+<item name = "tar"      value = "application/tar" />
+<item name = "tcl"      value = "application/x-tcl" />
+<item name = "tex"      value = "application/x-tex" />
+<item name = "texi"     value = "application/x-texinfo" />
+<item name = "texinfo"  value = "application/x-texinfo" />
+<item name = "tgz"      value = "application/x-gzip" />
+<item name = "tr"       value = "application/x-troff" />
+<item name = "txi"      value = "application/x-texinfo" />
+<item name = "ustar"    value = "application/x-ustar" />
+<item name = "zip"      value = "application/zip" />
+</preload>
+
+<preload name = "VRML MIME types">
+<item name = "wrl"      value = "x-world/x-vrml" />
+<item name = "wrz"      value = "x-world/x-vrml" />
+</preload>
+   
+</section>
+
+
+<!-- CONSOLE ------------------------------------------------------------>
+
+<section name = "Console"
+         type = "DETAIL" >
+This section controls the browser-based admin screens.
+
+<item name = "startup"
+      default = "1"
+      domain = "COUNT" >
+Specifies the initial screen to show; the values for this option
+are deliberately not documented.  Change this option only using the WBA.
+</item>
+
+<item name = "refresh"
+      default = "0"
+      domain = "FLAG" >
+Specifies whether the console information screens should refresh automatically
+or not. This only works with browsers that support the META HTTP-EQUIV="REFRESH"
+tag. On most modern browsers, the refresh option causes warning messages.
+</item>
+
+<item name = "rate"
+      default = "10"
+      domain = "TIMER" >
+Specifies the rate at which the refresh occurs, in seconds.
+</item>
+
+<item name = "capture"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether console output is sent to a file or not.
+</item>
+
+<item name = "filename"
+      default = "console.log"
+      domain = "FILENAME" >
+If the capture option is set, this option specifies a filename.
+</item>
+
+<item name = "append"
+      default = "0"
+      domain = "FLAG" >
+if the capture option is set, this option controls whether the console log is
+cleared each time the server is started, or not.
+</item>
+
+<item name = "javascript"
+      default = "1"
+      domain = "FLAG" >
+If 1, the WBA screens will use small amounts of JavaScript to improve the
+user-interface; for instance placing the cursor on the first input field
+automatically. If 0, JavaScript will not be used. In general enabling JavaScript
+will give better results.
+</item>
+
+<item name = "large-icons"
+      default = "1"
+      domain = "FLAG" >
+If 1, the WBA screens will show large icons on the icon bar. If 0, they will
+show small icons with only images, no text labels.
+</item>
+</section>
+
+
+<!-- WIN32 -------------------------------------------------------------->
+
+<section name = "Win32"
+         type = "DETAIL" >
+This section controls options specific to the 32-bit Windows versions of Xitami.
+
+<item name = "16bit-cgi"
+      default = "0"
+      domain = "FLAG" >
+Defines whether 16-bit CGIs are supported or not. If they are, all CGIs are run
+in a separate virtual machine. This is safe but slow. If you use only 32-bit
+CGIs, you can run CGIs faster by setting this option to 0.
+</item>
+
+<item name = "secure"
+      default = "0"
+      domain = "FLAG" >
+If 1, the 'Stop', 'Start', and 'Terminate' buttons on the Xitami Windows control
+panel are disabled. This is intended for configurations where the server may
+only be halted by an authorised administrator, using the WBA control panel.
+</item>
+
+<item name = "service-name"
+      default = "Xitami"
+      domain = "FILENAME" >
+This option is used under Windows NT for the NT service version of Xitami. You
+can only change this by manually editing defaults.cfg; it is not shown in the
+WBA. Change this before installing xiwinnt. You can use this option to install
+multiple instances of Xitami each with a different service name and title (as
+defined by the win32:service-text option). You will need a separate working
+directory for each such Xitami service that you start.
+</item>
+
+<item name = "service-text"
+      default = "Xitami Web Server"
+      domain = "MESSAGE" >
+This option is used under Windows NT for the NT service version of Xitami. You
+can only change this by manually editing defaults.cfg; it is not shown in the
+WBA.  To enable the change, run 'xiwinnt -u', then 'xiwinnt -i'.
+</item>
+
+</section>
+
+
+<!-- WSX ---------------------------------------------------------------->
+
+<section name = "WSX"
+         info = "wsx"
+         type = "LIST" >
+This section lets you define web server extension (WSX) agents. An example of a
+WSX agent is the WBA agent. Each entry in this section defines a URL prefix and
+an agent name. The prefix identifies all URLs passed to this agent, and consists
+of one or more directory names separated by '/'.   To disable a preloaded WSX
+agent, clear the agent name.
+
+<preload name = "Preloaded WSX agents">
+<item name = ".shtm"  value = "xixssi"  />
+<item name = ".shtml" value = "xixssi"  />    
+<item name = ".ssi"   value = "xixssi"  />
+<item name = ".map"   value = "xiimap"  />
+<item name = ".xml"   value = "xixxml"  />
+<item name = ".gsl"   value = "xixxml"  />
+<item name = "admin"  value = "xiadmin" />
+<item name = "error"  value = "xierror" />
+</preload>
+
+<example>
+[WSX]
+    admin=xiadmin      #   Web-based administration agent "/admin"
+    error=""           #   Error simulation agent disabled     
+</example>
+</section>
+
+
+<!-- FTP ---------------------------------------------------------------->
+
+<section name = "FTP"
+         type = "DETAIL" >
+This section controls Xitami's FTP service.
+
+<item name = "enabled"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether the FTP service is enabled or not. If you change this, restart
+Xitami for the changes to take effect.
+</item>
+
+<item name = "root"
+      default = "./ftproot"
+      domain = "DIRECTORY" >
+Specifies the root directory for FTP logins, unless a specific directory is
+defined for the current user.
+</item>
+
+<item name = "port"
+      default = "21"
+      domain = "IPPORT" >
+Specifies the FTP connection port. The port is shifted by the portbase specified
+for the main HTTP service. For instance if you specify a port 21, and a portbase
+of 8000, your server will accept FTP connections on port 8021 and HTTP
+connections on port 8080.
+</item>
+
+<item name = "timeout"
+      default = "300"
+      domain = "TIMER" >
+Specifies the time in seconds after which inactive control connections are
+closed. An FTP session requires one control connection, plus one data connection
+during file transfers. You should tune this timeout to suit the requirements of
+your system. For instance, under an OS like Windows 95, sockets are a limited
+resource, so a shorter timeout is a good idea. For sites with a small user
+group, you can use high timeouts, which users generally prefer.
+</item>
+
+<item name = "limit"
+      default = "25"
+      domain = "COUNT" >
+Specifies the maximum number of users that may login at once. On systems that
+can handle lots of open sockets (e.g. Unix, OS/2, WinNT, Win98), you may want to
+increase this. Xitami does not impose any fixed limit. If you set this value to
+0, it means 'no limit'.
+</item>
+
+<item name = "pipe"
+      default = ""
+      domain = "PIPE" >
+Specifies the default FTP throttle pipe. With a throttle pipe you can
+restrict the throughput of a FTP site to some fixed maximum, e.g. 64Kbps.
+This can be useful if several FTP sites share a single line, and you need
+to share this on a quality-of-service basis. The FTP throttle pipe is used
+for uploads and downloads for the FTP service, except where the profile for
+a user specifies a different throttle pipe.
+</item>
+
+<item name = "user-file"
+      default = "ftpusers.aut"
+      domain = "FILENAME" >
+Specifies the name of the FTP user definition file. 
+</item>
+
+<item name = "directory-file"
+      default = "ftpdirs.aut"
+      domain = "FILENAME" >
+Specifies the name of the directory definition file.
+</item>
+
+<item name = "dirsort"
+      default = "n"
+      domain = "DIRSORT" >
+Specifies the sort order for directory listings.  
+</item>
+
+<item name = "message-script"
+      default = "templates/ftpmesg.gsl"
+      domain = "SCRIPT" >
+Specifies the GSL script that is used to format FTP messages. If you use this
+option, Xitami ignores the welcome, signoff, and login-text options.
+</item>
+
+<item name = "welcome"
+      default = "@ftphello.txt"
+      domain = "FTPTEXT" >
+Specifies a text to be shown when a user connects to the FTP server. This can be
+literal text, or the name of a file, preceded by '@'. The file can contain up to
+2000 characters. Any lines that start with '#' are ignored as comments. If you
+modify this file, it is safest to make a copy (call it welcome.txt or something)
+and change this option to refer to the changed file. This avoids unpleasant
+surprises when you reinstall the next latest greatest version of Xitami.
+</item>
+
+<item name = "signoff"
+      default = "@ftpadios.txt"
+      domain = "FTPTEXT" >
+Specifies a text to be shown when a user ends the FTP session. This can be
+literal text, or the name of a file, preceded by '@'. The file can contain up to
+2000 characters. Any lines that start with '#' are ignored as comments. If you
+modify this file, it is safest to make a copy (call it goodbye.txt or something)
+and change this option to refer to the changed file. This avoids unpleasant
+surprises when you reinstall the next latest greatest version of Xitami.
+</item>
+
+<item name = "login-text"
+      default = "@ftplogin.txt"
+      domain = "FTPTEXT" >
+Specifies a text to be shown when a user logs-in to the FTP server. This can be
+literal text, or the name of a file, preceded by '@'. The file can contain up to
+2000 characters. Any lines that start with '#' are ignored as comments. If you
+modify this file, it is safest to make a copy (call it login.txt or something)
+and change this option to refer to the changed file. Xitami will search for this
+file first in the user's login directory, then in the main Xitami directory.
+</item>
+
+<item name = "user-at-host"
+      default = "1"
+      domain = "FLAG" >
+This flag controls whether Xitami allows virtual hosts using the syntax
+'username@hostname'. This syntax is supported by some FTP clients, and allows
+you to use multiple FTP virtual hosts on a single IP address.
+</item>
+
+<item name = "email-check"
+      default = "0"
+      domain = "FLAG" >
+If 1, the FTP server will check that the e-mail address supplied for anonymous
+logins is a valid address. The nature of the check is not documented (it may
+just look for an '@' in the address).
+</item>
+
+<item name = "http-aliases"
+      default = "0"
+      domain = "FLAG" >
+Specifies whether the HTTP [Alias] section should be used by the FTP service.
+This can be useful in configurations where you want to share the same data
+between services, but it can be a security risk if you want to use FTP aliases
+to access directories outside the HTTP space.
+</item>
+
+<item name = "soft-quota"
+      default = "2.5"
+      domain = "QUOTA" >
+Specifies the default soft quota for FTP users who are subject to a quota. You
+can also specify quota values for individual users. This value is specified in
+megabytes, as a decimal number (using a decimal point, not comma, even in
+Europe). When a user exceeds their soft quota, they start getting warning
+messages.
+</item>
+
+<item name = "hard-quota"
+      default = "5"
+      domain = "QUOTA" >
+Specifies the default hard quota for FTP users who are subject to a quota. You
+can also specify quota values for individual users. This value is specified in
+megabytes, as a decimal number. When a user exceeds their hard quota, they
+cannot upload new files.
+</item>
+
+<item name = "webmask"
+      default = "*"
+      domain = "WEBMASK" >
+Specifies the set of clients that can connect to the FTP server.
+</item>
+
+<item name = "password-case"
+      default = "1"
+      domain = "FLAG" >
+If 1, FTP passwords are case-sensitive. If 0, passwords are always converted to
+lower-case before validation. If you set this to 0, be sure to use only
+lower-case passwords in the password file.
+</item>
+
+<item name = "ipaddress"
+      default = "*"
+      domain = "IPADDRESS" >
+The IP address used for FTP connections.
+</item>
+
+<item name = "data-port"
+      default = "20"
+      domain = "IPPORT" >
+Specifies the port at which data connections will be made. Xitami scans for free
+ports, so this is simply the start of a range of ports. The port is shifted by
+whatever value was used for the server portbase.
+</item>
+
+<item name = "force-ip"
+      default = "0"
+      domain = "FLAG" >
+Indicates whether passive connections must be forced to the IP address specified
+in the 'passiveip' option.
+</item>
+
+<item name = "passiveip"
+      default = "main IP address"
+      domain = "IPADDRESS" >
+The IP address used for passive FTP data connections.  This can be set to the
+external network address for a server that is placed behind a firewall.
+</item>
+</section>
+
+
+<!-- FTP-ALIAS ---------------------------------------------------------->
+
+<section name = "FTP-Alias"
+         type = "LIST" >
+This section lets you define FTP aliases. An FTP alias looks like a root
+directory for ftp users, and point to some arbitrary directory on the server.+
+The alias name itself may not contain '/'. It is not case sensitive. FTP aliases
+are only shown to 'root' users, i.e. those with an empty root value, or those
+who have the 'aliases=1' option defined. Aliases are shown only if the user has
+GET access, and if the specified user's root directory actually exists.
+
+<example>
+[FTP-Alias]
+    demos=G:\site\demos
+</example>
+</section>
+
+
+<!-- FTPLOG ------------------------------------------------------------->
+
+<section name = "FTPLog"
+         type = "DETAIL" >
+This section controls the server access log, recording FTP hits.
+
+<item name = "enabled"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether logging is enabled or not.
+</item>
+<item name = "filename"
+      default = "access.log"
+      domain = "FILENAME" >
+Specifies the name of the log file.
+</item>
+<item name = "local"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether to include local addresses or not.
+</item>
+
+<item name = "format"      domain = "LOGFORMAT" />
+<item name = "custom"      domain = "LOGCUSTOM" />
+<item name = "translate"   domain = "LOGTRANSLATE" />
+<item name = "header"      domain = "LOGHEADER" />
+<item name = "cycle"       domain = "LOGCYCLE" />
+<item name = "cycle-how"   domain = "CYCLEHOW" />
+<item name = "cycle-time"  domain = "CYCLETIME" />
+<item name = "cycle-day"   domain = "CYCLEDAY" />
+<item name = "cycle-size"  domain = "CYCLESIZE" />
+<item name = "cycle-lines" domain = "CYCLELINES" />
+<item name = "cycle-arg"   domain = "CYCLEARG"
+                           default = "ac%yy%mm%dd.log" />
+</section>
+
+
+<!-- FTPERRLOG ---------------------------------------------------------->
+
+<section name = "FTPErrLog"
+         type = "DETAIL" >
+This section controls the FTP error log.
+
+<item name = "enabled"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether logging is enabled or not.
+</item>
+<item name = "filename"
+      default = "errors.log"
+      domain = "FILENAME" >
+Specifies the name of the log file.
+</item>
+<item name = "local"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether to include local addresses or not.
+</item>
+
+<item name = "format"      domain = "LOGFORMAT" />
+<item name = "custom"      domain = "LOGCUSTOM" />
+<item name = "translate"   domain = "LOGTRANSLATE" />
+<item name = "header"      domain = "LOGHEADER" />
+<item name = "cycle"       domain = "LOGCYCLE" />
+<item name = "cycle-how"   domain = "CYCLEHOW" />
+<item name = "cycle-time"  domain = "CYCLETIME" />
+<item name = "cycle-day"   domain = "CYCLEDAY" />
+<item name = "cycle-size"  domain = "CYCLESIZE" />
+<item name = "cycle-lines" domain = "CYCLELINES" />
+<item name = "cycle-arg"   domain = "CYCLEARG"
+                           default = "er%yy%mm%dd.log" />
+</section>
+
+<!-- LRWP --------------------------------------------------------------->
+
+<section name = "Lrwp"
+         info = "lrwp"
+         type = "DETAIL" >
+This section controls the LRWP (long-running web process) protocol.
+
+<item name = "enabled"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether the LRWP agent is enabled or not.
+</item>
+
+<item name = "port"
+      default = "81"
+      domain = "IPPORT" >
+Specifies the port on which the LRWP agent accepts connections.
+</item>
+
+<item name = "webmask"
+      default = "local"
+      domain = "WEBMASK" >
+Specifies the webmask for LRWP clients.  Normally this is restricted to local
+LRWP clients, but you can also construct LRWP networks from multiple servers.
+</item>
+
+<item name = "allow-all"
+      default = "1"
+      domain = "FLAG" >
+Allows all LRWP clients to connect. If this is set to 1, any LRWP
+application will be allowed to connect. Otherwise the LRWP-Application
+section must be used to authorise specific applications, and optionally
+specify a password to use during the authentication stage.
+</item>
+</section>
+
+<!-- LRWP-APPLICATION --------------------------------------------------->
+
+<section name = "LRWP-Application"
+         type = "LIST" >
+
+This section consists of one entry per application name (either URL prefix,
+or a URL "extension" name). The entry should either to be set to "*" to
+indicate the application is allowed without authentication, or to a
+password/phrase that is used in LRWP 2.0 authentication with that
+application. If a password/phrase is specified, then LRWP 1.0 clients will
+not be allowed to connect with that name (as they cannot perform the
+required authentication).
+
+
+<example>
+[LRWP-Application]
+    testapp=*             # Connect without any password
+    secureapp=funky161    # Connect using secure password
+</example>
+</section>
+
+<!-- SSL-HTTP ----------------------------------------------------------->
+
+<section name = "Ssl-http"
+         type = "DETAIL" >
+This section controls the interface between Xitami and the SSL (secure socket
+layer) agent.  The SSL agent is active in Xitami/Pro, the professional version
+of Xitami.
+
+<item name = "enabled"
+      default = "1"
+      domain = "FLAG" >
+Specifies whether the SSL interface is enabled or not.
+</item>
+
+<item name = "config-file"
+      default = "sslhttp.cfs"
+      domain = "FILENAME" >
+Specifies the SSL configuration filename.
+</item>
+</section>
+
+<!-- DOMAIN DEFINITIONS ------------------------------------------------->
+
+<domain name = "DIRECTORY" type = "TEXTUAL" size = "40" max = "100" />
+<domain name = "HTMLBLOCK" type = "TEXTBOX" size = "240" rows = "2" cols = "60" />
+<domain name = "HTMLTEXT"  type = "TEXTUAL" size = "60" max = "100" />
+<domain name = "FTPTEXT"   type = "TEXTBOX" size = "240" rows = "1" cols = "40" />
+<domain name = "URLPREFIX" type = "TEXTUAL" size = "40" />
+<domain name = "TIMER"     type = "NUMERIC" size = "5" />
+<domain name = "FILENAME"  type = "TEXTUAL" size = "40" max = "100" />
+<domain name = "FLAG"      type = "BOOLEAN" />
+<domain name = "COUNT"     type = "NUMERIC" size = "5" />
+<domain name = "FINETIMER" type = "NUMERIC" size = "6" />
+<domain name = "IPADDRESS" type = "TEXTUAL" size = "15" />
+<domain name = "IPPORT"    type = "NUMERIC" size = "5" />
+<domain name = "HOSTNAME"  type = "TEXTUAL" size = "40" max = "80" />
+<domain name = "USERNAME"  type = "TEXTUAL" size = "25" max = "40" />
+<domain name = "GROUPNAME" type = "TEXTUAL" size = "25" max = "40" />
+<domain name = "PASSWORD"  type = "TEXTUAL" size = "25" max = "40" />
+<domain name = "SIZEFMT"   type = "TEXTUAL" size = "8" />
+<domain name = "MESSAGE"   type = "TEXTUAL" size = "40" max = "80" />
+<domain name = "QUOTA"     type = "TEXTUAL" size = "10" />
+
+<domain name = "SCRIPT"
+        type = "TEXTUAL"
+        size = "40"
+        max  = "100" >
+GSL is a scripting language used by the iMatix GSLgen tool, incorporated into
+Xitami. A GSL script is a flexible way to format output texts - see the supplied
+script for more information. It's a good idea, if you change this script, to
+copy it and change the copy. Otherwise your changes will probably be lost
+when/if you ever upgrade your Xitami installation. 
+</domain>
+
+<domain name = "DIRSORT"
+        type = "TEXTUAL"
+        size = "5" >
+You can sort by file name, extension, size, or modification date/time using any
+combination of the letters 'n', 'x', 's', and 't'. For instance, dirsort=xnt
+will sort by extension, then name, then time. To sort in reverse order, use
+capital letters. For instance to show the most recent files first, use
+dirsort=T.
+</domain>
+
+<domain name = "WEBMASK"
+        type = "TEXTUAL"
+        info = "webmasks"
+        size = "40"
+        max  = "80" >
+Use 'webmask=local' to specify just local addresses, or 'webmask=item,item,...'
+to specify one or more types of access.  Each item allows or excludes some IP
+address(es): '250.12.13.*' allows matching addresses, '!250.12.13.*' excludes
+matching addresses (but does not allow others).  '!250.12.13.*,*' excludes one
+set of addresses and allows all others. 'webmask=@iplist.txt' reads the list of
+webmasks from a text file.
+</domain>
+
+<domain name = "LOGFORMAT"
+        type = "SELECT"
+        title = "Log file format"
+        default = "CLFX" >
+Specifies the log file format. The log file format you use needs to be
+compatible with whatever tool you use to analyze log files and build statistics.
+The most common tools work with an extended form of the NCSA log file format,
+also called 'common log file format'. We call this "CLFX". An other
+commonly-used format is that produced by Microsoft web servers. Xitami also
+creates log files in two XML formats, which you can easily process using GSLgen
+to you create arbitrary reports, statistics, and HTML analyses. Lastly, you can
+create your own format, for specific purposes.
+<value name = "CLF">Common-log format, as used by the NCSA httpd server.
+Defined as: '$\(client) - $\(user) [$\(datetime)] "$\(request)" $\(status)
+$\(sent)'
+</value>
+<value name = "CLFX">Extended CLF, as used by Apache and Xitami. Defined as:
+'$\(client) - $\(user) [$\(datetime)] "$\(request)" $\(status) $\(sent)
+"$\(referer)" "$\(agent)"'
+</value>
+<value name = "MS" >Microsoft format as used by IIS. Defined as: '$\(client),
+$\(user), $\(mon)/$\(day)/$\(year), $\(hh):$\(mm):$\(ss), $\(service), Xitami,
+$\(ipsrv), $\(stime), $\(recd), $\(sent), $\(status), 0, $\(method), $\(file)'
+</value>
+<value name = "LML" >iMatix Logfile Markup Language, an XML format. Defined as:
+'&lt;LOG DATE="$\(datetime)" CLIENT="$\(client)" REQUEST="$\(request)"
+METHOD="$\(method)" STATUS="$\(status)" SENT="$\(sent)" FILENAME="$\(file)"
+USERNAME="$\(user)" SERVICE="$\(service)" /&gt;'
+</value>
+<value name = "XLML" >iMatix Extended LML, a richer XML format. Defined as:
+'&lt;LOG DATE="$\(datetime)" CLIENT="$\(client)" CLIENTIP="$\(ipcli)"
+SERVERIP="$\(ipsrv)" REQUEST="$\(request)" METHOD="$\(method)"
+STATUS="$\(status)" RECEIVED="$\(recd)" SENT="$\(sent)" DURATION="$\(time)"
+FILENAME="$\(file)" USERAGENT="$\(agent)" REFERER="$\(referer)"
+USERNAME="$\(user)" SERVICE="$\(service)" VHOST="$\(vhost)" /&gt;'
+</value>
+<value name = "custom">User defined format, specified in custom field, and built
+from any combination of log format specifiers mixed with other text.
+</value>
+</domain>
+
+<domain name = "LOGCUSTOM"
+        type = "TEXTUAL"
+        size = "80"
+        max = "512"
+        default = "" >
+Custom log file format.  This is an arbitrary text string that contains symbols
+as listed below.  Symbols are enclosed by $\( and ) in the string.  
+<field name = "client">   Client address, as translated string</field>
+<field name = "ipcli">    Client address, as dotted number</field>
+<field name = "ipsrv">    Server address, as dotted number</field>
+<field name = "request">  Request line (HTTP only)</field>
+<field name = "query">    Query string, if any (HTTP only)</field>
+<field name = "method">   HTTP method or FTP command</field>
+<field name = "status">   Response code, 3 digits</field>
+<field name = "recd">     Request size, in bytes</field>
+<field name = "sent">     Response size, in bytes</field>
+<field name = "time">     Request duration, in msecs</field>
+<field name = "stime">    Request duration, in seconds (n.nnn)</field>
+<field name = "file">     Filename to which request was translated</field>
+<field name = "agent">    HTTP user agent (browser name)</field>
+<field name = "referer">  HTTP referer field</field>
+<field name = "user">     User name, if any, else -</field>
+<field name = "service">  Name of service (HTTP, FTP)</field>
+<field name = "vhost">    Virtual host name, if any, else -</field>
+<field name = "datetime"> Date/time in NCSA format</field>
+<field name = "yy">       Year as two digits</field>
+<field name = "year">     Year as four digits</field>
+<field name = "mon">      Month</field>
+<field name = "day">      Day</field>
+<field name = "hh">       Hour, using 24-hour clock</field>
+<field name = "mm">       Minutes</field>
+<field name = "ss">       Seconds</field>
+<field name = "XXX">      Environment variable XXX (XXX is uppercase)</field>
+</domain>
+
+<domain name = "LOGCYCLE"
+        type = "SELECT"
+        title = "Log file cycle option"
+        default = "daily" >
+Specifies when to cycle the log file.  When Xitami cycles a log file, it
+first moves or copies the existing data to another file, then creates a new,
+empty log file.
+<value name = "startup">When the server starts</value>
+<value name = "hourly"> Each hour at some specified time</value>
+<value name = "daily">  Each day at some specified time</value>
+<value name = "weekly"> Each week at some specified day and time</value>
+<value name = "monthly">Each month at some specified day and time</value>
+<value name = "manual"> Manually only</value>
+<value name = "size">   When the log file gets larger than some specified size
+in Kbytes.</value>
+<value name = "lines">  When the log file gets larger than some specified size
+in lines.</value>
+</domain>
+
+<domain name = "CYCLEHOW"
+        type = "SELECT"
+        title = "Log file cycle-how option"
+        default = "rename" >
+Specifies how to cycle the log file.
+<value name = "rename"> Rename the old log file, and create a new file.</value>
+<value name = "delete"> Delete the old log file, and create a new file.</value>
+<value name = "move">   Move the old log file to some directory, and create a
+new file.</value>
+<value name = "concat"> Append the old log file to some file, and create a new
+file.</value>
+<value name = "process">Run an arbitrary command to process the file, then create
+a new file.</value>
+</domain>
+
+<domain name = "LOGTRANSLATE"
+        type = "FLAG"
+        default = "0" >
+Specifies whether to do reverse-DNS translations of the logged IP addresses, or
+not.  Reverse-DNS translation can take some time, and if you need log file data
+quickly, leave this disabled.  Enabling reverse-DNS translations will not slow-
+down Xitami.
+</domain>
+
+<domain name = "LOGHEADER"
+        type = "TEXTBOX"
+        size = "500"
+        rows = "6"
+        cols = "80"
+        default = "" >
+Specifies one or more lines of text that will be copied into new log files
+as they are created during server startup or log file cycling.
+</domain>
+
+<domain name = "CYCLETIME"
+        type = "TEXTUAL"
+        size = "5"
+        default = "00:00" >
+Specifies the time of day, or minute past the hour, that the log file is cycled.
+</domain>
+
+<domain name = "CYCLEDAY" 
+        type = "NUMERIC"
+        size = "3"
+        default = "0" >
+Specifies the day of the week or month that the log file is cycled.
+</domain>
+
+<domain name = "CYCLESIZE"
+        type = "NUMERIC"
+        size = "6"
+        default = "0" >
+Specifies the maximum size in Kbytes for the log file; after that it is cycled.
+</domain>
+
+<domain name = "CYCLELINES"
+        type = "NUMERIC"
+        size = "9"
+        default = "0" >
+Specifies the maximum size in lines for the log file; after that it is cycled.
+</domain>
+
+<domain name = "CYCLEARG"
+        type = "TEXTUAL"
+        size = "60"
+        max  = "100" >
+Specifies an argument used for the various cycle-how options.  When renaming a
+file or concatenating it onto another, Xitami uses the argument as a time-stamped
+filename.  When moving the file, Xitami uses the argument as a time-stamped
+directory name.  When processing the file through an arbitrary command, it uses
+the argument as a time-stamped command string.  Xitami does not use the argument
+when deleting log files.  Format this argument from any of the following
+timestamp fiels, mixed with other text.
+<field name = "%y" >     Day of year, 001-366</field>
+<field name = "%yy" >    Year 2 digits, 00-99</field>
+<field name = "%yyyy" >  Year 4 digits, 0100-9999</field>
+<field name = "%mm" >    Month, 01-12</field>
+<field name = "%mmm" >   Month, Jan</field>
+<field name = "%mmmm" >  Month, January</field>
+<field name = "%MMM" >   Month, JAN</field>
+<field name = "%MMMM" >  Month, JANUARY</field>
+<field name = "%dd" >    Day, 01-31</field>
+<field name = "%ddd" >   Day of week, Sun</field>
+<field name = "%dddd" >  Day of week, Sunday</field>
+<field name = "%DDD" >   Day of week, SUN</field>
+<field name = "%DDDD" >  Day of week, SUNDAY</field>
+<field name = "%w" >     Day of week, 1-7 (1=Sunday)</field>
+<field name = "%ww" >    Week of year, 01-53</field>
+<field name = "%q" >     Year quarter, 1-4</field>
+<field name = "%h" >     Hour, 00-23</field>
+<field name = "%m" >     Minute, 00-59</field>
+<field name = "%s" >     Second, 00-59</field>
+<field name = "%c" >     Centisecond, 00-99</field>
+<field name = "%f" >     Name of log file, only for cycle-how=process.</field>
+<field name = "%%" >     Literal character %</field>
+</domain>
+
+<domain name = "TIMEFMT"
+        type = "TEXTUAL"
+        size = "40"
+        max  = "80" >
+<field name = "%a" >Abbreviated weekday name</field>
+<field name = "%A" >Full weekday name</field>
+<field name = "%b" >Abbreviated month name</field>
+<field name = "%B" >Full month name</field>
+<field name = "%c" >Date and time representation appropriate for locale
+</field>
+<field name = "%d" >Day of month as decimal number (01 - 31)</field>
+<field name = "%H" >Hour in 24-hour format (00 - 23)</field>
+<field name = "%I" >Hour in 12-hour format (01 - 12)</field>
+<field name = "%j" >Day of year as decimal number (001 - 366)</field>
+<field name = "%m" >Month as decimal number (01 - 12)</field>
+<field name = "%M" >Minute as decimal number (00 - 59)</field>
+<field name = "%p" >Current locale’s A.M./P.M. indicator for 12-hour
+clock</field>
+<field name = "%S" >Second as decimal number (00 - 59)</field>
+<field name = "%U" >Week of year as decimal number, with Sunday as first
+day of week (00 - 51)</field>
+<field name = "%w" >Weekday as decimal number (0 - 6; Sunday is 0)</field>
+<field name = "%W" >Week of year as decimal number, with Monday as first
+day of week (00 - 51)</field>
+<field name = "%x" >Date representation for current locale</field>
+<field name = "%X" >Time representation for current locale</field>
+<field name = "%y" >Year without century, as decimal number (00 - 99)
+</field>
+<field name = "%Y" >Year with century, as decimal number</field>
+<field name = "%z" >Time-zone name or abbreviation; empty if time zone is
+unknown</field>
+<field name = "%%" >Percent sign</field>
+</domain>
+
+<domain name = "PIPE"
+        type = "TEXTUAL"
+        size = "40"
+        default = "" >
+Pipes are defined in the XML file 'pipedef.xml'.  You can edit this file to
+add new pipes; Xitami reloads this automatically after a short delay.  Each
+pipe is defined as several 'instances', which are simply individual pipes
+that share the same characteristics.  For example, the default pipedef.xml
+file defines several pipes with a 64Kbps throughput.  These are individual
+instances of a 64Kpbs pipe.  All transfers that use a specific pipe
+instance share the bandwidth of that pipe instance.
+</domain>
+
+</config>
+

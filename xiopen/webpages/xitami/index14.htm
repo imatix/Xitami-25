@@ -1,0 +1,93 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Throttle Pipes</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index13.htm">&lt;</A>
+ | <A href="index15.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+<A NAME="pipes">&nbsp;</A>
+
+<H2><A NAME="TOC106">Throttle Pipes</A></H2>
+
+<H3><A NAME="TOC107">What are Throttle Pipes?</A></H3>
+
+<P>One problem with web and FTP sites is that they can consume a large
+amount of bandwidth.  If your site suddenly becomes popular, it can
+disturb other traffic that needs to work on the same line.
+
+<P>For people who use Xitami to do virtual hosting, it's useful to be able
+to balance the needs of the different web sites, possibly to provide
+different qualities of service to different clients.
+
+<P>Xitami lets you send output (and get input) through named 'throttle
+pipes', which you can visualise as pipes with a specific maximum capacity.
+For example, a 64Kb pipe will allow 65536 bytes to pass through every
+second.
+
+<P>By default, Xitami web sites and FTP sites do not use throttle pipes,
+and run at full speed.  You can choose a throttle pipe for a specific web
+site (virtual host), and for an FTP service.  You can also specify the
+throttle pipe for individual FTP users.  All connections that pass through
+the same throttle pipe share its capacity.  So, when you specify the same
+throttle pipe for five FTP users, these will share its capacity.  If you
+want to give each user the full capacity, you need to define five throttle
+pipes.
+
+<H3><A NAME="TOC108">Predefined Throttle Pipes</A></H3>
+
+<P>The predefined throttle pipes are in the file pipedef.xml.  This XML
+file specifies each throttle pipe as an 'instance' of a general pipe
+definition.  So, for instance, it may define two instances of a 64k pipe.
+Each instance is a real, usable throttle pipe.
+
+<H3><A NAME="TOC109">Defining New Throttle Pipes</A></H3>
+
+<P>You can edit the pipedef.xml file directly, but it's a better idea to
+copy it, and edit the copy.  Change the server:pipedef option to indicate
+the new file name.
+
+<P>When you edit the pipedef file, be sure to read the comments at the
+beginning.  These explain the XML syntax that you can use.  The XML file is
+case-sensitive.
+
+<P>Xitami defines pipes in terms of bytes per second, not bits per second
+(unlike most Internet connections).
+
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index13.htm">&lt;</A>
+ | <A href="index15.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <EM>Throttle Pipes</EM>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

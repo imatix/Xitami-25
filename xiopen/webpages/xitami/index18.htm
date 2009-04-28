@@ -1,0 +1,2572 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>FAQ</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index17.htm">&lt;</A>
+ | <A href="index19.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+
+<A NAME="faqlink">&nbsp;</A>
+<H2><A NAME="TOC150">FAQ</A></H2>
+
+
+
+
+<P><FONT SIZE=+1><B>Installing and Configuring Xitami</B></FONT>
+<UL>
+<LI>1: <A href="index18.htm#i_1">When I try to use the /admin setup, Xitami asks for a password!</A>
+<LI>2: <A href="index18.htm#i_2">Help - I don't understand how to define users and passwords!</A>
+<LI>3: <A href="index18.htm#i_3">Can I refer to an environment variable in the webpages setting?</A>
+<LI>4: <A href="index18.htm#i_4">I've screwed-up my installation and nothing works - Help!</A>
+<LI>5: <A href="index18.htm#i_5">I installed Xitami two days ago, and now I can't connect to it!</A>
+<LI>6: <A href="index18.htm#i_6">What is a 'HTTP port', actually?</A>
+<LI>7: <A href="index18.htm#i_7">Why do web servers want to use port 80 by default?</A>
+<LI>8: <A href="index18.htm#i_8">Is there some way to disable the WBA completely?</A>
+<LI>9: <A href="index18.htm#i_9">Why does the installation replace my xitami.cfg and .aut files?</A>
+<LI>10: <A href="index18.htm#i_10">How do I install a new version of Xitami without losing my config?</A>
+<LI>11: <A href="index18.htm#i_11">Can I install Xitami on a system that already has a web server?</A>
+<LI>12: <A href="index18.htm#i_12">How do I change the HTTP port but leave the FTP port at 21?</A>
+<LI>13: <A href="index18.htm#i_13">When I'm not connected to the network, Xitami is VERY slow!</A>
+<LI>14: <A href="index18.htm#i_14">'ping 127.0.0.1' works but I can't connect to http://127.0.0.1/</A>
+<LI>15: <A href="index18.htm#i_15">I can connect to http://127.0.0.1/ but not http://127.0.0.1/admin</A>
+<LI>16: <A href="index18.htm#i_16">Why does 127.0.0.1 not work with proxy servers?</A>
+<LI>17: <A href="index18.htm#i_17">Why does my server address switch between 127.0.0.1 and 253.239.42.1?</A>
+<LI>18: <A href="index18.htm#i_18">I want to test a site but my browser can't find 'www.myhost.com'</A>
+<LI>19: <A href="index18.htm#i_19">What's the 'document root'?</A>
+<LI>20: <A href="index18.htm#i_20">Do I need two computers to use Xitami?</A>
+<LI>21: <A href="index18.htm#i_21">Can I run Xitami on stand-alone machine?</A>
+<LI>22: <A href="index18.htm#i_22">Can I run Xitami under DOS?</A>
+<LI>23: <A href="index18.htm#i_23">Can I use Xitami over an ISDN or dial-in connection?</A>
+<LI>24: <A href="index18.htm#i_24">How do I change my IP address?</A>
+<LI>25: <A href="index18.htm#i_25">Xitami is reporting the wrong server address!</A>
+<LI>26: <A href="index18.htm#i_26">How do I tell Xitami to use my domain name?</A>
+<LI>27: <A href="index18.htm#i_27">How do I move my web site to an Internet domain name?</A>
+<LI>28: <A href="index18.htm#i_28">Can I set my hostname in xitami.cfg or defaults.cfg?</A>
+<LI>29: <A href="index18.htm#i_29">My server keeps starting on port 160, why?</A>
+<LI>30: <A href="index18.htm#i_30">Why does 'http://address/directory' does not work?</A>
+<LI>31: <A href="index18.htm#i_31">My images don't load, and various links give 'Not found'</A>
+<LI>32: <A href="index18.htm#i_32">Why do my aliases not work?</A>
+<LI>33: <A href="index18.htm#i_33">How can I change the error 404 message in Xitami?</A>
+<LI>34: <A href="index18.htm#i_34">What's 'Vanilla' Xitami?</A>
+<LI>35: <A href="index18.htm#i_35">Why is Xitami.aut not encoded?</A>
+<LI>36: <A href="index18.htm#i_36">After running a script that modifies defaults.aut, how do I get the same script to restart the server?</A>
+<LI>37: <A href="index18.htm#i_37">Can I use 'home.html' instead of 'default.htm'?</A>
+<LI>38: <A href="index18.htm#i_38">What is defaults.cfg? I can't find it anywhere!</A>
+<LI>39: <A href="index18.htm#i_39">Why does my webmask (!xx.xx.*) not work?</A>
+<LI>40: <A href="index18.htm#i_40">How do I make my server run faster?</A>
+<LI>41: <A href="index18.htm#i_41">How do I make my server secure?</A>
+<LI>42: <A href="index18.htm#i_42">I want each user to have FTP access to their personal web pages</A>
+<LI>43: <A href="index18.htm#i_43">Does Xitami support http://ipaddress/~username?</A>
+<LI>44: <A href="index18.htm#i_44">In FTP, 'ls' fails from a remote system (it works locally)</A>
+<LI>45: <A href="index18.htm#i_45">No-one can get to my server. I can get in, but no-one else can</A>
+<LI>46: <A href="index18.htm#i_46">No-one can connect to my server through the firewall!</A>
+<LI>47: <A href="index18.htm#i_47">Why does the Restart function not work?</A>
+<LI>48: <A href="index18.htm#i_48">The browser is not showing my new pages</A>
+<LI>49: <A href="index18.htm#i_49">I get the wrong default page, even if I change the webpages root!</A>
+<LI>50: <A href="index18.htm#i_50">I want several 'sites' on the same IP address, on different ports</A>
+<LI>51: <A href="index18.htm#i_51">How do I use Xitami on several different web projects?</A>
+<LI>52: <A href="index18.htm#i_52">How does Xitami work with subdomains?</A>
+<LI>53: <A href="index18.htm#i_53">Where can I get (just) primary & secondary DNS hosting for cheap?</A>
+</UL>
+<P><FONT SIZE=+1><B>Windows 3.x Questions</B></FONT>
+<UL>
+<LI>1: <A href="index18.htm#3_1">Xitami does not work - why not?</A>
+<LI>2: <A href="index18.htm#3_2">'Could not open HTTP port 80 - Protocol not known'</A>
+<LI>3: <A href="index18.htm#3_3">Are there still plans to introduce CGI for Win 3.x?</A>
+<LI>4: <A href="index18.htm#3_4">When will FTP work in the Win 3.x version?</A>
+<LI>5: <A href="index18.htm#3_5">Why does xiwin16.exe use all my CPU?</A>
+</UL>
+<P><FONT SIZE=+1><B>Windows 95/98 Questions</B></FONT>
+<UL>
+<LI>1: <A href="index18.htm#w_1">Can I use my Win95 system as a real server?</A>
+<LI>2: <A href="index18.htm#w_2">Can I use ASP (Active Server Pages) with Xitami?</A>
+<LI>3: <A href="index18.htm#w_3">'Could not open HTTP port 80 - Protocol not known'</A>
+<LI>4: <A href="index18.htm#w_4">'Port is already used by another server (WSEADDRINUSE)'</A>
+<LI>5: <A href="index18.htm#w_5">'How do I run PWS and Xitami on the same system?'</A>
+<LI>6: <A href="index18.htm#w_6">'Your browser sent a malformed request'</A>
+<LI>7: <A href="index18.htm#w_7">How can I tell what TCP/IP ports are assigned?</A>
+<LI>8: <A href="index18.htm#w_8">My URLs starting with file:// don't work across the network</A>
+<LI>9: <A href="index18.htm#w_9">Tips for using Xitami with dynamic IP addresses</A>
+<LI>10: <A href="index18.htm#w_10">Tips for using a dial-up IP connection</A>
+<LI>11: <A href="index18.htm#w_11">Ping will find 127.0.0.1 but not <I>myhost</I>.com</A>
+<LI>12: <A href="index18.htm#w_12">How do I debug my Windows network connection?</A>
+<LI>13: <A href="index18.htm#w_13">Xitami just sits there blinking between 'Running' and 'Suspended'</A>
+<LI>14: <A href="index18.htm#w_14">I get 'Not authorized to access this resource' on aliases</A>
+<LI>15: <A href="index18.htm#w_15">I get 'Not authorized to access this resource' on other URLs</A>
+<LI>16: <A href="index18.htm#w_16">How do I change my 'web server address'?</A>
+<LI>17: <A href="index18.htm#w_17">My web server address is 'http://default/' - why?</A>
+<LI>18: <A href="index18.htm#w_18">Can I run RealServer on the same system as Xitami?</A>
+<LI>19: <A href="index18.htm#w_19">My 16-bit CGI program does not output anything</A>
+<LI>20: <A href="index18.htm#w_20">How do I use the FrontPage extensions with Xitami?</A>
+<LI>21: <A href="index18.htm#w_21">Win95 crashes with a GPF in VxD IFSMGR(01)</A>
+<LI>22: <A href="index18.htm#w_22">Win95 crashes with a GPF in WINMM.DLL</A>
+<LI>23: <A href="index18.htm#w_23">Win95 gives me an error 10055 - Out of buffer space</A>
+<LI>24: <A href="index18.htm#w_24">Win95 still gives me errors when I use Xitami</A>
+<LI>25: <A href="index18.htm#w_25">Xitami crashes as soon as I try to start it</A>
+<LI>26: <A href="index18.htm#w_26">When I access my local site, it takes 3-4 minutes to load!</A>
+<LI>27: <A href="index18.htm#w_27">Why does Xitami use all my CPU?</A>
+<LI>28: <A href="index18.htm#w_28">When I run a CGI, I get a blank screen for several seconds</A>
+<LI>29: <A href="index18.htm#w_29">How do I reinstall just one file from the Xitami kit?</A>
+<LI>30: <A href="index18.htm#w_30">Xitami is reporting errors on its control panel</A>
+<LI>31: <A href="index18.htm#w_31">Can I run multiple instances under Windows?</A>
+<LI>32: <A href="index18.htm#w_32">IE sometimes fails with multiframe documents</A>
+<LI>33: <A href="index18.htm#w_33">Windows says 'URL.DLL not found' when I choose 'Setup'</A>
+<LI>34: <A href="index18.htm#w_34">Why is Windows ignoring my changes to the hosts.sam file?</A>
+<LI>35: <A href="index18.htm#w_35">What's CGI/Win?</A>
+<LI>36: <A href="index18.htm#w_36">Do you know of a good free proxy server for Windows?</A>
+<LI>37: <A href="index18.htm#w_37">Do you know of a good free e-mail server for Windows?</A>
+<LI>38: <A href="index18.htm#w_38">Do you know of a mail client for Windows?</A>
+<LI>39: <A href="index18.htm#w_39">Any hints for boosting Xitami's performance?</A>
+<LI>40: <A href="index18.htm#w_40">Why does Win95 insist on running 'service.bat'?</A>
+<LI>41: <A href="index18.htm#w_41">I installed MSIE 5 and uninstalled it, and now Xitami crashes whenever I try to start it up.</A>
+<LI>42: <A href="index18.htm#w_42">I'd like to run an abitrary Windows program from a browser</A>
+<LI>43: <A href="index18.htm#w_43">Can I stop Xitami from the command line or a batch script?</A>
+</UL>
+<P><FONT SIZE=+1><B>Windows NT Questions</B></FONT>
+<UL>
+<LI>1: <A href="index18.htm#n_1">My 16-bit CGI program does not output anything</A>
+<LI>2: <A href="index18.htm#n_2">The Xitami service can't access a network drive</A>
+<LI>3: <A href="index18.htm#n_3">The Xitami service fails to start, saying 'Access is denied'.</A>
+<LI>4: <A href="index18.htm#n_4">The Xitami service still fails to start!</A>
+<LI>5: <A href="index18.htm#n_5">Can I restart the Xitami service from a batch file?</A>
+<LI>6: <A href="index18.htm#n_6">How do I remove the Xitami icon in my control panel area?</A>
+<LI>7: <A href="index18.htm#n_7">I defined a new VH and now my NT service won't run</A>
+<LI>8: <A href="index18.htm#n_8">When I try to install Xitami on NT 4 I get a dialog box that says "Corrupt installation detected"</A>
+<LI>9: <A href="index18.htm#n_9">Can I use 'srvany' with Xitami?</A>
+</UL>
+<P><FONT SIZE=+1><B>UNIX Questions</B></FONT>
+<UL>
+<LI>1: <A href="index18.htm#u_1">Xitami does not build on my XXXX system</A>
+<LI>2: <A href="index18.htm#u_2">I need to search /usr/src/linux/include/ at build time</A>
+<LI>3: <A href="index18.htm#u_3">Can I run Xitami from my ISP telnet account?</A>
+<LI>4: <A href="index18.htm#u_4">Does Xitami support .htaccess with per-directory access control?</A>
+<LI>5: <A href="index18.htm#u_5">How can I run Xitami and have it listen on port 80 under Unix?</A>
+<LI>6: <A href="index18.htm#u_6">What are the security implications of running Xitami as root?</A>
+<LI>7: <A href="index18.htm#u_7">What's the best Linux operating system? RedHat, Debian, FreeBSD...?</A>
+<LI>8: <A href="index18.htm#u_8">Why does the documentation always use DOS-style slashes?</A>
+</UL>
+<P><FONT SIZE=+1><B>OS/2 Questions</B></FONT>
+<UL>
+<LI>1: <A href="index18.htm#o_1">Xitami does not start, and 'ping 127.0.0.1' does not work</A>
+<LI>2: <A href="index18.htm#o_2">Xitami reports 'too many open files'</A>
+<LI>3: <A href="index18.htm#o_3">Xitami aborts when my site is very heavily used</A>
+</UL>
+<P><FONT SIZE=+1><B>CGI and SSI questions</B></FONT>
+<UL>
+<LI>1: <A href="index18.htm#c_1">How do I write CGIs?</A>
+<LI>2: <A href="index18.htm#c_2">What's a good source for CGI programs?</A>
+<LI>3: <A href="index18.htm#c_3">When I run a CGI program, I don't get any response</A>
+<LI>4: <A href="index18.htm#c_4">I can't get PHP to run with Xitami!</A>
+<LI>5: <A href="index18.htm#c_5">Does Xitami have an API like ISAPI or NSAPI?</A>
+<LI>6: <A href="index18.htm#c_6">Would you recommend CGI or WSX for a simple e-mail application?</A>
+<LI>7: <A href="index18.htm#c_7">How do I tell Xitami which files are CGI programs?</A>
+<LI>8: <A href="index18.htm#c_8">How do I debug CGI programs?</A>
+<LI>9: <A href="index18.htm#c_9">Can you give me a checklist for installing Perl for Windows?</A>
+<LI>10: <A href="index18.htm#c_10">Why does my Perl CGI not run?</A>
+<LI>11: <A href="index18.htm#c_11">How can I find-out what directory a script is called from?</A>
+<LI>12: <A href="index18.htm#c_12">Can I restrict the commands that a Perl CGI uses?</A>
+<LI>13: <A href="index18.htm#c_13">Every time my SSI page uses #exec, Xitami scans the floppy drive!</A>
+<LI>14: <A href="index18.htm#c_14">When I try to run a Perl CGI, my browser says 'Save to disk?'</A>
+<LI>15: <A href="index18.htm#c_15">A require() or use() command in my Perl CGI script fails</A>
+<LI>16: <A href="index18.htm#c_16">I get "Can't locate ./lib/cgi-lib.pl in @INC at C:Program</A>
+<LI>17: <A href="index18.htm#c_17">I get "Document contains no data" when running a Perl CGI</A>
+<LI>18: <A href="index18.htm#c_18">How does Xitami handle its CGI stdio?</A>
+<LI>19: <A href="index18.htm#c_19">Why does my Perl 'flush' command not work under Xitami?</A>
+<LI>20: <A href="index18.htm#c_20">My BASIC .exe CGI does not work</A>
+<LI>21: <A href="index18.htm#c_21">Why do I get 'HTTP/1.0 502: Service temporarily overloaded'?</A>
+<LI>22: <A href="index18.htm#c_22">Why is the REMOTE USER not correctly filled-in?</A>
+<LI>23: <A href="index18.htm#c_23">Why is the HTTP REFERER not correctly filled-in?</A>
+<LI>24: <A href="index18.htm#c_24">When I generate images in my CGI program, LF becomes CRLF!</A>
+<LI>25: <A href="index18.htm#c_25">Must I use /cgi-bin in CGI URLs?</A>
+<LI>26: <A href="index18.htm#c_26">I want to put some CGIs in another directory, e.g. /htdocs/myscripts</A>
+<LI>27: <A href="index18.htm#c_27">How do I use a CGI program as a default page?</A>
+<LI>28: <A href="index18.htm#c_28">How do I set-up a web site counter?</A>
+<LI>29: <A href="index18.htm#c_29">How do I make a CGI file executable for DOS?</A>
+<LI>30: <A href="index18.htm#c_30">I tried compiling testcgi.c but it wants sfl.h?</A>
+<LI>31: <A href="index18.htm#c_31">How do I use an URL like '/cgi/script'?</A>
+<LI>32: <A href="index18.htm#c_32">My CGI '/somedir/cgi-bin/script' does not work</A>
+<LI>33: <A href="index18.htm#c_33">Can I redirect users to different pages using the .aut file?</A>
+<LI>34: <A href="index18.htm#c_34">Can I trap the user id to subset data?</A>
+<LI>35: <A href="index18.htm#c_35">I want to limit CGIs, but not HTML pages, to certain IP addresses</A>
+<LI>36: <A href="index18.htm#c_36">How do I allow CGIs in any regular HTML directory?</A>
+<LI>37: <A href="index18.htm#c_37">How do I write a shopping-card CGI program?</A>
+<LI>38: <A href="index18.htm#c_38">How do I access ODBC databases under Windows?</A>
+<LI>39: <A href="index18.htm#c_39">My CGI program can't connect to ODBC under Windows NT; it works from the command line</A>
+<LI>40: <A href="index18.htm#c_40">When I run a heavy ODBC CGI program, I get "Server Overloaded"</A>
+<LI>41: <A href="index18.htm#c_41">My images don't load when my CGI uses extra PATH INFO</A>
+<LI>42: <A href="index18.htm#c_42">How do I do file uploads through CGI?</A>
+<LI>43: <A href="index18.htm#c_43">My SSI page says '#exec command not permitted for security reasons'</A>
+<LI>44: <A href="index18.htm#c_44">Can I use Java servlets with Xitami?</A>
+<LI>45: <A href="index18.htm#c_45">Can I use LRWP peers with another web server?</A>
+<LI>46: <A href="index18.htm#c_46">What plans do you have for server-side JavaScript?</A>
+<LI>47: <A href="index18.htm#c_47">I've discovered a limit of 252 LRWP servers under Unix</A>
+<LI>48: <A href="index18.htm#c_48">How do I do user authentication in a CGI script?</A>
+</UL>
+<P><FONT SIZE=+1><B>Multihosting/Virtual Hosting</B></FONT>
+<UL>
+<LI>1: <A href="index18.htm#v_1">What exactly do I need to define for a Virtual Host?</A>
+<LI>2: <A href="index18.htm#v_2">How do I set-up a virtual host on another port?</A>
+<LI>3: <A href="index18.htm#v_3">How do I provide space for individual users on my system?</A>
+<LI>4: <A href="index18.htm#v_4">And how about their CGI scripts?</A>
+<LI>5: <A href="index18.htm#v_5">Can I run two versions of Xitami, e.g. on ports 80 and 1010?</A>
+<LI>6: <A href="index18.htm#v_6">My virtual host setup does not work - what can I try?</A>
+</UL>
+<P><FONT SIZE=+1><B>FTP Questions</B></FONT>
+<UL>
+<LI>1: <A href="index18.htm#f_1">People can't transfer files or see directories on my FTP server</A>
+<LI>2: <A href="index18.htm#f_2">How do I use my D: drive for additional FTP space?</A>
+<LI>3: <A href="index18.htm#f_3">When exactly does Xitami read the FTP user file?</A>
+<LI>4: <A href="index18.htm#f_4">If I give a user only 'P' access to a directory they can't list it</A>
+<LI>5: <A href="index18.htm#f_5">I'm having problems getting my FTP permissions right</A>
+<LI>6: <A href="index18.htm#f_6">How do I create an alias under the /pub directory?</A>
+<LI>7: <A href="index18.htm#f_7">Helloftp.txt does not show up under web-based FTP access</A>
+<LI>8: <A href="index18.htm#f_8">FTP aliases don't show-up when I do a browser directory listing</A>
+<LI>9: <A href="index18.htm#f_9">How do I set-up FTP virtual hosts?</A>
+<LI>10: <A href="index18.htm#f_10">Can I remotely browse my hard drives using Xitami?</A>
+</UL>
+<P><FONT SIZE=+1><B>Log File Questions</B></FONT>
+<UL>
+<LI>1: <A href="index18.htm#l_1">How do I use the Xitami log files?</A>
+<LI>2: <A href="index18.htm#l_2">Does the FTP server log logins, uploads, and downloads?</A>
+<LI>3: <A href="index18.htm#l_3">Why does access.log contain only numeric addresses?</A>
+<LI>4: <A href="index18.htm#l_4">Can I use Microsoft's WINS protocol for analysing my log files?</A>
+<LI>5: <A href="index18.htm#l_5">My log file has this strange URL: webpages/http://hostname/file.htm</A>
+<LI>6: <A href="index18.htm#l_6">I can't access the log files while Xitami is writing to them!</A>
+<LI>7: <A href="index18.htm#l_7">My log files do not get updated until Xitami is restarted</A>
+<LI>8: <A href="index18.htm#l_8">My computer crashed and now my log files are full of junk</A>
+</UL>
+<P><FONT SIZE=+1><B>Miscellaneous Questions</B></FONT>
+<UL>
+<LI>1: <A href="index18.htm#m_1">How do you pronounce Xitami?</A>
+<LI>2: <A href="index18.htm#m_2">What are the main problems with Xitami today?</A>
+<LI>3: <A href="index18.htm#m_3">Can you recommend a search engine for Xitami?</A>
+<LI>4: <A href="index18.htm#m_4">Why is the Xitami mailing list not a newsgroup?</A>
+<LI>5: <A href="index18.htm#m_5">Why do I get errors on 'robots.txt'? What is this?</A>
+<LI>6: <A href="index18.htm#m_6">Can I customise the directory listings?</A>
+<LI>7: <A href="index18.htm#m_7">Why is the password file not encrypted?</A>
+<LI>8: <A href="index18.htm#m_8">Do I need a special license to use/sell/modify Xitami at work?</A>
+<LI>9: <A href="index18.htm#m_9">I want to write a great Xitami addon...</A>
+<LI>10: <A href="index18.htm#m_10">How do I rebuild the SFL under Windows using MSVC?</A>
+<LI>11: <A href="index18.htm#m_11">I'm building a Windows app based on Xitami, but it aborts</A>
+<LI>12: <A href="index18.htm#m_12">How do I rebuild Xitami under Windows using lcc-win32?</A>
+<LI>13: <A href="index18.htm#m_13">I compiled Xitami with lcc-win32 but it always aborts</A>
+<LI>14: <A href="index18.htm#m_14">Why are there bugs in Xitami?</A>
+<LI>15: <A href="index18.htm#m_15">Why is Xitami free, and will it remain this way?</A>
+<LI>16: <A href="index18.htm#m_16">Where can I get older versions of Xitami?</A>
+<LI>17: <A href="index18.htm#m_17">Do you have any plans to incorporate SSL into Xitami?</A>
+<LI>18: <A href="index18.htm#m_18">What is the future for Xitami?</A>
+<LI>19: <A href="index18.htm#m_19">Is Xitami year 2000 compatible?</A>
+</UL>
+
+<HR>
+<H3><A NAME="TOC151">Installing and Configuring Xitami</A></H3>
+
+<P><B>1: When I try to use the /admin setup, Xitami asks for a password!</B><A NAME="i_1">&nbsp;</A>
+<P>Create two files:
+<OL>
+<LI>defaults.cfg:
+<PRE>[Security]
+    filename=defaults.aut
+</PRE>
+<LI>defaults.aut:
+<PRE>[/Admin]
+    admin=verysecret
+</PRE>
+</OL>
+Now use userid 'admin' and password 'verysecret' to access the WBA.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>2: Help - I don't understand how to define users and passwords!</B><A NAME="i_2">&nbsp;</A>
+<P>Xitami uses two separate user/password systems, one for web pages and
+one for FTP access.  To start with, create the defaults.cfg and defaults.aut
+file as described above.  Then, for each webpage directory you want to
+protect, add an entry in defaults.aut.  Enter the URL directory with or
+without a leading '/' - it does not matter.  Add each user with their
+password.  For instance, to say that only 'John' and 'Janet' can get at
+webpages starting with '/personal', you write something this:
+<PRE>
+[/personal]
+    john=Go96xas883
+    janet=Yhs7gsr73
+</PRE>
+(I'm inventing silly passwords here.)
+<P>For FTP access, you need to define each FTP user separately.  First, add
+these lines to defaults.cfg:
+<PRE>[Ftp]
+    Directory-file=ftpdloc.aut
+    User-file=ftplocal.aut
+</PRE>
+Now you can edit ftplocal.aut to define users.  The file ftpusers.aut shows
+what's allowed.  For example, to define an 'anonymous' user, who connects to
+the ftproot/pub directory with read access only, write this in ftplocal.aut:
+<PRE>[Anonymous]
+    Access=G
+    Password=*
+    Root=/pub
+</PRE>
+<P>A fairly classic setup is to define a personal web space for each user
+which they can update using FTP.  Be careful with this, since it's possible
+to set things up so that any user can run a CGI program (unsafe on Windows
+systems).  However, this is how you do it:
+<OL>
+<LI>For each user, create a directory below the ftproot with the user's
+short name.
+<LI>Create an FTP account as described above.  Use the access rights GPD,
+and MR if you want allow them to create/remove directories.
+<LI>Define an HTTP alias that points to this directory.  For instance, in
+defaults.cfg:
+<PRE>[Alias]
+    john=ftproot/john
+</PRE>
+<LI>If you also want these webpages to be private (password protected), add
+an entry to defaults.aut:
+<PRE>[/John]
+    john=Gsh65sgs12
+</PRE>
+</OL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>3: Can I refer to an environment variable in the webpages setting?</B><A NAME="i_3">&nbsp;</A>
+<P>Yes.  For example, if you defined the variable WEBROOT to specify the
+webpages location, use $(WEBROOT) in the webpages setting.  Note that
+environment variables are set in your startup script at the operating
+system level (e.g. .profile under Unix, autoexec.bat under Windows 95).
+
+<A NAME="reset-default">&nbsp;</A>
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>4: I've screwed-up my installation and nothing works - Help!</B><A NAME="i_4">&nbsp;</A>
+<P>If you edited xitami.cfg, you have to get the original version back out
+of the Xitami zip file or installation package.  Under Windows you can use
+Winzip or unzip to extract files from the .exe packages.  If you only worked
+through the WBA, you can delete defaults.cfg.  See the previous question for
+defining a new admin user and password.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>5: I installed Xitami two days ago, and now I can't connect to it!</B><A NAME="i_5">&nbsp;</A>
+<P>You probably set the server IP address to something.  Delete the line
+ipaddress=xxx in the defaults.cfg file.  If you really grok it, delete
+defaults.cfg.  See the previous question.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>6: What is a 'HTTP port', actually?</B><A NAME="i_6">&nbsp;</A>
+<P>It is a TCP/IP port that is used for HTTP. (HTTP being the HyperText
+Transfer Protocol, the means by which web pages, etc, get transfered around
+(usually).)
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>7: Why do web servers want to use port 80 by default?</B><A NAME="i_7">&nbsp;</A>
+<P>In order to contact a program running on another computer via TCP/IP
+(such as, say, a web server), you need to know two things: the IP address of
+the other computer, and the TCP/IP port on which it is listening for
+requests. The URL always includes the name of the other system (or its IP
+address), from which you can get the IP address that you need. The TCP/IP
+port </I>can</I>be included in the URL, but usually isn't. So you need
+another way to find out the URL. Of the various ways that this could be done
+(ask someone/another computer, guess, etc), the one chosen for most TCP/IP
+services is "you just know what it is". That is, there is a "Well Known"
+port number for most TCP/IP services including HTTP, which "everyone knows",
+and if nothing else is specified then that is the one that is used. The
+"Well Known" port number for HTTP is 80. So the servers want to use it by
+default so that everyone will know where to find them by default.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>8: Is there some way to disable the WBA completely?</B><A NAME="i_8">&nbsp;</A>
+<P>Yes, set the security:admin option to 0.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>1: do I know that my personal config 'xxx.cfg' is being loaded?</B><A NAME="How_1">&nbsp;</A>
+<P>Edit the config file and add a line '! Loading xxx.cfg'. Now, enable
+server debugging, and when you start Xitami, this message is output to the
+debug.log file.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>9: Why does the installation replace my xitami.cfg and .aut files?</B><A NAME="i_9">&nbsp;</A>
+<P>It has to do this, since new versions of Xitami may depend on updated
+.cfg and .aut files. The important thing is to make all changes in
+defaults.cfg, and this includes defining your own .aut file, so that the two
+standard files can be reinstalled at any time.
+<P>The installation will not override other files, except those provided as
+standard in the install package (e.g. default.htm).  So, as a general rule,
+do not modify anything that was supplied as standard, and if you're really
+paranoid, make a backup before you re-install Xitami.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>10: How do I install a new version of Xitami without losing my config?</B><A NAME="i_10">&nbsp;</A>
+<P>Firstly, make sure you did not change either xitami.cfg or xitami.aut.
+If you did change these, put your changes into defaults.cfg and
+defaults.aut, and add this to defaults.cfg:
+<PRE>[Security]
+    filename=defaults.aut
+</PRE>
+In principle you can now re-install Xitami safely.  The installation will
+not overwrite anything else you modified, including log files, web pages,
+CGIs, etc.  However, for safety, make a zip of the whole Xitami root before
+re-installing, just in case.  You should do this regularly anyhow.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>11: Can I install Xitami on a system that already has a web server?</B><A NAME="i_11">&nbsp;</A>
+<P>If you are already running a server on port 80, you must configure Xitami
+to run on some other port.  Change or create defaults.cfg:
+<PRE>[server]
+    portbase=1000
+</PRE>
+will run Xitami on port 1080.  The portbase is also added to the standard
+FTP port of 21 to give, in this case, 1021.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>12: How do I change the HTTP port but leave the FTP port at 21?</B><A NAME="i_12">&nbsp;</A>
+<P>You can shift the HTTP port between 80 and 100 while leaving the FTP port
+at 21.  Set the server portbase to a value between 1 and 20, and subtract
+this from the FTP port setting.  So, to move the HTTP port to 90, set the
+portbase to 10, and the FTP port to 11.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>13: When I'm not connected to the network, Xitami is VERY slow!</B><A NAME="i_13">&nbsp;</A>
+<P>Under Windows 95 and NT, your network configuration must match what's
+really going on. For instance, if your TCP/IP configuration specifies a
+particular gateway or DHCP server that is not available (because you are not
+physically connected). Check that the host and domain info in the DNS tab of
+the TCP/IP properties in the network control panel matches the info in the
+identification tab of the network control panel.
+<P> One typical symptom is that when you click on the Xitami icon in the
+taskbar, it takes a minute or two before the Xitami window appears. You may
+also get error messages when trying to point your browser to 127.0.0.1. The
+bottom line is this: if you want to run your PC off-line from the network,
+you must ensure that your PC's network configuration matches. There are
+various shareware tools that help you to manage multiple network
+configurations, for example NetSwitcher.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>14: 'ping 127.0.0.1' works but I can't connect to http://127.0.0.1/</B><A NAME="i_14">&nbsp;</A>
+<P>There are many possible causes of this problem.  The ones we know:
+<OL>
+<LI>The browser simply won't connect at all... you probably told Xitami to
+use a specific IP address, which excludes accesses via 127.0.0.1. Solution:
+delete any line 'ipaddress=xxx' in defaults.cfg.
+<LI>If you're using a proxy server, first try to disable this completely.
+If this improves things, now reconfigure the proxy settings so that the
+local addresses (127.0.0.1 and localhost) get past.  If this still fails,
+you may need to define an entry in your 'hosts' file for 'localhost'.
+<LI>Your server may be behind a proxy server that is not allowing HTTP
+connections to get past.  See your network administrator.
+</OL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>15: I can connect to http://127.0.0.1/ but not http://127.0.0.1/admin</B><A NAME="i_15">&nbsp;</A>
+<P>There are many possible causes of this problem.  The ones we know:
+<OL>
+<LI>You may have an old version of Xitami. Make sure you're running at least
+version 2.0.
+<LI>You may have installed a new version of Xitami but kept the xitami.cfg
+from an old installation. This can leave the WSX definition for /admin
+undefined, so /admin will not work. Symptom: you get 'not supported' as an
+error message.
+<LI>If you're using Xitami under Windows 3.x, the /admin WBA is not
+supported.  The 32-bit 'console' version of Xitami can run under Win32s.
+</OL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>16: Why does 127.0.0.1 not work with proxy servers?</B><A NAME="i_16">&nbsp;</A>
+<P>The problem is that if 127.0.0.1 is passed to the proxy server, it can't
+resolve that back to your local machine. You can configure your browser so
+that certain addresses (127.0.0.1) are not passed to the proxy.  This is
+actually the browser being really silly, because this address never means
+anything else than 'this machine'.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>17: Why does my server address switch between 127.0.0.1 and 253.239.42.1?</B><A NAME="i_17">&nbsp;</A>
+<P>127.0.0.1 is always available (it's the local loopback address); the
+other address is available when you're online and connected to the outside
+world.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>18: I want to test a site but my browser can't find 'www.myhost.com'</B><A NAME="i_18">&nbsp;</A>
+<P>Edit the 'hosts' file (in the Windows directory, and you may want to
+rename 'hosts.sam' to 'hosts'), and point the your site name to 127.0.0.1.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>19: What's the 'document root'?</B><A NAME="i_19">&nbsp;</A>
+<P>The document root is the directory where the main files are. For example
+if someone asks for a file "http://somehost/index.htm", this is taken to
+mean 'index.htm in the document root'. This is usually the directory called
+'webpages' in the Xitami directory. So if you installed Xitami in c:\xitami,
+the index.htm file would actually be in c:\xitami\webpages\index.htm. This
+webpages directory can itself contain subdirectories, of course.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>20: Do I need two computers to use Xitami?</B><A NAME="i_20">&nbsp;</A>
+<P>You can use one computer as a server, and one as a client if you like,
+but you can also use the same computer as client and server. Xitami is so
+small and fast that you can develop Java or CGI programs on the same system
+you test them on, and you will not notice any slow-down. This is also a
+simpler way of working than always copying your webstuff to another machine.
+Just set your Xitami cgi-bin option to point to the directory where you
+build your executables, or the webpages directory to your HTML directory
+root.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>21: Can I run Xitami on stand-alone machine?</B><A NAME="i_21">&nbsp;</A>
+<P>You can certainly run Xitami on a stand-alone system. It is a Good Idea
+to have TCP/IP networking installed (on a PC, go for Win95, OS/2, or Linux,
+which have TCP/IP built-in, instead of Win3.1 which is crippled in this
+area). You must install TCP/IP correctly and at least have a dial-up adaptor
+(software) configured. The 'ping localhost' command must work. Under Windows
+the winsock library may want to dial-up when you initialise it (e.g.
+connect from your browser), but this can be configured (in the browser or
+Internet control panel) to not be necessary.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>22: Can I run Xitami under DOS?</B><A NAME="i_22">&nbsp;</A>
+<P>Which version of DOS? We've not tested Xitami on a pure-DOS system, but
+it does run in the DOS box of Windows 95. If you're looking for something
+that will run on a PC without Windows, you could consider OS/2 or Linux:
+both run Xitami very well and with minimum hardware.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>23: Can I use Xitami over an ISDN or dial-in connection?</B><A NAME="i_23">&nbsp;</A>
+<P>Yes, if TCP/IP works and the 'ping' command does something useful. The
+Same goes for X.25, frame-relay, carrier-pigeon, and telephone drums.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>24: How do I change my IP address?</B><A NAME="i_24">&nbsp;</A>
+<P>By default, Xitami accepts connections on any available IP address.
+If you have multiple IP addresses, Xitami accepts connections on all of
+them.  More usually under Windows you have only one network card, only
+one IP address (though with a dial-up connection you have two interfaces
+and two addresses).  You can also configure Xitami to accept connections
+on a specific address only.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>25: Xitami is reporting the wrong server address!</B><A NAME="i_25">&nbsp;</A>
+<P>Xitami gets its name from the operating system.  Check the  TCP/IP
+configuration and especially the computer name.  You  should be able to
+test this using the 'ping' command in a DOS box.  Eg. 'ping mysystem'.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>26: How do I tell Xitami to use my domain name?</B><A NAME="i_26">&nbsp;</A>
+<P>Xitami works with any of the IP addresses available on the system. It
+does not care what the domain name is, and there is no way to define this
+within Xitami. (When you use virtual hosts the situation changes a little:
+there the domain name is used as a key to chose which virtual host to work
+with.)
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>27: How do I move my web site to an Internet domain name?</B><A NAME="i_27">&nbsp;</A>
+<P>See the <A href="index15.htm#beginners">Beginner's Guide</A> section. You have to do two main
+things:
+<UL>
+<LI>Register a new domain name with Internic.
+<LI>Get at least two existing machines to act as DNS servers for
+this name.
+</UL>
+<P>This is usually only worth doing if you have your own system, permanently
+connected to the Internet, or you want to rent a 'virtual host' on someone
+else's system. In the first case, your ISP can usually help set things up.
+In the second case, the virtual host provider will be able to help.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>28: Can I set my hostname in xitami.cfg or defaults.cfg?</B><A NAME="i_28">&nbsp;</A>
+<P>You cannot set your system hostname here. You have to get this working at
+the level of TCP/IP itself, e.g. by using the hosts file or a domain name
+server (DNS). However, you can specify the hostname that's used in
+redirected URLs, and this is important for virtual hosts.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>29: My server keeps starting on port 160, why?</B><A NAME="i_29">&nbsp;</A>
+<P>Set server:portbase to 0, or remove the line. The HTTP port is at
+portbase+80, and the FTP port at portbase+21.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>30: Why does 'http://address/directory' does not work?</B><A NAME="i_30">&nbsp;</A>
+<P>This should work. Set server:debug to 1 and see what's going on in
+debug.log. If you're on a PPP connection try setting server:translate to 0.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>31: My images don't load, and various links give 'Not found'</B><A NAME="i_31">&nbsp;</A>
+<P>You can switch off image loading in the browser, but I doubt this is the
+problem. More likely, you're using references that are incorrect for the
+configuration you're using. Look at the HTML pages, and check the &lt;A
+HREF&gt; tags. These must be valid. For example if they refer to some
+hostname which is not accessible, the images won't load.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>32: Why do my aliases not work?</B><A NAME="i_32">&nbsp;</A>
+<P>Set server:debug to 1 and see what's going on in debug.log. The WBA pages
+provide a 'test' facility where you can type an URL, and Xitami tells you
+what disk file it would be translated to.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>33: How can I change the error 404 message in Xitami?</B><A NAME="i_33">&nbsp;</A>
+<P>Edit the file errors/text-404.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>34: What's 'Vanilla' Xitami?</B><A NAME="i_34">&nbsp;</A>
+<P>This is just name for the portable, command-line version of Xitami.
+Usually we use this term in contrast to the Windows GUI versions of the web
+servers, which provide a graphical control panel for the web server.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>35: Why is Xitami.aut not encoded?</B><A NAME="i_35">&nbsp;</A>
+<P>This is a temporary situation: we plan to release an update in 1998 that
+uses encoded (hashed) passwords for better security. The password file
+itself is not accessible to browsers, unless you specify the Xitami root
+directory as its webpage directory, which would not really be a good idea.
+There are also advantages to plain-text password files: it is simple to
+manage these using scripts.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>36: After running a script that modifies defaults.aut, how do I get the same script to restart the server?</B><A NAME="i_36">&nbsp;</A>
+<P>You don't need to, since Xitami will automatically reload its config,
+including any modified password files, after a timeout that you can set as
+required (the server:refresh option).
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>37: Can I use 'home.html' instead of 'default.htm'?</B><A NAME="i_37">&nbsp;</A>
+<P>Change the defaults.cfg file server:defaultn options. You can specify
+anything you like: begin with 'default1'.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>38: What is defaults.cfg? I can't find it anywhere!</B><A NAME="i_38">&nbsp;</A>
+<P>Up to v1.3a, people had to modify the pre-supplied xitami.cfg file. This
+worked fine until they installed a new version, at which point they could
+start again. Defaults.cfg is not supplied with the server - you just copy
+the part of xitami.cfg you want to modify. Eg.
+<PRE>[CGI]
+    debug=1
+</PRE>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>39: Why does my webmask (!xx.xx.*) not work?</B><A NAME="i_39">&nbsp;</A>
+<P>The webmask is a bit pedantic. This mask forbids all hosts in a certain
+domain, but does not <I>allow</I> other hosts. Follow it by ',*' to allow
+all other hosts: webmask=!xx.xx.*,*
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>40: How do I make my server run faster?</B><A NAME="i_40">&nbsp;</A>
+<P>Make sure the server:keep-alive option is enabled. Add lots of RAM to
+your system and make sure this is available to your operating system disk
+cache. Put your web site onto a RAM disk.  Don't use lazy, slow CGIs,
+especially ones that search large databases. Change the priority under
+Windows NT to 'High'.  Raise the keep alive limit to 100 or more under
+Windows NT, or Unix (not under Win95 or your system will have problems).
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>41: How do I make my server secure?</B><A NAME="i_41">&nbsp;</A>
+<P>Firstly, consider buying Xitami/Pro which includes support for SSL/2,
+SSL/3, and TLS.
+<P>Then, understand that there are several standard ways to compromise a
+system via a web server:
+<UL>
+<LI>protocol attacks at the TCP/IP level, mostly aimed at denial of service
+attacks.  This depends on your operating system.
+<LI>buffer-overflow attacks enabled by programming flaws which allow hackers
+to write into the server code by using (for instance) very long URLs or
+filenames.  Xitami is robust against these attacks.
+<LI>all kinds of attacks based on CGI access.  This depends on who you allow
+to put CGIs on your web server system.
+</UL>
+<P>The main protection is to run Xitami on a system that has no basic
+security problems (i.e. Linux v.s NT), and to run it under a user id that
+has minimum privileges (so that even through a buffer-overflow attack, the
+hacker cannot do much damage). Disabling CGI is also a good idea. FTP does
+not pose much risk either way, if you disallow uploading, which allows a DoS
+attack (fill-up the hard disk).
+<P>Here is Brian Westric's checklist for securing Xitami under Windows NT:
+<OL>
+<LI>Under Unix, set port to 8085 to allow use of guest account (note: this
+doesn't work from web admin, one must edit the config file and restart the
+server).
+<LI>Start webserver as a service that uses a guest account. This account
+will have read access to the webpage directories, and no access to other
+directories.
+<LI>Make sure cgi-bin directory is empty.
+<LI>Disable directory browsing (in both cgi, and security sections).
+<LI>Delete default user in default.aut.
+<LI>Change admin password (by editing default.aut), and specify a su
+password (in security tab).
+<LI>Ftp: put port (offset) at -7984 so it runs at port 21 (otherwise, it
+doesn't seem to work correctly, possibly an issue with my firewall).
+<LI>Ftp: rename greeting, goodbye, userpermission, and dirpermission files.
+<LI>Ftp: only have an anonymous user, and give them download permission in
+one dir, upload in another.
+<LI>Ftp: specify log directory for a different directory than main
+directory.
+</OL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>42: I want each user to have FTP access to their personal web pages</B><A NAME="i_42">&nbsp;</A>
+<P>You do not need aliases.  Simply assign each user a subdirectory of
+the webpages directory, then specify this directory as their FTP home
+directory (using a full path).
+<P>You can also do it using aliases: create HTTP aliases which point into
+the FTP space.  So, user Joe gets a FTP directory: 'ftproot/joe'.  Then
+define a HTTP alias:
+<PRE>[Aliases]
+    joe=ftproot/joe
+</PRE>
+Which points all URLs starting with '/joe' into this directory.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>43: Does Xitami support http://ipaddress/~username?</B><A NAME="i_43">&nbsp;</A>
+<P>The ~username syntax is a UNIX thing; the UNIX shell translates ~username
+into the home directory for a user. Xitami does not yet support this
+automatically. However you can get much the same effect by creating a
+subdirectory for each user underneath the webpages directory, called
+'~username'.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>44: In FTP, 'ls' fails from a remote system (it works locally)</B><A NAME="i_44">&nbsp;</A>
+<P>This is probably due to the remote machine being hidden by a router or
+firewall which prevents return connections from the FTP server to the
+client. You should use passive mode for such connections. The next release
+of Xitami handles this situation better, but the basic problem is
+unsolvable; if the client is behind a firewall or router that does not allow
+reverse connections (i.e. server to client) then the default FTP protocol
+does not work correctly.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>45: No-one can get to my server. I can get in, but no-one else can</B><A NAME="i_45">&nbsp;</A>
+<P>From Paul S R Chisholm and others...
+<P>The 'ping' command (from the client to the server) is the simplest way
+to make sure that there is a TCP/IP connection actually established.
+However, because of "ping of death" attacks that have become popular over
+the past year or so, a lot of routers have been shutting off ICMP. Thus,
+ping doesn't work. traceroute (a.k.a. tracert) doesn't work either. This
+last one really hurts, in my experience. There are other things to try:
+<UL>
+<LI>"telnet <hostname> 80", then type "HEAD /" <return><return>;
+"Connection refused" means the host is accessible but the server isn't
+listening (a Bad Thing(tm)).
+<LI>"telnet <hostname> 32760"; you *should* get a "Connection refused"
+(I presume nothing's listening on port 32760), which means the host is
+accessible (a Good Thing(tm)).
+</UL>
+<P>You can still try ping and traceroute/tracert, but their failure may not
+mean anything. (Their *success* is encouraging.)
+<P>Another possible problem is that your server is behind a firewall or
+proxy server which is preventing HTTP access (it may even allow ping to
+work.)  If this is the case, see your network administrator for help.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>46: No-one can connect to my server through the firewall!</B><A NAME="i_46">&nbsp;</A>
+<P>In some networks, your server may not even be addressable from beyond the
+firewall. In this case you cannot do much. In other cases, the server is
+addressable, but the firewall may be blocking some combination of ports and
+protocols and addresses. If this is the case you may be able to convince the
+network administrators to open-up access to your server on port 80.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>47: Why does the Restart function not work?</B><A NAME="i_47">&nbsp;</A>
+<P>Some functions are not affected by the Restart function.  You cannot
+modify the HTTP port through this function.  If you find that the Restart
+function has no effect on the configuration change you made, you will
+need to stop and restart the server program fully.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>48: The browser is not showing my new pages</B><A NAME="i_48">&nbsp;</A>
+<P>There are various reasons why a browser will cache out-of-date pages.
+These are the most common ones:
+<UL>
+<LI>The Reload action by itself will usually fetch pages from the browser
+cache, not the web server.  Use Shift+Reload to force the browser to
+actually get the page from the server.
+<LI>Proxy servers use their own cache.  If your browser connects through a
+proxy server, you may find it hard to force a reload.  Disable the proxy
+connection, and connect directly to the web server.
+<LI>Try flushing the browser disk cache.  It's pointless to flush the
+browser's memory cache.
+<LI>If you use the META 'expires' tag in the HTML pages, check that it's not
+set to a future date.
+<LI>If your HTML is generated dynamically (e.g. by a CGI program), check
+that HTTP headers such as 'Expires:' and 'Last-Modified:' are correct.  If
+in doubt, remove these headers.
+</UL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>49: I get the wrong default page, even if I change the webpages root!</B><A NAME="i_49">&nbsp;</A>
+<P>If you load a default page, the browser caches it under a URL name with
+no filename, e.g. 'http://localhost/'.  If you then switch to another
+webpages root and request the same URL, the browser will compare dates and
+load the current default page only if it's more recent.  You'll often find
+that requesting the full filename will work correctly.  This problem can
+occur if you upgrade to a new release of Xitami, then take a look at the
+'Welcome to Xitami' default page.  If you then switch to your own config,
+the browser won't show your default page.  This problem can also happen if
+you run Xitami with different webpage roots, for instance to test different
+sites.  The solution to the first case is to flush the browser cache.  In
+the second case, disable the server:cache-defaults option.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>50: I want several 'sites' on the same IP address, on different ports</B><A NAME="i_50">&nbsp;</A>
+<P>You can run several copies of Xitami, each in a different directory, and
+each on a different port.  Xitami is small enough that this will not slow
+down the system.  In each directory, create a suitable defaults.cfg file
+with the server:portbase set to a different value.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>51: How do I use Xitami on several different web projects?</B><A NAME="i_51">&nbsp;</A>
+<P>It's common to use Xitami to test different web projects on the same
+system.  Generally we create a suitable root directory with the
+defaults.cfg, authorisation, and other site-specific files, then run Xitami
+in that directory.  Put the Xitami executable on the path.  You can also run
+the Xitami command-line program (For Windows, xidos32.exe) with command-line
+options to set the webpages, CGI, and FTP directories (-r, -c, -f).  It's a
+good idea to set the server:cache-defaults option to 0 if you use this kind
+of setup, so that default pages are always loaded correctly.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>52: How does Xitami work with subdomains?</B><A NAME="i_52">&nbsp;</A>
+<P>Let's say you have a domain, like imatix.com, with a fixed IP address
+(207.92.100.8 or something like that). The domain-name servers provided by
+our web site providers (azc.com), handle the translation from imatix.com to
+a numeric address.  For fun, we defined www.imatix.com and ftp.imatix.com to
+point to the same address, i.e. the same network card on the same system.
+It'd be quite possible to define further subdomains, all ending in
+imatix.com, and all pointing to the same system.  We call these 'virtual
+hosts' since each apparently distinct system, or host, actually comes back
+to the same thing.  Xitami lets you define a specific profile for each
+virtual host, which you can create using the WBA virtual host wizard.
+All this works under the same single registered domain.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>53: Where can I get (just) primary & secondary DNS hosting for cheap?</B><A NAME="i_53">&nbsp;</A>
+<P>Try the public DNS service at http://soa.granitecanyon.com/. It's free.
+You can also try using a .nu domain instead of a .com one.  Go to
+http://www.nunames.nu for info. They also link to a service that does the
+full DNS service for $49.95/year.  nunames updates your DNS info with an
+interactive program right on their web site and it's effective within 24-48
+hours.  Similar services are available at www.tonic.to.
+
+<HR>
+<H3><A NAME="TOC152">Windows 3.x Questions</A></H3>
+
+<P><B>1: Xitami does not work - why not?</B><A NAME="3_1">&nbsp;</A>
+<P>You need a TCP/IP winsock.dll.  And it has to work.  And it has to be
+configured correctly.  If you have any kind of difficulty running Xitami
+or connecting to it, use the PING command to debug your TCP/IP
+configuration.  First, use 'ping 127.0.0.1' to check that TCP/IP is
+working.  Then, use 'ping localhost' to check that winsock.dll is
+working.  Next try ping with the system name that Xitami displays.
+Then, try this command from another system.  All these must work before
+you can use Xitami.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>2: 'Could not open HTTP port 80 - Protocol not known'</B><A NAME="3_2">&nbsp;</A>
+<P>Your TCP/IP protocol is not correctly installed.  Ping must work!
+This is typically caused by inadequate winsock dialers that have incomplete
+support for server applications.  Try Trumpet winsock, which we've been
+told works.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>3: Are there still plans to introduce CGI for Win 3.x?</B><A NAME="3_3">&nbsp;</A>
+<P>No.  We are moving off this platform in the long term.  You'll find that
+the 32-bit console version of Xitami runs pretty well under Win32s, although
+CGI does not work due to filesystem incompatibilities.  You <EM>can</EM>
+write LRWP programs under Win32s.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>4: When will FTP work in the Win 3.x version?</B><A NAME="3_4">&nbsp;</A>
+<P>This will never work, due to memory limitations. We've had reasonably
+good results running the 32-bit console version on top of Win32s, and we
+recommend you try this if you really need the FTP and other features (such
+as WBA and LRWP) which are missing from the 16-bit version.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>5: Why does xiwin16.exe use all my CPU?</B><A NAME="3_5">&nbsp;</A>
+<P>When idling, xiwin16.exe spends most of its time waiting for incoming
+socket events. Under Windows 95 or NT, a 16-bit program that is waiting for
+socket events looks like it is sitting on the entire CPU. Maybe it is.
+Anything can happen in this business. However, as far as we can tell, the
+program really is idling, and does not slow-down the system. If this bothers
+you, move to Windows 95, and run the 32-bit version of Xitami. This uses
+Windows threads (as well as its own internal multithreading) to reduce CPU
+consumption to 1% or less when idling.
+
+<HR>
+<H3><A NAME="TOC153">Windows 95/98 Questions</A></H3>
+
+<P><B>1: Can I use my Win95 system as a real server?</B><A NAME="w_1">&nbsp;</A>
+<P>A decent web server like Xitami does not need large amounts of memory or
+a blazing CPU. You can happily serve a group of several hundred users from a
+486 PC with 16Mb memory. If you want to run heavy CGI programs, you'll need
+a faster system. Also, a fast hard disk is a good idea. And of course, any
+server is limited to the speed of the network. Given a fast hard disk and a
+fast network, Xitami will be able to handle several hits per second even on
+a slow 486 PC, and dozens of hits per second on a fast Pentium. (One hit per
+second is equivalent to about 20 users actively browsing, at the rate of a
+page per minute where a page requires about 3 accesses. If an average user
+browses for an hour a day, one hit per second thus translates into 100-150
+users.) Note that the earlier releases of Win95 are not really too stable.
+<P>Note also that Win95 and Win98 appear to be unstable when they are very
+heavily loaded; this does not happen with WinNT, and we assume this is done
+deliberately, since in principle the TCP/IP code is shared between these
+systems (at least the later Win95 releases).  Windows 95/98 leak memory when
+the TCP/IP stack is heavily used.  If you want to run a web server on a
+small cheap system, use Linux.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>2: Can I use ASP (Active Server Pages) with Xitami?</B><A NAME="w_2">&nbsp;</A>
+<P>If you have Visual Basic 5.0, you can convert your ASP pages with the VB
+conversion module provided in the server pack. You will need to make some
+modifications to the ASP code. You can then compile it as an executable
+program, and run it as a normal CGI program.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>3: 'Could not open HTTP port 80 - Protocol not known'</B><A NAME="w_3">&nbsp;</A>
+<P>Your TCP/IP protocol is not correctly installed. Try these steps:
+<UL>
+<LI>Open the Windows control panel and open the Network icon.
+<LI>You need to have at least one network adaptor: if you do not have a
+network card in your PC you can install the 'dial-up' adaptor: choose
+'Add...', then choose network adaptor, and choose the dial-up adaptor from
+Microsoft.
+<LI>You then need to add a protocol, TCP/IP, and allow Windows to install
+the necessary files.
+<LI>When you reboot, you can check that 'ping 127.0.0.1' works. If it does,
+go ahead with Xitami and Internet Explorer. If it does not work, you need to
+get hold of someone who can help.
+</UL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>4: 'Port is already used by another server (WSEADDRINUSE)'</B><A NAME="w_4">&nbsp;</A>
+<P>You are running another web server (perhaps MS PWS) - remove it then
+run Xitami.  In some cases you may have to edit the registry; look for
+a key 'Runservices' and delete any references to previous web servers.
+You can also run Xitami on another port by changing the server:portbase
+option, e.g.:
+<PRE>[Server]
+    portbase=1000
+</PRE>
+To run the HTTP service on port 1080 and the FTP service on port 1021.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>5: 'How do I run PWS and Xitami on the same system?'</B><A NAME="w_5">&nbsp;</A>
+<P>Using regedit, edit your registry:
+<PRE>HKEY_LOCAL_MACHINE/
+System/
+CurrentControlSet/
+Control/
+ServiceProvider/
+ServiceType/
+W3SVC/
+</PRE>
+TcpPort will be set at 50 (hex), value must be changed to 901f (hex) for
+port 8080.  Reboot your system.   If you're running FrontPage, FP Ext's must
+be uninstalled and reinstalled again.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>6: 'Your browser sent a malformed request'</B><A NAME="w_6">&nbsp;</A>
+<P>Check you're not using a Wingate proxy server or something similar on
+Xitami's port.  If you are, switch Wingate to port 90.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>7: How can I tell what TCP/IP ports are assigned?</B><A NAME="w_7">&nbsp;</A>
+<P>You can find out which TCP/IP ports are being used with:
+<PRE>netstat -a
+</PRE>
+or "netstat -na" if you don't have good DNS access. But this won't tell you
+what programs are using them. Under some Unixes you can use something like
+lsof (list open files) to find out the program using them; but I'm not aware
+of any equivalent for Windows 95. With Xitami stopped, try running the
+netstat command and look for a line with ":80" in it (or ":http") in the
+local address part; which indicates that something is using port 80. If
+there is, you'll have to dig around and see if you can find what it is.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>8: My URLs starting with file:// don't work across the network</B><A NAME="w_8">&nbsp;</A>
+<P>When you use a URL starting with file://, this is not handled by Xitami
+at all, but by the browser which picks-up the file from the local system.
+Xitami can handle URLs starting with http: and ftp:.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>9: Tips for using Xitami with dynamic IP addresses</B><A NAME="w_9">&nbsp;</A>
+<P>From Alex Feinerg a.k.a Yoonicks@EFNet and others...
+<UL>
+<LI>Get a DYNAmic Domain. There is a free one: http://www.ml.org: subscribe
+to Monolith and register a dynamic domain. You will need to know your ip
+every time you reconnect so you can update it.  Under Windows 95/NT, use
+winipcfg to see your IP address.
+<LI>With Monolith Dynamic IP you can use vhosts.  Just check the button
+"Use wild card aliases". All under your-domain.dyn.ml.org will resolve to
+your ip. Now use Xitami's vhost feature to perform these tasks so you can run
+two sites of one computer.
+<LI>Protect yourself with a firewall. Get a windows PC firewall from Conseal
+(http://www.signal9.com).  It's not freeware but is very useful.  It blocks
+ICMP, UDP and some TCP connections and is configurable.  For Linux/Unix use
+ipwadm.
+<LI>Does your ISP disconect if you are idle?  If it does write a program that
+does a certain task every 10-15 minutes. Here is a script for mirc irc client
+(add this to aliases): <TT>aidle { timer 0 600 /say . }</TT>.
+<LI>Other addresses to try: http://www.iceinc.net/DynamIP/, and
+http://www.dynip.com.
+</UL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>10: Tips for using a dial-up IP connection</B><A NAME="w_10">&nbsp;</A>
+<UL>
+<LI>Disable dial-on-demand; this option causes the winsock library to try to
+connect each time you initialise it. (In MSIE3, choose View, Options,
+Connection, and clear the option 'Connect to the Internet as needed'; for
+MSIE4, tell it you have a LAN connection, not a modem connection). At the
+best, this option will cause you delay and expense when you try to browse
+local pages. At the worst it can cause long timeouts while your browser
+tries to resolve names.
+<LI>If you have an early release of Windows 95, install the dial-up
+networking upgrade (last seen somewhere in the vicinity of the MS ISDN
+dial-up package).
+<LI>Enable Xitami's server:autostart option.  Then you can start Xitami at
+boot time, and it'll wait until the dial-up connection is ready.
+</UL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>11: Ping will find 127.0.0.1 but not <I>myhost</I>.com</B><A NAME="w_11">&nbsp;</A>
+<P>Ping is a good test to see if your computer name can be translated
+correctly. If you're on the Internet, you need to ask your Internet service
+provider to make the necessary DNS entries. On your own PC, you can edit the
+'hosts' file in the Windows directory. The file 'hosts.sam' is a sample that
+you can rename to 'hosts'. Then, add your machine name and 127.0.0.1. This
+may not always work; address translation may require that you are actually
+on-line. For instance, I can 'ping 127.0.0.1' at any time. When I try to
+'ping localhost', I get the TCP/IP dial-up dialog. I can Cancel this, and
+then 'ping localhost' works. But to ping my machine name, I must be online.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>12: How do I debug my Windows network connection?</B><A NAME="w_12">&nbsp;</A>
+<P>Windows 95 includes two tools besides ping to test TCP/IP connections:
+tracerout and winipcfg. With tracert, you can follow the route for a TCP/IP
+connection. Open a DOS prompt and type the command: tracert
+<I>somehost.com</I>. The program shows the route to the host, up to 30 hops.
+Type tracert with no arguments to get help. Winipcfg shows you your IP
+address(es) and some more information about your network.  Just type
+winipcfg; it's a Windows program.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>13: Xitami just sits there blinking between 'Running' and 'Suspended'</B><A NAME="w_13">&nbsp;</A>
+<P> The server is trying to start up, but there is a problem with the TCP/IP
+connection. Its default reaction prior to release 2.3c was to wait and try
+again, it blinks between 'Running' and 'Suspended'. You can edit the
+defaults.cfg file to include these lines:
+<PRE>[server]
+    autostart=0
+</PRE>
+which disables the autostart function. You can also check the xitami.log
+file to see what error messages Xitami has logged.  If you get a message
+like 'Port is already used', check that no other web server is already
+running.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>14: I get 'Not authorized to access this resource' on aliases</B><A NAME="w_14">&nbsp;</A>
+<P>For security, Xitami does not allow access through short filenames when a
+long filename is defined. Without this check, it's possible to bypass
+user/password authentication by using the shortened name for a long name, or
+vice-versa. When you get this error, the xitami.log file will say '- request
+refers to an illegal filename'. One consequence of this security check is
+that if you use short filenames in your alias or webpages definition, all
+requests through to those files will be rejected with a 403 error (not
+authorized). Use the full long filenames in alias or webpages definitions,
+or if the security issue does not bother you, set the security:safepaths
+option to 0.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>15: I get 'Not authorized to access this resource' on other URLs</B><A NAME="w_15">&nbsp;</A>
+<P>There are a number of specific reasons why Xitami may return this:
+<OL>
+<LI>The resource you are accessing is protected by a 'webmask' definition
+which excludes your PC.
+<LI>You are trying to browse a directory, but directory listings have not
+been enabled.
+<LI>You are trying to use an HTTP update method (PUT, DELETE, MOVE, or COPY)
+on a resource which has not been authorised for this.
+<LI>You are trying to run the WBA, but this has been disabled by the
+security:admin option.
+<LI>The URL refers to a Windows short filename when a long filename also
+exists.  Xitami rejects this as being a potential security violation.
+You can switch this behaviour off by setting security:safepaths to 0.
+<LI>You're trying to do a HTTP PUT, DELETE, MOVE, or COPY operation, and
+specified an absolute Content-Location: or Destination: URI which did not
+have the same path as the request URI.  Xitami rejects this because the
+authorisation was carried-out on the request URL, and using a different path
+for the Content-Location: or Destination: URL would violate this.
+<LI>A HTTP PUT, DELETE, MOVE, or COPY operation failed because of an access
+violation at the operating system level - for instance Xitami tried to write
+to a file which was marked as read-only.
+</OL>
+<P>In most of these cases, the reason for the error will be logged when you
+enable server debugging.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>16: How do I change my 'web server address'?</B><A NAME="w_16">&nbsp;</A>
+<P>Xitami gets its host name from the operating system - i.e. Windows. Your
+IP address is not something that Xitami can change or choose. Check your
+network configuration and if neccessary, ask your network administrator. The
+same applies to the hostname that Xitami displays. This is the name of the
+system as supplied by Windows. You can change this in the network control
+panel.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>17: My web server address is 'http://default/' - why?</B><A NAME="w_17">&nbsp;</A>
+<P>Check the TCP/IP configuration; your system is probably called 'default'.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>18: Can I run RealServer on the same system as Xitami?</B><A NAME="w_18">&nbsp;</A>
+<P>Yes, but change RealServer's port from 80 to something else (e.g. 1024).
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>19: My 16-bit CGI program does not output anything</B><A NAME="w_19">&nbsp;</A>
+<P>You cannot correctly run a 16-bit CGI program that is on a path with
+'long filenames'. For instance, if you installed Xitami in 'C:\Program
+Files\Xitami', then put a 16-bit CGI into the cgi-bin subdirectory, it will
+run, but its output is lost, and the browser will eventually time out and
+show a message like 'Document contains no data'. The fix is to either move
+Xitami to a directory like 'C:\Xitami' or create a CGI alias and put the CGI
+programs elsewhere than under the Xitami root.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>20: How do I use the FrontPage extensions with Xitami?</B><A NAME="w_20">&nbsp;</A>
+<P>The FrontPage server extensions are not documented and as far as we have
+been able to test, they do not work with Xitami under UNIX or under Windows
+NT.  Support for specific servers appears to be added at the whim of
+Microsoft, so you may want to try writing Bill Gates a sweet letter.  We're
+not in the business of reverse-engineering Microsoft software.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>21: Win95 crashes with a GPF in VxD IFSMGR(01)</B><A NAME="w_21">&nbsp;</A>
+<P>Upgrade to a more recent version of Windows 95.  There are several known
+problems with the winsock library and Win95 kernel in pre-1998 releases of
+Win95.  See the question below on miscellaneous Win95 crashes.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>22: Win95 crashes with a GPF in WINMM.DLL</B><A NAME="w_22">&nbsp;</A>
+<P>Check whether you are running Win95 with service pack 1 (also called
+OSR-2.1).  In 'My Computer', select Properties, and you'll see the version
+number.  If you have 950a (service pack 1), you need to upgrade to 950b.
+As far as we know this is only available as an OEM CD-ROM.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>23: Win95 gives me an error 10055 - Out of buffer space</B><A NAME="w_23">&nbsp;</A>
+<P>This can happen when you load the TCP/IP system heavily by running lots
+of servers.  There is no cure except to switch to WinNT, OS/2, or Linux.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>24: Win95 still gives me errors when I use Xitami</B><A NAME="w_24">&nbsp;</A>
+<P>Apply the various Windows 95 'service packs' and updates.  This is our
+list as of August 1998:
+<UL>
+<LI>W95setup.exe - Windows 95 Service Pack 1, 31 Dec 95
+<LI>W95oleupd.exe - Windows 95 OLE 32 Update, 24 Jan 96
+<LI>mspwlupd.exe - Windows 95 Password List Update, 17 May 96
+<LI>W95krnlupd.exe - Windows 95 Kernel 32 Update, 29 Jul 97
+<LI>W95ws2setup.exe - Windows 95 Windows Sockets 2 Update, 19 Feb 98
+</UL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>25: Xitami crashes as soon as I try to start it</B><A NAME="w_25">&nbsp;</A>
+<P>Check your clock; Xitami is known to crash if the clock is set to later
+than the year 2038.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>26: When I access my local site, it takes 3-4 minutes to load!</B><A NAME="w_26">&nbsp;</A>
+<P>Change the Internet Control Panel not to autodial. (In MSIE3, choose
+View, Options, Connection, and clear the option 'Connect to the Internet as
+needed'; for MSIE4, tell it you have a LAN connection, not a modem
+connection).
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>27: Why does Xitami use all my CPU?</B><A NAME="w_27">&nbsp;</A>
+<P>You probably set the priority to 'High'.  This is excellent if you do not
+use the system for anything else, but is not a good idea if Xitami shares
+the system with other users.  At high priority, Xitami will consume most of
+the CPU time during large downloads.  We do recomment High priority for a
+dedicated web server, and 'Normal' for a mixed-use system.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>28: When I run a CGI, I get a blank screen for several seconds</B><A NAME="w_28">&nbsp;</A>
+<P>Check that you've not configured your MS-DOS command window to appear
+full-screen. When the Xitami web server launches the CGI program, it does so
+in a way that says don't create a console window for the application.
+However, if the command window agent is configured for full screen, it
+switches first to full screen before making the test for putting up a
+console window which causes the blank screen to appear (sometimes with a
+blinking cursor). There doesn't appear to be a way of preventing this
+behaviour programmatically.
+<OL>
+<LI>Open the Start menu and choose Settings, Taskbar... and Start Menu
+Programs. Click on the Advanced button and find the 'MS-DOS Prompt' object
+in the Programs folder.
+<LI>Right mouse button click on the 'MS-DOS Prompt' object and choose the
+Properties option.
+<LI>Select the 'Screen' tab and set the usage to 'Window', not 'Full
+Screen'.
+</OL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>29: How do I reinstall just one file from the Xitami kit?</B><A NAME="w_29">&nbsp;</A>
+<P>Use unzip (WinZip, etc.) on the installation .exe file.  This file is
+compatible with the zip format.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>30: Xitami is reporting errors on its control panel</B><A NAME="w_30">&nbsp;</A>
+<P>Xitami reports 'Not Found', and any other 3xx, 4xx, or 5xx return
+code as an error on its control panel.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>31: Can I run multiple instances under Windows?</B><A NAME="w_31">&nbsp;</A>
+<P>You can run multiple instances of xiwin32.exe or xidos32.exe in separate
+directories (each with its own web space, config files, etc) and specify the
+portbase either on the command line or in the defaults.cfg file.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>32: IE sometimes fails with multiframe documents</B><A NAME="w_32">&nbsp;</A>
+<P>Microsoft IE 3.0 has occasional problems mixing keep-alive connections
+with highly-framed documents. The symptoms are that the last frames will not
+display. IE opens a connection, asks for a document, but prematurely closes
+the frame. Workarounds: use Navigator, a more recent version of IE (we
+assume the problem may be fixed), or switch-off keep-alive if you are using
+heavily-framed documents.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>33: Windows says 'URL.DLL not found' when I choose 'Setup'</B><A NAME="w_33">&nbsp;</A>
+<P>URL.DLL is a Windows DLL that is installed as part of TCP/IP networking,
+and allows you to double-click a .htm file to launch a browsers. Xitami uses
+this technique to launch a browser when you click on the 'Setup' button. You
+can either try installing TCP/IP networking (again) or start a browser and
+enter the URL 'http://127.0.0.1/admin' yourself.  This file may only be on
+the OSR/1 release of Windows, or may be supplied with MSIE or Navigator 4.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>34: Why is Windows ignoring my changes to the hosts.sam file?</B><A NAME="w_34">&nbsp;</A>
+<P>This file must be called "hosts", without an extension.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>35: What's CGI/Win?</B><A NAME="w_35">&nbsp;</A>
+<P>The CGI/Win protocol (which Xitami does not support) uses a mechanism for
+transferring the stdin/stdout and environment data that is different from
+the normal CGI manner. It's meant to support languages like Visual Basic
+that do not have access to stdin/stdout streams.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>36: Do you know of a good free proxy server for Windows?</B><A NAME="w_36">&nbsp;</A>
+Louis C. Lupin says: VSocks is a freeware Socks 4 proxy. It's easy to set-up
+and use.  See http://www.pscs.co.uk/software/support/vsockslight.html.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>37: Do you know of a good free e-mail server for Windows?</B><A NAME="w_37">&nbsp;</A>
+<P>Thomas Schroeter says: On www.freeware.com, I found a very good server
+(VPOP3) which includes POP 3, SMTP, finger connections, forwarding accounts
+and autoresponders. The program has a lot of settings (user accounts,
+headers, listserver, logging, error reporting, ...). It runs with Windows 95
+and it's very fast. Now, I'm using Xitami and VPOP3 together - both programs
+are working very well in my local network.
+<P>Justin Scott says: Try the freeware version of SLMail .. it supports
+upto 6 users, and an autoresponder. It's a commercial-grade e-mail server
+for Win95/NT. If you want more than the 6 users available in the freeware
+version, you'll have to get the standard edition for win95 (SLMail v2.6),
+which runs for about $200 (go with the freeware). It is available from
+Seattle Labs at www.seattlelab.com. Hope you find it useful (I know I do :).
+<P>Ian Hayes says: For Win95/NT you can get a nice little SMTP server called
+JSMail at http://j-bg.demon.co.uk It does SMTP, POP3, finger, autoresponders
+and you can reject mail based on Received: lines, source or subject words.
+Reverse DNS, anti-relay, and RBL support (for those interested). Of course,
+you'll still need a domain, and when mailing to certian domains, an MX
+record. Monolith provides both for free. You can run it as a service or from
+the command line. Takes up very little resources.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>38: Do you know of a mail client for Windows?</B><A NAME="w_38">&nbsp;</A>
+<P><A href="http://www.imatix.com/pub/tools/mailto.zip">Mailto</A> is a small,
+free, and simple mail client by Scott Beasley, author of the SFL sflmail
+module. This program lets you send e-mails from within CGI programs, with
+attachments. Mailto.exe even runs as a configurable CGI mail form program.
+This package is only about 35K.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>39: Any hints for boosting Xitami's performance?</B><A NAME="w_39">&nbsp;</A>
+<UL>
+<LI>Set virtual memory yourself.  If Windows handles this, the swap file
+changes constantly, thus slowing your system.  You should set both the
+min/max virtual memory to 1 1/2 to 3 times the physical memory in your
+computer.
+<LI>Create a RAM disk for Perl if you use a lot of CGIs. A RAM disk is fast,
+and reloaded at boot time. You should use RAM disks for read-only data only.
+To put Perl onto a RAM disk, use a disk with 512-byte sectors and about 1.2
+Mb space. Use a line like this in config.sys:
+<PRE>DEVICEHIGH=C:\WINDOWS\RAMDRIVE.SYS 1200 512 /E
+</PRE>
+where 1200 is the size and 512 is the sector size. Windows will attach the
+next available free drive letter to it (e.g. 'R:'). If you want to load Perl
+onto the RAM disk automatically, at boot time, add some commands to your
+autoexec.bat:
+<PRE>md r:\perl
+xcopy32 e:\perl\bin\perl*.* r:\perl
+xcopy32 e:\perl\bin\cmd*.* r:\perl
+PATH %PATH%;R:\PERL
+set PERLLIB=E:\PERL\LIB
+</PRE>
+This assumes that you leave the Perl libraries on the hard disk (here, E:).
+If you want a full-blown Perl on a RAM disk, you'll need about 6Mb of space.
+<LI>Create a RAM disk for commonly-used web pages and graphics.
+<LI>In the Win95 System control panel, under Performance, File System, set
+the 'Typical Role' to 'Network Server'.  We have reports that this improves
+system performance under heavy loads.
+</UL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>40: Why does Win95 insist on running 'service.bat'?</B><A NAME="w_40">&nbsp;</A>
+<P>Xitami installs this batch file when you install the Xitami Console
+version as a Windows 95 service. The service.bat file simply sets the
+correct working directory, then starts Xitami. To disable this, you can edit
+service.bat to remove the call to xidos32.exe. You can also remove the entry
+for service.bat in the registry; run regedit and find the key
+SOFTWARE\Microsoft\Windows\CurrentVersion\RunServices. You'll see a
+definition for service.bat, which you can delete.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>41: I installed MSIE 5 and uninstalled it, and now Xitami crashes whenever I try to start it up.</B><A NAME="w_41">&nbsp;</A>
+<P>Yes, indeed.  Well, what do you expect when you install and then remove
+half of your operating system?  Probably the only cure is to format the hard
+drive, and install a clean copy of Windows 95 or 98.  Maybe reinstalling
+MSIE 5 will help.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>42: I'd like to run an abitrary Windows program from a browser</B><A NAME="w_42">&nbsp;</A>
+<P>Okay, but be warned that this opens your system to arbitrary abuse. You
+cannot launch a Windows program directly, since a CGI program runs as a
+hidden console (DOS) process. However, it's trivial via a small batch file,
+which itself starts the Windows program. For instance, here's a batch file
+that starts any program at all using the CGI argument, e.g.
+"/cgi-bin/run?notepad", where run.bat contains just 3 characters: "@%1".
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>43: Can I stop Xitami from the command line or a batch script?</B><A NAME="w_43">&nbsp;</A>
+<P>You can use the wmkill.exe program supplied with Xitami. Wmps.c and
+wmkill.exe were written by Thomas Grobicki of Avilar Technologies to perform
+the functions of the Unix ps and kill commands for Windows 95/98 and NT. To
+kill Xitami, use this command:
+<PRE>wmkill -exact -titles -icons "Xitami Web Server"
+</PRE>
+To see the syntax for wmkill or wmps, type 'wmkill -help' or 'wmps -help'.
+
+<HR>
+<H3><A NAME="TOC154">Windows NT Questions</A></H3>
+
+<P><B>1: My 16-bit CGI program does not output anything</B><A NAME="n_1">&nbsp;</A>
+<P>Under Windows NT, you cannot run 16-bit CGIs at all, due to a limitation
+of the Windows 32-16 bit interface. A simple workaround is to use a batch
+file like this:
+<PRE>@echo off
+mycgi.exe &gt; temp.tmp
+type temp.tmp
+</PRE>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>2: The Xitami service can't access a network drive</B><A NAME="n_2">&nbsp;</A>
+<P>The problem is one of security; the service runs under the account
+'system' by default, and this may not have access to your network drive. In
+the Services control panel, you can change the start-up options for the
+Xitami service so that it logs-on as a user with the necessary privileges.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>3: The Xitami service fails to start, saying 'Access is denied'.</B><A NAME="n_3">&nbsp;</A>
+<P>You should install Xitami when logged-on as administrator. You can fix
+this quite simply. In a DOS box, go to the Xitami directory and type
+'xiwinnt -u' to uninstall the service. Now log-on as administrator and use
+'xiwinnt -i' to re-install the service. If you still have the problem,
+de-install Xitami completely, and re-install after logging-on as
+administrator.
+
+<A NAME="start_service">&nbsp;</A>
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>4: The Xitami service still fails to start!</B><A NAME="n_4">&nbsp;</A>
+<P>Search for the string "xiwinnt.exe", which may appear as follows:
+<PRE>KEY         VALUE
+ImagePath   c:\program files\xitami\xiwinnt.exe
+</PRE>
+The space in 'program files' is what's bothering NT. Change the key data to
+this:
+<PRE>KEY         VALUE
+ImagePath   "c:\program files\xitami\xiwinnt.exe"
+</PRE>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>5: Can I restart the Xitami service from a batch file?</B><A NAME="n_5">&nbsp;</A>
+<PRE>net stop xitami
+net start xitami
+</PRE>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>6: How do I remove the Xitami icon in my control panel area?</B><A NAME="n_6">&nbsp;</A>
+<P>When you installed the Xitami service, it installed the Xitami control
+panel file in the Windows System directory. Delete the file called
+'xiwinntc.cpl'. If you install and uninstall the NT service version, this
+file gets left behind due to an access conflict (which we have not
+figured-out how to resolve). (Details: if you use the 'Add/remove software
+components' control panel option, then the Xitami CPL is loaded, and can't
+be deleted...)
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>7: I defined a new VH and now my NT service won't run</B><A NAME="n_7">&nbsp;</A>
+<P>Check that the specified .aut file exists, even if it's just empty. Check
+the Xitami log files for error messages. If in doubt, run the console
+version to see what error message is being produced.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>8: When I try to install Xitami on NT 4 I get a dialog box that says "Corrupt installation detected"</B><A NAME="n_8">&nbsp;</A>
+<P>Could be that the install .exe has indeed been corrupted. Try downloading
+it again and trying again. If this fails you could be seeing a problem with
+the 16-bit subsystem in NT. Did you install any service packs? (I think SP2
+or 3 fixed this problem...) In any case you can easily install from the .zip
+file; if you're using the service version, install it by copying the .cpl
+file to the Windows system directory, and run 'xiwinnt -i'.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>9: Can I use 'srvany' with Xitami?</B><A NAME="n_9">&nbsp;</A>
+<P>Yes, this is a good way to run the console version as a service. You can
+get srvany from the NT resource kit, or you can download it from MSDN (the
+Microsoft Developer Network web site).  The following tips were provided by
+Ignacio "Iggie" Bustamante.
+<OL>
+<LI>Copy SRVANY.EXE and INSTSRV.EXE to your NT system directory and install
+it as a Windows NT service for Xitami, for example:
+<PRE>instsrv Xitamiweb c:\winnt\System32\srvany.exe
+</PRE>
+This will set the preliminary entries for a service named "Xitami" (choose
+your own name).
+<LI>Specify the application to start and its parameters:
+  <UL>
+    <LI>Run the Registry Editor (REGEDIT32.EXE), and open the registry at
+    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Xitamiweb.
+    <LI>Create a "DependOnService' value of type REG_MULTI_SZ and specify
+    the services that should be started before launching Xitami; mamely, Tcpi
+    and Afd. For example:
+    <PRE>DependOnService: REG_MULTI_SZ Tcpip Afd</PRE>
+    You will be presented with a multi-entry screen.  Just hit [Enter] after
+    each entry.  You can add other services here if you wish.
+    <LI>Create a 'Parameters' key.  Under the Parameters key, create an
+    'Application' value of type REG_SZ and specify the full path of the Xitami
+    executable (including the extension), for example:
+    <PRE>Application: REG_SZ: C:\Xitami\Xiwin32.exe</PRE>
+    <LI>Additionally, under the Parameters key, create an 'AppDirectory' value
+    of type REG_SZ and specify the current directory to use for Xitami, for
+    example:
+    <PRE>AppDirectory: REG_SZ: C:\Xitami</PRE>
+  </UL>
+<LI>Under Settings-> Control Panel-> Services, select Startup for Xitami.
+Set Startup Type:  "Automatic", set Log On As: Select "This Account", and
+enter the appropiate Username and Password for an Administrative account.
+</OL>
+This should do it.  Note that NT will report that the service was started
+successfully even if there was an error.  Always test Xitami after changing
+its configuration by running it as a console program (with the service
+stopped).  When the service has started, test the server and check its log
+files for possible errors.
+
+<HR>
+<H3><A NAME="TOC155">UNIX Questions</A></H3>
+
+<P><B>1: Xitami does not build on my XXXX system</B><A NAME="u_1">&nbsp;</A>
+<P>Xitami should build on: IBM AIX, Digital UNIX, HP/UX, Sun Solaris, SCO
+OpenUNIX, SCO OpenServer, FreeBSD, NetBSD, Sinix, and of course Linux.
+Anything else is unexplored territory, and that includes the future, since
+some of these systems are starting to come without an ANSI C compiler as
+standard.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>2: I need to search /usr/src/linux/include/ at build time</B><A NAME="u_2">&nbsp;</A>
+<P>The Xitami build uses a script, 'c', that lets you specify additional
+compiler options by setting the CCDEFINES variable. So, to specify an
+additional include directory, use shell commands like this before starting
+xibuild:
+<PRE># CCDEFINES="-I/usr/src/linux/include"
+# export CCDEFINES
+# ./xibuild
+</PRE>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>3: Can I run Xitami from my ISP telnet account?</B><A NAME="u_3">&nbsp;</A>
+<P>Yes, if you have access to an ANSI C compiler. Build Xitami as usual, and
+run it with a command like this: 'xitami -b 5000 -s'. Avoid port 8080 which
+is often used for proxies. You may also find that the ISP kill all
+long-running processes at regular intervals (e.g. midnight). The -s switch
+runs Xitami in the background; it's a bit cleaner than using 'nohup'.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>4: Does Xitami support .htaccess with per-directory access control?</B><A NAME="u_4">&nbsp;</A>
+<P>No, Xitami uses its own .aut files for access control.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>5: How can I run Xitami and have it listen on port 80 under Unix?</B><A NAME="u_5">&nbsp;</A>
+<P>Under Unix, only processes that are running as root are able to listen
+for new connections to TCP/IP ports less than 1024, including the well
+known HTTP port 80.  So for Xitami to listen for connections on port 80
+it needs to be run as root.  And of course there must not be another web
+server running that is already listening for connections to port 80.
+There are three ways that you could do this:
+<OL>
+<LI>Log in, or su, to root, and start up Xitami.
+<LI>Have Xitami started during the startup scripts when the machine boots.
+<LI>Make Xitami "setuid root".
+</OL>
+Which is best?  It depends.  (In the real world the answer is always "it
+depends"; why do they never accept that in exams?)
+<UL>
+<LI>If you just want to run Xitami occassionally on your own system then
+starting it up manually by logging in as root, or su'ing to root, is the
+best idea, because it ensures only people with the root password can run
+programs as root.
+<LI>If you want Xitami running all the time on your Unix system then having
+it started automatically from the boot scripts is best, and by default
+it will then start running as root, letting it listen on port 80.
+Exactly how to set this up varies from Unix system to Unix system, so
+look in the documentation for your Unix system.
+<LI>If your Unix system is only used by you, or just by people that you
+trust, and you don't want Xitami running all the time, and you don't
+want people to log in (or su) to root, then setting Xitami "setuid root"
+might be a suitable option for you.
+</UL>
+To make Xitami "setuid root" after compiling it:
+<PRE>% su
+# chown root xitami
+# chgrp www xitami
+# chmod 4770 xitami
+# exit
+%
+</PRE>
+where "www" is a Unix group that contains the users that should be able to
+start Xitami. Then the users that can run Xitami will be able to start it
+running as root, just by running it.  If you do decide to set Xitami "setuid
+root" beware that this is a potiental security risk, because it means that
+users without the root password can start the server running, and if they
+discover a bug in Xitami or a program run by Xitami they may be able to get
+root access to other things on the machine.
+<P>iMatix does not recommend setting Xitami "setuid root" except in
+situations where only people who can be trusted to run any program as root
+have access to log in to the machine, such as a personal Unix box. Even in
+this situation the use of a program like "sudo" should be investigated as a
+possible alternative.  Please also take a look at the next question
+concerning security aspects.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>6: What are the security implications of running Xitami as root?</B><A NAME="u_6">&nbsp;</A>
+<P>From Xitami 2.4b onwards it has been possible to request Xitami to change
+to a different user id and group id from the one that it was started in, for
+most of the time it is running.  To do this in the [Security] section of
+defaults.cfg put:
+<PRE>[Security]
+    setuid=1
+    setuid-user=www
+    setuid-group=www
+</PRE>
+assuming you have a "www" user and a "www" group (this is a common setup for
+Web Servers, but not universal). The default for setuid-user is "nobody" and
+the default for setuid-group is "nogroup", but using "www" for user and
+group is better if you have them available (or can add them).  The user and
+group privileges you choose will have to be sufficient to allow Xitami to
+write to all the log files it needs, and run the programs it needs (eg,
+cgi-bin programs).
+<P>When [Security] setuid=1 is used Xitami changes the effective user id and
+group id to the ones specified. However it also retains the privileges with
+which it was started (commonly in this situation root privileges), in order
+to be able to reopen the TCP/IP port it is listening on and so on.
+<P>Currently Xitami runs cgi-bin programs with the same privileges as it is
+running itself.  This means that when [security] setuid=1 is used, cgi-bin
+programs will be started with the effective user and group set as
+configured in the [security] section, but still with the user id with
+which it was started saved away (typically the "root" user id).
+<P>If Xitami is started as root (or has been "setuid root" (see above)),
+and using [security] setuid=1 a malicious cgi-bin program could recover
+the saved root privileges and then do nasty things.  It also means that
+if someone finds an exploitable bug in your cgi-bin program, they might
+be able to trick the program into recovering the root privileges and
+running a program as root.  All of this means that, as always, you need
+to be especially careful about checking cgi-bin programs for security
+issues.
+<P>Work is under way adding the ability for Xitami to run cgi-bin programs
+with different privileges from the ones which it is running as, including
+permanently discarding any saved privileges, which will further reduce this
+risk. This enhanced version will also include the ability to run the cgi-bin
+program with a different "root directory" from the one that Xitami is using,
+for additional security.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>7: What's the best Linux operating system? RedHat, Debian, FreeBSD...?</B><A NAME="u_7">&nbsp;</A>
+<P>Ewen McNeill says: Firstly, FreeBSD isn't a Linux operating system; it's
+a BSD-derived operating system. I haven't used it myself, but a number of
+large sites do use it and seem to be quite happy with it (eg, cdrom.com).
+Earlier versions of Xitami compiled and run under FreeBSD, but I'm not sure
+if anyone has tried with recent versions -- it should either run or be
+pretty simple to fix so it'll run.
+<P>Of the rest (RedHat, Debian, OpenLinux) I wouldn't expect much difference
+between them in terms of ability to handle load, etc. (Same for Slackware,
+Suse, etc as well.) They're all based around the same Linux kernels, and
+that (along with the web server) are the main things that'll affect
+stability, speed, etc (given the same hardware).
+<P>The main reason for choosing between the difference Linux distributions
+is the packaging of software they give you. Both RedHat (which uses RPM) and
+Debian (which uses .deb packages) have flexible package managers which will
+let you automatically install pre-compiled software, and make sure that any
+other programs that are needed to use them get installed too. RedHat has
+more GUI administration tools, but I've heard that it's more fussy about you
+using them too (that is, editing files by hand doesn't work so wel). Debian
+mostly has command line admin tools, which is good if you're used to that
+sort of thing (I like it). OpenLinux, Suse, etc, I don't know that much
+about -- but Suse is apparently very popular in Europe, and LinuxJournal are
+offering a copy of it with new subscriptions at present (at least they were
+in July). (I've installed some Slackware systems in the past and having
+tried Debian wouldn't switch back. Slackware seems to handle the basic
+install okay, but it's not so good on helping you keep your system up to
+date; Debian is very good at helping you keep your system up to date.
+<P>Personally my systems are all Debian systems -- but I like the command
+line tools, and the (dpkg) package manager, and tend to install systems
+without X.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>8: Why does the documentation always use DOS-style slashes?</B><A NAME="u_8">&nbsp;</A>
+<P> All recent versions of Xitami treat \ and / as identical, so the
+distinction is purely for the benefit of the server administrator. (Actually
+there is one exception, which is the \\ used to identify a remote file
+system under Windows. This must be entered as \\, not //.) We generally aim
+the documentation at Windows users, since these make-up the large majority
+of our user base. We also expect that Unix users are able to make the mental
+translation from \ to /.  Use / on Unix and either / or \ on Windows.
+
+<HR>
+<H3><A NAME="TOC156">OS/2 Questions</A></H3>
+
+<P><B>1: Xitami does not start, and 'ping 127.0.0.1' does not work</B><A NAME="o_1">&nbsp;</A>
+<P>Check the interfaces and routing with "netstat -r"; a "127.0.0.1"
+host with the interf(ace) of "lo" ought to be present if it is going
+to work.  The following command ought to establish a loopback
+connection: "ifconfig lo 127.0.0.1 up".
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>2: Xitami reports 'too many open files'</B><A NAME="o_2">&nbsp;</A>
+<P>Add this environment variable definition 'SET EMXOPT=-h120' to your
+config.sys.  However, note the following point.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>3: Xitami aborts when my site is very heavily used</B><A NAME="o_3">&nbsp;</A>
+<P>EMX has a default limit of 20-40 open sockets; when you hit this,
+programs start to abort or freeze.  Check the <A href="index2.htm#emx">section</A> on configuring
+EMX.
+
+<HR>
+<H3><A NAME="TOC157">Application Programming Questions</A></H3>
+
+<P><B>1: How do I write CGIs?</B><A NAME="c_1">&nbsp;</A>
+<P>There must be hundreds of places to get a good answer to this question.
+Look at the example programs in the cgi-src directory.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>2: What's a good source for CGI programs?</B><A NAME="c_2">&nbsp;</A>
+<P>Try <A HREF="www.cgi-resources.com">www.cgi-resources.com</A>.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>3: When I run a CGI program, I don't get any response</B><A NAME="c_3">&nbsp;</A>
+<P>Run your CGI in a DOS box and check first that it actually runs without
+errors.  Then, check that whether it prints a first line starting with
+'HTTP/'.  If it does this, it must also generate a correct 'Content-Length'
+header.  This is vital if the server uses Keep-Alive connections, which is
+the default configuration.  You can disable Keep-Alive, but this makes
+things work slower.  The best solution is to <I>not</I> produce neither the
+'HTTP/' first line, nor the 'Content-Length' line.  These just cause
+problems.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>4: I can't get PHP to run with Xitami!</B><A NAME="c_4">&nbsp;</A>
+<P>This is a step-by-step guide to installing and using PHP 3 with Xitami under
+Windows.  Under Unix, the issue is probably similar, but we've not tested
+it.
+<OL>
+<LI>First off, make sure Xitami is installed and running.
+<LI>Next, download and install the PHP binary distribution into some
+directory.  We'll assume it's c:\php.
+<LI>Add '.php=c:\php\php.exe' to the Filter section of the Xitami confguration.
+<LI>Rename the PHP initialisation file, 'php3.ini-dist' to 'php3.ini' and
+copy it into the Windows directory.  Don't bother trying to set the PHPRC
+environment variable, because this does not seem to work.
+<LI>Edit the ini file and change the 'extension_dir' setting to c:\php.
+<LI>Now test PHP by hand with a small test page, by running it in a command
+window, in the Xitami directory:
+<PRE>c:\php\php webpages\test.php
+</PRE>
+<LI>When that works, you should be able to use PHP pages from in a browser.
+</OL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>5: Does Xitami have an API like ISAPI or NSAPI?</B><A NAME="c_5">&nbsp;</A>
+<P>We support WSX and LRWP directly, and ISAPI through an LRWP add-on. WSX
+lets you build plugins that are linked into the server; LRWP lets you build
+external peer processes that handle specific URLs. WSX programs are written
+using the iMatix SMT library, in C. LRWP programs can be written in C, Java,
+Python, Perl, or any other language that supports sockets.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>6: Would you recommend CGI or WSX for a simple e-mail application?</B><A NAME="c_6">&nbsp;</A>
+<P>CGI is much simpler.  There is lots of information about CGI on the Net.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>7: How do I tell Xitami which files are CGI programs?</B><A NAME="c_7">&nbsp;</A>
+<P>With some servers you have to configure the server to recognise executable
+files.  For instance with Apache, one uses the AddHandler directive to say
+that a filename extension should be treated as a CGI script.  For example
+"AddHandler cgi-script .cgi".
+<P>Xitami, in contrast, will execute anything it considers executable and
+which is in a CGI binary directory. Special directives are not needed. Under
+Windows, files with extension .exe or .com or .bat are executable by
+default. Otherwise, files that start with #! and the name of an interpreter
+are executable through the interpreter (typical example: Perl scripts).
+Otherwise, files starting with the magic letters 'MZ' are also considered to
+be executable. Under Unix, executable files are de-facto marked by a
+protection bit, which makes things a lot simpler.
+<P>You can add support for special kinds of CGIs by using the [Filter]
+configuration section: this allows you to execute a file by passing it to
+some interpreter.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>8: How do I debug CGI programs?</B><A NAME="c_8">&nbsp;</A>
+<P>In many cases you can run the CGI program from the command-line,
+providing test data to the program using the '<' redirector. It's also
+possible to use a debugger. For example, under Windows I use the MSVC
+compiler for C CGI programs. To set a debug breakpoint I insert a call to
+DebugBreak() at some appropriate point in the program. This launches the
+debugger and I can then step through the code. If you use this technique, be
+sure to set the cgi:timeout high enough so that Xitami does not think your
+CGI program has started to loop (it will then kill the process, and leave
+you with a very confused debugger).
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>9: Can you give me a checklist for installing Perl for Windows?</B><A NAME="c_9">&nbsp;</A>
+<P>Okay, here goes:
+<OL>
+<LI>This applies to Windows NT, Windows 95, and Windows 98.
+<LI>Get Perl for Windows from <A href="http://www.activestate.com/">activestate.com</A>.
+<LI>Follow the installation instructions and install into a directory like
+C:\software\perl.
+<LI>Using the above example, make sure that the PATH setting in your
+autoexec.bat includes the directory C:\software\perl\bin.
+<LI>Also, make sure that the PERLLIB environment variable is set in your
+autoexec.bat to 'PERLLIB=.;C:\software\perl\lib'.
+<LI>Reboot, then go to the Xitami cgi-bin directory and try 'perl
+testperl.pl'.  This should print 'Hello World'.
+<LI>Now make sure that the CGI scripts you want to run start with the magic
+line '#! perl', or '#! /usr/bin/perl' or '#! C:/Software/perl/bin/perl' or
+something else appropriate.
+</OL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>10: Why does my Perl CGI not run?</B><A NAME="c_10">&nbsp;</A>
+<P>This is a check list that may help you.
+<OL>
+<LI>Did you install Perl?  (Yes, some people do forget this.)
+<LI>Can you run the CGI script from the DOS command line using the syntax
+'perl <I>scriptname</I>'?
+<LI>Can you run the standard http://127.0.0.1/cgi-bin/testcgi program?
+<LI>Can you run a simple script like this:
+<PRE>#! perl
+print "Hello World!";
+</PRE>
+<LI>Does your CGI script start with '#! perl'?
+<LI>If you're running a 16-bit Perl, make sure Xitami is not in a subdirectory
+with long filenames (E.g. C:\Program Files\Xitami) or the CGI won't work.
+Under NT, forget 16-bit Perls completely.
+<LI>Finally, set the cgi:debug and server:debug options to 1. This will
+leave you with a couple of files in the temp directory- tempxxxx.cgo and
+header.log - that contain the actual CGI output and the headers sent back to
+the browser.
+</OL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>11: How can I find-out what directory a script is called from?</B><A NAME="c_11">&nbsp;</A>
+<P>Here's a handy Perl snippet. It will dump the values of all environment
+variables. Use it after you have output the usual http/html document
+headers.
+<PRE>print map("&lt;pre&gt;$_ = $ENV{$_}\n&lt;/pre&gt;", sort keys %ENV);
+</PRE>
+You'll find the values quite instructional, and you may even find a
+variable that you can use to solve your problem.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>12: Can I restrict the commands that a Perl CGI uses?</B><A NAME="c_12">&nbsp;</A>
+<P>This question was posed to Gurusami Sarathy, and he most graciously
+offered the following reply:
+<P>"The answer should be simple: just don't use Windows 95 if you want
+security. I'd recommend some OS that understands users, permissions, etc.
+Try Linux (I won't recommend NT, because NT makes for a rather inefficient
+webserver).  That said, you may be able to disallow operators of your
+choosing with the Safe module. But its usage is not for inexperienced
+users."
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>13: Every time my SSI page uses #exec, Xitami scans the floppy drive!</B><A NAME="c_13">&nbsp;</A>
+<P>This can be caused by virus-checking programs.  Disable floppy scans in
+the virus-checker setup and check that the A: drive is not in your path.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>14: When I try to run a Perl CGI, my browser says 'Save to disk?'</B><A NAME="c_14">&nbsp;</A>
+<P>You must let Xitami know that the script is executable, rather than a
+text file to be sent to the browser.  Make sure the script starts with
+the magic '#! perl' line.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>15: A require() or use() command in my Perl CGI script fails</B><A NAME="c_15">&nbsp;</A>
+<P>This is a problem caused by the working directory used by the Perl
+interpreter.  First-off, make sure the CGI working directory is "-" (which
+means the script's current working directory).  If this still does not work,
+you have to modify the CGI script to explicitly set the correct working
+directory.  Issue the following command, once, near the beginning of the
+main Perl function and be any "require()" or "use()" commands:
+<PRE>chdir ("c:/Xitami/cgi-bin/my_perl_script_dir");
+</PRE>
+<P>Use an absolute path, and substitute your own path, of course.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>16: I get "Can't locate ./lib/cgi-lib.pl in @INC at C:Program</B><A NAME="c_16">&nbsp;</A>
+Files\Xitami\cgi-bin\test\hello.cgi line 3."
+<P>You have probably a problem with the PERLLIB setting.  It must include
+the directories where require'd files are found.  Alternatively, you may be
+able to fix this by running the script in the correct directory (set the CGI
+workdir to "-").  To sort this problem out, make a CGI script that creates a
+small file, then look for the file (this tells you where the script is
+running).  E.g.:
+<PRE>open (FILE, ">myhint");
+print FILE "This is my working directory";
+close (FILE);
+</PRE>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>17: I get "Document contains no data" when running a Perl CGI</B><A NAME="c_17">&nbsp;</A>
+<P>This message generally means "the Perl script didn't compile", which
+in turn means there was a bug in your script.  Two things that might help:
+<OL>
+<LI> If you're using CGI.pm (recommended for Perl CGI scripts) then try
+running it from the command line (CGI.pm will prompt for the script input,
+which is very handy).
+<LI>When you've run the CGI script, have a look in the Xitami cgi error log,
+which is cgierr.log by default. If your script fails to compile, then you'll
+get error messages here.
+</OL>
+You can also try putting "warn" messages in your Perl script, eg:
+<PRE>warn "About to try ... \n";
+</PRE>
+and they'll appear in the CGI error log, so long as the script compiles and
+runs up to that line.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>18: How does Xitami handle its CGI stdio?</B><A NAME="c_18">&nbsp;</A>
+<P>Xitami creates temporary files called 'pipe' something, and connects
+these to the stdin and stdout streams for the CGI subprocess. If there is
+something crooked in the subprocess itself, these can get lost. For instance
+if it's a 16-bit program under NT. The CGI_STDIN and CGI_STDOUT environment
+variables are provided for languages like BASIC which really can't access
+the stdio. Then it's possible to switch-off Xitami's piping (set cgi:stdio
+to 0), and in the program, read and write the stdin and stdout files
+directly.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>19: Why does my Perl 'flush' command not work under Xitami?</B><A NAME="c_19">&nbsp;</A>
+<P>This command is a simple "$| = 1;" issued somewhere at the beginning of
+the script, and is supposed to send (flush) to the browser any and all
+output (print statements) as they are being issued. Because Xitami does not
+work with streaming output, for now. It buffers all CGI output until the CGI
+ends, then sends it to the browser. We're considering alternatives to this
+model to allow streaming output.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>20: My BASIC .exe CGI does not work</B><A NAME="c_20">&nbsp;</A>
+<P>Some languages do not write their output to the stdout device, but
+directly to the BIOS. Try 'myprog > xxx' and if the output is still being
+sent to the screen, consult your documentation. At a pinch, use the
+CGI_STDOUT environment variable to determine the name of the expected output
+file, and write directly to that file. If you do this, makes sure you set
+cgi:stdio to 0.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>21: Why do I get 'HTTP/1.0 502: Service temporarily overloaded'?</B><A NAME="c_21">&nbsp;</A>
+<P>Increase the cgi:timeout value. Your CGI is taking so long that Xitami
+reckons it's looping with intent, and kills it (after giving it the
+customary fair trial, of course). ('Looping with intent' is a Legal Term
+that means almost exactly, but not quite totally, the opposite.)
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>22: Why is the REMOTE_USER not correctly filled-in?</B><A NAME="c_22">&nbsp;</A>
+<P>Make sure your directory is password-protected.  You can put the CGI
+script at any level under a directory like 'private', so long as the URL
+contains '/cgi-bin' somewhere.  If you access a CGI without an
+authentication check, the REMOTE_USER will contain arbitrary junk; typically
+the last user id that was used to access a protected resource.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>23: Why is the HTTP_REFERER not correctly filled-in?</B><A NAME="c_23">&nbsp;</A>
+<P>Variables starting with HTTP_ come from the browser (unless you changed
+something you were not supposed to).  For instance, the browser will usually
+provide its own name rank and serial number in 'HTTP_USER_AGENT'.
+HTTP_REFERER is filled-in if you choose a URL from another page, but not if
+you type it by hand.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>24: When I generate images in my CGI program, LF becomes CRLF!</B><A NAME="c_24">&nbsp;</A>
+<P>By default the stdout for a program is handled as a text stream.  This
+is easy to change.  First write the HTTP header, then (in C):
+<PRE>setmode (fileno (stdout), O_BINARY);
+</PRE>
+In Perl, this should work:
+<PRE>open (BLOCK, '>'.$ENV {'CGI_STDOUT'});
+binmode BLOCK;
+print BLOCK $binbuffer;
+close BLOCK;
+</PRE>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>25: Must I use /cgi-bin in CGI URLs?</B><A NAME="c_25">&nbsp;</A>
+<P>You can redefine this by changing the server:cgi-url option. As
+usual, modify this in defaults.cfg, not xitami.cfg.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>26: I want to put some CGIs in another directory, e.g. /htdocs/myscripts</B><A NAME="c_26">&nbsp;</A>
+<P>Define a <A href="index4.htm#config_cgi_alias">CGI alias</A>.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>27: How do I use a CGI program as a default page?</B><A NAME="c_27">&nbsp;</A>
+<OL>
+<LI>Add the index.cgi file to the list of default pages.
+<LI>Make sure that index.cgi is 'executable'.
+<LI>Define the server:cgi-url as "/".
+<LI>Define the server:cgi-bin directory to be same as server:webpages.
+<LI>Define cgi:mixed-url to be 1.
+<LI>Define cgi:dirlist to be 1 if you want directory listings to be enabled.
+</OL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>28: How do I set-up a web site counter?</B><A NAME="c_28">&nbsp;</A>
+<P>Use a web site counter like
+<A HREF="http://www.geocities.com/SiliconValley/6742">this one for
+Windows 95</A>.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>29: How do I make a CGI file executable for DOS?</B><A NAME="c_29">&nbsp;</A>
+<P>There is no equivalent to the UNIX 'chmod' command under DOS/Windows.
+After considering various techniques (e.g. looking at the extension), we
+decided that the UNIX execve technique was the simplest; i.e. the script
+specifies what interpreter to use. Actually if you want to see the code that
+decides this, look at the SFL code in sflfile.c -- file_is_executable ().
+The UNIX technique works for Perl, Awk and presumably shell scripts, and
+with a little tweaking, for Rexx too. Finally, we take a peek at the file
+contents if necessary. Under MS-DOS & Windows, a real executable starts with
+'MZ'. That's sufficient for Xitami to try to run the thing. Conclusion:
+executable files can take any extension and work with pretty much any
+processor/interpreter.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>30: I tried compiling testcgi.c but it wants sfl.h?</B><A NAME="c_30">&nbsp;</A>
+<P>The example CGI programs in C use the iMatix SFL library.  This is
+included in the Xitami source kit (since Xitami also uses it).  You can
+<A HREF="http://www.imatix.com/html/sfl">download it</A> from our site.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>31: How do I use an URL like '/cgi/script'?</B><A NAME="c_31">&nbsp;</A>
+<P>You can set this option in the [Server] section of custom.cfg, in
+the cgi-url option. Try this:
+<PRE>[Server]
+    cgi-url=/cgi
+</PRE>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>32: My CGI '/somedir/cgi-bin/script' does not work</B><A NAME="c_32">&nbsp;</A>
+<P>If you use /cgi-bin in the URL below the top level, you must enable the
+cgi:wildcard option.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>33: Can I redirect users to different pages using the .aut file?</B><A NAME="c_33">&nbsp;</A>
+<P>No, not without CGI programming. But it's quite simple to do in Perl or
+C: you test the user name (forget the password - it's already been
+validated) and return a header that redirects the browser to the actual
+page: "Location: /somedir/somefile.htm". Use the environment variable
+REMOTE_USER, which contains the user id.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>34: Can I trap the user id to subset data?</B><A NAME="c_34">&nbsp;</A>
+<P>In a CGI you can use the user name to subset data: you could issue a
+redirection to the appropriate file, e.g: Location: filename.htm depending
+on the value of the REMOTE_USER environment variable, or use this variable
+to determine what data to read from a database.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>35: I want to limit CGIs, but not HTML pages, to certain IP addresses</B><A NAME="c_35">&nbsp;</A>
+<P>Add this to the authentication file:
+<PRE>[/cgi-bin]
+    webmask=..whatever...
+</PRE>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>36: How do I allow CGIs in any regular HTML directory?</B><A NAME="c_36">&nbsp;</A>
+<P>Set the server:cgi-url option to "/", and the server:cgi-bin option to
+the same as the server:webpages option. Make sure cgi:mixed-url is 1.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>37: How do I write a shopping-card CGI program?</B><A NAME="c_37">&nbsp;</A>
+<P>You should ask this kind of question on CGI or HTTP newsgroups, and
+research the Internet for answers. The simplest way to do this is to use
+cookies, or to use URL arguments (?xxxx) to know the 'state' for each user.
+If you want to maintain long-term state for users, it's best to force them
+to logon (and thus identify themselves) each time they come back to the
+site.  See the question on <A href="index18.htm#user_authentication">CGI user authentication</A>.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>38: How do I access ODBC databases under Windows?</B><A NAME="c_38">&nbsp;</A>
+<P>From Perl, you can use Win32::ODBC, ActivePerl for Win95, and the DCOM
+driver. One report: "It worked very well - I was able to duplicate in a
+matter of hours what my buddy took almost a week to do with MS software, and
+the result was faster and looks better!"
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>39: My CGI program can't connect to ODBC under Windows NT; it works from the command line</B><A NAME="c_39">&nbsp;</A>
+<P>Under NT, each login ID has its own set of ODBC definitions. The reason
+your program works from the command line is that it runs under your current
+login ID, which apparently has a proper ODBC definition to utilize. The
+Xitami web server runs as an NT service and does not use your login ID by
+default. Xitami and all CGI programs launched from within it assume the
+login ID assigned to Xitami at start up. This can either be a system ID,
+which is typical, or a specified user ID, which requires extra configuration
+by an NT administrator.
+<P>The solution is to have an NT login created specifically for Xitami. It
+need only have the standard User privileges (assuming your NT environment
+uses the default definition of "User"). After this login is established, one
+must use it to login and then define a proper ODBC connection. Next, Xitami
+must be made to start as NT service using this new login instead of a system
+ID. Since this new login ID does not (or at least should not) have
+administrative rights, one will have to logout and log back in as an
+administrator to change this setting, which is made from the Services
+component of the Control Panel. Now when CGI programs run, they will do so
+under the new login ID, and will consequently have access to the new ODBC
+definition.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>40: When I run a heavy ODBC CGI program, I get "Server Overloaded"</B><A NAME="c_40">&nbsp;</A>
+<P>Your problem is that the CGI program runs 'too long' and is then
+killed by Xitami.  Increase the CGI timeout (which is specified in
+seconds).
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>41: My images don't load when my CGI uses extra PATH_INFO</B><A NAME="c_41">&nbsp;</A>
+<P>When you run a CGI that contains extra path information (the PATH_INFO
+environment variable), images on pages generated by the CGI will fail to
+load if they're referred-to by relative URLs.  For example, if the CGI URL
+is http://my_domain/cgi-bin/my_prog.cgi/extra-blah, and you refer to an
+image "pic.gif", the browser will ask for a URL called:
+http://my_domain/cgi-bin/my_prog.cgi/extra-blah/pic.gif, which presumably
+won't work.  You can check this by enabling server debugging and looking at
+debug.log.  There are two solutions:
+<OL>
+<LI>Use absolute references for the image files (starting with '/').
+<LI>Add a BASE tag at the start of the page (after the HEAD tag):
+<PRE>&lt;BASE href="http://my-domain/cgi-bin/"&gt;
+</PRE>
+</OL>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>42: How do I do file uploads through CGI?</B><A NAME="c_42">&nbsp;</A>
+<P>Find the Internet document RFC1867. This is the kind of FORM code you
+need:
+<PRE>&lt;FORM ENCTYPE="multipart/form-data" ACTION="_URL_" METHOD=POST&gt;
+File to process: &lt;INPUT NAME="userfile1" TYPE="file"&gt;
+&lt;INPUT TYPE="submit" VALUE="Send File"&gt;
+&lt;/FORM&gt;
+</PRE>
+You can test this quite simply by using ACTION="cgi-bin/testcgi.exe" and
+enabling CGI debugging ([cgi]debug=1) to see what the stdin stream looks
+like. To decode the file upload data you could use the functions in
+sflhttp.c.
+<P>Form-based file uploads do not work in IE3.x and earlier, and we have
+reports that it fails with some IE4 configurations.  Netscape 3.x and later
+work fine.  Opera 3.x does not handle this.  Therefore, we recommend that
+you use this carefully and probably best within an intranet setting where
+you can be sure of the type and version of browser used.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>43: My SSI page says '#exec command not permitted for security reasons'</B><A NAME="c_43">&nbsp;</A>
+<P>To enable the #exec command, set the ssi:exec option.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>44: Can I use Java servlets with Xitami?</B><A NAME="c_44">&nbsp;</A>
+<P>Takyiu Liu says: I have used servlets with Xitami with an unconventional
+way. I use servletrunner (or Jrun if you prefer a 3rd party servlet engine)
+and point it to the servlet classes I have written (I have the servlet
+connected to a SQL Anywhere DB on request). I then use Xitami to serve the
+web pages, with form actions pointing at something like:
+<PRE>&lt;FORM ACTION="http://53pc2951:8000/servlet/DBQuery" METHOD="POST"&gt;
+</PRE>
+On any platform where the servletrunner is not available, one can use the
+(undocumented) approach:
+<PRE>java sun.servlet.http.HttpServer -d your_servlet_directory
+</PRE>
+In other words, so long as a platform has a JDK 1.1 JVM, you can run servlets
+with just a copy of jsdk.jar.
+<P>Jrun is meant to be a servlet engine but in 2.2 they added primitive http
+support.  By default, it comes up on port 8000 and a typical location to put
+the web pages is:
+<PRE>\Program Files\Live Software\JRun\2.2\jsm-default\services\jws\htdocs
+</PRE>
+I think it is modelled after Sun's Java Web Server.  The default path for the
+servlet classes is:
+<PRE>\Program Files\Live Software\JRun\2.2\jsm-default\services\jse\servlets.
+</PRE>I also believe Jrun's http capability comes from ACME's server API, and
+so is very primitive compared with Xitami.  It is great to be able to combine
+Xitami's http capability and Jrun (or servletrunner)'s servlet capability.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>45: Can I use LRWP peers with another web server?</B><A NAME="c_45">&nbsp;</A>
+<P>You can use the sneaky parallel-server approach suggested by Takyiu Liu
+for running servlets: run Xitami beside the other web server on another port,
+just for the benefit of LRWP.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>46: What plans do you have for server-side JavaScript?</B><A NAME="c_46">&nbsp;</A>
+<P>Xitami does not support server-size JavaScript and we do not have such
+plans.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>47: I've discovered a limit of 252 LRWP servers under Unix</B><A NAME="c_47">&nbsp;</A>
+<P>This is a problem with some Unix systems, caused by a limit on the number
+of open file handles. You can link Xitami with AT&T's "SFIO" library
+(available from http://www.research.att.com/sw/tools/sfio/ ). No source
+modification is required: just copy libstdio.a and libsfio.a from the SFIO
+distribution to ./src/smt/ and modify one line in "./src/smt/c" script from:
+<PRE>LIBLIST="$LIBLIST $CCLIBS"
+</PRE>
+to
+<PRE>LIBLIST="$LIBLIST $CCLIBS libstdio.a libsfio.a"
+</PRE>
+
+<A NAME="user_authentication">&nbsp;</A>
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>48: How do I do user authentication in a CGI script?</B><A NAME="c_48">&nbsp;</A>
+<P>When a browser requests a page which Xitami considers 'protected', i.e.
+which is defined in defaults.aut, it fills-in a request header like like
+this:
+<PRE>Authorization: Basic dXNlcm5hbWU6MTIzNDU2Nzg=
+</PRE>
+<P>The strange thing at the end is the sequence "username:password" encoded
+using base-64, as defined in the Basic Authentication Scheme in RFC2068.
+Xitami provides the encoded string in the HTTP_AUTHORIZATION environment
+variable.  You can decode this using a fairly simple function - see the SFL
+sflmime module for an example in C.
+<P>It's also possible to tell the browser to ask for a password, if none is
+supplied, by generating a WWW-authenticate header.  For example:
+<PRE>  if not VariableSet( HTTP_AUTHORIZATION )
+    {
+     HeaderLine( 'HTTP/1.0 401 Unauthorized' );
+     HeaderLine( 'WWW-authenticate: basic realm="UserArea"' );
+     echo 'Text to send if user hits Cancel button';
+     exit;
+    }
+  else
+     HeaderLine( 'Location: http://anHost/users/userCode/userPage.html' );
+</PRE>
+An entry like the following should exist in the defaults.aut file:
+<PRE>[/users]
+  realm="UserArea"
+  UserName1="UserPassword1"
+  UserName2="UserPassword2"
+  ...
+</PRE>
+
+<HR>
+<H3><A NAME="TOC158">Multihosting/Virtual Hosting</A></H3>
+
+<P><B>1: What exactly do I need to define for a Virtual Host?</B><A NAME="v_1">&nbsp;</A>
+<P>For the main configuration you have xitami.cfg+defaults.cfg. For each
+virtual host you have some XXXXX.cfg. For unresolved virtual hosts you have
+basehost.cfg. Use the WBA virtual host wizard to define new virtual hosts.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>2: How do I set-up a virtual host on another port?</B><A NAME="v_2">&nbsp;</A>
+<P>You can do this quite simply by starting two copies of Xitami. We do this
+quite often; the advantage is that you can get the effect of multiple hosts
+(different document roots) without playing with the DNS system. Otherwise,
+you have to define DNS entries that map several different names
+'www1.here.com', 'www2.here.com' to the same IP address, then base the
+virtual hosting on the different names. Either way is okay; Xitami is so
+small that running two or even a dozen copies will not stress a system.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>3: How do I provide space for individual users on my system?</B><A NAME="v_3">&nbsp;</A>
+<P>Let's say you installed Xitami in c:\servers\xitami. Then, the main
+webpage directory will be c:\servers\xitami\webpages. An URL like
+'http://dynamic210.adelphia.net/Joe' is taken to mean something like:
+'http://dynamic210.adelphia.net/Joe/index.htm', which would be a file:
+'c:\servers\xitami\webpages\joe\index.htm'. You can also use
+default.htm, and you can change the main webpages directory to be
+somewhere else if you want. Under Windows 95 and NT you can make each
+subdirectory shareable separately, so that users can update their pages
+but not mess with other files.  You can also use aliases, especially if
+users' pages are on different disks.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>4: And how about their CGI scripts?</B><A NAME="v_4">&nbsp;</A>
+<P>Any URL containing /cgi-bin/ is treated as a CGI directory. So, Joe
+can put his web pages in "c:\servers\xitami\webpages\joe\" and his CGI
+programs in "c:\servers\xitami\webpages\joe\cgi-bin\".
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>5: Can I run two versions of Xitami, e.g. on ports 80 and 1010?</B><A NAME="v_5">&nbsp;</A>
+<P>It should work okay, providing you stop the two Xitami's from stepping on
+each others toes (eg, different home directories). If you want to run on
+port 1010 you'll have to give Xitami a carefully calculated base value (base
+(1010-80)=930; 1080 would be easier (base 1000).
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>6: My virtual host setup does not work - what can I try?</B><A NAME="v_6">&nbsp;</A>
+<UL>
+<LI>First off, if you're using DNS-based virtual hosting, understand that
+this will only work with version 3 or later browsers.  If in doubt, enable
+server debugging and check the request.log - each request must have the
+correct Host: header field.
+<LI>Then, check the debug.log file, which will show the virtual-host chosen
+for each URL request.
+<LI>If necessary, use the config-file debugging option to trace which config
+files are loaded, and when.  Any line starting with '!' will be sent to the
+debug.log file, if debugging is enabled.  For instance, add lines like this
+to your VH config and authorisation files:
+<PRE>! Loading somehost config
+</PRE>
+<LI>Check that your proxy is not playing games: it could be passing you
+old pages despite the virtual host config.
+</UL>
+
+<HR>
+<H3><A NAME="TOC159">FTP Questions</A></H3>
+
+<P><B>1: People can't transfer files or see directories on my FTP server</B><A NAME="f_1">&nbsp;</A>
+<P>This is a typical problem caused by the way FTP works. If there is a
+firewall (some some kinds of router are the same) which does not allow
+connections from the server to the client, file transfers (including
+directory listings) will fail. You should tell your users to use 'passive'
+connections.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>2: How do I use my D: drive for additional FTP space?</B><A NAME="f_2">&nbsp;</A>
+<P>You can move the entire FTP root anywhere you like - this is one way. You
+can also define any number of FTP aliases, which point to different file
+systems, CD-ROMs, etc. You can also put different FTP users' directories on
+different disks. For instance if I log in to 'anonymous', you could set my
+home directory to d:\anon.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>3: When exactly does Xitami read the FTP user file?</B><A NAME="f_3">&nbsp;</A>
+<P>Xitami reads this when it starts up, when you restart it, or after the
+refresh timeout (30 seconds by default).
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>4: If I give a user only 'P' access to a directory they can't list it</B><A NAME="f_4">&nbsp;</A>
+<P>Normally you'd use 'P' by itself for a directory meant purely for
+uploads. I.e. a userid 'uploads' with a dedicated write-only directory.
+If you use 'P' by itself on a subdirectory, the user will not be able to
+'cd' into it.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>5: I'm having problems getting my FTP permissions right</B><A NAME="f_5">&nbsp;</A>
+<P>The FTP permissions definitions are quite complex and it's easy to get
+these wrong.  The most common mistake is when you define directory-level
+protections.  For instance, if the ftproot is in 'ftproot', and a user
+'guest' connects to 'guest' (a subdirectory of ftproot), then how do you
+specify the protection for a subdirectory 'guest/pub'?  The correct form is:
+<PRE>[pub]
+    guest=..flags..
+</PRE>
+and not [guest/pub], [/pub], [/guest/pub] or any other combination.  The key
+is that you have to look at the protected directory name from the point of
+view of the logged-on user.  The user's home directory is []; the pub
+subdirectory is [pub].
+<P>To debug this kind of problem, enable server debugging, then check
+debug.log. It'll indicate the actual permissions that were used to access
+the directory.  Make sure you read the comments in ftpdirs.aut to see how
+FTP authentication works.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>6: How do I create an alias under the /pub directory?</B><A NAME="f_6">&nbsp;</A>
+<P>This is not possible at present.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>7: Helloftp.txt does not show up under web-based FTP access</B><A NAME="f_7">&nbsp;</A>
+<P>This depends entirely on your browser: some show it, some don't.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>8: FTP aliases don't show-up when I do a browser directory listing</B><A NAME="f_8">&nbsp;</A>
+<P>Aliases don't show-up in HTTP directory listings.  They do show up in
+FTP listings.  This is just the way things work.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>9: How do I set-up FTP virtual hosts?</B><A NAME="f_9">&nbsp;</A>
+<P>Do this the same way as for normal HTTP virtual hosts.  Note that the
+normal FTP protocol does not handle DNS-based virtual hosts.  Xitami, and
+some FTP clients, allow this by using the convention 'user@hostname' during
+the connection process.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>10: Can I remotely browse my hard drives using Xitami?</B><A NAME="f_10">&nbsp;</A>
+<P>You can define an FTP alias to C:\, for instance, and manage this using a
+remote FTP client. Make sure you use a secure user id and password.
+
+<HR>
+<H3><A NAME="TOC160">Log File Questions</A></H3>
+
+<P><B>1: How do I use the Xitami log files?</B><A NAME="l_1">&nbsp;</A>
+<P>There are many freeware and commercial logfile analysers; the Xitami
+access logfiles are NCSA/HTTPd compatible and thus compatible with most
+logfile analysers.  The Xitami.log file is used for server messages and
+thus not suitable for analysis.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>2: Does the FTP server log logins, uploads, and downloads?</B><A NAME="l_2">&nbsp;</A>
+<P>The FTP server logs uploads and downloads in the Xitami access log file,
+by default.  To separate the FTP access log into a separate file, change
+the Ftplog:filename configuration option.  This also applies to the error
+log, specified by ftperrlog:filename.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>3: Why does access.log contain only numeric addresses?</B><A NAME="l_3">&nbsp;</A>
+<P>You should configure and enable the reverse-DNS translation function.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>4: Can I use Microsoft's WINS protocol for analysing my log files?</B><A NAME="l_4">&nbsp;</A>
+<P>Yes. This is extracted from Microsoft's documentation: "In Windows NT
+4.0, Microsoft's implementation of DNS is tightly integrated with WINS. This
+allows non-WINS clients to resolve NetBIOS names by querying a DNS server.
+Administrators can now remove any static entries for Microsoft-based clients
+in legacy DNS server zone files in favor of the dynamic WINS/DNS
+integration. For example, if a non-Microsoft-based client wants to get to a
+Web page on an HTTP server that is DHCP/WINS enabled, the client can query
+the DNS server, the DNS server can query WINS and the name can be resolved
+and returned to the client. Previous to the WINS integration, there was no
+way to reliably resolve the name because of the dynamic IP addressing.
+Please see the 'DNS and Microsoft Windows NT 4.0' white paper for details on
+the WINS/DNS integration."  The upshot of this is that xixlat will work with
+WINS if you have a WinNT 4.0 DNS server.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>5: My log file has this strange URL: webpages/http://hostname/file.htm</B><A NAME="l_5">&nbsp;</A>
+<P>This is caused by the browser (usually MSIE4) sending a HTTP1/1 proxy
+request.  Xitami can not (yet) handle these.  This usually indicates that
+someone has defined your web server as a proxy server.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>6: I can't access the log files while Xitami is writing to them!</B><A NAME="l_6">&nbsp;</A>
+<P>This is normal behaviour under Windows.  Under Unix and OS/2 you may
+have more luck.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>7: My log files do not get updated until Xitami is restarted</B><A NAME="l_7">&nbsp;</A>
+<P>This happens (on several operating systems) because the OS may not show
+changes to a file until the file is closed by the process writing to it.
+When you do a restart, Xitami closes its log files, and then you see all the
+entries. At a guess the log files are being block buffered, which means that
+they'll only be written out to the file once a block is full (probably
+somewhere between 2K and 8K at a guess). This is a function of the way that
+the runtime library handles file I/O.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>8: My computer crashed and now my log files are full of junk</B><A NAME="l_8">&nbsp;</A>
+<P>When the computer crashes, for whatever reason, it can leave open files
+in an incomplete state. One symptom is that allocated blocks can contain
+garbage from previous files, allocated to the new file, but not yet written
+with data.  This is probably what happened to your log file.  In other words,
+the junk is probably not what caused the crash, just random data that
+happened to be on the hard disk when Xitami was writing to its log file.
+
+<HR>
+<H3><A NAME="TOC161">Miscellaneous Questions</A></H3>
+
+<P><B>1: How do you pronounce Xitami?</B><A NAME="m_1">&nbsp;</A>
+<P>Just say 'iMatix' backwards -- it's simple! Okay, to be more precise...
+There are two basic ways to pronounce this name; you can aspirate the 'X' as
+'Sh', or you can keep it hard, as 'Ks'. In either case the accent is on the
+second syllable.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>2: What are the main problems with Xitami today?</B><A NAME="m_2">&nbsp;</A>
+<P>People also often ask for FrontPage support.  Besides the fact
+that FrontPage uses an undocumented server interface, we think that if you
+want to be tied to a single platform (Windows in this case) you can use the
+platform-specific server (IIS in this case).  Xitami offers a long-term
+approach, robust enough to survive several OS changes.
+
+<P><B>3: Can you recommend a search engine for Xitami?</B><A NAME="m_3">&nbsp;</A>
+<P>We've tried a few; there is a free engine available from <A
+HREF="www.excite.com">www.excite.com</A>, and we've also tested the free
+Swish engine, which works well with Xitami. You can get Wim Niemans' port of
+this for Windows 95/98/NT from the <A href="http://www.imatix.com/pub/tools/swish11.exe">iMatix website</A>.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>4: Why is the Xitami mailing list not a newsgroup?</B><A NAME="m_4">&nbsp;</A>
+<P>We are well aware of the advantages and disadvantages of newsgroups
+vs. mailing lists.  Each has their strong points, but in general a mailing
+list is accessible to more people than a newsgroup.  We're looking for ways
+to provide transparent merging of the two techniques, so that people can
+use the mailing list either as a newsgroup or a list.  Until that date,
+we will stick with a mailing list.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>5: Why do I get errors on 'robots.txt'? What is this?</B><A NAME="m_5">&nbsp;</A>
+<P>The various search engines (like AltaVista) use a 'web spider' or 'robot'
+to scan and index websites. This often includes large amounts of junk that
+make the resulting searches pretty useless. So, a standard mechanism has
+evolved to make this work better. The 'Robot Exclusion Standard' specifies
+that a file called 'robots.txt' in the home directory will indicate which
+pages or directories should be ignored. This is not meant as any kind of
+security device, just a 'hint'. So, most robots will ask for this file. If
+the errors in the log files bother you, create an empty file in the webpages
+directory called 'robot.txt'.  To ask all robots to skip your site, use
+this:
+<PRE># robots.txt
+User-Agent: *
+Disallow: /
+</PRE>
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>6: Can I customise the directory listings?</B><A NAME="m_6">&nbsp;</A>
+<P>No, not in this version.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>7: Why is the password file not encrypted?</B><A NAME="m_7">&nbsp;</A>
+<P>In general if access to your server is secure, then the lack of
+encryption is not a problem. If someone can read the Xitami directory on
+your system, they can see the passwords. Note that even if you use a hashed
+password file, it is often trivial to discover passwords using a
+dictionary-based attack. It's therefore much better to concentrate on hiding
+the password file than on encrypting it.  At some future date, Xitami will
+support encrypted (hashed) passwords.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>8: Do I need a special license to use/sell/modify Xitami at work?</B><A NAME="m_8">&nbsp;</A>
+<P>No, none.  Read the <A href="license.htm#license">Xitami license</A>.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>9: I want to write a great Xitami addon...</B><A NAME="m_9">&nbsp;</A>
+<P>Excellent news!  Xitami is an Open Source project, and has benefitted
+from many contributions, including people who ported the SFL library, wrote
+plugs like the LRWP agent, wrote documentation, tested it, and so on.  You
+will want to learn how to use our great tools - Libero, SFL, SMT.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>10: How do I rebuild the SFL under Windows using MSVC?</B><A NAME="m_10">&nbsp;</A>
+<P>The simplest check-list is:
+<OL>
+<LI>Get the Xitami Windows source code distribution (this always contains
+the most recent release of SFL).
+<LI>Unzip into a directory; the SFL source code is put into src\sfl.
+<LI>Create a new project, for a static library; change the options to
+create an output file in the main directory (instead of debug/). I usually
+call the library 'libsfl.lib'.
+<LI>Add all source files called 'sfl*.c' from the src/sfl directory.
+<LI>Build.
+</OL>
+For SMT, you can do the same, but there are some sources you want to leave
+out: smttst*.c and smtschm.c.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>11: I'm building a Windows app based on Xitami, but it aborts</B><A NAME="m_11">&nbsp;</A>
+<P>If you try to mix Xitami with MFC, you'll get a server that stops running
+after 60 seconds, or whatever you set the server:refresh interval to. This
+is because MFC traps the timer signal Xitami uses, and handles it as an
+abort. There may be workarounds for this, depending on how well you know
+MFC.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>12: How do I rebuild Xitami under Windows using lcc-win32?</B><A NAME="m_12">&nbsp;</A>
+<P>If you want to compile under Windows, you should download the Windows
+source kit, not the Unix one - this will give you files with the correct
+line endings (CRLF not LF). Then, you should set the environment variable
+CCNAME to lcc and CCDIR to the lcc-win32 directory. Try the c.bat file on
+one source, e.g. sflbits to make sure it works correctly, then run build.bat
+in src/sfl. Copy sfl.h and libsfl.lib to src/smt, and run build.bat there
+too. Lastly, when Xitami is built, be prepared to throw it away, since at
+the time of writing, lcc-win32 had a bug which causes Xitami to halt when it
+gets a timer signal -- see the following question.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>13: I compiled Xitami with lcc-win32 but it always aborts</B><A NAME="m_13">&nbsp;</A>
+<P>Lcc is a wonderful little compiler but its runtime has a problem with
+certain interrupts. Basically, when Xitami receives a timer signal, it
+aborts. This hits after the refresh timeout, and when running CGIs. We have
+notified the author of lcc, and provided a small test program that shows
+this behaviour. It's quite clearly a bug in lcc. Apart from this problem,
+we've found lcc to be fast, reliable, and in fact it's supported fully by
+the SFL. I can recommend it for CGI programming (oh, one more caveat - no
+support for ODBC as far as I could see).
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>14: Why are there bugs in Xitami?</B><A NAME="m_14">&nbsp;</A>
+<P>Any complex software is filled with bugs. Xitami is pretty good in this
+respect, we reckon. Our policy is to fix those we can identify and localise,
+depending on the severity of the problem. A bug that causes the server to
+crash will make us run around a lot faster than a bug which causes some
+obscure feature to work otherwise than documented.  Large amounts of money
+will also tend to focus our attention.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>15: Why is Xitami free, and will it remain this way?</B><A NAME="m_15">&nbsp;</A>
+<P>Xitami is a product that we developed to demonstrate the quality of our
+technology and to introduce people to iMatix Corporation.  This web server
+will remain free software, and as the kernel for our commercial web server
+products, will continue to be ported, improved, and maintained.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>16: Where can I get older versions of Xitami?</B><A NAME="m_16">&nbsp;</A>
+<P>We keep one back version but not older ones.  You may be able to find
+a specific version by searching through an FTP search engine like the
+one at http://ftpsearch.ntnu.no.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>17: Do you have any plans to incorporate SSL into Xitami?</B><A NAME="m_17">&nbsp;</A>
+<P>Xitami/Pro supports this.  E-mail us for details and prices.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>18: What is the future for Xitami?</B><A NAME="m_18">&nbsp;</A>
+<P>Xitami will continue to be improved and extended, while keeping it a
+server that you can install and set-up within minutes.  For professional
+users, Xitami/Pro offers more sophisticated functions but these also take
+more time to learn and configure.  Xitami will remain free software.
+
+<P><A href="index18.htm#faqlink">[Top]</A><HR>
+<P><B>19: Is Xitami year 2000 compatible?</B><A NAME="m_19">&nbsp;</A>
+<P>Yes.
+
+<P><A href="index18.htm#faqlink">Go back to FAQ index</A>
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index17.htm">&lt;</A>
+ | <A href="index19.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <EM>FAQ</EM>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

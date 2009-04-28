@@ -1,0 +1,400 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>A Beginner's Guide</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index14.htm">&lt;</A>
+ | <A href="index16.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+<A NAME="beginners">&nbsp;</A>
+
+<H2><A NAME="TOC110">A Beginner's Guide</A></H2>
+
+<H3><A NAME="TOC111">Setting-up a Web Site</A></H3>
+
+<H4><A NAME="TOC112">General Remarks</A></H4>
+
+<P>Xitami does the same work as any other web server (only faster and more
+reliably), so this section covers general information that you can probably
+find on the Net, in a hundred books, and in documentation for other web
+servers.  Since you chose to look here, we'll feel free to mix our opinions
+with our advice.
+
+<P>You must of course have a good idea of 'Why?' before you start building a
+web site.  Who is going to access it, how often, and to get what information?
+A web site is basically an exercise in publishing.  So be prepared to spend a
+lot of time writing and editing material.  Web sites that look like video
+games may be fun to build, but are usually painfully slow to work with, and
+don't necessarily add any value to the information you're presenting.
+
+<P>There are many tools that help with the process of building and managing
+the many HTML files you will need.  However, there is no substitute for a
+good knowledge of HTML (which is a <EM>simple</EM> language) and for some
+skill in managing complexity.  The shareware HTMLib library is an excellent
+reference for the HTML language. (Htmlib is written by Stephen le Hunte: to
+find it, search <A href="http://www.altavista.com/">altavista</A> or any of the other big search engines.)
+
+<P>You may find that a tool like MS FrontPage is ideal for managing this
+problem.  You may alternatively prefer a more mechanical solution, such as
+the <A href="http://www.imatix.com/html/htmlpp/">htmlpp</A> preprocessor that we use for our web site.   Of course, we
+recommend htmlpp.  It's simply more open and flexible than any do-it-all
+environment like FrontPage.  Whatever choice you make, these are some of the
+issues you will have to manage when you start producing dozens, then hundreds
+of HTML files:
+
+<UL>
+<LI>Organising the files into directories.  Don't go overboard; too many
+directories quickly becomes an exercise in futile complexity.
+<LI>Keeping a consistent look and feel.  For instance, you may want a
+standard header and footer for most files on the site.
+<LI>Maintaining links between files.  Nothing makes a worse impact than '404
+Not found' messages when people try to navigate a site (except perhaps 'Host
+not responding').
+<LI>Maintaining links to external sites.  You can use tools to check the
+site, and you can use mechanisms to reduce the cost of maintaining such links
+(htmlpp does this well).
+<LI>Updating the site and managing versions.  You'd be foolish to edit the
+files in place, since any mistakes would show-up right away on the site.  A
+good approach is to make a full test site (a 'mirror'), with a separate web
+server, where you install and test the pages.  Then, you can copy the entire
+site across, or individual pages using the date/time settings on each file.
+<LI>We like to make HTML sites that can be accessed <EM>without a web
+server</EM>.  This can be very useful, with the exception of image maps and
+CGI, which need a server to work.  Do not use full URLs ('http://site/file')
+when referring to other documents in the site; rather, use <EM>relative
+URLs</EM>, which are filenames relative to the actual page.  For instance,
+if a document in '/html/tools' needs to reference an image file in
+'/html/images/cover.jpg', it can use an URL like this: '../images/cover.jpg'.
+If you use full URLs, you'll need a server to access the files.
+</UL>
+
+<H4><A NAME="TOC113">Top Ten Things To Do</A></H4>
+
+<OL>
+<LI>Learn HTML - use a reference like HTMLib to keep up to date. (Htmlib
+is written by Stephen le Hunte: to find it, search <A href="http://www.altavista.com/">altavista</A> or any of
+the other big search engines.)
+<LI>Write HTML that works with all browsers, including text-only browsers.
+<LI>Learn the basic rule of publishing: <EM>keep it clean</EM>.
+<LI>Keep your web pages simple so that they load quickly.
+<LI>Your home page should fit on one screen.
+<LI>Use an HTML validator tool to check your pages.
+<LI>Use a good tool to manage the web site files.
+<LI>Keep a test site, and test well before you publish.
+<LI>Use the Xitami alias functions to access other resources such as
+HTML-driven CD-ROMs.
+<LI>Use the Xitami errors.log file to detect and fix link errors.
+</OL>
+
+<H4><A NAME="TOC114">Things To Avoid Like The Plague</A></H4>
+
+<OL>
+<LI>Blinking text.
+<LI>The bells and whistles offered by proprietary extensions - these are
+designed to lock you and your clients into vendor-specific solutions.
+<LI>Lots of images, unless you are building an intranet site.  Images
+can be very useful, but cost a lot in terms of preparation, maintenance,
+disk space, and network transport.
+<LI>Java, JavaScript, ActiveX, PerlScript... unless you are very aware
+of the costs and benefits involved.  All programming is expensive, and
+executable content is particularly costly. not least because it relies
+on untested, rapidly changing technologies.  Like images, executable
+content is most often used for flash, not to solve specific problems.
+JavaScript, in small quantities, is probably the safest route to go for
+small adornments, since most browsers can handle it these days.
+<LI>CGI, unless you really need it and are aware of the costs and
+benefits involved.  Badly-written CGIs will slow-down your entire site.
+Good CGIs can provide a very useful level of interactivity, but you must
+know what you are doing.
+<LI>Cookies, unless you really know what you're doing.  Sites that use
+cookies can be viewed negatively by users.  If you use cookies, make sure
+they are set to expire correctly, and do not send a new cookie with each
+page.
+<LI>All web servers except Xitami - why make your web site run slower? :-)
+</OL>
+
+<H3><A NAME="TOC115">Installing Xitami</A></H3>
+
+<P>Xitami is quite simple to set-up -- basically it runs with no
+configuration at all -- but your TCP/IP set-up must work first.  You can
+start by making a stand-alone site (a browser talking to Xitami on the
+same machine), then connect your system to a network and let other
+people access your pages.  This is a checklist of things to do:
+<UL>
+<LI>You need a network adaptor; under Win95, this can be the dial-up
+adaptor, rather than a physical card.
+<LI>TCP/IP must be installed and ready to use.  You need to be able to
+do a 'ping 127.0.0.1' from the DOS command-line.  If this does not work,
+you need to correct the network configuration. This can be complex - get
+help if necessary.
+<LI>Install Xitami and start a browser, then try address
+'http://127.0.0.1'. It must show the Xitami home page correctly.
+<LI>Try the various links and clickable images.  Only one won't work,
+since it links to http://www.imatix.com/.
+<LI>To connect your computer to a network, you need to give it a fixed
+IP address and a domain name.  This is a job for a network
+administrator.  On a dial-up PPP connection you get a temporary IP
+address which can be used (eg. http://193.23.54.12/) but it changes each
+time you connect.  Some providers will give you a fixed IP address,
+sometimes at extra cost.
+</UL>
+
+<H3><A NAME="TOC116">Getting Yourself Connected</A></H3>
+
+<P>This section describes how to make your web site available to other
+people.  The problems involved in connecting on an internal network are
+a little different from connecting to the Internet itself.
+
+<H4><A NAME="TOC117">How Do Domain Names Work?</A></H4>
+
+<P>So long as you have TCP/IP installed and running you can use
+127.0.0.1 and 'localhost' (which both mean the same normally)
+and which TCP/IP interprets as the 'loopback address', i.e. the
+current machine.
+
+<P>When you want to talk to other computers you need to know their IP
+address.  Correspondingly your system also needs an IP address.  And
+your address has to be unique, network-wide.  When the network is the
+Internet, this means world-wide.  There are two ways to get such a
+unique address.  One, you ask/pay someone for a fixed address.  Two,
+you work with an ISP that owns a pool of addresses.  This is
+typically how dial-up PPP connections work: the ISP will lend you an
+address for the duration of the connection.
+
+<P>Now, if you dial-up on a PPP line, and you do 'ping xxxx' where
+'xxxx' is the name of your system, ping will tell you your current IP
+address.  Other people can, then, connect to that address and access
+your web pages.  This works.  But they have to type the literal
+address: 'xxx.xxx.xxx.xxx'.
+
+<P>TCP/IP uses a system called DNS to translate a name like 'imatix.com'
+into an address.  DNS uses a network of servers that are able to
+translate names into addresses.  So when you use Netscape to access
+imatix.com, your local TCP/IP interface asks its local DNS server to
+translate the name.  This goes off, and after several hops comes back
+with the address, and then you can connect.
+
+<P>The system name must of course be unique, within the network, or
+world-wide on the Internet.  Again, you can get unique names in
+several ways.  You can extend an existing domain name
+(research.imatix.com) or invent a new domain name (some-thing.com).
+Domain names must be registered with the Internic.  This costs $70
+for 2 years and $35 per year after that.  You can do this directly or
+via your ISP.  It's quite a fast process; the only problem is finding
+a good domain name that's not already used.
+
+<P>In general, you'll find that a dial-up PPP connection is not much use
+for a web server, since your IP address changes each time you dial-in to
+your ISP.  (Ignoring the fact that local phone calls still cost quite a
+lot in many parts of the world.)  There are some interesting sites that
+help get around this problem by acting as DNS/proxy servers for such
+connections.  If you want to do this kind of thing, you'll have to
+investigate yourself -- we're getting too deep for a beginner's guide.
+
+<H4><A NAME="TOC118">On An Intranet (LAN)</A></H4>
+
+<P>See your network administrator to get an IP address.  Then,
+configure your TCP/IP software so that your computer is reachable from
+others on the network.  Generally you'll already have got TCP/IP working
+even to run Xitami on a stand-alone system.  What changes with respect
+to an intranet is that you need an IP address, and it can't be the same
+as any other IP address on the network.
+
+<P>When TCP/IP is working correctly (even before you start Xitami) you
+can use the 'ping' command from other machines to check that your
+machine is addressable.  Type ping like this:
+
+<PRE>ping <I>xxx.xxx.xxx.xxx</I></PRE>
+
+<P>Where 'xxx.xxx.xxx.xxx' is the IP address of your machine.  If this
+works, then you can start Xitami and access it from a browser using the
+URL <TT>http://<I>xxx.xxx.xxx.xxx</I>/</TT>.
+
+<P>The next step is to get your system known by the DNS (domain name
+system).  An intranet usually has one or two domain name servers,
+although it's not mandatory.  If DNS is working, you can configure your
+TCP/IP to talk to the DNS server - then other PCs will be able to refer
+to your system by name, not IP address.
+
+<P>If you do not have a DNS server, you can generally use the 'hosts'
+file (in Windows this sites in C:\Windows) to translate IP addresses
+into names and vice versa.  Each computer that want to access your web
+site needs to put a line in its hosts file.  This is a bit tedious,
+which is why DNS exists.
+
+<H4><A NAME="TOC119">On The Big Wide World Wide Web</A></H4>
+
+<P>Getting your site onto the web involves cooperation from a commercial
+provider of some sorts.  You can get help from:
+<UL>
+<LI>Your ISP, who can provide a fixed line or a permanent IP address for
+dial-up connections, or space and a connection for your own server PC.
+<LI>A virtual host provider, who can provide a complete web site
+(although then you are normally not using your own machine).
+<LI>A telecoms operator who can provide you with a high-speed link to
+one of the Internet backbones.
+</UL>
+
+<P>A good solution for a small web site is to pay for a fixed line. There
+are various technologies; ISDN, ASDL, POTS (plain old telephone something)
+... Check-out the capacity of the line and shop-around for the best deal.
+This gives you the most flexibility and control of your system, but may be
+limited when handling large volumes. The most interesting type of connection
+may be the kind offered by TV cable companies: in some cities this is a very
+cheap way to get high-speed IP connections. However, check the rate at which
+you can send data out from your server - this is sometimes quite low.
+
+<P>The actual steps involved in setting-up an Internet host are (and
+feel free to correct me on this; this is coming from long-unused memory
+cells):
+<OL>
+<LI>Invent a domain name that no-one already uses.  You can telnet to
+internic.net (I think) and query their database to see whether your name
+of choice has already been used.  You can also use the 'whois' command
+to see whether the name is used.
+<LI>You have to submit a domain name registration request to the Internic.
+<LI>At the same time you have to be able to refer to two DNS servers who
+can handle the domain name translation.
+<LI>Once the name is registered and the new IP address is given to the
+two DNS servers, it gets distributed through the Internet, and after a
+few days anyone can access your system either using its IP address or
+the domain name.
+<LI>It's only really worthwhile doing if you need to aquire a domain
+name for business reasons, or you have a permanent connection to the
+Net.
+</OL>
+
+<P>This is a lot of fuss for normal people, and an ISP can usually do the
+whole job for you, though they will charge something extra.
+
+<H4><A NAME="TOC120">On a private dial-up network</A></H4>
+
+<P>You can also become your own ISP by setting-up a pool of modems, and
+arranging for dial-up accounts into an internal intranet. This can be very
+effective for networks with a specific set of clients - for instance,
+salesmen who travel a lot. It can also work in regions where real Internet
+connections are expensive or not available. If you want to do this you
+should find someone who knows about such things.
+
+<H3><A NAME="TOC121">Using Virtual Hosts</A></H3>
+
+<P>Virtual Hosts are a useful way to manage independent and separate web
+sites on a single system, with one copy of Xitami running on the main HTTP
+port 80. The user sees separate web sites - you need only manage one server.
+This is of most use when you want to host several sites but only manage a
+single web server. You can also run one copy of Xitami per site. Since
+Xitami is small and does not use much memory both approaches are practical.
+
+<P>The <A href="index11.htm#vhosts">virtual hosts section</A> gives a detailed explanation of what
+virtual hosts are and how to set them up. We'll cover some more introductory
+topics here.
+
+<P>When you define virtual hosts, each virtual host can have its own
+webpages directory, CGI directory, log files, error messages, password file,
+timeouts, etc. In fact, almost all Xitami options except those that affect
+the whole server (such as the port) can be specific to the virtual host.
+
+<P>To define a virtual host you define a specific config file - this
+contains all the options that are specific to that virtual host; other
+options are then inherited from the xitami.cfg and defaults.cfg files.
+
+<P>To create virtual hosts, you must be able to define new entries in the
+domain name system (DNS) or be able to define multiple IP addresses on your
+system. Neither of these are jobs for beginners, so if you've not done it
+before, get competent advice.
+
+<H3><A NAME="TOC122">Managing Your Web Site</A></H3>
+
+<H4><A NAME="TOC123">Updating The Site</A></H4>
+
+<P>It's a good idea to work with a 'test site'. This is simply a directory
+on your PC where you install and test the HTML files, images, CGI scripts,
+and other resources before you install them on your public web site. For
+instance, the iMatix site is built on its own disk partition, where each
+directory matches that on our web site.
+
+<P>We do not generally work directly on the files in the test site. Rather,
+we build a package of HTML files, images, whatever, then install them into
+the test site. This lets different people manage different sections of the
+site. It's also a natural way to work when one uses tools like htmlpp.
+
+<P>There are basically two ways to update a web site: the 'dribble' and the
+'stomp'. Dribbling means updating it in small pieces; a few files here and
+there. This is typically how people work when they don't use a test site.
+Stomping means shoving several tons of stuff onto the site at once, so that
+everything is updated together. Dribble works for spot updates, bug fixes,
+and such. But it is not a good way to work in the long term: stomping is
+safer and not much slower.
+
+<P>We stomp our site using a couple of Perl scripts that find all files
+changed since the last stomp; these files are compressed into a zip file,
+which is sent by file transfer to the web site. There we decompress it. It's
+a lot faster to do this than to transfer the individual files one by one
+(firstly, zip files are compressed by about 75% unless you are already
+handling compressed data, and secondly, it takes a second or two to
+negotiate a file transfer, which is slow when you transfer dozens of small
+files).
+
+<P>There are of course many free and shareware tools (such as Netload)
+available to do this kind of thing, but none that we know of will use a
+zip-style compression to save upload time.
+
+<H4><A NAME="TOC124">Counting Hits</A></H4>
+
+<P>Xitami produces standard NCSA-style log files that can be read and
+analysed by most log file analysers. People often misuse the term 'hits' to
+imply that one hit is one person visting the site. This is not true. For
+instance, the iMatix web site has 250,000 hits in a typical month, but about
+15,000 actual visitors, or whom perhaps 2,500 stay long enough on the main
+page to trigger the page counter. Each page has several images as well as
+the HTML text, and people will read several pages.
+
+<P>To accurately count the number of visitors to your site, you can count
+the number of hits to the main page. If you encourage people to always visit
+your site's main page (publish just that URL), then your statistics will be
+more accurate.
+
+<H4><A NAME="TOC125">Using The Log Files</A></H4>
+
+<P>This section still needs to be completed.
+
+<H4><A NAME="TOC126">Using Password Protection</A></H4>
+
+<P>This section still needs to be completed.
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index14.htm">&lt;</A>
+ | <A href="index16.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <EM>A Beginner's Guide</EM>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

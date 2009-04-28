@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+<pdl
+    name      = "Xitami/Open"
+    acronym   = "xit"
+    install   = "xitami-25"
+    deploy    = "app"
+    version   = "2.5c2"
+    copyright = "Copyright (c) 1991-2003 iMatix Corporation"
+    workflow  = "standard.pwl">
+
+<include filename = "prelude.pdl" />
+<file name = "version.h"    class = "c version"         >Project version header</file>
+
+<file name = "xiopen.xml"   class = "gsl data"          >Xitami models
+    <derive filename = "xitami.c" class = "generated main" />
+    <derive filename = "xilite.c" class = "generated main" />
+    <derive filename = "xiwtp.c"  class = "generated main" />
+</file>
+<file name = "xitami"       class = "public command"    >Xitami main program</file>
+<file name = "xilite"       class = "public command"    >Xitami/Lite main program</file>
+<file name = "xiwtp"        class = "public command"    >Xitami/WTP main program</file>
+<file name = "ddnsdef.xml"  class = "public resource"   >Dynamic DNS services</file>
+<file name = "pipedef.xml"  class = "public resource"   >Pipe definitions</file>
+<file name = "ftpadios.txt" class = "public resource"   >FTP goodbye text</file>
+<file name = "ftphello.txt" class = "public resource"   >FTP welcome text</file>
+<file name = "ftplogin.txt" class = "public resource"   >FTP login text</file>
+<file name = "ftpdirs.aut"  class = "public resource"   >FTP directory authentication</file>
+<file name = "ftpusers.aut" class = "public resource"   >FTP user authentication</file>
+<file name = "xitami.aut"   class = "public resource"   >Basic authentication file</file>
+<file name = "xitami.cfg"   class = "generated resource">Basic configuration file</file>
+<file name = "xixlat.c"     class = "main program"      >Xitami log file translator</file>
+<file name = "xiconfig.htp" class = "generated"         >Configuration documentation</file>
+<file name = "perlssi"      class = "command script"    >SSI as Perl filter</file>
+
+<directory name = "cgi-bin" class = "public resource" >
+    <file name = "readme.txt"   >Read me file</file>
+</directory>
+
+<directory name = "cgi-src" class = "public resource" >
+    <file name = "testcgi.c"    >CGI example program</file>
+    <file name = "testcgi1.c"   >CGI example program</file>
+    <file name = "testcgi2.c"   >CGI example program</file>
+    <file name = "testcgi3.c"   >CGI example program</file>
+    <file name = "testcgi4.c"   >CGI example program</file>
+    <file name = "testcgi5.c"   >CGI example program</file>
+    <file name = "testcgi6.c"   >CGI example program</file>
+    <file name = "testcgi7.c"   >CGI example program</file>
+    <file name = "testperl.pl"  >CGI example program in Perl</file>
+</directory>
+
+<directory name = "debug"   class = "public resource" >
+    <file name = "readme.txt"   >Read me file</file>
+</directory>
+
+<directory name = "errors"  class = "public resource" >
+    <file name = "footer.htm"   ></file>
+    <file name = "header.htm"   ></file>
+    <file name = "text-400.htm" ></file>
+    <file name = "text-401.htm" ></file>
+    <file name = "text-402.htm" ></file>
+    <file name = "text-403.htm" ></file>
+    <file name = "text-404.htm" ></file>
+    <file name = "text-412.htm" ></file>
+    <file name = "text-413.htm" ></file>
+    <file name = "text-500.htm" ></file>
+    <file name = "text-501.htm" ></file>
+    <file name = "text-502.htm" ></file>
+</directory>
+
+<directory name = "ftproot" class = "public resource" >
+    <file name = "readme.txt"   ></file>
+    <directory name = "guest" >
+        <file name = "index.htm">Directory index</file>
+        <file name = "index.txt">Directory index</file>
+    </directory>
+    <directory name = "pub" >
+        <file name = "index.htm">Directory index</file>
+        <file name = "index.txt">Directory index</file>
+    </directory>
+    <directory name = "upload" >
+        <file name = "index.htm">Directory index</file>
+        <file name = "index.txt">Directory index</file>
+    </directory>
+</directory>
+
+<directory name = "headers" class = "public resource" >
+    <file name = "readme.txt"   >Read me file</file>
+</directory>
+
+<directory name = "logs"    class = "public resource" >
+    <file name = "readme.txt"   >Read me file</file>
+</directory>
+
+<directory name = "temp"    class = "public resource" >
+    <file name = "readme.txt"   >Read me file</file>
+</directory>
+
+<directory name = "templates" class = "public resource" >
+    <file name = "errors.gsl"   />
+    <file name = "ftpmesg.gsl"  />
+    <file name = "httpdir.gsl"  />
+</directory>
+
+<directory name = "html"    class = "private resource" >
+    <file name = "anchor.def"      class = "generated"       >Anchor links</file>
+    <file name = "macros.def"      class = "public resource" >Documentation macros</file>
+    <file name = "prelude.def"     class = "public resource" >Documentation prelude</file>
+    <file name = "xitami1.txt"     class = "htmlpp document" >Main documentation</file>
+    <file name = "xitami2.txt"     class = "htmlpp document" >Supplemental documentation</file>
+    <file name = "testssi.ssi"     class = "generated" />
+    <file name = "private.htm"     class = "generated" />
+    <file name = "default.htm"     class = "generated" />
+    <file name = "index*.htm"      class = "generated" />
+    <file name = "license.htm"     class = "generated" />
+    <file name = "belgium.htm"     class = "generated" />
+    <file name = "mapfail.htm"     class = "generated" />
+    <file name = "os2-readme.htm"  class = "generated" />
+    <file name = "unix-readme.htm" class = "generated" />
+    <file name = "windows.htm"     class = "generated" />
+</directory>
+
+<directory name = "win32"   class = "private binary" keep_paths = "0" >
+    <file name = "about.ico"    />
+    <file name = "active.bmp"   />
+    <file name = "bitmap4.bmp"  />
+    <file name = "bitmap5.bmp"  />
+    <file name = "bug100.bmp"   />
+    <file name = "gsl.dsp"      />
+    <file name = "imatix1.bmp"  />
+    <file name = "off.bmp"      />
+    <file name = "off.ico"      />
+    <file name = "on.bmp"       />
+    <file name = "on.ico"       />
+    <file name = "resource.h"   />
+    <file name = "sfl.dsp"      />
+    <file name = "smt.dsp"      />
+    <file name = "studio.dsp"   />
+    <file name = "xiadmin.dsp"  />
+    <file name = "xicpl32.c"    />
+    <file name = "xicpl32.def"  />
+    <file name = "xigui32.c"    />
+    <file name = "xiprocpl.def" />
+    <file name = "xisrv32.c"    />
+    <file name = "Xitami_Console.dsp"/>
+    <file name = "Xitami_Control_Panel.dsp"/>
+    <file name = "Xitami_Service.dsp"/>
+    <file name = "Xitami_Win32.dsp"/>
+    <file name = "xitami.dsw"   />
+    <file name = "xitami.h"     />
+    <file name = "xitami1.bmp"  />
+    <file name = "xiwin.rc"     />
+    <file name = "xidos32.exe"  class = "xitami binary" target = "win32" />
+    <file name = "xigui32.exe"  class = "xitami binary" target = "win32" />
+    <file name = "xisrv32.exe"  class = "xitami binary" target = "win32" />
+    <file name = "xicpl32.cpl"  class = "xitami binary" target = "win32" />
+
+    <!-- Build Windows executables from hand-made MSVC project files -->
+    <actions>
+      <build>
+        <execute command = "msdev xitami.dsw /make &quot;all - release&quot;" target = "win32" />
+      </build>
+      <clean>
+        <execute command = "msdev xitami.dsw /make &quot;all - release&quot; /clean" target = "win32" />
+      </clean>
+    </actions>
+</directory>
+
+<directory name = "webpages" class = "public binary" >
+    <file name = "buttons.map"  />
+    <file name = "testssi.inc"  />
+    <file name = "testssi.ssi"     class = "html resource" />
+    <file name = "default.htm"     class = "html resource" />
+    <file name = "mapfail.htm"     class = "html resource" />
+    <file name = "windows.htm"     class = "html resource" />
+    <directory name = "xitami" >
+        <file name = "index*.htm"  class = "html resource" />
+        <file name = "license.htm" class = "html resource" />
+    </directory>
+    <directory name = "images" >
+        <file name = "buttons.gif"  />
+        <file name = "imatix.gif"  />
+        <file name = "xitami1.gif"  />
+        <file name = "powered*.gif" />
+    </directory>
+    <directory name = "private" >
+        <file name = "private.htm" class = "html resource" />
+    </directory>
+</directory>
+
+<class name = "html resource" inherit = "public resource" >
+    <generate>
+        <copy from = "html" />
+    </generate>
+</class>
+
+<!-- Class for binaries built here but installed as resources -->
+<class name = "xitami binary" generated = "1">
+    <distrib as = "binary" format = "raw" />
+    <install as = "resource" />
+</class>
+
+<!-- Generate xiconfig documentation files -->
+<actions>
+  <generate>
+    <execute command = "gsl -q -build_doc:1 -build_config:1 xiconfig" />
+  </generate>
+</actions>
+
+</pdl>

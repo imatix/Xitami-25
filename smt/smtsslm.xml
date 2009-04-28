@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<!--
+     SMT messages for the SMTSSL agent
+     Written: 1998/05/30
+     Revised: 2000/02/18
+
+     To compile, use GSLgen with smtgen.gsl script.
+     -->
+     
+<application script = "smtexdr.gsl" title = "Smtssl messages" module = "smtsslm">
+
+  <agent        name = "smtssl" title = "SMT SSL agent">
+  
+    <message    name = "SSL_OPEN"       type = "request" >
+      <field    name = "config"         type = "string" title = "Configuration file to use" />
+      <method   name = "SSL_OPEN"                       title = "Open SSL port" />
+    </message>
+    <message    name = "SSL_OPEN_OK"    type = "reply" >
+      <field    name = "port"           type = "dbyte"  title = "SSL port opened" />
+      <method   name = "SSL_OPEN_OK"                    title = "SSL port opened OK" />
+    </message>
+
+    <message    name = "SSL_CLOSE"      type = "request" >
+      <method   name = "SSL_CLOSE"                      title = "Close SSL port" />
+    </message>
+    <message    name = "SSL_RESTART"    type = "request" >
+      <method   name = "SSL_RESTART"                    title = "Restart SSL connection" />
+    </message>
+    <message    name = "SSL_ACCEPTED"   type = "request" >
+      <field    name = "socket"         type = "qbyte"  title = "Socket handle for SSL connection" />
+      <field    name = "user"           type = "string" title = "User name"         />
+      <field    name = "cipher"         type = "string" title = "Cipher used"       />
+      <field    name = "verify"         type = "dbyte"  title = "Level of user verification" />
+      <method   name = "SSL_ACCEPTED"                   title = "Accept SSL connection" />
+    </message>
+    <message    name = "SSL_READ_REQUEST" type = "request" >
+      <field    name = "size"           type = "qbyte"  title = "Maximum size to read" />
+      <method   name = "SSL_READ_REQUEST"               title = "Request read" />
+    </message>
+    <message    name = "SSL_WRITE_REQUEST" type = "request" >
+      <field    name = "timeout"        type = "dbyte"  title = "Timeout in seconds, zero = none" />
+      <field    name = "socket"         type = "qbyte"  title = "Socket to write to" />
+      <field    name = "size"           type = "size"   title = "Amount of data to write" />
+      <field    name = "data"           type = "body"   title = "Block of data to write" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "SSL_WRITE_REQUEST"              title = "Write SSL data" />
+    </message>
+    <message    name = "SSL_PUT_SLICE"  type = "request" >
+      <field    name = "socket"         type = "qbyte"  title = "Socket for output" />
+      <field    name = "filename"       type = "string" title = "Name of file to send" />
+      <field    name = "start"          type = "qbyte"  title = "Starting offset; 0 = start" />
+      <field    name = "end"            type = "qbyte"  title = "Ending offset; 0 = end" />
+      <method   name = "SSL_PUT_SLICE"                  title = "Write file slice to SSL socket" />
+    </message>
+    <message    name = "SSL_ERROR"      type = "reply" >
+      <field    name = "code"           type = "qbyte"  title = "Error code" />
+      <method   name = "SSL_ERROR"                      title = "Signal SSL error" />
+    </message>
+
+    <message    name = "SSL_WRITE_OK"   type = "reply" >
+      <field    name = "socket"         type = "qbyte"  title = "Socket used for i/o, or new socket" />
+      <field    name = "tag"            type = "qbyte"  title = "User-defined request tag" />
+      <method   name = "SSL_WRITE_OK"                   title = "Write OK reply" />
+    </message>
+    <message    name = "SSL_READ_OK"    type = "reply" >
+      <field    name = "size"           type = "size"   title = "Size of result" />
+      <field    name = "data"           type = "body"   title = "Read data" />
+      <method   name = "SSL_READ_OK"                    title = "Read result data" />
+    </message>
+    <message    name = "SSL_PUT_SLICE_OK"  type = "reply" >
+      <field    name = "size"           type = "qbyte"  title = "Amount of transmitted data" />
+      <method   name = "SSL_PUT_SLICE_OK"               title = "File written okay" />
+    </message>
+  </agent>
+</application>

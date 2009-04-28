@@ -1,0 +1,306 @@
+Cache-control: no-cache
+Expires: 0
+
+<HTML>
+<HEAD><TITLE>Xitami Administration</TITLE>
+<script type="text/javascript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function submit(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+function focus() {
+    if ("#(_focus)" != "jsaction")
+        document.forms[0].#(_focus).focus();
+}
+</script>
+</HEAD>
+<BODY onLoad="focus()" style="font-family: sans-serif" BGCOLOR="#87CEFA">
+<SCRIPT LANGUAGE="JavaScript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function subform(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+</SCRIPT>
+<TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100%>
+<FORM METHOD=POST ACTION="#(proto)#(host)#(uri)">
+<INPUT TYPE=HIDDEN NAME=jsaction VALUE="">
+<TR><TD ALIGN=LEFT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Back249 LABEL="/admin/$back.gif" EVENT=back_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/backa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$back.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Save250 LABEL="/admin/$save.gif" EVENT=save_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/savea.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$save.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Default251 LABEL="/admin/$default.gif" EVENT=default_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/defaulta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$default.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Undo252 LABEL="/admin/$undo.gif" EVENT=undo_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/undoa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$undo.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<A HREF="/xitami/index4.htm#config_advanced" TARGET="Help" TITLE="Help"
+onMouseOver="show('Help','/admin/helpa.gif')"
+onMouseOut="show('Help','/admin/$help.gif')"><IMG SRC="/admin/$help.gif" ALT="" BORDER=0 ALIGN=MIDDLE NAME="Help"
+WIDTH=40 HEIGHT=39></A><IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+<TD ALIGN=CENTER><FONT SIZE=+1>#(config) - Advanced Server Properties </FONT>
+<TD ALIGN=RIGHT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Console253 LABEL="/admin/$console.gif" EVENT=console_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/consolea.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$console.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Halt254 LABEL="/admin/$halt.gif" EVENT=halt_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/halta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$halt.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Restart255 LABEL="/admin/$restart.gif" EVENT=restart_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/restarta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$restart.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Exit256 LABEL="/admin/$exit.gif" EVENT=exit_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/exita.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$exit.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+</TABLE><p>
+<FONT SIZE=-1>
+<!--FML ACTION=Ok LABEL="Ok" EVENT=save_event CONFIRM="" ATTR="" TYPE=PLAIN -->
+<A HREF=# >Ok</A>
+<!--FML /ACTION-->
+<!--FML ACTION=Cancel LABEL="Cancel" EVENT=back_event CONFIRM="" ATTR="" TYPE=PLAIN -->
+<A HREF=# >Cancel</A>
+<!--FML /ACTION-->
+</FONT><HR>
+
+<!--FML FIELD=main-config NUMERIC BLANK SIZE=4 VALUE=1-->
+<!--FML /FIELD-->
+
+<TABLE WIDTH="100%">
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F463 TEXTUAL LABEL NAME=L_supervisor VALUE="Enable supervisor agent?&nbsp;&nbsp;" -->
+Enable supervisor agent?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F464 BOOLEAN INPUT NAME=supervisor
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F465 TEXTUAL LABEL NAME=L_cache-defaults VALUE="Cache default pages?&nbsp;&nbsp;" -->
+Cache default pages?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F466 BOOLEAN INPUT NAME=cache-defaults
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F467 TEXTUAL LABEL NAME=L_hostname VALUE="Default redirect hostname:&nbsp;&nbsp;" -->
+Default redirect hostname:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F468 TEXTUAL INPUT NAME=hostname
+SIZE=30 MAX=80 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=30 VALUE="" >
+<!--FML /FIELD-->
+<!--FML IF=main-config VALUE=1-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F469 TEXTUAL LABEL NAME=L_priority VALUE="Server performance:&nbsp;&nbsp;" -->
+Server performance:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F470 RADIO INPUT NAME=priority COLUMN=0 VALUE=0
+CHANGE=no ATTR="" TYPE=? 0="No selection" 1="Normal" 2="Background" 3="Turbo!" -->
+<INPUT TYPE=RADIO NAME=priority>Normal
+<INPUT TYPE=RADIO NAME=priority>Background
+<INPUT TYPE=RADIO NAME=priority>Turbo!
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F471 TEXTUAL LABEL NAME=L_portbase VALUE="IP port base:&nbsp;&nbsp;" -->
+IP port base:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F472 NUMERIC INPUT NAME=portbase
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=5 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=5 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F473 TEXTUAL LABEL NAME=L_base-host VALUE="Base host config file:&nbsp;&nbsp;" -->
+Base host config file:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F474 TEXTUAL INPUT NAME=base-host
+SIZE=30 MAX=80 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=30 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F475 TEXTUAL LABEL NAME=L_ipaddress VALUE="Server IP address:&nbsp;&nbsp;" -->
+Server IP address:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F476 SELECT INPUT NAME=ipaddress SIZE=0 VALUE=0
+CHANGE=no ATTR="" TYPE=dynamic 0="No selection"  -->
+<SELECT SIZE=0 >
+<OPTION>No selection
+</SELECT>
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F477 TEXTUAL LABEL NAME=L_temp-dir VALUE="Directory for temp files:&nbsp;&nbsp;" -->
+Directory for temp files:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F478 TEXTUAL INPUT NAME=temp-dir
+SIZE=30 MAX=100 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=30 VALUE="" >
+<!--FML /FIELD-->
+Can be an environment variable
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F479 TEXTUAL LABEL NAME=L_debug-dir VALUE="Directory for debug files:&nbsp;&nbsp;" -->
+Directory for debug files:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F480 TEXTUAL INPUT NAME=debug-dir
+SIZE=30 MAX=100 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=30 VALUE="" >
+<!--FML /FIELD-->
+Can be an environment variable
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F481 TEXTUAL LABEL NAME=L_lrwp-enabled VALUE="Enable LRWP protocol?&nbsp;&nbsp;" -->
+Enable LRWP protocol?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F482 BOOLEAN INPUT NAME=lrwp-enabled
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F483 TEXTUAL LABEL NAME=L_lrwp-port VALUE="LRWP connection port:&nbsp;&nbsp;" -->
+LRWP connection port:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F484 NUMERIC INPUT NAME=lrwp-port
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=5 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=5 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F485 TEXTUAL LABEL NAME=L_lrwp-webmask VALUE="LRWP webmask:&nbsp;&nbsp;" -->
+LRWP webmask:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F486 TEXTUAL INPUT NAME=lrwp-webmask
+SIZE=20 MAX=80 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=20 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F487 TEXTUAL LABEL NAME=L_pipedef VALUE="Throttle pipe definitions:&nbsp;&nbsp;" -->
+Throttle pipe definitions:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F488 TEXTUAL INPUT NAME=pipedef
+SIZE=40 MAX=80 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F489 TEXTUAL LABEL NAME=L_ssl-enabled VALUE="Enable SSL interface?:&nbsp;&nbsp;" -->
+Enable SSL interface?:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F490 BOOLEAN INPUT NAME=ssl-enabled
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+Xitami/Pro only
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F491 TEXTUAL LABEL NAME=L_ssl-filename VALUE="SSL config file:&nbsp;&nbsp;" -->
+SSL config file:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F492 TEXTUAL INPUT NAME=ssl-filename
+SIZE=30 MAX=80 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=30 VALUE="" >
+<!--FML /FIELD-->
+<!--FML /IF-->
+</TD></TR>
+<TR><TD COLSPAN=99 ALIGN=LEFT VALIGN=TOP CLASS=tdbody>
+<HR>
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F493 TEXTUAL LABEL NAME=L_test-uri VALUE="Test URI mapping:&nbsp;&nbsp;" -->
+Test URI mapping:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F494 TEXTUAL INPUT NAME=test-uri
+SIZE=50 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=50 VALUE="" >
+<!--FML /FIELD-->
+<!--FML ACTION=Test LABEL="Test" EVENT=test_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Test" VALUE="Test" >
+<!--FML /ACTION-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F495 TEXTUAL LABEL NAME=L_mapped-uri VALUE="Result of mapping:&nbsp;&nbsp;" -->
+Result of mapping:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F496 TEXTUAL LABEL NAME=mapped-uri
+SIZE=50 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=50 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+</TABLE>
+
+<!--FML FIELD=message_to_user SIZE=120 TEXTUAL HIDDEN -->
+<!--FML /FIELD -->
+</FORM>
+<SCRIPT LANGUAGE="JavaScript">
+    if ("#(_focus)" != "jsaction" && document.forms[0].#(_focus))
+        document.forms[0].#(_focus).focus();
+</SCRIPT>
+<HR>
+<TABLE WIDTH=100%><TR>
+<TD><IMG SRC="/admin/imatix.gif"
+WIDTH=96 HEIGHT=41>
+<TD ALIGN=CENTER><FONT SIZE=-1>Copyright &#169 1996-2002 iMatix Corporation
+<BR>Powered by iMatix Studio 2.5
+<TD ALIGN=RIGHT><FONT SIZE=-1>#(date) #(time)
+<BR>#(product) v2.5c2
+</TABLE>
+</BODY></HTML>

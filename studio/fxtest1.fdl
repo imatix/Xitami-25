@@ -1,0 +1,94 @@
+.-
+.-   fxtest1    Test form #1
+.-
+.define author   Pieter Hintjens <ph@imatix.com>
+.define written  97/01/28
+.define revised  97/06/04
+
+.include prelude.def
+.page fxtest1 = "Formatix Test Form 1"
+
+.livelink link1
+
+<P>This is the first of several test forms.  Please fill in
+some fields and use the action buttons to call further forms
+or quit the $(*link1=application).
+.define LATTR  TITLE
+.action "" Test-2x join=yes event=test_2_event type=plain
+.const maxsize 255
+
+.fields
+.numeric  "Counter:"    counter size=5
+.boolean  "Form back used?" back-used value=false
+.numeric  "Decimal field:" money size=12 decs=2 value="123.45" comma=yes
+.numeric  "Form event:"  event       size=3 attr=protect
+.numeric  "click field:" click_field size=3 attr=protect join=yes
+.numeric  "click index:" click_index size=3 attr=protect join=yes
+.numeric  "image_x:"     image_x     size=3 attr=protect join=yes
+.numeric  "image_y:"     image_y     size=3 attr=protect join=yes
+.boolean  "ssl:"         show_ssl    attr=protect join=yes
+<HR>
+.label "BEFORE IF EVENT"
+.do if event
+.label "BEGIN IF EVENT"
+.textual  "Parameters"   params      size=40
+.label "END IF EVENT"
+.enddo
+.label "AFTER IF EVENT"
+<HR>
+.label "BEFORE UNLESS EVENT"
+.do unless event
+.label "BEGIN UNLESS EVENT"
+.textual  "Parameters"   params1     size=40
+.label "END UNLESS EVENT"
+.enddo
+.label "AFTER UNLESS EVENT"
+<HR>
+.textual  "" click1 value="Click Here!" attr=option wrap=yes
+.textual  "" click2 value="" attr=option
+.textual  "Context check: " mark1 size=1
+.textual  ":"               mark2 size=1 join=yes
+.textual  ":"               mark3 size=1 join=yes
+.textual  ":"               mark4 size=1 join=yes
+.textual  ":"               mark5 size=1 join=yes
+.endfields
+<HR>
+
+<TABLE WIDTH=60% BORDER=1>
+<TR>
+<TD>The following Hotels were found for the dates you selected. Price is based
+on 2 people sharing a standard room. Any suplements which may apply will be
+indicated before confirmation. Select a hotel to view.</TD>
+</TR><TR><TD>
+
+.table name=hotels rows=5
+.select "Selection" currency type=dynamic attr=input
+.endtable
+
+</TD></TR><TR><TD>
+RQ indicates we will need to contact the hotel to request the room.  We
+will need your credit card details to do this.
+<!--FML ACTION=WHY_CCARD EVENT=test_2_event TYPE=PLAIN
+        VALUE="Click here to see why?" --><A HREF="/">Click here to see why?</A>
+<!--FML /ACTION-->
+</TD></TR>
+</TABLE>
+<H1>Form Symbols</H1>
+<P>Server software: #(SERVER_SOFTWARE) #(SERVER_VERSION)
+<BR>Server URL:     #(SERVER_URL)
+<BR>Server Name:    #(SERVER_NAME)
+<HR>
+
+.fields
+.action "Choose an action" Quit event=return_event
+.action "" Test-2 join=yes event=test_2_event type=plain
+.action "" Test-3 join=yes event=test_3_event type=plain
+.action "" Create join=yes event=create_event
+.action "" Secure join=yes event=secure_event
+.action "" Insecure join=yes event=insecure_event
+.action "" Cancel join=yes event=cancel_event
+.action "" Loop   join=yes event=loop_event
+.endfields
+
+.-index parts
+.index address

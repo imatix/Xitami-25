@@ -1,0 +1,163 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Virtual Hosts</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index10.htm">&lt;</A>
+ | <A href="index12.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+<A NAME="vhosts">&nbsp;</A>
+
+<H2><A NAME="TOC89">Virtual Hosts</A></H2>
+
+<H3><A NAME="TOC90">Setting-up A Virtual Host</A></H3>
+
+<P><EM>Virtual hosts</EM> means running multiple virtual web sites on
+one system.  This is commonly used by web site providers, but can be
+useful in all kinds of organisations.  There are two ways to configure
+your IP system to permit virtual hosting:
+<OL>
+<LI>You can assign multiple IP addresses to a system, a technique that
+is called 'multihoming'.  An IP address refers to a connection point
+(e.g. a network card) to a system, rather than the system itself, so
+it's quite normal to have multiple IP addresses.  Many network cards can
+support multiple addresses (4 or 8), and most systems can take multiple
+network cards.  There are probably routers and gateways that make it
+possible to have thousands of IP addresses on one system.
+<LI>You can assign the same IP address to lots of host names, using DNS
+or something similar.  Thus, 'www1.some.domain' and 'www2.some.domain'
+can refer to the same address. This is often called a 'virtual host'
+because the host does not exist as a separate computer, just as a name.
+</OL>
+
+<P>Xitami can work with both these mechanisms for HTTP and FTP connections.
+It handles multiple IP addresses automatically: if you ask it to run on
+port 80, it will accept connections on any IP address, on port 80. You do
+not need to configure this (although you can restrict it to run on one
+specific address). This means that you do not need to specify on which IP
+address Xitami should accept connections - if a system has ten IP
+addresses, Xitami will accept connections on all ten.
+
+<P>A multihomed virtual host is identified by its IP address. A DNS-based
+virtual host is identified by its name:
+
+<PRE>[Virtual-Hosts]
+    xxx.xxx.xxx.xxx=filename.cfg   #  A multihomed host
+    www.some.domain=filename.cfg   #  A DNS-based virtual host
+</PRE>
+
+<P>DNS-based virtual hosting requires a DNS server or something similar. The
+mechanisms for setting-up both multiple IP addresses and multiple domain
+names are system-specific; you should have access to technical documentation
+for your TCP/IP configuration or good technical support. DNS-based virtual
+hosting uses a HTTP/1.1 feature called the 'Host:' header, and an FTP feature
+whereby the user name is specified as 'user@<I>hostname</I>'.  Most modern
+browsers support this; if you are building an intranet it is quite easy to
+be sure that all browsers will work correctly with DNS-based virtual
+hosting. On the Internet you can catch browsers that do not send a valid
+Host: header, and show some specific pages.
+
+<P>The SSL protocol used in Xitami/Pro cannot work with DNS-based
+virtual hosts, so to use SSL virtual hosts you must have a unique IP address
+for each host.
+
+<P>When you set-up a virtual host, you will generally want to use a specific
+directory for the web pages, CGI scripts, password file, and log files. (You
+can also share these in any way you need to.) You can also configure options
+such as the HTTP error messages, timeouts, security, and so on.
+
+<P>To define these, you specify a configuration file per virtual host. The
+virtual host configuration inherits all definitions from defaults.cfg (and
+xitami.cfg). You need only define those options that are specific to the
+virtual host. If the HTTP request refers to a host name or IP address that
+has not been configured as a virtual host, the request is handled by the
+<EM>base host</EM>. To configure the base host, create a file called
+'basehost.cfg'. You can change this name in the defaults.cfg file
+server:base-host option.
+
+<P>This is a typical configuration for a site with several virtual hosts:
+<PRE>[Server]
+    webpages=websites/hostx/webpages
+    cgi-bin=websites/hostx/cgi-bin
+</PRE>
+
+<P>Some of the options in the [Server] apply to the entire server globally,
+and are not taken from the virtual host configuration file: background,
+customise, debug, limit, portbase, and refresh.
+
+<P>When you define a multihomed virtual host, you must specify a
+server:hostname value. This should be a host name that translates back into
+the correct IP address. The server:hostname option is used whenever Xitami
+has to return a 'redirected' URL; for image maps, incomplete URL, and
+directory listings. If you do not define server:hostname, or define it
+wrongly, these functions may not work.
+
+<P>When you define a DNS-based virtual host, Xitami takes the name as a
+default value for the server:hostname option. This usually works correctly,
+but you can override it if necessary by adding the server:hostname option
+explicitly. To avoid confusion, make sure your DNS server is correctly
+configured. You normally use 'ping' to test that this works.
+
+<P>The virtual host configuration files, must exist when the server
+starts-up. You can modify the virtual host configurations on-the-fly, as for
+the normal configuration files, but if you want to add or remove a virtual
+host you must stop and restart the server (for instance using the WBA
+control panel.)
+
+<H3><A NAME="TOC91">Debugging Virtual Hosts</A></H3>
+
+<P>Since virtual hosting means playing with a lot of config files,
+this can quickly become confusing if you don't take some basic care
+and precautions.  We advise you to:
+<UL>
+<LI>Keep the extension .cfg for all config files.  This lets you
+distinguish the config files from other files.
+<LI>Use filenames that match the host name.
+<LI>Use a directory structure that matches the host names.
+<LI>Only specify those options that are not the defaults.  This
+allows you to focus on the specific virtual-host options that
+you've defined.
+</UL>
+
+<P>If you have 'not found' errors that you can't explain, set the
+server:debug option to 1 and recreate the error. Then, the log files
+'debug.log' contains detailled information about the URL translation. You
+can look at this file, or in serious cases, send it to us and we'll try to
+help.
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index10.htm">&lt;</A>
+ | <A href="index12.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <EM>Virtual Hosts</EM>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

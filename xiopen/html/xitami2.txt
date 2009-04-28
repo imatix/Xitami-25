@@ -1,0 +1,235 @@
+.-----------------------------------------------------------------
+.-  xitami2.txt - Xitami test pages documentation source
+.-  Copyright (c) 1998 iMatix.
+.-----------------------------------------------------------------
+
+.define author      iMatix Corporation
+.define written     10 Nov 1996
+.define revised      2 Jan 1999
+.include prelude.def
+
+.block header
+<HTML><HEAD><!--Revised: $(revised) By: $(author)-->
+<TITLE>$(TITLE)</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | $(*imatix=iMatix home page)<BR>
+ | <A HREF="/xitami/index.htm"> Xitami home page</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami"
+ WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+</TABLE>
+<HR>
+.end
+
+.block footer
+<HR>
+<TABLE WIDTH=100%>
+<TR>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=40 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>
+.endblock
+
+.-----------------------------------------------------------------
+.page default.htm=Welcome To Xitami v$(version)
+
+.ignore header 1
+<TABLE>
+<TR><TD VALIGN=TOP>
+<H1>$(TITLE)</H1>
+
+<P>Welcome to Xitami, the <EM>fast</EM> web server. You should be accessing
+these pages through Xitami now. To configure the server, use the
+<A HREF="/admin">web-based admin</A> function. This is password-protected. On
+UNIX and OS/2 you should edit the password file (xitami.aut or equivalent)
+after installation. Under Windows this is done at installation time.
+
+<H2>For more information</H2>
+<UL>
+<LI><A HREF="/xitami/index.htm" >Xitami documentation</A>
+<LI><A HREF="/xitami/$(license)">Xitami license agreement</A>
+<LI><A HREF="/xitami/$(faqlink)">Xitami FAQ - Read this before emailing!</A>
+<LI><A HREF="/xitami/$(getting_support)">Getting technical support</A>
+</UL>
+<P>If you use Xitami, please register now!  It's free - just
+<A HREF="mailto:register-xitami@imatix.com">send us an e-mail</A>
+with subject 'register' and your comments, if any.
+
+<TD VALIGN=TOP>
+<H2>Why is Xitami Fantastic?</H2>
+<P>Xitami is free, fast, and simply really good at its job.  This is a
+professional web server that will run out of the box but lets you configure
+it every possible way.  Many of the best ideas in Xitami came from the
+thousands of people who use it every day for their intranet and internet web
+sites.  It won't crash when you start using it heavily, and it won't
+slow-down your system.
+
+<H2>The Technology Behind Xitami</H2>
+<P>Xitami is at least as fast as any other web server. It is based on the
+high-performance $(*smt=SMT) multithreading technology developed by iMatix.
+SMT is Open Source technology, freely available as source code.
+
+<BR>Xitami is portable to 16-bit and 32-bit Windows, to OS/2, most Unix
+systems, and Digital OpenVMS. It uses the $(*sfl=SFL) portability library
+developed by iMatix. SFL is Open Source technology, also freely available as
+source code.
+
+</TABLE>
+
+<HR>
+<H2>Copyright and Disclaimer</H2>
+
+<P>Copyright (c) 1991-2003 iMatix Corporation. This software is distributed
+under an Open Source license agreement; you can redistribute it and/or modify
+it under the terms of the <A HREF="xitami/license.htm">Xitami License
+Agreement</A> as provided in the file LICENSE.TXT. This software is
+distributed in the hope that it will be useful, but without any warranty of
+any kind.
+
+<HR>
+<H2>Xitami/Pro</H2>
+
+<P>Xitami/Pro combines all the great features of Xitami with secure sockets
+(SSL/2, SSL/3, TLS) to create one of the fastest, low-cost and most exciting
+secure web servers around.  Xitami/Pro is available on a subscription basis,
+which gives you access to free updates for a fixed period:
+<TABLE>
+<TR><TD>3-month subscription<TD>US$100
+<TR><TD>12-month subscription<TD>US$175
+<TR><TD>24-month subscription<TD>US$250
+</TABLE>
+<P>Please see <A href="http://www.xitami.com">www.xitami.com</a> for
+details.
+
+<HR>
+<H2>Using Xitami</H2>
+
+<P>This is a summary of how to use Xitami:
+<UL>
+<LI>You can run Xitami on any port from 80 upwards.
+<LI>Xitami supports the HTTP GET, POST, and HEADER commands.
+<LI>Xitami supports CGI and clickable image maps.
+<LI>Xitami provides a detailed logging function.
+<LI>Xitami assumes that all web pages are in a subdirectory called
+'webpages'.
+<LI>CGI scripts and programs are in a subdirectory called
+'cgi-bin'.
+<LI>Directories can be protected by editing the file 'xitami.aut'.
+<LI>HTTP accesses are logged in the file 'access.log'.
+<LI>Errors and console messages are sent to 'xitami.log'.
+</UL>
+<HR>
+
+<H3>The Common Gateway Interface (CGI)</H3>
+<P>Xitami supports the standard CGI protocol.
+<A HREF="/cgi-bin/testcgi">This test CGI program</A> returns a
+page showing the current environment settings.
+
+<H3>Clickable Image Maps</H3>
+<P>Xitami supports clickable image maps following the NCSA
+standard.  Try this test image:
+<P><CENTER><A HREF="buttons.map"><IMG SRC="/images/buttons.gif"
+WIDTH=400 HEIGHT=53 ISMAP></A></CENTER>
+
+<H3>Protected Directories</H3>
+<P>The webpages/private directory is password protected.  To
+follow <A HREF="/private/private.htm">this link</A>, enter the
+username <EM>jacky</EM> and password <EM>robusta</EM>.
+
+<H3>Server-Side Includes</H3>
+<P><A HREF="testssi.ssi">This page</A> demonstrates some SSI
+tags.  Note that this currently requires Perl to be installed
+and on the path.
+
+.-----------------------------------------------------------------
+.page private.htm=Private Web Page
+<H1>$(TITLE)</H1>
+
+<P>This web page is protected by the [Private] entry in the
+<TT>xitami.aut</TT> file.  Any one of the users listed can
+access this directory.  You can also limit access to a directory
+depending on the client IP address, using the webmask= option
+in the authentication file.
+
+.-----------------------------------------------------------------
+.page mapfail.htm=Default Image Map Selection
+<H1>$(TITLE)</H1>
+
+<P>You clicked on the image map, but not on one of the buttons.
+This is the 'default' page for the image map.
+
+.-----------------------------------------------------------------
+.page windows.htm=Using Xitami in Windows
+<H1>$(TITLE)</H1>
+
+<P>You can stop and start Xitami from the control panel.  If you
+want to change the main HTML directory, CGI directory, HTTP port,
+or any of the other Xitami configuration options, use the
+<A HREF="http://127.0.0.1/admin">browser-based admin</A> function.
+
+<P><EM><B>When Xitami is installed, the browser-based admin function
+is disabled.  To enable it you must modify xitami.aut to define a
+password for the [/admin] URI.  Since these admin screens allow
+anyone to configure or halt the server, and the admin password
+allows access to all resources, please choose a secure and
+unguessable password.</B></EM>
+
+<P>These futher pages are available:
+<UL>
+<LI><A HREF="/default.htm">Welcome to Xitami</A>
+<LI><A HREF="/xitami/index.htm" >Xitami documentation</A>
+<LI><A HREF="/xitami/$(license)">Xitami License Agreement</A>
+<LI><A HREF="/xitami/$(faqlink)">Frequently-asked questions</A>
+</UL>
+
+.-----------------------------------------------------------------
+.page testssi.ssi=Server-Side Includes
+<H1>$(TITLE)</H1>
+
+<P>If SSI is working and enabled, you will see the various SSI tags
+correctly translated below.
+<!--#include file="testssi.inc"-->
+
+.block header
+<HTML><HEAD><!--Revised: $(revised) By: $(author)-->
+<TITLE>$(TITLE)</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | $(*imatix=iMatix home page)<BR>
+ | <A HREF="$(imatix)xitami/index.htm">Xitami home page</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami"
+ WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version $(version)
+</TABLE>
+<HR>
+.end
+
+.block footer
+<HR>
+<TABLE WIDTH=100%>
+<TR>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="$(imatix)index.htm">
+<IMG SRC="/images/imatix.gif"
+ WIDTH=96 HEIGHT=40 ALT="iMatix" BORDER=0>
+</A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix</TABLE>
+</BODY></HTML>
+.endblock
+
+
+.-----------------------------------------------------------------
+.page belgium.htm=European Mirror Site
+<H1>$(TITLE)</H1>
+
+<H2>Current release: $(version)</H2>
+
+.file_table %(vxi) http://users.skynet.be/sky95044/
+
+<H2>Previous release: 2.4x2</H2>
+
+.file_table 24b2   http://users.skynet.be/sky37432/
+

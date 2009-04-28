@@ -1,0 +1,25 @@
+.-
+.-   fxtest3    Test form #3
+.-
+.define author   Pieter Hintjens <ph@imatix.com>
+.define written  97/01/28
+.define revised  97/01/28
+
+.define PROCESSOR /cgi-bin/fxdemo
+
+.include prelude.def
+.page fxtest3 = "Formatix Test Form 3"
+
+<P>This is the third of several test forms.
+
+.fields
+.textual  "Short text field" field-1 size=5
+.textual  "Long text field"  field-2 size=80
+.file     "File name"        field-9 size=80 attr=label value="/upload/00000001.tmp"
+.numeric  "Numeric field"    field-3 size=12
+.date     "Field number 3"   field-4 picture="yyyy-MMM-dd"
+.textual  "Parameters"       params  size=40
+.textbox  "Comments" comments rows=4 cols=40 notes="Free text"
+.action   "Choose an action" Return event=return_event
+.action   ""                 Process join=yes event=process_event
+.endfields

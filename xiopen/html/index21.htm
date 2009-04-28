@@ -1,0 +1,1249 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Release History</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index20.htm">&lt;</A>
+ | <A href="license.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+
+<A NAME="history">&nbsp;</A>
+<H2><A NAME="TOC169">Release History</A></H2>
+
+<H3><A NAME="TOC170">Release Notes for Xitami 2.5</A></H3>
+
+<P>These are the release notes for the latest major version of
+Xitami, since the last release of the previous major release.
+Summary release notes for every release since 1.0a come afterwards.
+
+<UL>
+<LI>Further support for HTTP/1.1, including partial GETs. We now consider
+Xitami to be a HTTP/1.1 server, although a number of optional HTTP/1.1
+features are not yet implemented. The critical features implemented are:
+keep-alive handling, document publishing, resume (partial GET), and
+HTTP/1.1 virtual hosts.
+
+<LI>SSI handling is now done internally. To use SSI pages you no longer
+need to install Perl and the perlssi filter. The Xitami installation still
+includes perlssi, but it is not activated in the .cfg file [Fiilters]
+section. The new [SSI] section controls the internal SSI agent. The most
+important config items in this section are:
+<TABLE BORDER=0><TR>
+<TD>enabled=1/0</TD><TD>Enable or disable SSI, enabled by default</TD>
+<TD>timeout=30</TD><TD>Timeout for CGI programs called from the SSI agent</TD>
+<TD>exec=0</TD>Enable/disable the #exec command, a potential security hole.
+The SSI_INSECURE environment variable is no longer used.
+</TD></TR></TABLE>
+To re-enable use of the perlssi filter, remove references to xixssi in
+xitami.cfg, and add the [Filter] definition for perlssi.
+
+<LI>Xitami's logging capabilties have been given a complete overhaul. The
+new logging agent lets you manage log file rotation/cycling in many
+different ways, and lets you create log files in many formats.
+<P>The built-in log file formats are:
+<UL>
+<LI>CLF  - Common-log format, as used by the NCSA httpd server.
+<LI>CLFX - Extended CLF, as used by Apache and Xitami.
+<LI>MS   - Microsoft format as used by IIS.
+<LI>LML  - iMatix Logfile Markup Language, an XML format.
+<LI>XLML - iMatix Extended LML, a richer XML format.
+</UL>
+<P>LML and XLML are intended to simplify log-file post-processing via an
+XML-capable tool like GSLgen. You can also define custom log file formats
+using any combination of text, delimiters, and logging data fields.
+<P>The logging agent performs reverse-DNS translations on the fly, note
+that you must define the RDNS configuration before this will work.
+<P>You can cycle log files hourly, daily, weekly, or monthly. You can cycle
+the log files when the server starts-up, when they exceed some size in
+kilobytes, or when they exceed some size in lines.
+<P>You can specify the exact day and/or time a log file must be cycled.
+<P>When cycling a log file, you can rename the old file, delete the old
+file, move the old file to some directory, append the old data to some
+file, or run an arbitrary command against the old log file.
+<P>You can decide how to name old log files using a mask built from the
+current day, time, and other information or text.
+<P>Each virtual host can have independent settings for its HTTP and FTP log
+files.
+
+<LI>A new 'supervisor agent' cleans-out old log files, temporary files,
+etc. This agent can be activated on servers that must run for long periods
+without manual intervention or monitoring. By default it is disabled - set
+the [Server] supervisor option to 1 to enable it.
+
+<LI>Xitami can now act as a dynamic-DNS registration client, so that if you
+register with a service like Xitami.Net, Xitami does the necessary work to
+register your IP address. Xitami works with several DDNS services, and it's
+quite easy to add other ones once you know the protocol used. This is an
+example of the [Ddns] section, set-up to use the Xitami.net service (we've
+blanked-out the password key):
+<PRE>[Ddns]
+    Domain = "black.xitami.net"
+    Enabled = "1"
+    Password = "TZO-xxxx-xxxx-xxxx-xxxx"
+    Service = "tzo.com"
+    Username = "admin@xitami.com"
+</PRE>
+
+<LI>The LRWP protocol handler has been upgraded to LRWP/2.0, which is a
+more secure and faster version of the LRWP protocol. Xitami still handles
+LRWP/1.0 applications.
+
+<LI>ISAPI support is now available, for Windows systems, as an LRWP plug-
+in. You can download this from xitami.com.
+
+<LI>Java Servlet support is available, for all systems, as a LRWP plug-in.
+You can download this from xitami.com.
+
+<LI>Various other improvements to the HTTP service:
+<UL>
+<LI>You can issue customised HTTP headers depending on file types.
+<LI>Aliases can now refer to a full filename, which provides an easy way to
+define a default file for a certain URL.
+<LI>CGI programs can now be started under specific user ids and user
+groups. This can be defined on a virtual-host basis.
+<LI>If the URL parameter is 'sort=xxx', uses this value instead of the
+current server:dirsort option.
+</UL>
+
+<LI>Various other improvements to the FTP service:
+<UL>
+<LI>Xitami supports the FTP user@hostname syntax for virtual hosts. This
+lets you construct FTP logins to access virtual hosts, and some FTP clients
+support this directly.
+<LI>Uploads can no longer exceed hard quota.
+</UL>
+
+<LI>Xitami now uses GSLgen in several important places. GSL is iMatix's
+Open Source template-based code-generation language. The GSLgen engine is
+built-in to Xitami, and GSLgen is also provided as a seperate command-line
+tool with Xitami. GSL templates are called 'scripts' and are normally
+placed in the gsl subdirectory. You can modify these, but we recommend
+you copy them and change the copies. Each virtual host can use its own set
+of scripts.
+<UL>
+<LI>Each script starts with a small explanation, which you will need when
+you want to change them or make your own. Especially useful is the list of
+data fields that you can insert into the template.
+<LI>HTTP directory listings are no longer hard-coded, but are now based on
+a script called httpdir.gsl. The script creates a page with three columns,
+each resortable. This uses the new '?sort=xxx' feature.
+<LI>FTP messages, such as that shown when the user logs-in, are based on a
+template, rather than the previous set of static text files. This lets you
+show messages like 'there are X users logged-in to this server'.
+<LI>You will also find GSLgen useful for analysing and processing log files
+in LML or XLML formats.
+<LI>Xitami lets you process XML files directly into HTML, using GSL scripts.
+This is a powerful way of showing data that comes from other sources.
+</UL>
+
+<LI>The Xitami config file, xitami.cfg, now contains full documentation for
+all options. The config file is actually generated using GSLgen, from an
+XML definition file. The same XML definition file generates various pieces
+of source code, and the HTML documentation for the config file options.
+This is an example of a useful GSL application.
+
+<LI>A new package, the Xitami SDK, contains a number of tools and
+components that were previously either not supplied or were dispersed in
+other packages:
+<UL>
+<LI>The iMatix Studio form compilers fdlgen and fmlgen. These tools are
+used to create the HTML forms used in the Xitami WBA. FDL is a form
+definition language based on htmlpp, and FML is an embedded form-markup
+language based on HTML comment tags. Fdlgen converts an FDL file into FML,
+and fmlgen converts an FML file into C language defintions that can be
+compiled. A web program displays such forms using the form i/o system
+(formio.c), also provided. FDL and FML are described in the fdldoc.txt and
+fmldoc.txt files. Using these tools you can create your own derivates of
+the Xitami WBA, and you can add the form functions to LRWP applications
+written in C. The Xitami SDK includes the FDL file used by the Xitami WBA.
+<LI>The WSX resource compiler, wsxrc. This is a Perl script that compiles
+image files and other resources into C include files, so that they can be
+compiled into an executable. The Xitami WBA uses this technique to compile
+icons and images into the Xitami server executable, making the WBA faster
+and more robust (not depending on external files). Wsxrc can easily be
+adapted to generating other languages. One possible future for this tool is
+to produce XML, which can then be fed to a GSL script. The Xitami SDK
+includes the Xitami WBA resource file (xiadmin.rc) and all image files used
+in the WBA (GIF files).
+<LI>The Xitami configuration definition and script, xiconfig.xml and
+xiconfig.gsl. These are the single source for all Xitami config option
+definitions.
+<LI>The Xitami model definitions and script, ximodel.xml and ximodel.gsl.
+These generate the various Xitami models (xitami, xilite, xipro,...) from a
+single script. You can define your own models, including the agents you
+want. You will need to compile and link the generated program. We use a GSL
+script here to avoid copying code.
+
+<LI>Xitami 2.5 introduces the notion of <EM>throttle pipes</EM>, a
+technique for limiting the bandwidth consumed by a web or FTP site. A
+throttle pipe has a specific upload and download bandwidth, and is shared
+by a set of web sites, and FTP sites. If throttle pipes are used (by
+default they are disabled), then all HTTP accesses for a virtual host share
+one throttle pipe.  FTP accesses use a default throttle pipe, but
+individual logins can use other throttle pipes.  So, if you have a 64kbps
+line, you can define all web and ftp downloads to share one 32kbps pipe,
+while a privileged FTP login might have access to a 64kbps pipe.  Xitami
+comes with a standard set of pipe definitions, but you can add more if you
+want to.
+
+</UL>
+
+<H3><A NAME="TOC171">Summary Release Notes for All Versions</A></H3>
+
+<UL>
+  <LI>Xitami 2.5c2 released 2004/07/22 with these changes:
+  <UL>
+    <LI>Fixed DoS attack based on malformed HTTP headers.</LI>
+    <LI>Server sometimes aborted on socket errors; fixed.</LI>
+    <LI>Added redirection capability with [redirect] section.</li>
+  </UL>
+
+  <LI>Xitami 2.5c1 released 2003/12/05 with these changes:
+  <UL>
+    <LI>For WSX agents, SCRIPT_PATH now contains alias used to invoke
+    WSX, and SCRIPT_NAME holds same as PATH_INFO.</li>
+    <LI>PHP scripts were sending incorrect caching information (and being
+    cached), this has been fixed.</li>
+  </UL>
+
+  <LI>Xitami 2.5c0 released 2003/09/25 with these changes:
+  <UL>
+    <LI>Fixed denial-of-service hole in WSX interface in which over-long
+    header field names could crash the server.</li>
+  </UL>
+
+  <LI>Xitami 2.5b6 released 2003/09/24 with these changes:
+  <UL>
+    <LI>Fixed denial-of-service hole in which over-long values in request
+    header could crash the server (affected all platforms).
+    <LI>Added new log file variable, 'url' that holds requested resource for
+    HTTP accesses.
+    <LI>Added new logging option, 'header', allowing W3C compatible log files.
+    <LI>Fixed various errors in WBA where changes were incorrectly saved.
+    <LI>CGI SERVER_HTTP_PORT and SERVER_HTTPS_PORT symbols now hold server port
+    numbers, SERVER_PORT holds actual port used for incoming request.
+  </UL>
+
+  <LI>Xitami 2.5b5 released 2002/04/01 with these changes:
+  <UL>
+    <LI>Fixed Windows denial-of-service hole in which any request for a file
+    named after a DOS device (e.g. aux, nul, con) caused the server to die.
+  </UL>
+
+  <LI>Xitami 2.5b4 released 2000/04/20 with these changes:
+  <UL>
+    <LI>Browser-based admin was broken - fixed.
+  </UL>
+
+  <LI>Xitami 2.5b3 released 2000/04/01 with these changes:
+  <UL>
+    <LI>Upgraded GSL engine to GSL/2.0.
+    <LI>Corrected errors in dynamic DNS agent.
+    <LI>Closed denial-of-service hole whereby a request 'GET<space>' caused
+    an assertion failure.
+    <LI>Closed denial-of-service hole whereby requests for filenames or
+    directory names containing DOS device names caused the operating system
+    to fail (affecting Windows 95/98).
+    <LI>Handles situations where file size is unknown gracefully (for
+    OpenVMS).
+    <LI>Corrected bug in CGI handler which caused stdin to be empty.
+  </UL>
+
+  <LI>Xitami 2.5b2 released 99/11/26 with these changes:
+  <UL>
+    <LI>Xitami can now do server-side GSL scripting (processing .gsl files).
+    <LI>FTP mkdir command failed on UNC drives (\\system\drive).
+    <LI>Fixed error in logfile 'append' method.
+    <LI>Added manual log cycling functions to WBA.
+    <LI>Some files were missing from Windows install kits.
+    <LI>HEAD method did not work with SSI pages - fixed.
+  </UL>
+
+  <LI>Xitami 2.5b1 released 99/11/14 with these changes:
+  <UL>
+    <LI>Closed some denial-of-service weaknesses in LRWP/2.0 agent.
+    <LI>Various fixes in logging agent.
+  </UL>
+
+  <LI>Xitami 2.5b0 released 99/11/01 with these changes:
+  <UL>
+    <LI>Added xixxml agent for server-side XML processing using GSL.
+    <LI>Sealed Windows '//' security issue.
+    <LI>Safepaths option was not being applied to CGIs and directory
+    listings - fixed.
+    <LI>WSX agents can now map all URLs for a website using '/' alias.
+    <LI>Partial downloads were not working - fixed.
+    <LI>Logging agent sometimes failed to cycle log files - fixed.
+  </UL>
+
+  <LI>Xitami 2.5a1 released 99/09/19 with these changes:
+  <UL>
+    <LI>Sometimes aborted when launched at startup under Windows - Fixed.
+    <LI>Sometimes aborted when restarted from the WBA - fixed.
+    <LI>Added support for HTTP and FTP throttle pipes, with standard set of
+    throttle pipes.
+    <LI>Image maps were broken (xiimap agent) - fixed.
+    <LI>Full release notes for 2.5a were added to documentation.
+    <LI>WBA accepts URL http://servername/admin/ - previously this returned
+    a 404 error.
+    <LI>Dynamic DDNS definition file name can be configured in DDNS config
+    section (was previously hard-coded as 'ddnsdef.xml').
+    <LI>WBA did not allow modification of log cycle fields - fixed.
+    <LI>SSI agent aborted when asked to show a non-existing SSI file -
+    fixed.
+    <LI>Fixed memory leak in FTP file transfer service (thanks to Jimi
+    Joergensen for finding this).
+    <LI>Log files were not cycling at correct time - fixed.
+    <LI>FTP service aborted when accessing directories on CD-ROMs.
+  </UL>
+
+  <LI>Xitami 2.5a0 released 99/08/07 with these changes:
+  <UL>
+    <LI>New xixssi agent does fast internal SSI parsing (PerlSSI is dead, long
+    live SSI!)
+    <LI>New xixlog logging agent allows fully-customisable logging including XML.
+    <LI>New xisuper supervisor agent cleans-out old log, temp, and debug files.
+    <LI>New xiimap image-map agent handles .map files.
+    <LI>New xiddns agent handles dynamic domain-name (DDNS) registration.
+    <LI>New xilrwp agent supports LRWP/2.0.
+    <LI>New LRWP plug-in supports ISAPI (Windows only, beta).
+    <LI>New LRWP plug-in supports Java servlet support (beta).
+    <LI>Added support for HTTP/1.1 functions including resume (Range: header).
+    <LI>CGIs can now run under specified user ids.
+    <LI>Aliases can now refer to full filename.
+    <LI>Allows custom HTTP headers, using server:header-dir option.
+    <LI>Allows FTP virtual hosts using 'user@hostname' syntax.
+    <LI>If VH authorisation file is missing, starts with a warning message.
+    <LI>HTTP directory listings can be customised using GSL scripts.
+    <LI>Uploads can no longer exceed hard quota.
+    <LI>Keep-Alive always disabled for CGIs that produce their own HTTP header.
+    <LI>Xitami.cfg file now contains full documentation for options.
+    <LI>HTTP error texts can be generated using GSL scripts.
+    <LI>FTP welcome texts can be generated using GSL scripts.
+    <LI>HTTP directory listing sort order can be overridden by passing a
+    URL argument: '?sort=xxx' where xxx is the desired sort order.
+  </UL>
+
+  <LI>Xitami 2.4d10 released with these changes:
+  <UL>
+    <LI>Fixed denial-of-service hole in which over-long values in request
+    header could crash the server (affected all platforms).
+  </UL>
+
+  <LI>Xitami 2.4d9 released with these changes:
+  <UL>
+    <LI>Fixed Windows denial-of-service hole in which any request for a file
+    named after a DOS device (e.g. aux, nul, con) caused the server to die.
+  </UL>
+
+  <LI>Xitami 2.4d8 released 2000/06/01 with these changes:
+  <UL>
+    <LI>Fixed memory leak in Windows GUI version.  This was losing about
+    16 bytes per second.  This did not affect the console/Unix version.
+    <LI>Removed testcgi program from default installation - this was
+    allowed hackers to get information about an out-of-the-box installation.
+    <LI>Xitami occasionally aborted with assertion failure in
+    authentication parsing - fixed.
+    <LI>Default FTP data port had been set to 200 in the default config file
+    (by mistake, we think).  It is now 20, which should work somewhat better
+    across firewalls and routers.
+  </ul>
+
+  <LI>Xitami 2.4d7 released 2000/04/01 with these changes:
+  <UL>
+    <LI>Closed denial-of-service hole whereby a request 'GET<space>' caused
+    an assertion failure.
+    <LI>Closed denial-of-service hole whereby requests for filenames or
+    directory names containing DOS device names caused the operating system
+    to fail (affecting Windows 95/98).
+  </UL>
+
+  <LI>Xitami 2.4d6 released 99/11/26 with these changes:
+  <UL>
+    <LI>Fixed error in logfile 'append' method.
+    <LI>FTP mkdir command failed on UNC drives (\\system\drive).
+    <LI>LRWP/2.0 handler was broken - fixed
+    <LI>HEAD method did not work with SSI pages - fixed.
+  </UL>
+
+  <LI>Xitami 2.4d5 released 99/11/14 with these changes:
+  <UL>
+    <LI>Closed some denial-of-service weaknesses in LRWP/2.0 agent.
+    <LI>Various fixes in logging agent.
+    <LI>Unix build script had errors - fixed.
+  </UL>
+
+  <LI>Xitami 2.4d4 released 99/11/01 with these changes:
+  <UL>
+    <LI>Sealed Windows '//' security issue.
+    <LI>Upgraded LRWP agent to LRWP/2.0 protocol.
+    <LI>Safepaths option was not being applied to CGIs and directory
+    listings - fixed.
+    <LI>Logging agent sometimes failed to cycle log files - fixed.
+  </UL>
+
+  <LI>Xitami 2.4d3 released 99/09/19 with these changes:
+  <UL>
+    <LI>Sometimes aborted when launched at startup under Windows - fixed.
+    <LI>Sometimes aborted when restarted from the WBA - fixed.
+    <LI>Sometimes aborted when accessing CD-ROMs through FTP - fixed.
+    <LI>Log files were not cycling at correct time - fixed.
+    <LI>FTP service had some memory leaks - fixed.
+    <LI>URLs starting with // bypassed authentication checks - fixed.
+  </UL>
+
+  <LI>Xitami 2.4d2 released 99/08/07 with these changes:
+  <UL>
+    <LI>Redirections were returning the wrong MIME type - fixed.
+    <LI>Windows GUI correctly updates server IP address if it change.
+    <LI>1024-byte limitation on form query variables was removed.
+  </UL>
+
+  <LI>Xitami 2.4d1 released 99/06/23 with these changes:
+  <UL>
+    <LI>Better handling for sockets under Windows when keep-alive is off.
+    <LI>Corrected PATH_TRANSLATED for PHP and other filters.
+    <LI>Issued two Content-Length: headers for CGIs that generated this -
+    fixed.
+    <LI>WBA wrongly showed links 'Errors Wsx Filters' for some pages, and
+    crashed when these were selected - fixed.
+    <LI>WBA sometimes showed errors in lists of users - fixed.
+    <LI>Xitami sometimes returned '403' when looking for files on networked
+    drives - fixed.
+    <LI>Removed server:translate option - redirected URLs now always use the
+    hostname.
+    <LI>New option, cgi:passargs, controls whether CGIs receive command-line
+    arguments or not.
+    <LI>FTP rmdir command failed after doing a 'dir' of the directory.
+  </UL>
+
+  <LI>Xitami 2.4d0 released 99/05/15 with these changes:
+  <UL>
+    <LI>HTTP listings failed when filenames contained '%' character.
+    <LI>FTP quota manager was causing problems - fixed.
+    <LI>FTP server secured against dictionary-based password attacks.
+    <LI>FTP server stopped responding if two PASV commands were issued to
+    same control connection.
+    <LI>FTP server now handles APPEnd command correctly.
+    <LI>FTP timeouts were being set 100 times too high.
+    <LI>Windows timer handler gave occasional aborts - fixed.
+    <LI>Xitami crashed if posted variable was greater than 255 characters.
+    <LI>Access log lines were limited to 255 characters - increased to 4k.
+    <LI>Access log file showed a file size '-1' for 404 errors - fixed.
+    <LI>Access log time format was wrong in some time zones.
+  </UL>
+
+  <LI>Xitami 2.4c3 released 99/03/14 with these changes:
+  <UL>
+    <LI>FTP server failed when APPEnd command was used - fixed.
+  </UL>
+
+  <LI>Xitami 2.4c2 released 99/01/23 with these changes:
+  <UL>
+    <LI>FTP server now suppports multihoming virtual hosts.
+    <LI>Logging stopped after server restart - fixed.
+    <LI>CGI PATH_TRANSLATED symbol now holds full path and was corrected to
+    fix a problem introduced in 2.4c0.
+    <LI>CGI SERVER_NAME symbol no longer contains port number for instances
+    of Xitami running above port 80.
+    <LI>New symbol, SERVER_URL holds full URL to server.
+    <LI>HTTP file upload was not working for files > 30k - fixed.
+    <LI>Added new CGI variable, SERVER_VERSION.
+    <LI>HTTP server sometimes closed socket before entire page was
+    transmitted to browser - fixed.
+    <LI>Corrected bug in handling of CGI Location: header.
+  </UL>
+
+  <LI>Xitami 2.4c1 released 99/01/02 with these changes:
+  <UL>
+    <LI>Better handling for high ASCII (e.g. Chinese) characters.
+    <LI>CGI variables PATH_TRANSLATED and CGI_ROOT now hold full path, which
+    corrects some problems with the SSI #include and #exec commands.
+  </UL>
+
+  <LI>Xitami 2.4c0 released 98/12/23 with these changes:
+  <UL>
+    <LI>FTP server sometimes gave 'unauthorised' message on rmdir - fixed.
+    <LI>FTP server now lets you allocate disk space quotas per user.
+    <LI>Web server now accepts URL names containing '+'.
+    <LI>New FTP access mode, 'U' allows only uploading of new files.
+    <LI>FTP 'P' access mode now allows directory browsing.
+    <LI>Web-based administration interface improved.  Much nicer.
+    <LI>Corrected long-standing problem with aliases under OS/2.
+    <LI>No longer generates Last-Modified header for CGIs, WSXs, & filters.
+    <LI>Corrected display of IP address in Xitami Windows control panel.
+    <LI>Corrected bug under Linux which caused TCP/IP functions to go into
+    debugging mode when keep-alive connections were enabled.
+    <LI>PATH_INFO was not being provided to WSX agents - fixed.
+    <LI>Added Crash Recovery system to Windows GUI and NT service versions:
+    Xitami will now recover from a memory violation error.
+    <LI>Added server:recover option for silent crash recovery.
+  </UL>
+
+  <LI>Xitami 2.4b2 released 98/12/06 with these changes:
+  <UL>
+    <LI>Server sometimes crashed during log file cycling - fixed.
+    <LI>DOCUMENT_ROOT CGI variable now holds full path; this fixes a
+    problem with the 'SSI #include virtual=' command.
+    <LI>Corrected a fault in the handling of the HTTP MOVE command.
+    <LI>Xitami distribution filenames changed to new format.
+    <LI>Server:advertize option turns off server name in directory listings.
+    <LI>WBA Help function now works correctly.
+    <LI>Improved WBA icons.
+    <LI>FTP manager now lets you set quotas per user.
+  </UL>
+
+  <LI>Xitami 2.4b1 released 98/11/28 with these changes:
+  <UL>
+    <LI>SSI #include command was broken in Perlssi - fixed.
+    <LI>It was possible to freeze the server by asking for 'com1' or 'lpt1'
+    (and variants) as a URL - fixed.
+    <LI>Rare memory overwrite problem in SMT kernel was fixed.
+    <LI>Changed default ftp:ipaddress for passive connections to '*'.
+    <LI>HTTP PUT method returned 404 for new files - corrected.
+    <LI>Removed cgi:exit-ok configuration option.
+    <LI>Improved handling for 'webmask=@filename' option.
+    <LI>Access logs now allow filenames containing spaces (these are
+    replaced by the MIME encoding '%20').
+    <LI>Added new fields (filename, config table) to WSX_REQUEST messages.
+    <LI>Log file cycling corrected to work per virtual host.
+    <LI>Server:log-dir option now defaults to 'logs'.
+    <LI>Authentication was still looking for URL names with '_', e.g.
+    [cgi_bin].  This was changed to search for the real URL value, e.g.
+    [cgi-bin].
+    <LI>Server created empty files when asked for filtered file that did not
+    exist - fixed.
+    <LI>WBA Restart function still occasionally crashed the server - fixed.
+  </UL>
+
+  <LI>Xitami 2.4b released 98/11/08 with these changes:
+  <UL>
+    <LI>Improved support for PHP 3.0, corrected PHP_SELF variable.
+    <LI>Added support for HTTP MOVE and COPY methods.  All update methods
+    are now controlled by the same 'http-update' URL authorisation option.
+    <LI>WBA Restart function crashed the server - fixed.
+    <LI>WBA Help function killed the WBA agent - fixed.
+    <LI>Log files were wrongly named (e.g. "./d:\logs\access.log") when
+    fully-specified log file names were used - fixed.
+    <LI>Server now uses setuid functions to access port 80 under Unix
+    (thanks to Grant McDorman &lt;grant@isgtec.com&gt;).
+    <LI>Server now uses setuid functions to switch to a safe user and group
+    under Unix (thanks to Georg Ottinger &lt;g.ottinger@magnet.at&gt;).
+    <LI>Changed console:refresh default to 0 to get rid of IE4 warning
+    messages.
+    <LI>Added Xitami version number to WBA screens.
+    <LI>Maximum size of HTTP request in log files increased from 255 to
+    1024 chars.
+    <LI>Added win32:service-name and service-text options to allow multiple
+    Xitami services to run on the same system.
+    <LI>Extended FTP access logging to include logins, failed logins, and
+    logouts.
+    <LI>FTP server did not show aliases if user's root directory was empty -
+    fixed.
+    <LI>Filters now run as specified by the cgi:workdir option.
+    <LI>CGIs and filters appeared twice in logfiles - fixed.
+    <LI>Under Windows, accessing URLs 'aux', 'con', 'prn' or 'nul' caused
+    server to freeze-up - fixed.
+    <LI>401 errors were being logged to the error log - these are now
+    ignored.
+    <LI>Xitami was logging 'WSAECONNRESET' messages in the error log file;
+    these were removed since they do not actually indicate errors.
+    <LI>DNS-based virtual hosts did not work correctly on HTTP ports other
+    than 80 - fixed.
+    <LI>cgi:timeout can be set to zero to indicate 'no limit'.
+  </UL>
+
+  <LI>Xitami 2.4a1 released 98/10/03 with these changes:
+  <UL>
+    <LI>Added support for HTTP PUT and DELETE methods.
+    <LI>Configuration file handling was changed to allow "-" in key names,
+    for instance in virtual host names.  Old config files containing "_" in
+    key names must be changed to use '-'.
+    <LI>Added ftp:login-text option to WBA FTP setup.
+    <LI>Last-Modified: response date was miscalculated by a month.  This
+    also showed-up in FTP directory listings.
+    <LI>Corrected a fault in the log file cycling code which created old
+    log files in main directory, even if log files were stored in separate
+    directory.
+    <LI>FTP server crashed if REST command was sent with no arguments.
+    <LI>Added 'local' option for HTTP and FTP access and error logs which
+    allows you to suppress logging for local connections.
+    <LI>PerlSSI filter was improved to strip-off HTTP headers from CGI
+    output.
+    <LI>Corrected a bug in the logging code which sometimes wrote a file
+    size of '-1' bytes, under Windows.
+    <LI>Windows version now updates the system tray icon to indicate
+    connections.
+    <LI>Added cgi:enabled option to enable/disable CGI completely.
+    <LI>Added cgi:wildcard option to control whether /cgi-bin is allowed
+    anywhere in URL, or only at start (by default, not allowed).
+    <LI>Added server:log-dir option to allow central control of logfile
+    directory.
+    <LI>Security:admin option now works correctly for virtual hosts.
+    <LI>Windows 95 tray message now shows server statistics.
+    <LI>Xitami used to accept URIs like "/cgi-bintestcgi"; these are now
+    rejected.
+    <LI>'BBA' renamed to 'WBA' (web-based admin) in documentation.
+    <LI>Corrected a bug in the config file handling which caused problems
+    when one tried to protect a resource containing ':', e.g. [e:\private].
+    <LI>Corrected a bug in the FTP transfer statistics which were counting
+    arbitrary transfer sizes for simple FTP commands.
+    <LI>Added WSX_REQBIN, WSX_BIN and WSX_MBIN messages for passing binary
+    data to and from WSX plugins.
+    <LI>WBA given a facelift; added graphical toolbar and changed the look
+    and feel a little.
+    <LI>Added security:safepaths option to disable unsafe filename checking.
+    <LI>Added all=* option in authorisation files.
+    <LI>Fixed a bus error in the LRWP agent under SGI.
+    <LI>Increased the maximum length of a CGI cookie string from 237 to
+    about 4K.
+    <LI>FTP server no longer replaces international characters by octal
+    escape sequences in directory listings.
+    <LI>CGI:workdir default changed from 'cgi-bin' to '-' (so that CGIs run
+    in the script directory).
+    <LI>Corrected a bug which caused logging to cease after WBA restart.
+    <LI>Corrected a DoS bug which crashed the server when a very long user
+    name or password was entered in for a URL authorisation.
+    <LI>Corrected a DoS bug which crashed the server when an URL was entered
+    with an extra trailing slash.
+    <LI>Corrected a bug which crashed the server when a .map file contained
+    incorrect values.
+    <LI>Added Java interface library for LRWP (thanks to Eugen Woronenko
+    &lt;EWoronen@osram.com&gt;).
+    <LI>Added Visual Basic CGI 'stdcgi' module (thanks to Wei-dun Teng
+    &lt;tiberius@ms13.accmail.com.tw&gt;).
+  </UL>
+
+  <LI>Xitami 2.3d1 released 98/07/26 with these changes:
+  <UL>
+    <LI>Corrected a fault in the FTP server which caused it to refuse
+    new connections after a WBA Restart, under Windows NT.
+    <LI>Added regression testing tool, 'xitest' to addons section.
+  </UL>
+
+  <LI>Xitami 2.3d released 98/07/25 with these changes:
+  <UL>
+    <LI>Corrected a fault in the HTTP server which left dangling sockets;
+    after intensive use the server could refuse new connections.
+    <LI>Corrected a fault in the CGI handler which had problems with CGI
+    scripts located in directories that contained '.' in the name.
+    <LI>Corrected a fault in the HTTP security system which was producing
+    403 (Not Authorised) errors on some directories.
+    <LI>Improved the HTTP directory listing to show GMT times correctly.
+    <LI>Corrected a fault in the LRWP agent which sometimes aborted when
+    peer processes de-registered.
+    <LI>Improved the handling of the Windows version with respect to the
+    Windows 95/NT 'Suspend' mode.
+    <LI>Improved the handling of very long URLs in the HTTP server; these
+    were causing assertion failures.
+    <LI>Corrected the 'iMatix Web Site' button in the Windows version which
+    wrongly used the current portbase setting when linking to imatix.com.
+    <LI>Added Desktop icon installation procedure for OS/2 (thanks to Scott
+    Drake).
+  </UL>
+
+  <LI>Xitami 2.3c3 released 98/07/13 with these changes:
+  <UL>
+    <LI>FTP listing always omitted the last entry.
+    <LI>Default pages and SSIs did not always show correctly.
+    <LI>FTP and HTTP listings now hide 'hidden' files.
+    <LI>HTTP 302 return code works better with Opera browser.
+    <LI>Fixed some problems with use of CGIs as default pages.
+  </UL>
+
+  <LI>Xitami 2.3c2 released 98/07/06 with these changes:
+  <UL>
+    <LI>DNS-based virtual hosts were broken.
+    <LI>Log file did not contain correct value for User-Agent field.
+  </UL>
+
+  <LI>Xitami 2.3c1 released 98/07/05 with these changes:
+  <UL>
+    <LI>Server aborted on certain URLs (CGIs without extensions).
+    <LI>Some problems in OS/2 and Windows build scripts were fixed.
+  </UL>
+
+  <LI>Xitami 2.3c released 98/07/04 with these changes:
+  <UL>
+    <LI>Closed security hole under Windows 95/NT which let people access a
+    URL containing long filenames by using the abbreviated short name.
+    <LI>Closed a security hole which allowed 'webmask' and 'realm' to be
+    used as user names in certain cases.
+    <LI>The server:autostart option is now FALSE by default.  If you want
+    this you have to explicitly enable it.
+    <LI>At startup, Xitami indicates on which addresses it will accept
+    connections (in WBA messages box or console window).
+    <LI>Under Windows, did not always handle CGI .bat files correctly.
+    <LI>Handling of CGI program arguments now conforms to CGI standards: URL
+    argument string is split on '+', unless it contains '=', in which case
+    it is passed only as the QUERY_STRING variable.
+    <LI>Added ability to specify HTTP and FTP directory list sort order in
+    server:dirsort and ftp:dirsort.
+    <LI>Added support for FTP sign-off message (ftp:signoff option).
+    <LI>CGI SERVER_NAME variable is now the HTTP Host: field if available.
+    <LI>SSI "#include file=" command did not work correctly - fixed.
+    <LI>Corrected a memory leak introduced in 2.3b2.
+    <LI>Corrected handling of empty error header/footer blocks.
+    <LI>WSX interface corrected to handle small binary uploads.
+    <LI>FTP service can now be enabled/disabled through the WBA.
+    <LI>WBA virtual host wizard defines a password for "/admin" in all cases.
+    <LI>New format for [Filter] definitions: ".xxx=filter".  Old format is
+    still supported.
+    <LI>[WSX] definitions can now be based on file extensions, using
+    ".xxx=agent" format.
+    <LI>HTTP directory listing format revised for long filenames.
+    <LI>Multilanguage Accept header now applies to CGI programs, filters,
+    and to default pages.
+    <LI>Redirected URLs (302) now use server:hostname in preference to the
+    Host: field, if server:hostname defined.
+    <LI>Directory listings could fail on directories that were shared as
+    volumes with Services for Macintosh (which creates funny filenames).
+    <LI>Cycled log files are now given names based on the date, not time.
+    <LI>Server aborted on CGI scripts starting with '#!' without a following
+    program name.
+    <LI>Corrected log file timezone indicator to always be [-+]nnnn.
+    <LI>CGIs failed if server:temp-dir did not exist - fixed.
+  </UL>
+
+  <LI>Xitami 2.3b2 released 98/06/02 with these changes:
+  <UL>
+    <LI>Corrected a problem with the NT service version which caused it
+    to issue system log messages with no reason.
+    <LI>Corrected a security hole in the authentication system which made it
+    possible to get into protected files by using '\' in the URL (under
+    Windows only).
+    <LI>Automatically looks for a .htm file if it can't find a .html (and
+    vice-versa).
+  </UL>
+
+  <LI>Xitami 2.3b1 released 98/05/24 with these changes:
+  <UL>
+    <LI>Windows install created broken shortcut for Xitami icon if Xitami
+    was installed elsewhere than in the default directory.
+    <LI>WBA transfer statistics were sometimes incorrect - fixed.
+    <LI>POST method now allowed for filters - small but important change.
+    <LI>Virtual host lookup now uses Host: field before IP address
+    (previously tested the other way around).
+    <LI>Added ftp:password-case option.
+    <LI>FTP server aborted if ftp root was set to '/'.
+    <LI>FTP server root got corrupted after a restart operation.
+    <LI>Form POSTs passed through the environment did not work.
+    <LI>Filenames ending in % could cause aborts.
+    <LI>Limit on size of customised error texts increased to 32k total.
+    <LI>FTP server correctly issues a 221 Closing Connection after QUIT.
+  </UL>
+
+  <LI>Xitami 2.3b released 98/05/09 with these changes:
+  <UL>
+    <LI>Priority option was being ignored; Xitami always ran under
+    HIGH priority (under Windows 95 and NT).
+    <LI>Multipart/form uploads failed for binary files smaller than 8K.
+    <LI>SSI include files can now contain SSI commands themselves.
+    <LI>SSI #execute cgi command can pass URL arguments (?xxx).
+    <LI>16-bit version was not scanning HTTP requests correctly: fixed.
+    <LI>Referrer field in access log file was empty.
+    <LI>WBA crashed when the 'Errors' option was selected from the
+    main config screen - fixed.
+    <LI>Accept-Language support improved.
+    <LI>Restart function did not always reload configuration: fixed.
+  </UL>
+
+  <LI>Xitami 2.3a1 released 98/04/25 with these changes:
+  <UL>
+    <LI>Redirection of URLs based on aliases did not work correctly.
+    <LI>CGI_STDIN/STDOUT variables were being wrongly formatted.
+    <LI>CGI content type was being forced, wrongly, to text/html.
+    <LI>Added support for Accept-Language header for multiple languages.
+    <LI>FTP server also handles APPE command.
+    <LI>Xitami aborted when WBA Restart command was used.
+    <LI>Xitami aborted when FTP user list held more than a page of users.
+  </UL>
+
+  <LI>Xitami 2.3a released 98/04/18 with these changes:
+  <UL>
+    <LI>FTP connections now work asynchronously; previously clients behind a
+    firewall could cause the FTP server to block.
+    <LI>Referencing a file like 'nul.gif' caused the server to abort under
+    Windows (fixed).
+    <LI>WSX and filters now take precedence over CGI URLs.
+    <LI>Handles DOS-style aliases better (allows '\' in alias values).
+    <LI>Windows 3.x 16-bit version now works correctly.
+    <LI>Support for Win32s under Windows 3.x now documented correctly.
+    <LI>Configuration values can contain environment symbols like this:
+    $(NAME).
+    <LI>Allows CGI programs to be placed in any HTML directory (you must set
+    server:cgi-url=/, server:cgi-bin=webpages, and cgi:mixed-url=1).
+    <LI>Files with no extension can now have a MIME type (.=text/plain).
+    <LI>server:temp-dir directory is used for temporary files (e.g. CGI pipes).
+    <LI>server:debug-dir directory is used for debug log files.
+    <LI>"Support 16-bit CGI programs?" option in WBA CGI page did not work.
+    <LI>Server crashed on restart if Serverlog:enabled=0 was set - fixed.
+    <LI>PerlSSI filter improved to allow execution of CGI scripts.
+    <LI>Access log now contains full Referer field, including arguments.
+    <LI>Mime:default option defines MIME type for undefined file types.
+    <LI>Code uses snprintf/vsnprintf to protect against buffer overruns.
+    <LI>WBA FTP users screen did not delete users correctly; now does so when
+    you clear the user name.
+    <LI>It is now possible to define for each user whether or not they have
+    access to the root FTP aliases (aliases=0/1 option).
+    <LI>CGI output reparsing improved (was losing lines starting with
+    &lt;HTML&gt;).
+    <LI>FTP cdup command moved to root directory; now works correctly.
+    <LI>FTP ftplogin.txt file can be placed in user login directories.
+    <LI>FTP server can now resume broken downloads.
+    <LI>FTP server also handles REIN, and STRU commands.
+    <LI>Log file cycling did not work correctly if set from WBA - fixed.
+    <LI>CGI programs can now generate multiple Set-Cookie: header lines.
+    <LI>Added support for long webmasks (up to 64k): use @filename.
+  </UL>
+
+  <LI>Xitami 2.2d3 released 98/03/03 with these changes:
+  <UL>
+    <LI>The security hole in 2.2d was still open in a different place.
+    Finally closed it!
+  </UL>
+
+  <LI>Xitami 2.2d2 released 98/03/02 with these changes:
+  <UL>
+    <LI>Corrected a bug in the FTP security code which was causing
+    memory overwrites and consequent problems in the WBA.
+    <LI>Corrected a denial-of-service loophole which caused the server
+    to crash when given a very long URL.
+    <LI>FTP 'mode' command was not working - fixed.
+  </UL>
+
+  <LI>Xitami 2.2d1 released 98/03/01 with these changes:
+  <UL>
+    <LI>Closed security hole in 2.2d that allowed access to protected
+    resources.
+  </UL>
+
+  <LI>Xitami 2.2d released 98/02/28 with these changes:
+  <UL>
+    <LI>Certain POST requests (between 500-8000) bytes did not work.
+    <LI>Virtual host wizard was broken: it did not let you define a
+    DNS-based virtual host.
+    <LI>Empty passwords are now accepted in the WBA and by the server.
+    <LI>WBA did not show authentication realms.
+    <LI>WBA treats FTP directory '/' as empty (i.e. in FTP root itself).
+    <LI>FTP server responses (550, 553) improved.
+    <LI>FTP server access rights per directory were not always used.
+    <LI>FTP directory access restrictions on [] now work.
+    <LI>FTP server was allowing all users to access aliases - fixed.
+  </UL>
+
+  <LI>Xitami 2.2c released 98/02/09 with these changes:
+  <UL>
+    <LI>Fixes an abort in the WBA (when you use the console properties
+    button.)
+    <LI>Corrected UNIX and OS/2 build scripts.
+    <LI>Password protection sometimes switched-off completely, until
+    Xitami was restarted.  This has been fixed.
+    <LI>FTP uploads did not work any longer - fixed.
+  </UL>
+
+  <LI>Xitami 2.2b (beta 2) released 98/01/18 with these changes:
+  <UL>
+    <LI>Cgi:msdos-style option now controls whether CGIs and filters get
+    filenames with Unix-style or MS-DOS style slashes.  Default is 0.
+    <LI>Server:refresh can now be set to 0 to disable autorefresh.
+    <LI>Server:priority option added (can run up to 2-3 times faster under
+    Windows).
+    <LI>Xitami crashed if you enabled full logging (server:debug=1)
+    and there was an access error on a log file.
+    <LI>Security:admin option was not implemented in console version.
+    <LI>Server:cache-defaults option added to control whether defaults pages
+    are cached or not.  When this is 0, the browser will always fully reload
+    a defaults page.
+    <LI>WBA now uses JavaScript for (New! Improved!) user interface.
+    <LI>Under Windows, PATH_TRANSLATED now uses \ instead of /.
+  </UL>
+
+  <LI>Xitami 2.2a (beta 1) released 98/01/13 with these changes:
+  <UL>
+    <LI>WSX protocol improved to allow dynamic aliases, non-HTML mime types,
+    CGI environment variables,...  Thanks to Robin Dunn for providing these
+    ideas and the LRWP WSX agent.
+    <LI>LRWP (long-running web process) protocol support added.
+    <LI>PerlSSI was not still not really working - fixed again.  Thanks to
+    R. K. Lele for providing a solid test page.
+    <LI>Filters are now applied to the default pages; you can use SSI in the
+    default page for a directory.
+    <LI>WSX protocol now allows dynamic aliases (WSX_INSTALL and WSX_CANCEL
+    messages).
+    <LI>Small POSTs to WSX agents are now passed in memory; large POSTS in
+    temporary files.  Similar principle for returned HTTP data.
+    <LI>Authentication can now work with user-defined realms (previously the
+    realm was always the requested URI, which was not excellent).
+    <LI>Server:debug option now also logs incoming requests.
+    <LI>Virtual host wizard closes a security loophole in which virtual hosts
+    could access the WBA pages without password control.
+    <LI>Filters did not work under OS/2 - fixed.
+    <LI>Server:limit default changed to 0 for all platforms; ftp:limit
+    default is now 25.
+    <LI>FTP service did not indicate transfer file type correctly - fixed.
+    <LI>FTP access rights strengthened - this code was completely rewritten.
+    <LI>FTP delete and rename functions always replied 'Okay' even if there
+    were protection errors.
+    <LI>FTP directory listing function was broken - fixed.
+    <LI>FTP user and authentication files now uses full path names: this
+    changes the meaning of an entry like [/pub], which is now a full path
+    name (it used to be relative to the ftp root directory).
+    <LI>Various buffer-overrun flaws in FTP service fixed.
+    <LI>Xitami sometimes crashed when restarted from WBA - fixed.
+    <LI>Server restart no longer closes/reopens HTTP port - this was
+    too delicate to get working right.
+    <LI>WBA can be disabled by setting security:admin to 0.
+    <LI>UNC names (//server/filename) no longer worked - fixed.
+  </UL>
+
+  <LI>Xitami 2.1c released 97/12/25 with these changes:
+  <UL>
+    <LI>ftp:login-text option added for configurable login messages.
+    <LI>Online management of custom error messages rewritten.
+    <LI>Online management of FTP passwords was broken - fixed.
+    <LI>File upload function was broken in 2.1a and b - fixed.
+    <LI>'Powered by Xitami' images now shown on welcome page.
+    <LI>PerlSSI was not working - fixed.
+    <LI>CGI:debug was not being applied to filters - fixed.
+    <LI>Server portbase was not being applied to FTP access - fixed.
+  </UL>
+
+  <LI>Xitami 2.1b released 97/12/19 with these changes:
+  <UL>
+    <LI>FTP 'cd' command failed if user did not have GET authority; now
+    works within all subdirectories of user's root directory.
+    <LI>Server:autostart option is now TRUE by default (Win95 only).
+    <LI>FTP service sometimes crashed, due to a memory overwrite.
+    <LI>Webmask=local did not work at all; fixed.
+    <LI>Windows source kit (console version) now provided.
+  </UL>
+
+  <LI>Xitami 2.1a released 97/12/15 with these changes:
+  <UL>
+    <LI>OS/2 CGI handling rewritten.
+    <LI>FTP service 'LIST' command now works in all cases.
+    <LI>FTP service now shows subdirectories in compact listing.
+    <LI>Server died if FTP was disabled and web-based console tried
+    to display details of current connections - fixed.
+    <LI>Added 'Powered by Xitami' graphic to distribution (by Jptxs).
+    <LI>Added server:autostart config option (Windows 95 only).
+    <LI>Added server:limit option to restrict number of connections.
+    <LI>Added ftp:email-check config option.
+    <LI>Added ftp:webmask config option.
+    <LI>Changed cgi:dirlist option to default to 0.
+    <LI>Added [Filter] section and PerlSSI filter.
+    <LI>Added configurable welcome text for FTP server.
+    <LI>Added support for PHP as filter program (tested version 2).
+    <LI>Added timezone indication to log files.
+    <LI>Host name in redirected URLs now taken from Host: header if
+    possible; this makes image maps work better with modern browsers.
+    <LI>Error 401 now returns HTML page correctly: previously this
+    returned an empty page.
+    <LI>All error texts are predefined in the errors/ subdirectory.
+    <LI>Under Windows, taskbar menu works correctly in secure mode.
+    <LI>Web-based admin crashed on certain Unix systems.
+    <LI>Web-based admin crashed when using More... key on the user
+    list file.
+    <LI>FTP aliases now supported.
+    <LI>ftp:http-alias option includes HTTP aliases in FTP aliases.
+    <LI>FTP user configuration file syntax changed slightly, and access
+    rights can now be defined on a directory basis.
+    LI>Works with CGI programs that do not produce a header.
+    <LI>CGI output sometimes failed on NT; this was fixed in 1.3 and broken
+    again in 2.0.  Fixed again!
+    <LI>cgi:exit-ok option now set to 0 by default.
+    <LI>Fixed a bug which crashed Xitami when you used Restart.
+    <LI>Better documentation of WSX protocol.
+  </UL>
+
+  <LI>Xitami 2.0e released 97/10/11 with these changes:
+  <UL>
+    <LI>Customised error messages now work correctly.
+    <LI>User-defined CGI directories was broken: fixed.
+    <LI>POSTed data was sometimes not being passed to admin screens.
+    <LI>Admin screens aborted in some configurations: fixed.
+  </UL>
+
+  <LI>Xitami 2.0d released 97/10/07 with these changes:
+  <UL>
+    <LI>Various corrections to the FTP service.
+    <LI>Various corrections to the UNIX kits.
+  </UL>
+
+  <LI>Xitami 2.0c released 97/10/04 with these changes:
+  <UL>
+    <LI>Windows control panel 'Setup' button did not work if a port
+    other than 80 was used.
+  </UL>
+
+  <LI>Xitami 2.0b released 97/09/30 with these changes:
+  <UL>
+    <LI>Form POST data no longer passed as QUERY_STRING by default.
+    <LI>Form POST data no longer limited in size.
+    <LI>Supports RFC1867 form-based file uploads.
+    <LI>Added ability to run server on one specific IP address.
+  </UL>
+
+  <LI>Xitami 2.0a released 97/09/15 for limited beta testing, with
+  these changes:
+  <UL>
+    <LI>Added FTP server.
+    <LI>Changed config handling so that you can change options on
+    <EM>either</EM> the control panel or the config file (previously
+    ignored webpages, cgi-bin, and portbase options in config file
+    of primary host.
+    <LI>Authorisation now works on any URL, including '/'.
+    <LI>Webmasks extended to allow multiple combinations.
+    <LI>Aliases did not work with virtual hosts - fixed.
+    <LI>Added full logging of URL translation if server:debug set; this
+    is useful when debugging complex virtual hosts.
+    <LI>New security:password-case option controls whether passwords
+    are case-sensitive. (User names are always compared in lowercase.)
+    <LI>Security:dynamic option no longer applicable - removed.
+    <LI>Sometimes showed junk in error headers/footers from files.
+    <LI>'Location:' header did not work in CGIs - fixed.
+    <LI>WinNT service did not recognise config files - fixed.
+    <LI>WinNT service died if specified with -r option - fixed.
+    <LI>WinNT control panel now runs in Xitami service directory.
+    <LI>Server died if run without a Xitami .cfg file; now works.
+    <LI>Server died if root directory was on an invalid drive - fixed.
+    <LI>Server died on URLs like "http://127.0.0.1/buttons.map' - fixed.
+    <LI>Server looped if URL argument contained accented chars - fixed.
+    <LI>Virtual host names containing a hyphen did not work - fixed.
+    <LI>You can now specify a password as "-", meaning 'not allowed'.
+    <LI>CGI output sometimes failed on fast NT systems - fixed.
+    <LI>CGI SCRIPT_NAME now works with normal and CGI aliases.
+    <LI>Custom.cfg renamed to defaults.cfg.
+    <LI>Added error simulation URL '/error?xxx'.
+    <LI>Added server:text-xxx options for customised HTTP error texts.
+    <LI>Added server:error-url option for error simulation.
+    <LI>Added cgi:stdio option to support Basic CGI programs.
+    <LI>Added cgi:dirlist option to control CGI directory lists.
+    <LI>Added server:base-host option for base host definition.
+    <LI>Added browser-based configuration screen via /admin URL.
+    <LI>Added win32:16bit-cgi option allows fast 32-bit CGIS.
+    <LI>Added win32:secure option to secure Windows control panel.
+    <LI>Added security:superuser password (default disabled).
+    <LI>Added [Console] configuration section.
+    <LI>Added [CGI-Alias] section for CGI aliases.
+    <LI>Added [WSX] section for web-server extensions, and added
+    support for WSX to server kernel.
+    <LI>Sometimes failed on large forms - fixed.
+    <LI>Windows control panels completely redesigned.
+  </UL>
+
+  <LI>Xitami 1.3c released 97/07/31 with these changes:
+  <UL>
+    <LI>Alias handling cleaned-up; converts alias in URL to lowercase
+    to match alias name (always lowercase).
+    <LI>CGI SCRIPT_NAME now compatible with MS IIS (starts with '/').
+    <LI>URLs can contain spaces (did not work with Netscape Navigator).
+    <LI>Would abort on incomplete requests like 'GET xxxxx'.
+    <LI>Virtual host server:cgi-dir option was not being used.
+    <LI>NT service control panel crashed if you started on port 0.
+    <LI>Added support for Visual Basic through CGI_STDIN and related
+    environment variables.
+  </UL>
+
+  <LI>Xitami 1.3b released 97/07/22 with these changes:
+  <UL>
+    <LI>Windows control panel shows more statistics.
+    <LI>New [CGI-Environment] option for arbitrary CGI variables.
+    <LI>New server:hostname option for redirected URLs.
+    <LI>New [ErrorLog] section for HTTP errors.
+    <LI>Fixed various minor bugs with virtual host logic.
+  </UL>
+
+  <LI>Xitami 1.3a released 97/07/16 with these changes:
+  <UL>
+    <LI>New virtual hosts/multihoming facility.
+    <LI>New [Alias] option allows multiple document roots.
+    <LI>New webmask= option in xitami.aut lets you restrict access
+    to a directory depending on the client's IP address.
+    <LI>New configuration scheme, custom.cfg, simplifies upgrading
+    from older versions of Xitami.
+    <LI>New option 'cgi:workdir=-' means always use script directory.
+    <LI>New option 'server:cgi-url' defines '/cgi-bin' prefix.
+    <LI>Windows control panel now works correctly with the keyboard.
+    <LI>Improved REXX CGI support (*/ allowed on first line).
+    <LI>New CGI environment variable: SCRIPT_PATH.
+    <LI>CGI SCRIPT_NAME no longer includes the PATH_INFO.
+    <LI>Fixed bug: NT service version did not let you change the
+    webpages or CGI directory.
+    <LI>Fixed bug: CGI script 'magic header' did not work fully.
+    <LI>Fixed bug: server could block while sending a file if the
+    browser closed the connection during the transfer.
+    <LI>Fixed bug: "cgi:workdir" did not work under UNIX.
+    <LI>Fixed bug: no longer freezes-up if you change the clock.
+    <LI>Fixed bug: CGI URLs in map files can now have arguments.
+    <LI>Eliminated caching for default pages; browser now always
+    shows correct page if you change the document root directory.
+    <LI>Keep-Alive default raised from 5 to 50.
+    <LI>Error-Header, Footer now reloaded for each 4xx response.
+    <LI>Added support for Midi MIME types (.mid, .rmi).
+  </UL>
+
+  <LI>Xitami 1.2e released 97/06/16 with these changes:
+  <UL>
+    <LI>Webpages directory can now be a disk drive, e.g. I:.
+    <LI>Added server:translate option for working on dynamic
+    IP connections (e.g. PPP).
+    <LI>Added support for REXX CGIs using "/*!" magic header.
+    <LI>Xitami would sometimes freeze-up: this has been fixed.
+    <LI>You can now limit clients to a specific IP subnet mask.
+    <LI>CGI scripts (e.g. Perl) can use #! /usr/bin/perl header;
+    the path is removed if it does not actually exist.
+    <LI>server:error-header/footer can come from a file.
+  </UL>
+
+  <LI>Xitami 1.2d released 97/05/31 to correct a security
+  hole in 1.2c; protected URLs could be accessed by supplying
+  an empty username and password.
+
+  <LI>Xitami 1.2c released 97/05/28 with these changes:
+  <UL>
+    <LI>Under 32-bit Windows, executable files can have any
+    extension.
+    <LI>Now correctly asks for password when listing a directory.
+    <LI>Password protection also applied to CGI programs.
+    <LI>Keep-Alive did not work for some directory listings.
+    <LI>Closed security hole that allowed '...' in URLs.
+    <LI>Added REMOTE_HOST and REMOTE_ADDR variables for CGI.
+    <LI>Under Windows 95 & NT, CGI response-time was improved by
+    an average of 500ms thanks to improved SFL timer functions.
+    <LI>New configuration option cgi:timeout specifies timeout
+    for CGI programs.  The cgi:monitor option specifies CGI monitor
+    rate.
+    <LI>Sometimes gave file errors during rapid reloading of CGI
+    programs; this has been improved.
+    <LI>You can now modify the xitami.aut file on-the-fly: it is
+    refreshed every 60 seconds (by default) See server:refresh
+    configuration option.
+    <LI>cgi:exit-ok controls whether CGI programs' exit code is
+    checked or not.
+    <LI>Server crashed on some URLs (http://localhost/myfile.htm/);
+    the server was treating these as directory names; fixed.
+    <LI>Server crashed when running CGI script if #! command did
+    not exist as an executable file; fixed.
+    <LI>'Browse' and 'Defaults' buttons added to Windows panels.
+    <LI>Improved error messages in Windows versions when there is
+    a TCP/IP error; e.g. port in use or TCP/IP not installed.
+    <LI>Windows versions allow Terminate action at all times.
+    <LI>Relaxed HTTP header parsing to support more HTTP clients;
+    headers may use either CRLF or LF end-of-line sequences.
+  </UL>
+
+  <LI>Xitami 1.2b released 97/04/23 with these changes:
+  <UL>
+    <LI>Improved Keep-Alive handling; sometimes failed.
+    <LI>Keep-Alive arguments are now configurable.
+    <LI>Sometimes died if very long URLs were used.
+    <LI>Windows NT control panel did not work.
+  </UL>
+
+  <LI>Xitami 1.2a limited release with these changes:
+  <UL>
+    <LI>Added server:portbaseN configuration option.
+    <LI>Keep-Alive works for CGI programs.
+    <LI>Allows non-CGI files in cgi-bin directory.
+    <LI>cgi:mixed-url controls non-CGI files in cgi-bin directory.
+    <LI>CGI stderr output logged to cgi:stderr file
+    <LI>Corrected access log file format, which had errors.
+    <LI>Output from CGI programs is now handled correctly.
+    <LI>Server occasionally aborted due to an assertion.
+    <LI>If-Modified-Since: header was not being used correctly.
+  </UL>
+
+  <LI>Xitami 1.1b released 97/03/17 with these changes:
+  <UL>
+    <LI>Improved use of 'cgi-bin' option; can now specify an
+    absolute directory, and 'cgi-bin' can occur at any level
+    in the URL path.
+    <LI>Added PATH_INFO variable for CGI programs.
+    <LI>Directory listings can be disabled.
+    <LI>Added support for user-defined MIME types.
+    <LI>Added support for absolute URLs in image maps.
+    <LI>Customisable CGI support.
+    <LI>Customisable server error pages.
+    <LI>Windows NT service control panel added.
+    <LI>Reduced CPU usage in 32-bit Windows versions.
+    <LI>Added support for Perl CGI programs under Windows and OS/2.
+    <LI>Added optional Xitami configuration file.
+    <LI>Auto reloading of configuration and authorization files
+    when modified.
+    <LI>Hourly, daily, weekly, monthly cycling of log files.
+    <LI>Log files can be in any directory.
+  </UL>
+
+  <LI>Xitami 1.0d released 97/02/23 with these changes:
+  <UL>
+    <LI>Windows NT service version added.
+    <LI>16-bit Windows version released.
+    <LI>Windows versions permit customised web pages and CGI
+    directories; previously these were fixed.
+    <LI>Returns MIME type */* for unknown file types; previously
+    returned text/html, which caused unknown files (such as zip
+    files) to be shown as HTML text.
+    <LI>CGI programs get their arguments in the same way for GET
+    methods as for PUT methods.
+    <LI>More variables passed to CGI programs.
+    <LI>Too-long requests are correctly handled, returning a 500
+    or 413 error code.
+    <LI>Xitami now tries port 5080 if 80 is unavailable (previous
+    versions tried 8080, but this is commonly used for HTTP proxy
+    servers).
+    <LI>A bug in previous versions allowed a user to browse into
+    directories by adding '..' to the URL.  This has been fixed.
+  </UL>
+
+  <LI>Xitami 1.0c released 97/01/01 with various improvements:
+  <UL>
+    <LI>Access log file using CERN/NCSA common log format.
+    <LI>Access log files automatically cycled.
+    <LI>Console log file kept separate from access log file.
+  </UL>
+
+  <LI>Xitami 1.0b was released as a separate product in December
+  1996.
+
+  <LI>Xitami 1.0a was released as part of the SMT product in
+  October 1996.
+</UL>
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index20.htm">&lt;</A>
+ | <A href="license.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <EM>Release History</EM>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

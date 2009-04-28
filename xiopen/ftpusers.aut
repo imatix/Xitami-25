@@ -1,0 +1,51 @@
+#
+#   ftpusers.aut - FTP users file for XITAMI
+#
+#   Each section [Xxxx] defines a user who can connect to the FTP service.
+#   The user name is not case sensitive.  Possible options for a user are:
+#
+#   access=(G|P|U|D|M|R|*)...   Permissions: get/put/del/upload/mkdir/rmdir
+#   password=(-|*|""|text)      * = anonymous; - = disabled; "" = none
+#   root=directory              With leading '/' is absolute path; "" is
+#                               main ftproot directory.
+#   aliases=1|0                 Has access to aliases?  By default 1 if
+#                               root="", else defaults to 0.  Note: this
+#                               command is not currently implemented.
+#   use-quotas=1|0              User is subject to quotas.  By default, 0.
+#   soft-quota=n                Above this, user gets error messages
+#   hard-quota=n                Above this, new uploads are forbidden
+#
+#   NOTE: do not modify this file except for testing.  When you re-install
+#   Xitami, this file may be replaced.  Instead, change the ftp:user-file
+#   option and copy this file.
+#
+#*END
+
+[Admin]
+    access=GPDMR
+    password=-
+    root=""
+    use-Quotas=0                        #   Enforce quotas per user
+
+[Anonymous]
+    access=G
+    password=*
+    root=pub
+
+[Ftp]
+    access=G
+    password=*
+    root=pub
+
+[Guest]
+    access=G
+    password=""
+    root=guest
+
+[Upload]
+    access=P
+    password=upload
+    root=upload
+    use-quotas=1
+    soft-quota=1.0                     #   Warnings above 4 Mbytes
+    hard-quota=2.0                     #   Blocks above 5 Mbytes

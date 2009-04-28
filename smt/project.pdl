@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<pdl
+    name      = "SMT"
+    acronym   = "smt"
+    install   = "xitami-25"
+    version   = "2.80"
+    copyright = "Copyright (c) 1991-2003 iMatix Corporation"
+    workflow  = "standard.pwl"
+    library   = "libsmt">
+
+<include filename = "prelude.pdl" />
+<file name = "version.h"    class = "c version"       >Project version header</file>
+
+<file name = "smtdefn.h"    class = "public header"   />
+<file name = "smtlib.h"     class = "public header"   />
+<file name = "smtmsg.h"     class = "generated header"/>
+<file name = "smtsslm.h"    class = "generated header"/>
+<file name = "smthttpl.h"   class = "public header"   />
+<file name = "smtftpl.h"    class = "public header"   />
+<file name = "xixlogm.h"    class = "generated header"/>
+<file name = "xixlog.h"     class = "public header"   />
+<file name = "smtupm.h"     class = "private resource"/>
+<file name = "smtsimu.h"    class = "private resource"/>
+<file name = "xilrwp.h"     class = "private resource"/>
+<file name = "smtschm.c"    class = "public resource" />
+<file name = "smtecho.c"    class = "c/libero"        />
+<file name = "smtftpc.c"    class = "c/libero"        />
+<file name = "smtftpd.c"    class = "c/libero"        />
+<file name = "smtftpl.c"    class = "library module"  />
+<file name = "smthlog.c"    class = "c/libero"        />
+<file name = "smthttp.c"    class = "c/libero"        />
+<file name = "smthttpl.c"   class = "library module"  />
+<file name = "smtlib.c"     class = "library module"  />
+<file name = "smtlog.c"     class = "c/libero"        />
+<file name = "smtoper.c"    class = "c/libero"        />
+<file name = "smtpipe.c"    class = "c/libero"        />
+<file name = "smtrdns.c"    class = "c/libero"        />
+<file name = "smtrdnsl.c"   class = "library module"  />
+<file name = "smtsimu.c"    class = "c/libero"        />
+<file name = "smtslot.c"    class = "c/libero"        />
+<file name = "smtsock.c"    class = "c/libero"        />
+<file name = "smttime.c"    class = "c/libero"        />
+<file name = "smttran.c"    class = "c/libero"        />
+<file name = "smttst1.c"    class = "c/libero"        />
+<file name = "smttst2.c"    class = "c/libero"        />
+<file name = "smttst3.c"    class = "c/libero"        />
+<file name = "smtupmc.c"    class = "c/libero"        />
+<file name = "smtupmd.c"    class = "c/libero"        />
+<file name = "xiddns.c"     class = "c/libero"        />
+<file name = "xierror.c"    class = "c/libero"        />
+<file name = "xiredir.c"    class = "c/libero"        />
+<file name = "xiimap.c"     class = "c/libero"        />
+<file name = "xilrwp.c"     class = "c/libero"        />
+<file name = "xisuper.c"    class = "c/libero"        />
+<file name = "xixlog.c"     class = "c/libero"        />
+<file name = "xixssi.c"     class = "c/libero"        />
+<file name = "xixxml.c"     class = "c/libero"        />
+<file name = "wsxrc"        class = "perl/libero"     />
+<file name = "smtexdr.gsl"  class = "public resource" >Generate EXDR wrappers for SMT messages</file>
+<file name = "smtmsg.xml"   class = "gsl template"    >SMT message definitions</file>
+<file name = "smtsslm.xml"  class = "gsl template"    >SMT SSL message definitions</file>
+<file name = "xixlogm.xml"  class = "gsl template"    >Xixlog message definitions</file>
+<file name = "xiconfig.gsl" class = "public script"   >Generate configuration</file>
+<file name = "xiconfig.xml" class = "public resource" >Xitami configuration</file>
+<file name = "xiconfig.h"   class = "generated"       >Configuration header</file>
+<file name = "ximodel.gsl"  class = "public script"   >Generate Xitami models</file>
+<file name = "ximodel.xml"  class = "public resource" >Xitami model definitions</file>
+<file name = "xicore.xml"   class = "gsl data"        >Xitami core definitions
+    <derive filename = "xicorpro.d"  class = "generated header"  />
+    <derive filename = "xicorpro.i"  class = "generated header"  />
+    <derive filename = "xicorstd.d"  class = "generated header"  />
+    <derive filename = "xicorstd.i"  class = "generated header"  />
+</file>
+
+<!-- Deliverables   -->
+<file name = "libsmt"       class = "public library"  />
+
+<actions>
+  <generate>
+    <execute command = "gsl -q -build_header:1 xiconfig" />
+  </generate>
+</actions>
+
+</pdl>

@@ -1,0 +1,1610 @@
+#! /usr/bin/perl
+#=============================================================================
+#                                                                            
+#   fmlgen - Form Markup Language generator                                  
+#                                                                            
+#   Copyright (c) 1991-2003 iMatix Corporation                               
+#                                                                            
+#   ------------------ GPL Licensed Source Code ------------------           
+#   iMatix makes this software available under the GNU General               
+#   Public License (GPL) license for open source projects.  For              
+#   details of the GPL license please see www.gnu.org or read the            
+#   file license.gpl provided in this package.                               
+#                                                                            
+#   This program is free software; you can redistribute it and/or            
+#   modify it under the terms of the GNU General Public License as           
+#   published by the Free Software Foundation; either version 2 of           
+#   the License, or (at your option) any later version.                      
+#                                                                            
+#   This program is distributed in the hope that it will be useful,          
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of           
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            
+#   GNU General Public License for more details.                             
+#                                                                            
+#   You should have received a copy of the GNU General Public                
+#   License along with this program in the file 'license.gpl'; if            
+#   not, write to the Free Software Foundation, Inc., 59 Temple              
+#   Place - Suite 330, Boston, MA 02111-1307, USA.                           
+#                                                                            
+#   You can also license this software under iMatix's General Terms          
+#   of Business (GTB) for commercial projects.  If you have not              
+#   explicitly licensed this software under the iMatix GTB you may           
+#   only use it under the terms of the GNU General Public License.           
+#                                                                            
+#   For more information, send an email to info@imatix.com.                  
+#   --------------------------------------------------------------           
+#=============================================================================
+
+require 'findfile.pl';                  #   Find file on path
+require 'fmlgen.fmt';                   #   Include output formats
+require 'fmlgen.d';                     #   Include dialog interpreter
+
+
+##########################   INITIALISE THE PROGRAM   #########################
+
+sub initialise_the_program
+{
+    $version = "3.1";                   #   Program version number
+    $me      = "fmlgen";                #   For all messages
+    $ext     = ".htm";                  #   Default argument file extension
+
+    if (@ARGV > 0) {                    #   1 or more arguments in @ARGV?
+        $the_next_event = $ok_event;
+        $next_arg = 0;                  #   Arguments start at 0
+    }
+    else {
+        print "$me - Studio form code generator V$version\n";
+        print "Copyright (c) 1995-2002 iMatix Corporation\n";
+        print "syntax: $me <filename>...\n";
+        $the_next_event = $error_event;
+    }
+}
+
+
+#########################   PARSE FORMIO HEADER FILE   ########################
+
+sub parse_formio_header_file
+{
+    #   We load all enums from the formapi.h header file, thus avoiding
+    #   messy maintenance problems.
+
+    local ($filepath);
+    $filepath = &findfile ("formio.h", "INCDIR");
+    $filepath = &findfile ("formio.h", "INCDIR_ALT")  unless $filepath;
+    $filepath = &findfile ("formio.h", "STUDIO_DATA") unless $filepath;
+
+    if ($filepath && open (HEADER, $filepath)) {
+        while (<HEADER>) {
+            $enum = 1 if /enum\s\{/;
+            $enum = 0 if /\};/;
+            eval "\$$1 = $2"
+                if ($enum && /^\s*([A-Z0-9_]+)\s+=\s+([0-9]+)/);
+        }
+        close (HEADER);
+    }
+    else {
+        print "$me E: can't read formio.h: $!\n";
+        &raise_exception ($exception_event);
+    }
+}
+
+
+#########################   INITIALISE PROGRAM DATA   #########################
+
+sub initialise_program_data
+{
+    #   Tokens that we recognise in FML tags
+    $keyword {"if"}      = $if_event;
+    $keyword {"/if"}     = $end_if_event;
+    $keyword {"unless"}  = $unless_event;
+    $keyword {"/unless"} = $end_unless_event;
+    $keyword {"field"}   = $field_event;
+    $keyword {"/field"}  = $end_field_event;
+    $keyword {"repeat"}  = $repeat_event;
+    $keyword {"/repeat"} = $end_repeat_event;
+    $keyword {"action"}  = $action_event;
+    $keyword {"/action"} = $end_action_event;
+    $keyword {"const"}   = $const_event;
+    $keyword {"/const"}  = $end_const_event;
+
+    #   FML field keywords
+    $fml_type {"textual"}  = $BLOCK_TEXTUAL;
+    $fml_type {"numeric"}  = $BLOCK_NUMERIC;
+    $fml_type {"date"}     = $BLOCK_DATE;
+    $fml_type {"time"}     = $BLOCK_TIME;
+    $fml_type {"boolean"}  = $BLOCK_BOOLEAN;
+    $fml_type {"textbox"}  = $BLOCK_TEXTBOX;
+    $fml_type {"select"}   = $BLOCK_SELECT;
+    $fml_type {"radio"}    = $BLOCK_RADIO;
+    $fml_type {"file"}     = $BLOCK_FILE;
+    $fml_type {"image"}    = $BLOCK_IMAGE;
+
+    $fml_attr {"input"}    = $FATTR_INPUT;
+    $fml_attr {"require"}  = $FATTR_REQUIRE;
+    $fml_attr {"error"}    = $FATTR_ERROR;
+    $fml_attr {"absent"}   = $FATTR_ABSENT;
+    $fml_attr {"secure"}   = $FATTR_SECURE;
+    $fml_attr {"hidden"}   = $FATTR_HIDDEN;
+    $fml_attr {"protect"}  = $FATTR_PROTECT;
+    $fml_attr {"blank"}    = $FATTR_BLANK;
+    $fml_attr {"label"}    = $FATTR_LABEL;
+    $fml_attr {"title"}    = $FATTR_TITLE;
+    $fml_attr {"hilite"}   = $FATTR_HILITE;
+    $fml_attr {"message"}  = $FATTR_MESSAGE;
+    $fml_attr {"option"}   = $FATTR_OPTION;
+
+    #   Prepare date and time symbol strings
+    ($sec, $min, $hour, $day, $month, $year) = localtime;
+    $date = sprintf ("%04d/%02d/%02d", $year + 1900, $month + 1, $day);
+    $time = sprintf ("%2d:%02d:%02d", $hour, $min, $sec);
+}
+
+
+#########################   BUILD LIST OF HTML FILES   ########################
+
+sub build_list_of_html_files
+{
+    local ($argn);                      #   Index into @ARGV
+
+    #   We want a list of all HTML files to process.  The command-line can
+    #   specify a HTML file (extension .htm or .html) or a page list file
+    #   as produced by fxpre (extension .log).  When a command-line argument
+    #   has no extension, we look first for a .log file, then for an HTML
+    #   file.  The resulting list of files goes into @file_list.
+
+    undef @file_list;                   #   Clear file list table
+    for ($argn = 0; $argn < @ARGV; $argn++) {
+        $_ = $ARGV [$argn];             #   Get next argument filename
+        $_ = $` if /\.fdl$/;            #   fdl -> htm
+
+        if (/\.html?$/) {               #   htm, html
+            push (@file_list, $_);
+        }
+        elsif (/\.log$/) {              #   Parse fxpre .log file
+            &parse_pagelist ($_);
+        }
+        elsif (-f "$_.log") {           #   No extension - try .log
+            &parse_pagelist ("$_.log");
+        }
+        elsif (-f "$_.htm") {           #   No extension - try .htm
+            push (@file_list, "$_.htm");
+        }
+        elsif (-f "$_.html") {          #   No extension - try .html
+            push (@file_list, "$_.html");
+        }
+        else {
+            print "$me E: can't find a HTML or log file called $_\n";
+            &raise_exception ($exception_event);
+        }
+    }
+}
+
+#   Read a pagelist file produced by fxpre, store non-commment
+#   lines in the file_list table.
+#
+sub parse_pagelist {
+    local ($pagefile) = @_;             #   Get subroutine arguments
+
+    if (open (PAGELIST, $pagefile)) {
+        while (<PAGELIST>) {
+            chop while /\s$/;           #   Remove trailing whitespace
+            next if /^#/;               #   Skip comments
+            next if /^$/;               #     and blank lines
+            push (@file_list, $_);
+        }
+        close (PAGELIST);
+    }
+    else {
+        print "$me E: can't open $pagefile: $!\n";
+        &raise_exception ($exception_event);
+    }
+}
+
+
+#########################   GET NEXT FILE TO PROCESS   ########################
+
+sub get_next_file_to_process
+{
+    if (@file_list > 0) {
+        $htmlfile = shift (@file_list);
+        $formname = &basename ($htmlfile);
+        $codefile = $formname.".h";
+        $the_next_event = $ok_event;
+    }
+    else {
+        $the_next_event = $no_more_files_event;
+    }
+}
+
+#   Return filename, without extension
+#
+sub basename {
+    local ($name) = @_;                 #   Get argument
+    $name =~ s/\..*//;                  #   Remove extension, if any
+    return ($name);
+}
+
+
+###########################   OPEN HTML PAGE FILE   ###########################
+
+sub open_html_page_file
+{
+    $htmlfile.= $ext if $htmlfile !~ /\./;
+    if (open (HTMLFILE, $htmlfile)) {
+        print "$me I: processing $htmlfile...\n";
+    }
+    else {
+        print "$me E: can't open $htmlfile: $!\n";
+        &raise_exception ($exception_event);
+    }
+    $lines_read = 0;
+    $in_header  = 1;                    #   Until we get tagged text
+    
+    #   These attributes define each entry in the block list
+    #
+    $block_count = 0;                   #   Size of block tables
+    undef @block_type;                  #   Type code for each block
+    undef @block_text;                  #   Block text for each block
+    undef @block_size;                  #   Size of block
+    undef @block_times;                 #   Occurences of block (in REPEAT)
+    undef @block_optn;                  #   Block options ("abc=xyz ...")
+    undef @block_line;                  #   Block line number in input
+    undef @block_base;                  #   Offset of block in table
+
+    #   These attributes define each entry in the field list
+    #
+    $field_count = 0;                   #   Size of field tables
+    undef @field_attr;                  #   Attribute for each field
+    undef @field_block;                 #   Block index for each field
+    undef @field_times;                 #   Occurences of field (in REPEAT)
+    undef @field_name;                  #   Short name for each field
+    undef @field_long;                  #   Long name for each field
+    undef @field_size;                  #   External size for field
+    undef @field_max;                   #   Internal size for field
+    undef @field_type;                  #   C datatype for each field
+
+    #   This table lets us find the field number (index into field_attr)
+    #   for a particular field name.
+    #
+    undef %field_lookup;                #   Field number for each short name
+    undef %field_name;                  #   Field number for each long name
+
+    #   Reset table of constants
+    undef %constants;
+    
+    #   If we're within a repeat block, this variable holds the rows
+    #
+    $repeat_rows = 0;
+
+    #   This variable lets us count the actions in the form, 0..n-1
+    #
+    $action_index = 0;
+}
+
+
+############################   GET NEXT HTML LINE   ###########################
+
+sub get_next_html_line
+{
+    if ($_ = <HTMLFILE>) {              #   Get next line of input
+        $lines_read++;                  #   Count the line
+
+        #   If line contains an open FML tag, read and append next line
+        while (/<!--FML[^>]*$/i) {
+            chop while /\s$/;           #   Remove newline character
+            $_ .= " ".<HTMLFILE>;
+            $lines_read++;              #   Count the line
+        }
+        $document_line  = "$_";
+        $remainder      = "$_";         #   For parsing into segments
+        $the_next_event = $ok_event;
+        $in_header = 0 if (/^</);       #   Tag at start of line means end of header
+    }
+    else {
+        &raise_exception ($end_of_file_event);
+    }
+}
+
+
+##########################   GET NEXT LINE SEGMENT   ##########################
+
+sub get_next_line_segment
+{
+    #   Gets next line segment into $_
+
+    local ($command);
+    if ($remainder eq "" && $in_header) {
+        $_ = "\n";
+        $the_next_event = $blank_line_event;
+    }
+    elsif ($remainder =~ /<!--FML\s+(\/?[a-z]+)[^>]*-->/i) {
+        if ($`) {                       #   Anything before <!--FML?
+            $_ = $`;                    #   $_ is text
+            $remainder = $&.$';         #   Keep remaining text
+            $the_next_event = $html_text_event;
+        }
+        else {
+            $_ = $&;                    #   $_ is FML tag
+            $remainder = $';            #   Keep remaining text
+            ($command = $1) =~ tr/A-Z/a-z/;
+            if (defined ($keyword {$command})) {
+                $the_next_event = $keyword {$command};
+            }
+            else {
+                &syntax_error ("undefined FML action: $command");
+            }
+        }
+    }
+    else {
+        if ($remainder eq "" || ($remainder eq "\n" && !$in_header)) {
+            $the_next_event = $no_more_segments_event;
+        }
+        else {
+            $the_next_event = $html_text_event;
+            $_ = $remainder;
+            $remainder = "";
+        }
+    }
+}
+
+sub syntax_error {
+    print "$document_line\n";
+    print "$me E: ($htmlfile $.) syntax error\n";
+    print "$me E: ($htmlfile $.) @_\n";
+    &raise_exception ($exception_event);
+}
+
+
+#########################   STORE HTML TEXT SEGMENT   #########################
+
+sub store_html_text_segment
+{
+    push (@block_type,  $BLOCK_PLAIN);
+    push (@block_times, $repeat_rows);
+    push (@block_text,  $_);            #   Store HTML text
+    push (@block_line,  $.);            #     and current input line number
+    push (@block_optn,  "");
+    $block_count++;
+}
+
+
+#########################   CONCAT HTML TEXT SEGMENT   ########################
+
+sub concat_html_text_segment
+{
+    #   If the text looks like it could be compressed, store it as a new
+    #   block.  Otherwise append it to the previous block.
+
+    #   Anything that starts with '<' is assumed to be compressible.
+    if (/^</ || $block_text [$block_count - 1] =~ /^</) {
+        &store_html_text_segment;
+    }
+    else {
+        $block_text [$block_count - 1] .= "$_";
+    }
+}
+
+
+##############################   OPEN IF BLOCK   ##############################
+
+sub open_if_block
+{
+    #   <!--FML IF=name [VALUE=number]-->
+    #
+    $cur_if_block = @block_type;        #   Index into block tables
+    &parse_block ("IF");
+    push (@block_type, $BLOCK_IF);
+}
+
+
+#   Subroutine parses a block and stores it in the @block_type table.
+#   Any options that follow the block are stored in @block_optn.
+#
+sub parse_block {
+    local ($block_name) = @_;           #   Get subroutine arguments
+    local ($block_text);
+
+    if (/<!--FML\s+$block_name=([A-Za-z0-9-_]+)(.*)-->/i) {
+        ($block_text = $1) =~ tr/A-Z-/a-z_/;
+        push (@block_times, $repeat_rows);
+        push (@block_text, $block_text);
+        push (@block_optn, $2);         #   Store block options text
+        push (@block_line, $.);         #     and current line number
+        &parse_options ($2);            #   Parse options if any
+        $block_count++;
+    } else {
+        &syntax_error ("not a valid $block_name definition");
+    }
+}
+
+
+#   Subroutine parses option string and creates associated array %values.
+#
+sub parse_options {
+    local ($_) = @_;                    #   Get current line to work with
+
+    undef %values;                      #   Clear values array
+    while ($_) {                        #   Parse line until finished
+        if (/^\s*(\w+)="([^"]*)"/       #     name="value"
+        ||  /^\s*(\w+)='([^']*)'/       #     name='value'
+        ||  /^\s*(\w+)=(\S+)/) {        #     name=value
+            $_ = $1;                    #   Get keyword name
+            tr/A-Z/a-z/;                #     in lowercase
+            $values {$_} = $2;          #   Store keyword=value
+            $_ = $';                    #   Remainder of line
+        }
+        else {
+            last;
+        }
+    }
+}
+
+
+##############################   CLOSE IF BLOCK   #############################
+
+sub close_if_block
+{
+    #   <!--FML /IF -->
+    #   Currently, we don't allow nested IF and UNLESS
+    #
+    #   Calculate the number of blocks between IF and /IF
+    $block_size [$cur_if_block] = $block_count - $cur_if_block - 1;
+}
+
+
+############################   OPEN UNLESS BLOCK   ############################
+
+sub open_unless_block
+{
+    #   <!--FML UNLESS=name [VALUE=number]-->
+    #
+    $cur_unless_block = @block_type;    #   Index into block tables
+    &parse_block ("UNLESS");
+    push (@block_type, $BLOCK_UNLESS);
+}
+
+
+############################   CLOSE UNLESS BLOCK   ###########################
+
+sub close_unless_block
+{
+    #   <!--FML /UNLESS -->
+    #   Currently, we don't allow nested IF and UNLESS
+    #
+    #   Calculate the number of blocks between UNLESS and /UNLESS
+    $block_size [$cur_unless_block] = $block_count - $cur_unless_block - 1;
+}
+
+
+############################   OPEN REPEAT BLOCK   ############################
+
+sub open_repeat_block
+{
+    #   <!--FML REPEAT=name [ROWS=max] -->
+    #
+    $cur_repeat_block = @block_type;    #   Index into block tables
+    &parse_block ("REPEAT");
+    $repeat_rows = &value ("rows", 1);
+    push (@block_type, $BLOCK_REPEAT);
+}
+
+
+############################   CLOSE REPEAT BLOCK   ###########################
+
+sub close_repeat_block
+{
+    #   <!--FML /REPEAT -->
+    #   Currently, we don't allow nested REPEAT blocks
+    #
+    #   Calculate the number of blocks between UNLESS and /UNLESS
+    $block_size [$cur_repeat_block] = $block_count - $cur_repeat_block - 1;
+    $repeat_rows = 0;                   #   No longer repeating
+}
+
+
+########################   STORE CONSTANT DEFINITION   ########################
+
+sub store_constant_definition
+{
+    #   <!--FML CONST=name VALUE=value -->
+    #
+    if (/<!--FML\s+CONST=([A-Za-z0-9-_]+)(.*)-->/i) {
+        $fname = $1;
+        &parse_options ($2);
+        $constants {$fname} = &value ("value", 1);
+    } else {
+        &syntax_error ("not a valid CONST definition");
+    }
+}
+
+
+#############################   OPEN FIELD BLOCK   ############################
+
+sub open_field_block
+{
+    #   <!--FML FIELD=name [type] [keyword...] [attrs...] -->
+    #
+    if (/<!--FML\s+FIELD=([A-Za-z0-9-_]+)(.*)-->/i) {
+        &parse_field_definition ($1, $2);
+    } else {
+        &syntax_error ("not a valid FIELD definition");
+    }
+}
+
+
+sub parse_field_definition {
+    local ($_);
+    local ($keyword);
+    ($field_name, $_) = @_;
+
+    #   Check that field name is valid according to our syntax rules
+    $field_name =~ tr/A-Z-/a-z_/;       #   Always lower-case
+    if ($field_name !~ /^[a-z0-9]([a-z0-9_]*[a-z0-9])?$/) {
+        &syntax_error ("name must be letters, digits, and embedded '_', '-'");
+    }
+
+    #   Set default field type and attribute, to be overridden by the
+    #   type and attribute keywords, if present.
+    #
+    $field_type = $BLOCK_TEXTUAL;
+    $field_attr = $FATTR_LABEL;
+    $field_optn = "";
+
+    die "Assert" if !defined ($field_type);
+    die "Assert" if !defined ($field_attr);
+
+    #   Break field definition into keywords and options
+    while ($_) {
+        #   Single word is a keyword
+        if (/^\s*([A-Za-z0-9]+)(\s+|$)/) {
+            ($keyword = $1) =~ tr/A-Z/a-z/;
+            if (defined ($fml_type {$keyword})) {
+                $field_type = $fml_type {$keyword};
+            }
+            elsif (defined ($fml_attr {$keyword})) {
+                $field_attr = $fml_attr {$keyword};
+            }
+            else {
+                &syntax_error ("unrecognised FIELD keyword: '$keyword'");
+            }
+        }
+        elsif (/^\s*(\w+="[^"]*")\s*/   #     name="value"
+        ||     /^\s*(\w+='[^']*')\s*/   #     name='value'
+        ||     /^\s*(\w+=\S+)\s*/) {    #     name=value
+            $field_optn .= "$1 ";
+        }
+        else {
+            &syntax_error ("invalid field definition");
+            last;
+        }
+        $_ = $';                        #   Take remaining text
+    }
+
+    #   Now store the field definition as appropriate
+    &parse_options ($field_optn);
+    &store_field_definition;
+}
+
+
+sub store_field_definition {
+    local ($field_size);
+
+    #   Check that field is unique on form
+    #
+    local ($long_name) = &value ("name", $field_name);
+    $long_name =~ tr/A-Z-/a-z_/;        #   Always lower-case, ulines
+
+    if (defined ($field_lookup {$field_name})
+    ||  defined ($field_name   {$long_name})) {
+        &syntax_error ("'$field_name' is already defined on form");
+    }
+    else {
+        #   Store the field index in %field_lookup.
+        $field_lookup {$field_name} = $field_count;
+        $field_name   {$long_name} =  $field_count;
+    }
+    $field_size = &value ("size", 0);
+    push (@field_attr,  $field_attr);
+    push (@field_block, $block_count);
+    push (@field_times, $repeat_rows);
+    push (@field_name,  $field_name);
+    push (@field_long,  $long_name);
+    push (@field_size,  $field_size);
+    push (@field_max,   &value ("max", 0));
+    $field_count++;
+
+    push (@block_type,  $field_type);
+    push (@block_times, $repeat_rows);
+    push (@block_text,  $field_name);
+    push (@block_optn,  $field_optn);   #   Store block options text
+    push (@block_line,  $.);            #     and current line number
+    push (@block_size,  0);             #   Block size not used
+    $block_count++;
+}
+
+
+############################   OPEN ACTION BLOCK   ############################
+
+sub open_action_block
+{
+    #   <!--FML ACTION=name [EVENT=name] -->
+    #
+    &parse_block ("ACTION");
+    push (@block_type, $BLOCK_ACTION);
+}
+
+
+###########################   GENERATE OUTPUT FILE   ##########################
+
+sub generate_output_file
+{
+    &open_output_code_file;
+    &format_output (CODEFILE, "OUTPUT_HEAD");
+
+    &output_form_constants;
+    &output_form_blocks;
+    &output_form_fields;
+    &output_form_data;
+    &output_form_definition;
+
+    &format_output (CODEFILE, "OUTPUT_FOOT");
+    close (CODEFILE);
+}
+
+
+sub open_output_code_file {
+    if (!open (CODEFILE, ">$codefile")) {
+        print "$me E: can't write $codefile: $!\n";
+        &raise_exception ($exception_event);
+    }
+}
+
+#   Subroutine prepares output format and writes it to the specified
+#   output stream.
+#
+sub format_output {
+    local ($stream, $format) = @_;      #  Get subroutine arguments
+
+    select ($stream);
+    $~ = "$format";
+    eval "write";
+    select (STDOUT);
+    if ($@) {
+        print "$me E: ($htmlfile $.) can't write $format: $@\n";
+        &raise_exception ($exception_event);
+    }
+}
+
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   Subroutine generates the form constants
+#
+sub output_form_constants {
+    #   Output the header
+    &format_output (CODEFILE, "FORM_CONSTANTS_HEAD");
+
+    #   Output the maximum size of each REPEAT table
+    for ($block = 0; $block < $block_count; $block++) {
+        if ($block_type [$block] == $BLOCK_REPEAT) {
+            &parse_options ($block_optn [$block]);
+            $name  = $block_text [$block]."_MAX";
+            $name  =~ tr/a-z/A-Z/;
+            $value = &value ("rows", 1);
+            &format_output (CODEFILE, "FORM_CONSTANT");
+        }
+    }
+    #   Output a definition for each field, giving the field index
+    for ($field = 0; $field < $field_count; $field++) {
+        $name = $formname."_".$field_long [$field];
+        $name =~ tr/a-z-/A-Z_/;
+        $value = $field;
+        &format_output (CODEFILE, "FORM_CONSTANT");
+    }
+    #   Output all programmer-defined constants
+    foreach (keys (%constants)) {
+        $name  = $_;
+        $value = $constants {$name};
+        &format_output (CODEFILE, "FORM_CONSTANT");
+    }
+
+    &format_output (CODEFILE, "FORM_CONSTANTS_FOOT");
+}
+
+
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   Subroutine generates the form block table
+#
+sub output_form_blocks {
+    &format_output (CODEFILE, "FORM_BLOCKS_HEAD");
+
+    $block_base = 0;                    #   We're at the start of the table
+    for ($block = 0; $block < $block_count; $block++) {
+        $type = $block_type [$block];   #   Get block type value
+        $text = $block_text [$block];   #   Get block text or field name
+        $size = $block_size [$block];   #   Get block size, if used
+        $optn = $block_optn [$block];   #   Get block options, if any
+        $line = $block_line [$block];   #   Get block original line number
+        &parse_options ($optn);
+        $output_line = "";              #   Reset output line
+        $output_size = 0;
+
+        $type == $BLOCK_PLAIN   && do { &output_plain_block;   next; };
+        $type == $BLOCK_IF      && do { &output_if_block;      next; };
+        $type == $BLOCK_UNLESS  && do { &output_unless_block;  next; };
+        $type == $BLOCK_REPEAT  && do { &output_repeat_block;  next; };
+        $type == $BLOCK_TEXTUAL && do { &output_textual_block; next; };
+        $type == $BLOCK_FILE    && do { &output_file_block;    next; };
+        $type == $BLOCK_NUMERIC && do { &output_numeric_block; next; };
+        $type == $BLOCK_DATE    && do { &output_date_block;    next; };
+        $type == $BLOCK_TIME    && do { &output_time_block;    next; };
+        $type == $BLOCK_TEXTBOX && do { &output_textbox_block; next; };
+        $type == $BLOCK_BOOLEAN && do { &output_boolean_block; next; };
+        $type == $BLOCK_SELECT  && do { &output_select_block;  next; };
+        $type == $BLOCK_RADIO   && do { &output_radio_block;   next; };
+        $type == $BLOCK_ACTION  && do { &output_action_block;  next; };
+        $type == $BLOCK_IMAGE   && do { &output_image_block;   next; };
+
+        print "$me E: ($htmlfile $.) invalid block type $type\n";
+        &raise_exception ($exception_event);
+    }
+    &format_output (CODEFILE, "FORM_BLOCKS_FOOT");
+}
+
+
+#   Generate output for BLOCK_PLAIN
+#
+sub output_plain_block {
+    local ($compare, $match_addr);
+    local ($char_nbr);
+
+    &generate_comment ($text);
+
+    #   If text segment matches existing stored segment, store as
+    #   compressed block; else store as plain block.
+
+    for ($compare = 0; $compare < $block; $compare++) {
+        next unless $block_type [$block] == $BLOCK_PLAIN;
+        if ($text eq $block_text [$compare]) {
+            &output_byte  ($COMPR_WHOLEDICT);
+            &output_dbyte ($block_base [$compare]);
+            &generate_output ($BLOCK_COMPRESSED);
+            return;
+        }
+        elsif (length ($text) > 4       #   Compressed block is already 4
+        && $text eq substr ($block_text [$compare], 0, length ($text))) {
+            &output_byte  ($COMPR_PARTDICT);
+            &output_dbyte ($block_base [$compare]);
+            &output_dbyte (length ($text));
+            &generate_output ($BLOCK_COMPRESSED);
+            return;
+        }
+    }
+    for ($char_nbr = 0; $char_nbr < length ($text); $char_nbr++) {
+        &output_byte (ord (substr ($text, $char_nbr, 1)));
+    }
+    &generate_output ($BLOCK_PLAIN);
+}
+
+
+#   Subroutine formats a byte value and appends it to the current $_ line
+#
+sub output_byte {
+    local ($value) = @_;
+    local ($vchar);
+
+    $vchar = sprintf ("%c", $value);
+    if ($vchar !~ /[\x00-\x20\x80-\xff-'\\]/) {
+        $output_line .= "\'$vchar\', ";
+    }
+    else {
+        $output_line .= sprintf ("%d, ", $value);
+    }
+    $output_size++;
+}
+
+
+#   Subroutine formats a dbyte value and appends it to the current $_ line
+#
+sub output_dbyte {
+    local ($value) = @_;
+    &output_byte (($value / 256) & 255);
+    &output_byte ($value & 255);
+}
+
+
+#   Generate comment for the following block
+#
+sub generate_comment {
+    local ($_) = @_;                    #   Get subroutine argument
+
+    s/\n//g;                            #   Kill all newlines
+    if (length ($_) > 62) {             #     and cut to a reasonable size
+        $_ = substr ($_, 0, 28)." ... ".substr ($_, -28);
+    }
+    &format_output (CODEFILE, "FORM_BLOCK_COMMENT");
+}
+
+
+#   Generate partial output stream, as hexadecimal values separated
+#   by commas.  Takes two arguments; first is data to output, second
+#   is block type as a number.
+#
+sub generate_output {
+    local ($type) = @_;                 #   Get subroutine arguments
+    local ($char_nbr);                  #   Index into $data
+    local ($cur_char);                  #   Next character to output
+    local ($_);
+
+    push (@block_base, $block_base);    #   Store current block base
+    $block_base += $output_size + 3;    #   Count length, type, and data
+
+    #   Start block with 2-byte length in network order (Hi-Lo)
+    #   We include the block type in the length
+    $_  = sprintf ("%d, %d, %d, ",
+                   ($output_size + 1) / 256, ($output_size + 1) & 255, $type);
+    $_ .= $output_line;
+    &format_output (CODEFILE, "FORM_BLOCK_DATA");
+}
+
+
+#   Generate output for BLOCK_IF
+#
+sub output_if_block {
+    &generate_comment ("!--IF $text $optn");
+    &output_field ($text);
+    &output_dbyte ($size);
+    &output_dbyte (&value ("value", 0));
+    &generate_output ($BLOCK_IF);
+}
+
+
+#   Subroutine looks for the specified field name and if found,
+#   appends the fields number as a dbyte to the current $_.  If the
+#   field is not found, displays an error message and raises the
+#   exception event.
+#
+sub output_field {
+    local ($field_name) = @_;
+    if (defined ($field_lookup {$field_name})) {
+        &output_dbyte ($field_lookup {$field_name});
+    }
+    elsif (defined ($field_name {$field_name})) {
+        &output_dbyte ($field_name {$field_name});
+    }
+    else {
+        &output_dbyte (0);
+        print "$me E: ($htmlfile $line) '$field_name' not defined as field\n";
+        &raise_exception ($exception_event);
+    }
+}
+
+
+#   Generate output for BLOCK_UNLESS
+#
+sub output_unless_block {
+    &generate_comment ("!--UNLESS $text $optn");
+    &output_field ($text);
+    &output_dbyte ($size);
+    &output_dbyte (&value ("value", 0));
+    &generate_output ($BLOCK_UNLESS);
+}
+
+
+#   Generate output for BLOCK_REPEAT
+#
+sub output_repeat_block {
+    &generate_comment ("!--REPEAT $text $optn");
+    &output_field ($text);
+    &output_dbyte ($size);
+    &output_dbyte (&value ("rows", 1));
+    &generate_output ($BLOCK_REPEAT);
+}
+
+
+#   Return value for keyword, or default value if missing or "?"
+#
+sub value {
+    local ($key, $default) = @_;
+    local ($value);
+
+    if (defined ($values {$key})) {
+        $value = $values {$key};
+        $value = $default
+            if $value eq "?";
+    }
+    else {
+        $value = $default;
+    }
+    return ($value);
+}
+
+
+#   Return lowercase value for keyword, or default value if missing or "?"
+#
+sub vlower {
+    local ($value) = &value (@_);
+    $value =~ tr/A-Z/a-z/;
+    return ($value);
+}
+
+
+#   Generate output for BLOCK_TEXTUAL
+#
+sub output_textual_block {
+    local ($field_upper) = &value ("upper", 0);
+
+    &generate_comment ("!--FIELD TEXTUAL $text $optn");
+
+    &get_field_values ($text);          #   Get field index and attr
+
+    if ($field_max == 0) {
+        $field_max = $field_size;
+        $field_max [$field_index] = $field_max;
+    }
+    &output_byte   ($field_attr);
+    &output_byte   ($field_times);
+    &output_byte   ($field_upper);
+    &output_dbyte  ($field_size);
+    &output_dbyte  ($field_max);
+    &output_string ($field_name);
+    &output_string ($field_value);
+    &output_string (&value ("attr", ""));
+
+    &generate_output ($BLOCK_TEXTUAL);
+}
+
+
+#   Generate output for BLOCK_FILE
+#
+sub output_file_block {
+    &generate_comment ("!--FIELD FILE $text $optn");
+
+    &get_field_values ($text);          #   Get field index and attr
+
+    if ($field_max == 0) {
+        $field_max = $field_size;
+        $field_max [$field_index] = $field_max;
+    }
+    &output_byte   ($field_attr);
+    &output_byte   ($field_times);
+    &output_dbyte  ($field_size);
+    &output_dbyte  ($field_max);
+    &output_string ($field_name);
+    &output_string ($field_value);
+    &output_string (&value ("attr", ""));
+
+    &generate_output ($BLOCK_FILE);
+}
+
+
+#   Subroutine looks for a specified field name and sets $field_index
+#   to the field index, if found, else to zero.  Then sets these values:
+#
+#       $field_attr
+#       $field_size
+#       $field_max
+#       $field_times
+#       $field_value
+#
+sub get_field_values {
+    ($field_name) = @_;
+
+    if (defined ($field_lookup {$field_name})) {
+        $field_index = $field_lookup {$field_name};
+        $field_attr  = $field_attr   [$field_index];
+        $field_size  = $field_size   [$field_index];
+        $field_max   = $field_max    [$field_index];
+        $field_times = $field_times  [$field_index];
+
+        if (defined ($values {"value"})) {
+            $field_value = $values {"value"};
+        }
+        else {
+            $field_value = "";
+        }
+
+        #   Some clean-ups
+        if ($field_size == 0) {
+            $field_size = $field_value? length ($field_value): 1;
+        }
+        $field_times = 1 if $field_times == 0;
+    }
+    else {
+        $field_index = 0;
+        $field_attr  = 0;
+        $field_size  = 0;
+        $field_max   = 0;
+        $field_times = 0;
+        $field_value = "";
+    }
+}
+
+
+#   Subroutine formats a string value and appends it to the current $_ line
+#
+sub output_string {
+    local ($value) = @_;
+    local ($char_nbr);
+
+    for ($char_nbr = 0; $char_nbr < length ($value); $char_nbr++) {
+        &output_byte (ord (substr ($value, $char_nbr, 1)));
+    }
+    &output_byte (0);
+}
+
+
+#   Generate output for BLOCK_NUMERIC
+#
+sub output_numeric_block {
+    local ($sign, $decs, $decfmt, $fill);
+
+    &generate_comment ("!--FIELD NUMERIC $text $optn");
+
+    &get_field_values ($text);          #   Get field index and attr
+    if ($field_max == 0) {
+        $field_max = $field_size;
+        $field_max [$field_index] = $field_max;
+    }
+    #   Parse and check numeric field options
+    $sign = &vlower ("sign", "none");
+    {
+        $sign eq "none"  && do { $sign = $FSIGN_NONE;      last; };
+        $sign eq "post"  && do { $sign = $FSIGN_POST;      last; };
+        $sign eq "pre"   && do { $sign = $FSIGN_PRE;       last; };
+        $sign eq "post+" && do { $sign = $FSIGN_POSTPLUS;  last; };
+        $sign eq "pre+"  && do { $sign = $FSIGN_PREPLUS;   last; };
+        $sign eq "fin"   && do { $sign = $FSIGN_FINANCIAL; last; };
+        print "$me E: ($htmlfile $line) SIGN=$sign not valid\n";
+        &raise_exception ($exception_event);
+    }
+    $field_decs = &value ("decs", 0);
+    $decfmt = &vlower ("decfmt", $field_decs? "all": "none");
+    {
+        $decfmt eq "none" && do { $decfmt = $FDECFMT_NONE; last; };
+        $decfmt eq "all"  && do { $decfmt = $FDECFMT_ALL;  last; };
+        $decfmt eq "drop" && do { $decfmt = $FDECFMT_DROP; last; };
+        print "$me E: ($htmlfile $line) DECFMT=$decfmt not valid\n";
+        &raise_exception ($exception_event);
+    }
+    $fill = &vlower ("fill", "none");
+    {
+        $fill eq "none"  && do { $fill = $FFILL_NONE;  last; };
+        $fill eq "space" && do { $fill = $FFILL_SPACE; last; };
+        $fill eq "zero"  && do { $fill = $FFILL_ZERO;  last; };
+        print "$me E: ($htmlfile $line) FILL=$fill not valid\n";
+        &raise_exception ($exception_event);
+    }
+    &output_byte   ($field_attr);
+    &output_byte   ($field_times);
+    &output_dbyte  ($field_size);
+    &output_dbyte  ($field_max);
+    &output_byte   ($field_decs);
+    &output_byte   ($sign);
+    &output_byte   ($decfmt);
+    &output_byte   ($fill);
+    &output_byte   (&value ("blank", 0));
+    &output_byte   (&value ("comma", 0));
+    &output_string ($field_name);
+    &output_string ($field_value);
+    &output_string (&value ("attr", ""));
+
+    &generate_output ($BLOCK_NUMERIC);
+}
+
+
+#   Generate output for BLOCK_DATE
+#
+sub output_date_block {
+    local ($show, $format, $year, $month, $day);
+
+    &generate_comment ("!--FIELD DATE $text $optn");
+
+    &get_field_values ($text);          #   Get field index and attr
+    $field_max [$field_index] = $FORMIO_DATE_SIZE;
+
+    #   Parse and check date field options
+    $show = &vlower ("show", "ymd");
+    {
+        $show eq "ymd" && do { $show = $FSHOW_YMD; last; };
+        $show eq "ym"  && do { $show = $FSHOW_YM;  last; };
+        $show eq "md"  && do { $show = $FSHOW_MD;  last; };
+        print "$me E: ($htmlfile $line) SHOW=$show not valid\n";
+        &raise_exception ($exception_event);
+    }
+    $format = &vlower ("format", "slash");
+    {
+        $format eq "compact" && do { $format = $FFORMAT_COMPACT; last; };
+        $format eq "slash"   && do { $format = $FFORMAT_SLASH;   last; };
+        $format eq "space"   && do { $format = $FFORMAT_SPACE;   last; };
+        $format eq "comma"   && do { $format = $FFORMAT_COMMA;   last; };
+        print "$me E: ($htmlfile $line) FORMAT=$format not valid\n";
+        &raise_exception ($exception_event);
+    }
+    $year = &vlower ("year", "full");
+    {
+        $year eq "full"   && do { $year = $FYEAR_FULL;  last; };
+        $year eq "short"  && do { $year = $FYEAR_SHORT; last; };
+        print "$me E: ($htmlfile $line) YEAR=$year not valid\n";
+        &raise_exception ($exception_event);
+    }
+    $month = &vlower ("month", "numeric");
+    {
+        $month eq "numeric" && do { $month = $FMONTH_NUMERIC; last; };
+        $month eq "counter" && do { $month = $FMONTH_COUNTER; last; };
+        $month eq "alpha"   && do { $month = $FMONTH_ALPHA;   last; };
+        $month eq "upper"   && do { $month = $FMONTH_UPPER;   last; };
+        print "$me E: ($htmlfile $line) MONTH=$month not valid\n";
+        &raise_exception ($exception_event);
+    }
+    $day = &vlower ("day", "numeric");
+    {
+        $day eq "numeric" && do { $day = $FDAY_NUMERIC; last; };
+        $day eq "counter" && do { $day = $FDAY_COUNTER; last; };
+        print "$me E: ($htmlfile $line) DAY=$day not valid\n";
+        &raise_exception ($exception_event);
+    }
+
+    &output_byte   ($field_attr);
+    &output_byte   ($field_times);
+    &output_dbyte  ($field_size);
+    &output_byte   ($show);
+    &output_byte   ($format);
+    &output_byte   ($year);
+    &output_byte   ($month);
+    &output_byte   ($day);
+    &output_string ($field_name);
+    &output_string ($field_value);
+    &output_string (&value ("picture", ""));
+    &output_string (&value ("attr", ""));
+
+    &generate_output ($BLOCK_DATE);
+}
+
+
+#   Generate output for BLOCK_TIME
+#
+sub output_time_block {
+    &generate_comment ("!--FIELD TIME $text $optn");
+
+    &get_field_values ($text);          #   Get field index and attr
+    $field_max [$field_index] = $FORMIO_TIME_SIZE;
+
+    #   Parse and check date field options
+    &output_byte   ($field_attr);
+    &output_byte   ($field_times);
+    &output_dbyte  ($field_size);
+    &output_string ($field_name);
+    &output_string ($field_value);
+    &output_string (&value ("picture", "hh:mm:ss"));
+    &output_string (&value ("attr", ""));
+
+    &generate_output ($BLOCK_TIME);
+}
+
+
+#   Generate output for BLOCK_TEXTBOX
+#
+sub output_textbox_block {
+    local ($field_rows)  = &value ("rows",  4);
+    local ($field_cols)  = &value ("cols", 30);
+    local ($field_upper) = &value ("upper", 0);
+
+    &generate_comment ("!--FIELD TEXTBOX $text $optn");
+
+    &get_field_values ($text);          #   Get field index and attr
+    if ($field_max == 0) {
+        $field_max = $field_rows * $field_cols;
+        $field_max [$field_index] = $field_max;
+    }
+    &output_byte   ($field_attr);
+    &output_byte   ($field_times);
+    &output_byte   ($field_rows);
+    &output_byte   ($field_cols);
+    &output_byte   ($field_upper);
+    &output_dbyte  ($field_max);
+    &output_string ($field_name);
+    &output_string ($field_value);
+    &output_string (&value ("attr", ""));
+
+    &generate_output ($BLOCK_TEXTBOX);
+}
+
+
+#   Generate output for BLOCK_BOOLEAN
+#
+sub output_boolean_block {
+    &generate_comment ("!--FIELD BOOLEAN $text $optn");
+
+    &get_field_values ($text);          #   Get field index and attr
+    $field_max [$field_index] = 1;      #   Fixed-size for Boolean fields
+
+    $field_value =~ tr/A-Z/a-z/;
+    if ($field_value eq "true"
+    ||  $field_value eq "yes"
+    ||  $field_value eq "t"
+    ||  $field_value eq "y") {
+        $field_value = 1;
+    }
+    else {
+        $field_value = 0;
+    }
+    &output_byte   ($field_attr);
+    &output_byte   ($field_times);
+    &output_string ($field_name);
+    &output_string ($field_value);
+    &output_string (&value ("true", "yes"));
+    &output_string (&value ("false", "no"));
+    &output_string (&value ("attr", ""));
+
+    &generate_output ($BLOCK_BOOLEAN);
+}
+
+
+#   Generate output for BLOCK_SELECT
+#
+sub output_select_block {
+    local ($option_nbr);
+    local ($option_count);
+    local ($option_change) = &value ("change", "no");
+
+    &generate_comment ("!--FIELD SELECT $text $optn");
+
+    $type = &vlower ("type", "fixed");
+    if ($type eq "fixed") {
+        #   Parse select options
+        for ($option_nbr = 1; defined $values {$option_nbr}; $option_nbr++) {
+            $option_count = $option_nbr;
+        }
+    }
+    elsif ($type eq "dynamic") {
+        $option_count = 0;              #   Represented by options = zero
+    }
+    else {
+        print "$me E: ($htmlfile $line) TYPE=$type not valid\n";
+        &raise_exception ($exception_event);
+    }
+    &get_field_values ($text);          #   Get field index and attr
+    $field_max [$field_index] = $FORMIO_INDEX_SIZE;
+
+    &output_byte   ($field_attr);
+    &output_byte   ($field_times);
+    &output_byte   (&value ("size", 1));
+    &output_byte   ($option_count);
+    &output_byte   ($option_change eq "no"? 0: 1);
+    &output_string ($field_name);
+    &output_string ($field_value);
+    &output_string ($option_change);
+    &output_string (&value ("attr", ""));
+    &output_string (&value (0, "No selection"));
+    for ($option_nbr = 1; $option_nbr <= $option_count; $option_nbr++) {
+        &output_string ($values {$option_nbr});
+    }
+    &generate_output ($BLOCK_SELECT);
+}
+
+
+#   Generate output for BLOCK_RADIO
+#
+sub output_radio_block {
+    local ($option_nbr);
+    local ($option_count);
+    local ($option_change) = &value ("change", "no");
+
+    &generate_comment ("!--FIELD RADIO $text $optn");
+
+    $type = &vlower ("type", "fixed");
+    if ($type eq "fixed") {
+        #   Parse select options
+        for ($option_nbr = 1; defined $values {$option_nbr}; $option_nbr++) {
+            $option_count = $option_nbr;
+        }
+    }
+    elsif ($type eq "dynamic") {
+        $option_count = 0;              #   Represented by options = zero
+    }
+    else {
+        print "$me E: ($htmlfile $line) TYPE=$type not valid\n";
+        &raise_exception ($exception_event);
+    }
+    &get_field_values ($text);          #   Get field index and attr
+    $field_max [$field_index] = $FORMIO_INDEX_SIZE;
+
+    &output_byte   ($field_attr);
+    &output_byte   ($field_times);
+    &output_byte   (&value ("column", 0));
+    &output_byte   ($option_count);
+    &output_byte   ($option_change eq "no"? 0: 1);
+    &output_string ($field_name);
+    &output_string ($field_value);
+    &output_string ($option_change);
+    &output_string (&value ("attr", ""));
+    &output_string (&value (0, "No selection"));
+    for ($option_nbr = 1; $option_nbr <= $option_count; $option_nbr++) {
+        &output_string ($values {$option_nbr});
+    }
+    &generate_output ($BLOCK_RADIO);
+}
+
+
+#   Generate output for BLOCK_ACTION
+#
+sub output_action_block {
+    local ($type, $show);
+
+    &generate_comment ("!--ACTION $text $optn");
+
+    $times = $block_times [$block]; #   Get block repeat count
+    $times = 1 if $times == 0;
+
+    #   Parse and check action field options
+    $type = &vlower ("type", "button");
+    {
+        $type eq "button" && do { $type = $FTYPE_BUTTON; last; };
+        $type eq "plain"  && do { $type = $FTYPE_PLAIN;  last; };
+        $type eq "image"  && do { $type = $FTYPE_IMAGE;  last; };
+        print "$me E: ($htmlfile $line) TYPE=$type not valid\n";
+        &raise_exception ($exception_event);
+    }
+    $show = &vlower ("show", "enabled");
+    {
+        $show eq "enabled"  && do { $show = $FACTION_ENABLED;  last; };
+        $show eq "disabled" && do { $show = $FACTION_DISABLED; last; };
+        $show eq "hidden"   && do { $show = $FACTION_HIDDEN;   last; };
+        print "$me E: ($htmlfile $line) SHOW=$show not valid\n";
+        &raise_exception ($exception_event);
+    }
+    &output_byte   ($type);
+    &output_byte   ($times);
+    &output_named  (&value ("event", -1));
+    &output_dbyte  ($action_index);  $action_index += $times;
+    &output_byte   ($show);
+    &output_dbyte  (&value ("height", 0));
+    &output_dbyte  (&value ("width", 0));
+    &output_string ($text);
+    &output_string (&value ("label", "<No label>"));
+    &output_string (&value ("rollover", ""));
+    &output_string (&value ("confirm",  ""));
+    &output_string (&value ("alt",      ""));
+    &output_string (&value ("attr",     ""));
+
+    &generate_output ($BLOCK_ACTION);
+}
+
+
+#   Subroutine appends a named word constant to the output line
+#
+sub output_named {
+    local ($value) = @_;
+
+    $output_line .= "(byte) ((word) $value / 256), ";
+    $output_line .= "(byte) ((word) $value & 255), ";
+    $output_size += 2;
+}
+
+
+#   Generate output for BLOCK_IMAGE
+#
+sub output_image_block {
+
+    &generate_comment ("!--FIELD IMAGE $text $optn");
+
+    &get_field_values ($text);          #   Get field index and attr
+
+    $times = $block_times [$block];     #   Get block repeat count
+    $times = 1 if $times == 0;
+    $field_max [$field_index] = 1;
+
+    &output_byte   ($field_attr);
+    &output_byte   ($times);
+    &output_byte   (1);
+    &output_string ($text);
+    &output_string (&value ("label", "<No label>"));
+    &output_string (" ");
+
+    &generate_output ($BLOCK_IMAGE);
+}
+
+
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   Subroutine generates the form field address table
+#
+sub output_form_fields {
+    local ($offset, $prevaddr);         #   Address of each field
+    local ($type, $max);
+
+    #   Output the header
+    &format_output (CODEFILE, "FORM_FIELDS_HEAD");
+
+    #   Now output the offset of each form field
+    $offset = 0;
+    for ($field = 0; $field < $field_count; $field++) {
+        $max         = $field_max   [$field];
+        $field_times = $field_times [$field];
+        $field_name  = $field_long  [$field];
+        $type        = $block_type  [$field_block [$field]];
+        $block       = $block_base  [$field_block [$field]];
+        $prevaddr    = $offset;
+
+        &format_output (CODEFILE, "FORM_FIELD");
+
+        $type == $BLOCK_TEXTUAL && do { $offset += $max;               };
+        $type == $BLOCK_FILE    && do { $offset += $max;               };
+        $type == $BLOCK_NUMERIC && do { $offset += $max;               };
+        $type == $BLOCK_DATE    && do { $offset += $FORMIO_DATE_SIZE;  };
+        $type == $BLOCK_TIME    && do { $offset += $FORMIO_TIME_SIZE;  };
+        $type == $BLOCK_TEXTBOX && do { $offset += $max;               };
+        $type == $BLOCK_BOOLEAN && do { $offset += 1;                  };
+        $type == $BLOCK_SELECT  && do { $offset += $FORMIO_INDEX_SIZE; };
+        $type == $BLOCK_RADIO   && do { $offset += $FORMIO_INDEX_SIZE; };
+        $type == $BLOCK_IMAGE   && do { $offset += $max;               };
+        $offset += 2;                   #   Null byte + attr byte
+
+        #   Bump again if field is repeated
+        $offset += ($offset - $prevaddr) * ($field_times - 1)
+            if $field_times;
+    }
+    &format_output (CODEFILE, "FORM_FIELDS_FOOT");
+
+    $fields_size = $offset;             #   For code generation
+}
+
+
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   Subroutine generates the form data structure
+#
+sub output_form_data {
+    local ($fname, $flong, $ftimes);
+    local ($field, $type, $format);
+    local ($block_nbr);
+
+    #   Output the header
+    &format_output (CODEFILE, "FORM_DATA_HEAD");
+    $action_count = 0;
+
+    #   Now output each field, either a simple field or a repeating field
+    for ($field = 0; $field < $field_count; $field++) {
+        $fname  = $field_name  [$field];
+        $flong  = $field_long  [$field];
+        $fmax   = $field_max   [$field];
+        $ftimes = $field_times [$field];
+        $flong  =~ tr/A-Z-/a-z_/;       #   Always lower-case, no hyphens
+
+        &get_field_values ($fname);     #   Get field index and attr
+
+        $block_nbr = $field_block [$field];
+        $type      = $block_type  [$block_nbr];
+        $flong_a   = sprintf ("%-20s", $flong."_a");
+        $flong     = sprintf ("%-20s", $flong);
+
+        &format_output (CODEFILE, "FORM_DATA_ATTR");
+        $type == $BLOCK_TEXTUAL && do { $format = "FORM_DATA_TEXTUAL"; };
+        $type == $BLOCK_FILE    && do { $format = "FORM_DATA_FILE";    };
+        $type == $BLOCK_NUMERIC && do { $format = "FORM_DATA_NUMERIC"; };
+        $type == $BLOCK_DATE    && do { $format = "FORM_DATA_DATE";    };
+        $type == $BLOCK_TIME    && do { $format = "FORM_DATA_TIME";    };
+        $type == $BLOCK_TEXTBOX && do { $format = "FORM_DATA_TEXTBOX"; };
+        $type == $BLOCK_BOOLEAN && do { $format = "FORM_DATA_BOOLEAN"; };
+        $type == $BLOCK_SELECT  && do { $format = "FORM_DATA_SELECT";  };
+        $type == $BLOCK_RADIO   && do { $format = "FORM_DATA_RADIO";   };
+        $type == $BLOCK_IMAGE   && do { $format = "FORM_DATA_IMAGE";   };
+        &format_output (CODEFILE, $format);
+    }
+    #   Output attribute only for each action
+    for ($block = 0; $block < $block_count; $block++) {
+        if ($block_type [$block] == $BLOCK_ACTION) {
+            $fname = $block_text [$block]."_a";
+            $fname =~ tr/A-Z-/a-z_/;    #   Always lower-case, no hyphens
+            $ftimes = $block_times [$block];
+            &format_output (CODEFILE, "FORM_ACTION_ATTR");
+            $action_count += $ftimes ? $ftimes : 1;     #   For code generation
+        }
+    }
+    &format_output (CODEFILE, "FORM_DATA_FOOT");
+}
+
+
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   Subroutine generates the form definition structure
+#
+sub output_form_definition {
+    if ($fields_size > $FORMIO_DATA_MAX) {
+        print "$me E: ($htmlfile) form data > $FORMIO_DATA_MAX bytes\n";
+        &raise_exception ($exception_event);
+    }
+    &format_output (CODEFILE, "FORM_DEFINITION");
+}
+
+
+###########################   CLOSE HTML PAGE FILE   ##########################
+
+sub close_html_page_file
+{
+    close (HTMLFILE);
+}
+
+
+##########################   SIGNAL NO REPEAT OPEN   ##########################
+
+sub signal_no_repeat_open
+{
+    &syntax_error ("no <!--FML REPEAT defined");
+}
+
+
+###########################   SIGNAL NO FIELD OPEN   ##########################
+
+sub signal_no_field_open
+{
+    &syntax_error ("no <!--FML FIELD defined");
+}
+
+
+##########################   SIGNAL NO ACTION OPEN   ##########################
+
+sub signal_no_action_open
+{
+    &syntax_error ("no <!--FML ACTION defined");
+}
+
+
+########################   SIGNAL NOT VALID IN REPEAT   #######################
+
+sub signal_not_valid_in_repeat
+{
+    &syntax_error ("not valid within a <!--FML REPEAT definition");
+}
+
+
+########################   SIGNAL NOT VALID IN FIELD   ########################
+
+sub signal_not_valid_in_field
+{
+    &syntax_error ("not valid within a <!--FML FIELD definition");
+}
+
+
+########################   SIGNAL NOT VALID IN ACTION   #######################
+
+sub signal_not_valid_in_action
+{
+    &syntax_error ("not valid within a <!--FML ACTION definition");
+}
+
+
+#########################   SIGNAL UNFINISHED REPEAT   ########################
+
+sub signal_unfinished_repeat
+{
+    &syntax_error ("<!--FML /REPEAT is missing");
+}
+
+
+#########################   SIGNAL UNFINISHED FIELD   #########################
+
+sub signal_unfinished_field
+{
+    &syntax_error ("<!--FML /FIELD is missing");
+}
+
+
+#########################   SIGNAL UNFINISHED ACTION   ########################
+
+sub signal_unfinished_action
+{
+    &syntax_error ("<!--FML /ACTION is missing");
+}
+
+
+############################   GET EXTERNAL EVENT   ###########################
+
+sub get_external_event
+{
+}
+
+
+##########################   TERMINATE THE PROGRAM    #########################
+
+sub terminate_the_program
+{
+    $the_next_event = $terminate_event;
+}
+

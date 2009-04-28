@@ -1,0 +1,872 @@
+.-
+.-  FDL definition for Xitami WBA
+.-
+.define author   iMatix Corporation
+
+.define version    2.5c2
+.define FORM_WIDTH 100%
+.define TALIGN     LEFT
+
+.macro icon_open  <IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE>\
+.macro icon_close <IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+
+.macro image -
+    <IMG SRC="/admin/$1.gif" ALT="$+" BORDER=0 ALIGN=MIDDLE NAME="$2" -
+     WIDTH=40 HEIGHT=39>
+
+.macro icon -
+.action "" $1 event=&lower("$1")_event type=image - -
+    value="/admin/$&lower("$1").gif" rollover="/admin/&lower("$1")a.gif" - -
+    width=40 height=39
+
+.block header
+Cache-control: no-cache
+Expires: 0
+
+<HTML>
+<HEAD><TITLE>Xitami Administration</TITLE>
+<script type="text/javascript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function submit(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+function focus() {
+    if ("#(_focus)" != "jsaction")
+        document.forms[0].#(_focus).focus();
+}
+</script>
+</HEAD>
+<BODY onLoad="focus()" style="font-family: sans-serif" BGCOLOR="#87CEFA">
+.end
+
+.block footer
+<HR>
+<TABLE WIDTH=100%><TR>
+<TD><IMG SRC="/admin/imatix.gif"
+WIDTH=&image_width("imatix.gif") HEIGHT=&image_height("imatix.gif")>
+<TD ALIGN=CENTER><FONT SIZE=-1>Copyright &#169 1996-2002 iMatix Corporation
+<BR>Powered by iMatix Studio 2.5
+<TD ALIGN=RIGHT><FONT SIZE=-1>#(date) #(time)
+<BR>#(product) v$(version)
+</TABLE>
+</BODY></HTML>
+.end
+
+.macro break_menu -
+
+.macro break -
+.page $1 = "$+" -
+<TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100%> -
+.fields -
+.endfields -
+<TR><TD ALIGN=LEFT> -
+.icon_open -
+.for icon in $(iconbar?) -
+.icon $\(icon) -
+.endfor -
+<A HREF="/xitami/index4.htm#$(topic)" TARGET="Help" TITLE="Help" -
+    onMouseOver="show('Help','/admin/helpa.gif')" -
+    onMouseOut="show('Help','/admin/$help.gif')"><.image $help Help></A>\ -
+.icon_close -
+<TD ALIGN=CENTER><FONT SIZE=+1>$+</FONT> -
+<TD ALIGN=RIGHT> -
+.icon_open -
+.icon Console -
+.icon Halt -
+.icon Restart -
+.icon Exit -
+.icon_close -
+</TABLE><p>
+
+.macro show_tag -
+.if "$1" eq "$3" -
+<EM>$3</EM> -
+.else -
+.action "" $3 event=$2_event type=plain -
+.endif
+
+.macro main_page -
+<TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100%><TR> -
+<TD ALIGN=LEFT><FONT SIZE=-1> -
+.for action in $(actionbar?) -
+.action "" $\(action) event=&lower\("$\(action)")_event type=plain -
+.endfor -
+<TD ALIGN=RIGHT><FONT SIZE=-1> -
+.show_tag $* server   Server -
+.show_tag $* vhosts   Vhosts -
+.show_tag $* cgi      CGI -
+.show_tag $* security Security -
+.show_tag $* logging  Logging -
+.show_tag $* ftp      FTP -
+</FONT></TABLE><HR> 
+
+.macro sub_page -
+<FONT SIZE=-1> -
+.action "" Ok     event=save_event type=plain -
+.action "" Cancel event=back_event type=plain -
+</FONT><HR>
+
+.macro info_page -
+<FONT SIZE=-1> -
+.action "" Close event=back_event type=plain -
+</FONT><HR>
+
+.-  Max size of filename
+.define FNSIZE 80
+.-  Max size of webmask
+.define WMSIZE 80
+.-  Max size of realm
+.define RLSIZE 80
+.-  Max size of console text
+.define CONMAX 4000
+
+.macro menu_head -
+<CENTER> -
+<TABLE WIDTH="80%" BORDER=0 CELLSPACING=0 CELLPADDING=0 BGCOLOR="#000080"> -
+<TR><TD COLSPAN=2><HR><CENTER> -
+<FONT COLOR="#FFFF99"><H1><I>$*</I></H1></FONT> -
+</CENTER><HR><TR><TD VALIGN=TOP NOWRAP>
+
+.macro menu_item &nbsp; -
+.action "" menu_$1 event=&lower("$1")_event type=image - -
+    value="/admin/click.gif" rollover="/admin/clicka.gif" -
+&nbsp;<FONT COLOR="#FFFF99">$+</FONT>&nbsp;&nbsp;<BR>
+
+.macro menu_last -
+<P>&nbsp;<TD VALIGN=TOP BGCOLOR="#CCFFFF">
+
+.macro menu_foot -
+</TABLE>
+
+.-----------------------------------------------------------------------------
+.define iconbar
+.define topic config_main
+.break_menu
+.break xiadm01
+
+.menu_head Xitami   Administration
+.menu_item Config   Configuration
+.menu_item Hosts    Virtual hosts
+.menu_item Console  Server Console 
+.menu_item Wizard   VHost Wizard
+.menu_item Restart  Restart Server
+.menu_item Halt     Halt Server
+
+.menu_last
+<UL>
+<LI>The Xitami web-based administration screens let you manage your web
+server from anywhere on the Internet.  If you do not want to allow this
+access, you can disable the /admin alias or restrict it to local access
+only.
+<LI>Don't use the browser's back button.  Instead, navigate using the
+icons.  Click on 'Save' when you have made changes, and the 'Back' icon
+to lose changes.  If you make changes in detail pages, you will have to
+click 'Save' twice.
+<LI>If you make changes to the virtual hosts you should click 'Restart'
+to restart the web server.
+</UL>
+.menu_foot
+
+.-----------------------------------------------------------------------------
+.define iconbar Back New First Next
+.define topic   virtual_hosts
+.break xiadm02 Virtual Hosts Configuration
+
+<P>Select a configuration:<BR>
+.table name=config-list type=variable rows=15 width=90% compact=yes
+.textual "Name:"            filename size=40 max=$(FNSIZE) attr=option
+.date    "Last modified:"   filedate         span=2        attr=label
+.time    ""                 filetime                       attr=label
+.numeric "Size, lines:"     filesize size=5                attr=label
+.endtable
+
+<BR>
+.action "" Defaults event=default_event  value="Defaults..."
+ for all virtual hosts<BR>
+.action "" Basehost event=basehost_event  value="Base host..."
+ for unresolved virtual hosts
+
+.-----------------------------------------------------------------------------
+.define iconbar   Back Save Default Undo
+.define actionbar Aliases Errors SSI MIMEs WSX Filters DDNS Advanced
+.define topic     config_server  
+.break xiadm03 #(config) - Server Properties
+.main_page Server
+.define actionbar
+
+.-  True if we're looking at Xitami.cfg or defaults.cfg
+.index main-config   value=1
+.index on-unix       value=1
+.index on-windows-32 value=1
+
+.fields
+.textual "Main HTML directory:"     webpages size=40 max=100
+.textual "Main CGI directory:"      cgi-bin  size=40 max=100
+.textual "CGI URLs start with:"     cgi-url  size=40
+.do if main-config
+.boolean "Run in debug mode?"       debug -
+    notes="- creates additional log files"
+.numeric "Refresh config every:"    refresh_rate size=8 notes="seconds"
+.numeric "Max HTTP connections:"    limit    size=4 notes="if any" blank=yes
+.select  "HTTP throttle pipe:"      pipe     type=dynamic
+.enddo
+.do if on-unix
+.boolean "Run in background?"       background
+.enddo
+.do if on-windows-32
+.boolean "Start when TCP/IP is ready?"    autostart
+.boolean "Recover silently from crashes?" recover
+.enddo
+.textual "Default HTML page:"       default1 size=12 max=$(FNSIZE)
+.textual "Then:"                    default2 size=12 max=$(FNSIZE) join=yes
+.textual ""                         default3 size=12 max=$(FNSIZE) join=yes
+.textual ""                         default4 size=12 max=$(FNSIZE) join=yes
+.boolean "Allow Keep-Alive connections?" keep-alive
+.numeric "Allow up to:" keep-alive-max size=4 join=yes notes="requests"
+.numeric "Close after:" timeout        size=4 join=yes notes="seconds"
+.textual "Directory list sort order"   dirsort  size=5 -
+    notes="n=name x=ext t=time s=size N,X,T,S=inverted"
+.textual "Directory list template script:" dir-script size=30 max=$(FNSIZE)
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Clear Undo First Next
+.define topic   config_alias
+.break xiadm04 #(config) - Aliases
+.sub_page
+
+.table name=alias-list type=variable rows=15 compact=yes
+.textual ""                 key         size=20 attr=hidden
+.textual "Alias:"           alias-name  size=20
+.textual "Points to path:"  alias-path  size=50 max=80
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Clear Undo First Next
+.define topic   config_virtual_hosts
+.break xiadm05 #(config) - Virtual Hosts
+.main_page Vhosts
+
+.table name=vhost-list type=variable rows=15 compact=yes
+.textual ""                         key        size=50 attr=hidden
+.textual "IP address or host name:" vhost-name size=40 max=50
+.textual "Config file:"             vhost-file size=40 max=$(FNSIZE)
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar   Back Save Default Undo
+.define actionbar Aliases Environment
+.define topic     config_cgi
+.break xiadm06 #(config) - CGI Properties
+.main_page CGI
+.define actionbar
+
+.-  True if we're running on a Win32 system
+.index on-windows-32
+
+.fields
+.boolean "CGI enabled?"              enabled
+.textual "Working directory:"        workdir size=40 max=100 -
+    notes="'-' means use program directory"
+.boolean "Match /cgi-bin anywhere in URL?" wildcard -
+    notes="If not, /cgi-bin must come at the start"
+.numeric "Timeout for CGI programs:" timeout notes="seconds"
+.numeric "Check CGI progress every:" monitor notes="msecs"
+.boolean "Allow directory lists?"    dirlist
+.do if on-windows-32
+.boolean "Support 16-bit CGI programs?" support-16bit
+.enddo
+.boolean "Use MS-DOS-style filenames?" msdos-style
+.boolean "Debug CGI in/out?"        debug
+.boolean "Use standard I/O?"        stdio -
+    notes="- switch off if you use CGI_STDOUT, e.g. for Basic"
+.boolean "Allow file mixing?"       mixed-url -
+    notes="- e.g. images in CGI bin directory"
+.textual "Error log file (stderr):" errlog size=40 max=$(FNSIZE)
+<P>
+.label "CGI environment"
+.boolean "Full environment?"        environ
+.boolean "Pass HTTP fields?"        http-fields
+.textual "Using prefix:"            http-prefix size=20 join=yes
+.boolean "Pass form fields?"        form-fields
+.textual "Using prefix:"            form-prefix size=20 join=yes
+.boolean "Pass QUERY_STRING?"       form-query
+.action  "Specific CGI environment:" -
+    CGI-envir value="Define..." event=environment_event
+.action  "Aliases for CGI directories:" -
+    CGI-alias value="Define..." event=aliases_event
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar   Back Save Default Undo
+.define actionbar Passwords
+.define topic     config_security
+.break xiadm07 #(config) - HTTP Security
+.main_page Security
+
+.-  True if we're running on a Win32 system
+.index on-windows-32
+.index on-unix
+.fields
+.textual "Password file:" filename size=20 max=$(FNSIZE) -
+    notes="- blank to disable password protection"
+.action "" Define value="Define..." event=passwords_event
+.boolean "Case-sensitive passwords?"    password-case
+.boolean "Allow directory lists?"       dirlist
+.boolean "Allow web-based admin?"       admin
+.textual "IP address mask:"             webmask size=20 max=$(WMSIZE) -
+    notes="- eg. 111.222.333.*"
+.textual "Superuser password:"          superuser size=20 -
+    notes="- gives FULL ACCESS to ALL RESOURCES"
+.do if on-windows-32
+.boolean "Reject unsafe short filenames?" safepaths
+.boolean "Disable Windows control panel?" secure
+.enddo
+.textual "Run CGIs under user name:"    cgi-username size=10 max=30
+.textual "group:"                       cgi-groupname size=10 max=30 join=yes
+.textual "password:"                    cgi-password size=10 max=30 join=yes -
+                                        attr=secure 
+.do if on-unix
+.boolean "Run Xitami under safe user id?" setuid
+.textual "  Using harmless user id:"      setuid-user size=30
+.textual "and group:"                     setuid-group size=30 join=yes
+.enddo
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar   Back Save Default Undo
+.define actionbar ServerLog AccessLog ErrorLog FtpLog FtpErrors
+.define topic     config_serverlog
+.break xiadm08 #(config) - Log Files
+.main_page Logging
+.define actionbar
+
+.-  True if we're looking at Xitami.cfg or defaults.cfg
+.index main-config value=1
+
+.fields
+.textual "Log file directory:"         log-dir   size=50
+
+.do if main-config
+.action "Server messages:"  define-server-log event=serverlog_event -
+    type=image value="/admin/property.gif" rollover="/admin/propertya.gif"
+.textual ""                 server-msgs     size=40 attr=label join=yes
+.enddo
+.action "HTTP access log:"  define-access-log event=accesslog_event -
+    type=image value="/admin/property.gif" rollover="/admin/propertya.gif"
+.textual ""                 http-access     size=40 attr=label join=yes
+
+.action "HTTP error log:"   define-error-log event=errorlog_event -
+    type=image value="/admin/property.gif" rollover="/admin/propertya.gif"
+.textual ""                 http-error      size=40 attr=label join=yes
+
+.action "FTP access log:"   define-ftp-log event=ftplog_event -
+    type=image value="/admin/property.gif" rollover="/admin/propertya.gif"
+.textual ""                 ftp-access      size=40 attr=label join=yes
+
+.action "FTP error log:"    define-ftperr-log event=ftperrors_event -
+    type=image value="/admin/property.gif" rollover="/admin/propertya.gif"
+.textual ""                 ftp-error       size=40 attr=label join=yes
+
+.do if main-config
+<HR>
+.textual "DNS servers - primary:"      primary   size=20
+.textual "secondary:"                  secondary size=20 join=yes
+.boolean "Allow recursive queries?"    recurse
+.boolean "Debug reverse-DNS queries?"  debug 
+.enddo
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Clear Undo First Next
+.define topic   config_mime
+.break xiadm09 #(config) - MIME Types
+.sub_page
+
+<P>MIME types (showing built-in types):
+
+.table name=mime-list type=variable rows=15 compact=yes
+.textual ""                key       size=10 attr=hidden
+.textual "File extension:" mime-ext  size=10
+.textual "MIME type:"      mime-type size=50
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Default Undo
+.break xiadm10 #(config) - HTTP Error Messages
+.sub_page
+
+.fields
+.boolean "Use message template script?" use-error-script
+.textual "Script file:"         error-script size=30 max=$(FNSIZE) join=yes
+
+<HR>
+.label   "Otherwise, use these texts:"
+.textual "" filler value="HTML text or @filename:" attr=title
+.textbox "Header for errors:"   error-header cols=60 rows=2 max=240
+.textual "400 - Bad request:"                     text-400  size=60
+.textual "401 - Unauthorized:"                    text-401  size=60
+.textual "402 - Payment required:"                text-402  size=60
+.textual "403 - Forbidden:"                       text-403  size=60
+.textual "404 - Not found:"                       text-404  size=60
+.textual "412 - Precondition failed:"             text-412  size=60
+.textual "413 - Request entity too large:"        text-413  size=60
+.textual "500 - Internal error:"                  text-500  size=60
+.textual "501 - Not implemented:"                 text-501  size=60
+.textual "502 - Service temporarily unavailable:" text-502  size=60
+.textbox "Footer for errors:"   error-footer cols=60 rows=2 max=240
+
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Clear Undo First Next
+.define topic   config_cgi_environment
+.break xiadm11 #(config) - Specific CGI Environment
+.sub_page
+
+.table name=cgi-envir-list type=variable rows=15 compact=yes
+.textual ""                     key             size=20 attr=hidden
+.textual "Variable:"            cgi-envir-name  size=20
+.textual "Has this value:"      cgi-envir-value size=40 max=120
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Undo First Next
+.break xiadm12 #(config) - Protected URIs
+.sub_page
+
+.table name=resource-list type=variable rows=15 width=90% compact=yes
+.textual "URI or partial URI:"   uri-name  size=80 attr=option
+.textual "Translated path:"      uri-path  size=60 attr=label
+.textual "IP address mask:"      webmask   size=15 max=$(WMSIZE)
+.textual "Authentication realm:" realm     size=15 max=$(RLSIZE)
+.numeric "Users:"                uri-users size=5 attr=label
+.endtable
+<P>
+.fields
+.textual "Add new protected URI:" new-uri size=30 max=$(FNSIZE)
+.action "" Define  event=define_event value="Define..." join=yes
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Clear Undo First Next
+.break xiadm13 #(config) - Users who can access this resource
+.sub_page
+
+.table name=user-list type=variable rows=15 compact=yes
+.textual ""                 key       size=20 attr=hidden
+.textual "User name:"       user-name size=20
+.textual "Password:"        password  size=20
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Clear Undo First Next
+.define topic   config_cgi_alias
+.break xiadm14 #(config) - CGI Aliases
+.sub_page
+
+.table name=cgi-alias-list type=variable rows=15 compact=yes
+.textual ""                 key            size=20 attr=hidden
+.textual "CGI alias:"       cgi-alias-name size=20
+.textual "Points to path:"  cgi-alias-path size=50 max=80
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Clear Undo First Next
+.define topic   config_wsx
+.break xiadm15 #(config) - Web-Server Extension (WSX) Agents
+.sub_page
+
+.table name=wsx-list type=variable rows=15 compact=yes
+.textual ""                 key       size=20 attr=hidden
+.textual "URL alias:"       wsx-alias size=20
+.textual "WSX agent name:"  wsx-agent size=40
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Default Undo
+.define topic   config_ftp
+.break xiadm16 #(config) - FTP Configuration
+.main_page FTP
+
+.-  True if we're looking at Xitami.cfg or defaults.cfg
+.index main-config value=1
+
+.fields
+.do if main-config
+.boolean "Enable FTP server?"        enabled
+.enddo
+.textual "FTP root directory:"       rootdir   size=40 max=100
+.numeric "Timeout for connections:"  timeout   size=6  notes="seconds"
+.textual "User configuration file:"  user-file size=40 max=$(FNSIZE)
+.action "" define-users event=define_users_event value="Define..." join=yes
+.textual "Directory access file:"    directory-file size=40 max=$(FNSIZE)
+.action "" define-dirs event=define_dirs_event value="Define..." join=yes
+.textual "Directory list sort order" dirsort   size=5-
+    notes="n=name x=ext t=time s=size NXTS=invert"
+.boolean "Check anonymous passwords?" email-check
+.boolean "Share HTTP aliases?"       http-aliases
+.action  "" ftp-aliases value="Define FTP aliases..." -
+                                     event=aliases_event join=yes
+.boolean "Allow user@hostname?"      user-at-host
+.boolean "Case-sensitive passwords?" password-case
+.textual "Default soft quota (Mb):"  soft-quota size=8 max=10
+.textual "hard quota (Mb):"          hard-quota size=8 max=10 join=yes
+<P>
+.textual "Message template script:"  message-script size=30 max=$(FNSIZE)
+.label   "If no script, use these texts:"
+.textbox "Welcome message:"          welcome   rows=1 cols=40 max=240 -
+                                     notes="text or @filename"
+.textbox "Login message:"            login     rows=1 cols=40 max=240 -
+                                     notes="text or @filename"
+.textbox "Sign-off message:"         signoff   rows=1 cols=40 max=240 -
+                                     notes="text or @filename"
+<B>Advanced options</B>
+.do if main-config
+.numeric "Port for FTP connections:" port      size=5
+.numeric "Max FTP connections:"      limit     size=6  notes="if any" blank=yes
+.enddo
+.select  "Default throttle pipe:"    pipe      type=dynamic
+.textual "IP address mask:"          webmask size=40 max=$(WMSIZE) -
+                                     notes="- eg. 111.222.333.*"
+.numeric "Data connection port:"     data-port size=5
+.select  "Passive IP address:"       ipaddress type=dynamic
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar Back New Save Undo First Next Refresh
+.define topic   config_ftp
+.break xiadm17 #(config) - FTP User Profiles
+.sub_page
+
+.table name=ftp-user-list type=variable rows=15 width=90% compact=yes
+.textual "User name:"       user-name   size=40 attr=option
+.textual "Password:"        password    size=40 attr=label
+.textual "Login directory:" rootdir     size=50 attr=label
+.textual "Permissions:"     access      size=6  attr=label
+.numeric "Space used (Mb):" cur-usage   size=15 attr=label decs=3 decfmt=drop
+.numeric "Number of files:" cur-files   size=7  attr=label
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save First Next
+.break xiadm18 #(config) - FTP Directory-level Permissions
+.sub_page
+
+.table name=ftp-dir-list type=variable rows=15 width=90% compact=yes
+.textual "Directory name:"       dir-name  size=40 max=80 attr=option
+.textual "Translated path:"      dir-path  size=60 attr=label
+.numeric "Users:"                dir-users size=5  attr=label
+.endtable
+.fields
+.textual "Add new directory:" new-dir size=40 max=$(FNSIZE)
+.action "" Define  event=define_event value="Define..." join=yes
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Clear Undo First Next
+.break xiadm19 #(config) - User Permissions for Directory
+.sub_page
+
+.table name=ftp-dir-user-list type=variable rows=15 compact=yes
+.textual ""                 key       size=20 attr=hidden
+.textual "User name:"       user-name size=20
+.textual "Access rights:"   accesses  size=5 notes="GPDMR, or *"
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Clear Undo First Next
+.define topic   config_filter
+.break xiadm20 #(config) - Filters
+.sub_page
+
+.table name=filter-list type=variable rows=15 compact=yes
+.textual ""                          key          size=10 attr=hidden
+.textual "File extension (.xxx):"    filter-alias size=10
+.textual "Filter command or script:" filter-agent size=50
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Clear Refresh
+.break xiadm21 Server Console Panel
+.info_page
+
+.index locked
+.fields
+.date    "Server started at:"          date-started
+.time    ":"                           time-started   join=yes
+.textual "Last server error message:"  server-message size=80
+.numeric "HTTP service is on port:"    http-port      size=5
+.numeric "FTP service is on port:"     ftp-port       size=5
+.numeric "Number of open connections:" cur-connects   size=6
+.numeric "Highest open connections:"   max-connects   size=6
+.numeric "Total number of hits:"       connect-count  size=10
+.numeric "Total number of errors:"     error-count    size=10
+.numeric "Total data transferred"      transfer-size  size=10
+.textual ""                            transfer-unit  size=5 join=yes
+.numeric "Active log files:"  log_files  size=5 notes="files"
+.numeric ""                   log_lines  size=8 notes="lines" join=yes
+.numeric ""                   log_kbytes size=8 notes="Kb"    join=yes
+.action  "" cycle_data event=cycle_logs_event value="Cycle" -
+                       type=plain join=yes
+.action  "" clear_data event=clear_logs_event value="Empty" -
+                       type=plain join=yes confirm="Really clear log files?"
+.endfields
+<P>
+.action "" Messages    event=messages_event value="Messages..."
+.action "" Details     event=details_event  value="Details..."
+.action "" Preferences event=define_event   value="Preferences..."
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Clear Refresh
+.break xiadm22 Console Messages
+.info_page
+
+.define DATA_WIDTH ""
+<!--FML FIELD=messages TEXTBOX INPUT
+    NAME=messages ROWS=24 COLS=90 MAX=$(CONMAX) -->
+<!--FML /FIELD-->
+</FORM>
+<FORM METHOD=POST ACTION="#(uri)">
+.action "" Preferences event=define_event  value="Preferences..."
+.action "" Invert      event=invert_event
+.define DATA_WIDTH "80%"
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Default Undo
+.define topic   config_console
+.break xiadm23 Console Preferences
+.sub_page
+
+.fields
+.radio "Start-up page:"         startup -
+    1="Main menu" 2="Basic config" 3="VHost config" 4="Console page"
+.boolean "Capture console?"     capture
+.textual " - capture to file:"  filename size=30 max=$(FNSIZE)
+.boolean " - append data?"      append
+.boolean "Use JavaScript?"      javascript
+.boolean "Show large icons?"    large-icons -
+          notes="Flush browser cache when changing this"
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Refresh
+.break xiadm24 Current HTTP & FTP Connections
+.info_page
+
+.table name=client-list type=variable rows=20 width=90% compact=yes
+.textual "Type:"              type       size=4   align=center
+.textual "Client address:"    ipaddress  size=15  align=center
+.textual "Request:"           request    size=50  align=center
+.textual "User name:"         username   size=20  align=center
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar Back
+.break xiadm25 Virtual Host Wizard
+
+<HR>
+<H2>Virtual Host Wizard</H2>
+
+.fields
+.textual "Create virtual host profile:"     host-file  size=30 max=$(FNSIZE) -
+    notes=".cfg extension is assumed"
+.boolean "Overwrite existing?"              overwrite
+<HR>
+.select  "Select IP address:"               host-addr  type=dynamic
+.textual "Or, enter DNS host name:"         host-name  size=50
+<HR>
+.textual "Web page root directory:"         webpages   size=50
+.textual "CGI-bin directory:"               cgi-bin    size=50
+.textual "FTP root directory:"              ftproot    size=50
+.boolean "Create directories if necessary?" makedirs   value=yes
+.textual "Superuser password:"              superuser  size=20
+.boolean "Uses shared logfiles?"            sharelogs  value=no
+.boolean "Can use full WBA?"                use-admin  value=no
+.textual "If so, user id:"                  admin-user size=20
+.textual "password:"                        admin-pass size=20 join=yes
+.boolean "Can use VH WBA (limited)?"        use-vhwba  value=yes
+.textual "If so, user id:"                  vhwba-user size=20
+.textual "password:"                        vhwba-pass size=20 join=yes
+<P>
+.label  ""
+.action "" Create     event=define_event   join=yes
+.action "" Cancel     event=back_event     join=yes
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Clear Undo First Next
+.define topic   config_ftp_alias
+.break xiadm26 #(config) - FTP Aliases
+.sub_page
+
+.table name=ftp-alias-list type=variable rows=15 compact=yes
+.textual ""                 key            size=20 attr=hidden
+.textual "FTP alias:"       ftp-alias-name size=20
+.textual "Points to path:"  ftp-alias-path size=50 max=80
+.endtable
+
+.-----------------------------------------------------------------------------
+.define iconbar Back New Save Delete Default Undo First Next
+.define topic   config_ftp_users
+.break xiadm27 #(config) - FTP User Properties
+.sub_page
+
+.fields
+.textual "User name:"           user-name size=40
+.textual "Password:"            password  size=40 -
+    notes="Blank=none; -=disabled; *=anonymous"
+.textual "Login directory:"     rootdir   size=40 max=100 -
+    notes="below ftproot, or absolute"
+.boolean "User sees aliases?"   aliases
+.label   "User permissions:"
+.boolean "Get:"                 access-get    join=yes
+.boolean "Put:"                 access-put    join=yes
+.boolean "Upload:"              access-upload join=yes
+.boolean "Delete:"              access-delete join=yes
+.boolean "Mkdir:"               access-mkdir  join=yes
+.boolean "Rmdir:"               access-rmdir  join=yes
+.select  "Permissions chooser:" chooser -
+                                0="Leave unchanged" -
+                                1="Full access" -
+                                2="Restricted access" -
+                                3="Full upload" -
+                                4="Restricted upload" -
+                                5="Download only"
+.action ""                      Define event=define_event join=yes
+.boolean "Limit disk usage?"    use-quotas
+.textual " - soft quota (Mb):"  soft-quota size=8 max=10
+.textual "hard quota (Mb):"     hard-quota size=8 max=10 join=yes
+.select  "Throttle pipe:"       pipe       type=dynamic
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Default Undo
+.define topic   config_ssi
+.break xiadm28 #(config) - SSI (Server-Side Includes) Properties
+.sub_page
+
+.fields
+.boolean "SSI enabled?"               enabled
+.textual "For these file extensions:" fileext1  size=6
+.textual "&nbsp;"                     fileext2  size=6 join=yes
+.textual "&nbsp;"                     fileext3  size=6 join=yes
+.textual "&nbsp;"                     fileext4  size=6 join=yes
+.textual "&nbsp;"                     fileext5  size=6 join=yes
+.textual "&nbsp;"                     fileext6  size=6 join=yes
+.boolean "Permit SSI #exec command?"  exec
+.textual "Format for time fields:"    timefmt   size=40 max=80
+.textual "Format for size fields:"    sizefmt   size=10
+.textual "SSI error message:"         errmsg    size=40 max=80
+.numeric "Timeout for #exec calls:"   timeout   notes="seconds"
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Default Undo
+.define topic   config_serverlog
+.break xiadm29 #(config) - Log File Properties
+.sub_page
+
+.-  True if we're looking at a rich log file
+.index rich-logging value=0
+.fields
+.textual "Type of log file:"            log-type size=40 attr=title
+.boolean "Logging enabled:"             enabled
+.textual "Log file name:"               filename size=40 max=$(FNSIZE) 
+.do if rich-logging
+.boolean "Include local requests?"      inc_local
+.boolean "Translate IP addresses?"      translate
+.select  "Log file format:"             format type=dynamic
+.action  ""                             Show event=show_event join=yes
+.textbox "Log file format string:"      custom cols=70 rows=7 max=1000 
+.enddo
+.textbox "Log file header:"             header cols=70 rows=4 max=500 
+.select  "Cycle log file:"              cycle       type=dynamic
+.textual "Cycle at time (HH:MM):"       cycle-time  size=5
+.numeric "on day of week or month:"     cycle-day   size=3 join=yes -
+    notes="0=Sunday, 1=Monday... or 0-31"
+.numeric "Max. kbytes for log file:"    cycle-size  size=6 
+.numeric "max. lines for log file:"     cycle-lines size=9 join=yes
+.select  "How to cycle old log file:"   cycle-how   -
+    0="Rename to path/filename as specified below" -
+    1="Delete old log file" -
+    2="Move log file to path specified below" -
+    3="Append log file to path/filename specified below" -
+    4="Process log file using command specified below"
+.textual "Argument for cycle operation" cycle-arg size=40 max=$(FNSIZE) 
+.action "Log file data:" cycle_data  event=cycle_event value="Cycle now"
+.action ""               clear_data  event=clear_event value="Wipe logfile" -
+                                     join=yes
+.endfields
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Default Undo
+.define topic   config_ddns
+.break xiadm30 #(config) - Dynamic DNS Registration
+.sub_page
+
+<P>Xitami will automatically register with most popular DDNS providers.
+When you enter your password or DDNS key, make sure you type it exactly
+as provided.
+<P>
+
+.fields
+.boolean "Enable dynamic DNS sign-on?"        enabled
+.textual "DDNS service definition file"       filename size=40 max=$(FNSIZE) 
+.select  "Dynamic DNS service:"               service  type=dynamic
+.textual "Your server domain name:"           domain   size=60
+.textual "Your username or e-mail adddress:"  username size=60
+.textual "Your password or DDNS key:"         password size=60
+<P>
+.label  ""
+.action "" Sign-on   event=signon_event       join=yes
+.action "" Sign-off  event=signoff_event      join=yes
+.endfields
+
+
+.-----------------------------------------------------------------------------
+.define iconbar Back Save Default Undo
+.define topic   config_advanced
+.break xiadm31 #(config) - Advanced Server Properties
+.sub_page
+
+.-  True if we're looking at Xitami.cfg or defaults.cfg
+.index main-config value=1
+
+.fields
+.boolean "Enable supervisor agent?"  supervisor
+.boolean "Cache default pages?"      cache-defaults
+.textual "Default redirect hostname:" hostname size=30 max=80 
+.do if main-config
+.radio   "Server performance:"       priority -
+                                     1="Normal" 2="Background" 3="Turbo!"
+.numeric "IP port base:"             portbase   size=5
+.textual "Base host config file:"    base-host  size=30 max=$(FNSIZE)
+.select  "Server IP address:"        ipaddress  type=dynamic
+.textual "Directory for temp files:" temp-dir  size=30 max=100 -
+                                     notes="Can be an environment variable"
+.textual "Directory for debug files:" debug-dir size=30 max=100 -
+                                     notes="Can be an environment variable"
+.boolean "Enable LRWP protocol?"     lrwp-enabled
+.numeric "LRWP connection port:"     lrwp-port    size=5
+.textual "LRWP webmask:"             lrwp-webmask size=20 max=$(WMSIZE) 
+.textual "Throttle pipe definitions:" pipedef size=40 max=$(FNSIZE) 
+.boolean "Enable SSL interface?:"    ssl-enabled  notes="Xitami/Pro only"
+.textual "SSL config file:"          ssl-filename size=30 max=$(FNSIZE)
+.enddo
+<HR>
+.textual "Test URI mapping:"  test-uri   size=50
+.action "" Test     event=test_event     join=yes
+.textual "Result of mapping:" mapped-uri size=50 attr=label
+.endfields
+

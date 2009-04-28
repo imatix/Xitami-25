@@ -1,0 +1,311 @@
+Form I/O Data Structures
+************************
+
+Author:
+  Pieter Hintjens <ph@imatix.com>
+Revised:
+  2003-1020
+Reference:
+  RFC/I/002
+
+This document describes the data structures produced by the fxgen tool.
+It is a reference to understand these structures, especially for those
+who need to re-implement the Forms interface in languages other than C.
+
+Introduction
+************
+
+Datatypes used in this document:
+
+    [byte]:      1-byte numeric value, unsigned
+    [dbyte]:     2-byte numeric value, unsigned, in network (hilo) order
+    [data]:      Fixed-length data block; size is defined explicitly
+    [string]:    Variable-length string; ends in null byte
+
+The form is defined as several data structures:
+
+1. Block list: this defines the blocks that compose the form.  The
+block list is a static structure which is shared by all instances
+of a form.  There are various kinds of block: control blocks (IF,
+UNLESS, REPEAT), text blocks (HTML text), field blocks (textual,
+numeric, date...), and action blocks.
+
+2. Field data: this defines the data fields which exist on the form.
+The field data is a structure that is instanciated for each form
+instance.  The field data stores each field as a C data item, and
+each field's attribute as a single byte value.  Field values are
+always stored as ASCII strings.  This makes a field value block
+portable, i.e. it can be created on one system and used on another.
+The field data cannot be larger than 65535 bytes.
+
+3. Field info table: this table contains information required for each
+field.  The table is stored as an array of FIELD_DEFN items, built
+statically.
+
+Each FIELD_DEFN block contains these fields:
+
+    data        word                Offset of field in field data
+    block       word                Offset of field in block list
+    max         word                Field max size, (e.g. 8 for dates)
+
+The FIELD_DATA data points to the field's attribute (1 byte).  The
+field's data follows, occupying 1 or more bytes.  The size of the
+field's data is calculated by subtracting (field address + 1) from the
+address stored at the following position.  For repeated fields, stores
+one entry only (for the first field).  The table ends in a sentinel
+entry.
+
+The field value size depends on the field type:
+
+Textual:    char [max + 1]
+Numeric:    char [max + 1]
+Date:       char [8 + 1] "yyyymmdd"
+Textbox:    char [max + 1]
+Boolean:    char [1 + 1] "0" or "1"
+Select:     char [3 + 1] "000" to "999".
+Radio:      char [3 + 1] "000" to "999".
+
+The Block List Structure
+========================
+
+Each block is prefixed by a length indicator:
+
+    [dbyte]     Length of block, excluding length value itself
+
+Each block starts with a type indicator:
+
+    [byte]      Type indicator:
+                0 = plain          - plain HTML text
+                1 = compressed     - compressed HTML text
+                2 = if             - conditional block
+                3 = unless         - conditional block
+                4 = repeat         - repeated block
+                10 = textual       - text field
+                11 = numeric       - numeric field
+                12 = date          - date field
+                13 = textbox       - multiline field
+                14 = boolean       - boolean field
+                15 = select        - selection field
+                16 = radio control - radio control field
+                20 = action        - action button
+                21 = file upload   - needs explanation
+                22 = image         - needs explanation
+    [data]      Data for block
+
+For field blocks (TEXTUAL, NUMERIC,...) the first byte after the type
+indicator is the field's initial attribute.  The second byte is always the
+number of times that the field occurs on the form, which is 0 for normal
+fields, and 1 or greater for fields that occur inside a REPEAT table.
+
+Plain:
+
+    [byte]      0
+    [block]     HTML text to output, not null-delimited
+
+Compressed:
+
+    [byte]      1
+    [byte]      Compression type
+                0 = whole dictionary compression
+                [dbyte]     Offset of previous block (at length field)
+                1 = partial dictionary compression
+                [dbyte]     Offset of previous block (at length field)
+                [dbyte]     Offset within block
+                [dbyte]     Length of matched data
+
+If:
+
+    [byte]      2
+    [dbyte]     Controlling field on form (0..n-1)
+    [dbyte]     Number of blocks inside if block (0 or more)
+    [dbyte]     Value of constant comparator
+
+Unless:
+
+    [byte]      3
+    [dbyte]     Controlling field on form (0..n-1)
+    [dbyte]     Number of blocks inside unless block (0 or more)
+    [dbyte]     Value of constant comparator
+
+Repeat:
+
+    [byte]      4
+    [dbyte]     Controlling field on form (0..n-1)
+    [dbyte]     Number of blocks inside repeat block (0 or more)
+    [dbyte]     Maximum size of repeat block (1 or more)
+
+Textual:
+
+    [byte]      10
+    [byte]      Initial attribute for field:
+                0 = INPUT       Field accepts input
+                1 = ERROR       Field accepts input; shown as error
+                2 = SECURE      Field accepts input; shown as password
+                3 = PROTECT     Field is temporarily closed
+                4 = HIDDEN      Field does not appear on form
+                5 = BLANK       Field appears as spaces
+                6 = LABEL       Field appears as normal text
+                7 = TITLE       Field appears as bold or emphasised text
+                8 = HILITE      Field appears as reverse or bold text
+                9 = MESSAGE     Field appears as strong text
+                10 = OPTION     Field is clickable
+    [byte]      Number of occurences of field, 1 to 255
+    [byte]      Field property flags; bit 0 = uppercase
+    [dbyte]     Field size on screen
+    [dbyte]     Maximum size of field data
+    [string]    Field name
+    [string]    Initial value for field
++   [string]    HTML attributes for field
+
+Numeric:
+
+    [byte]      11
+    [byte]      Initial attribute for field
+    [byte]      Number of occurences of field, 1 to 255
+    [dbyte]     Field size on screen
+    [dbyte]     Maximum size of field data
+    [byte]      Max. number of decimals
+    [byte]      Sign format:
+                0 = NONE        Sign is not displayed
+                1 = POST        If negative, '-' follows number
+                2 = PRE         If negative, '-' precedes number
+                3 = POST+       If non-zero, sign follows number
+                4 = PRE+        If non-zero, sign precedes number
+                5 = FIN         Financial sign, e.g. (123)
+    [byte]      Decimal format:
+                0 = NONE        Do not show decimals
+                1 = ALL         Show all decimals (123.40)
+                2 = DROP        Drop zero decimals (123.4)
+    [byte]      Filler option:
+                0 = NONE        Left-justify, removing zeroes
+                1 = SPACE       Right-justify, show leading spaces
+                2 = ZERO        Right-justify, show leading zeroes
+    [byte]      Blank-when-zero:
+                0 = NO          Show zero as '0'
+                1 = YES         Show zero as empty field
+    [byte]      Thousand separators:
+                0 = NO          Show number as 12345.00
+                1 = YES         Show number as 12,345.00
+    [string]    Field name
+    [string]    Initial value for field
++   [string]    HTML attributes for field
+
+Date:
+
+    [byte]      12
+    [byte]      Initial attribute for field
+    [byte]      Number of occurences of field, 1 to 255
+    [dbyte]     Field size on screen
+    [byte]      Date components:
+                0 = YMD
+                1 = YM
+                2 = MD
+    [byte]      Date delimiters:
+                0 = yy/mm/dd
+                1 = yymmdd
+                2 = yy mm dd
+                3 = yy mm, dd
+    [byte]      Date year format:
+                0 = yy
+                1 = yyyy
+    [byte]      Date month format:
+                0 = 02
+                1 =  2
+                2 = Feb
+                3 = FEB
+    [byte]      Date day format:
+                0 = 02
+                1 =  2
+    [string]    Field name
+    [string]    Initial value for field
+    [string]    Date picture, or empty means use preceding options
++   [string]    HTML attributes for field
+
+Time:
+
+    [byte]      13
+    [byte]      Initial attribute for field
+    [byte]      Number of occurences of field, 1 to 255
+    [dbyte]     Field size on screen
+    [string]    Field name
+    [string]    Initial value for field
+    [string]    Time picture, required
++   [string]    HTML attributes for field
+
+Textbox:
+
+    [byte]      14
+    [byte]      Initial attribute for field
+    [byte]      Number of occurences of field, 1 to 255
+    [byte]      Rows on screen
+    [byte]      Columns on screen
+    [byte]      Field property flags; bit 0 = uppercase
+    [dbyte]     Maximum size of field data
+    [string]    Field name
+    [string]    Initial value for field
++   [string]    HTML attributes for field
+
+Boolean:
+
+    [byte]      15
+    [byte]      Initial attribute for field
+    [byte]      Number of occurences of field, 1 to 255
+    [string]    Field name
+    [string]    Initial value for field
+    [string]    True text
+    [string]    False text
++   [string]    HTML attributes for field
+
+Select:
+
+    [byte]      16
+    [byte]      Initial attribute for field
+    [byte]      Number of occurences of field, 1 to 255
+    [byte]      Size on screen; 0 = pop-up list
+    [byte]      Number of select options; 0 = filled at runtime 
++   [byte]      1 = handle on_change event
+    [string]    Field name
+    [string]    Initial value for field
++   [string]    Javascript function for on_change if required
++   [string]    HTML attributes for field
+    [string]    No-selection text (shown when field has value 0)
+    [string]... Select option strings, 0..n
+
+Radio (data field):
+
+    [byte]      17
+    [byte]      Initial attribute for field
+    [byte]      Number of occurences of field, 1 to 255
+    [byte]      1 = show radio options in a column
++   [byte]      Number of radio options; 0 = filled at runtime 
++   [byte]      1 = handle on_change event
+    [string]    Field name
+    [string]    Initial value for field
++   [string]    Javascript function for on_change if required
++   [string]    HTML attributes for field
+    [string]    No-selection text (shown when field has value 0)
++   [string]... Radio option strings, 0..n
+
+Action:
+
+    [byte]      20
+    [byte]      Action type:
+                0 = button
+                1 = hyperlink
+                2 = image
+    [word]      Action value, or -1
+    [word]      Action index on screen, 0..n-1
+    [byte]      Initial display mode (FACTION_ENABLED,...)
+    [dbyte]     Height, if applicable - zero means not defined
+    [dbyte]     Width, if applicable - zero means not defined
+    [string]    Button field name
+    [string]    Label text or image name for action button
+    [string]    Image name for action button rollover, or ""
+    [string]    Confirmation message for action, or ""               
+    [string]    Alt text for images
++   [string]    HTML attributes for field
+
+Block list ends in null values:
+
+    [dbyte]     zero (length)
+    [byte]      zero (type)

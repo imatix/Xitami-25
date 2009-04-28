@@ -1,0 +1,57 @@
+.-----------------------------------------------------------------------------
+.-
+.-  errors.gsl - GSL script to format HTTP error messages
+.-
+.-  Written:  1999/05/30  Xitami team
+.-  Revised:  2000/01/01  Xitami team
+.-
+.-  If you want to modify this script, copy it, and modify the copy.  Then
+.-  change the server:error-script option to refer to your new script.
+.-
+.-  The root item has these attributes:
+.-      tempfile            name of temporary output file
+.-      errorcode           HTTP error code, as 3 digits
+.-      errortext           HTTP error text
+.-      message             More detailed cause of error, if any
+.-      date                current date, 'yyyy/mm/dd'
+.-      time                current time, 'hh:mm:ss'
+.-      script              name of script
+.-      urlbase             base URL for directory
+.-      server_software     name of the web server
+.-      server_version      the server version in use
+.-      server_name         the current host name
+.-      server_url          full url back to the server
+.-      server_port         port on which the web server is running
+.-      server_protocol     HTTP version in use (currently "HTTP/1.1").
+.-      remote_user         authorised username, if any, else "-"
+.-      remote_host         remote host name, "xxx.xxx.xxx.xxx"
+.-      Additionally, for each HTTP header field, an attribute HTTP_xxxx
+.-      where xxxx is the header field name. 
+.-
+.-  To debug changes to this script, start Xitami in debug mode (server:debug
+.-  option) and provoke an error.  This creates a file 'errors.xml' that you
+.-  can feed to gslgen by hand:
+.-
+.-      gslgen -script:templates/myfile.gsl errors.xml
+.-
+.-----------------------------------------------------------------------------
+.output tempfile
+<HTML><TITLE>Error</TITLE><BODY><H1>
+<HTML><BODY>
+<H2>Error $(errorcode)</H2>
+<H3>$(errortext:)</H3>
+.if defined (message)
+<P>$(message:)
+.endif
+<HR>
+<TABLE>
+<TR><TD>Server       </TD><TD>$(server_software:)</TD></TR>
+<TR><TD>Version      </TD><TD>$(server_version:)</TD></TR>
+<TR><TD>Name         </TD><TD>$(server_name:)</TD></TR>
+<TR><TD>Full URL     </TD><TD>$(server_url:)</TD></TR>
+<TR><TD>HTTP port    </TD><TD>$(server_port:)</TD></TR>
+<TR><TD>Protocol     </TD><TD>$(server_protocol:)</TD></TR>
+<TR><TD>Your IP      </TD><TD>$(remote_host:)</TD></TR>
+<TR><TD>Your browser </TD><TD>$(http_user_agent?:)</TD></TR>
+</TABLE>
+</BODY></HTML>

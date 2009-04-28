@@ -1,0 +1,223 @@
+Cache-control: no-cache
+Expires: 0
+
+<HTML>
+<HEAD><TITLE>Xitami Administration</TITLE>
+<script type="text/javascript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function submit(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+function focus() {
+    if ("#(_focus)" != "jsaction")
+        document.forms[0].#(_focus).focus();
+}
+</script>
+</HEAD>
+<BODY onLoad="focus()" style="font-family: sans-serif" BGCOLOR="#87CEFA">
+<SCRIPT LANGUAGE="JavaScript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function subform(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+</SCRIPT>
+<TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100%>
+<FORM METHOD=POST ACTION="#(proto)#(host)#(uri)">
+<INPUT TYPE=HIDDEN NAME=jsaction VALUE="">
+<TR><TD ALIGN=LEFT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Back223 LABEL="/admin/$back.gif" EVENT=back_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/backa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$back.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Save224 LABEL="/admin/$save.gif" EVENT=save_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/savea.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$save.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Default225 LABEL="/admin/$default.gif" EVENT=default_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/defaulta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$default.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Undo226 LABEL="/admin/$undo.gif" EVENT=undo_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/undoa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$undo.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<A HREF="/xitami/index4.htm#config_ssi" TARGET="Help" TITLE="Help"
+onMouseOver="show('Help','/admin/helpa.gif')"
+onMouseOut="show('Help','/admin/$help.gif')"><IMG SRC="/admin/$help.gif" ALT="" BORDER=0 ALIGN=MIDDLE NAME="Help"
+WIDTH=40 HEIGHT=39></A><IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+<TD ALIGN=CENTER><FONT SIZE=+1>#(config) - SSI (Server-Side Includes) Properties </FONT>
+<TD ALIGN=RIGHT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Console227 LABEL="/admin/$console.gif" EVENT=console_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/consolea.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$console.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Halt228 LABEL="/admin/$halt.gif" EVENT=halt_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/halta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$halt.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Restart229 LABEL="/admin/$restart.gif" EVENT=restart_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/restarta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$restart.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Exit230 LABEL="/admin/$exit.gif" EVENT=exit_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/exita.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$exit.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+</TABLE><p>
+<FONT SIZE=-1>
+<!--FML ACTION=Ok LABEL="Ok" EVENT=save_event CONFIRM="" ATTR="" TYPE=PLAIN -->
+<A HREF=# >Ok</A>
+<!--FML /ACTION-->
+<!--FML ACTION=Cancel LABEL="Cancel" EVENT=back_event CONFIRM="" ATTR="" TYPE=PLAIN -->
+<A HREF=# >Cancel</A>
+<!--FML /ACTION-->
+</FONT><HR>
+
+<TABLE WIDTH="100%">
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F396 TEXTUAL LABEL NAME=L_enabled VALUE="SSI enabled?&nbsp;&nbsp;" -->
+SSI enabled?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F397 BOOLEAN INPUT NAME=enabled
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F398 TEXTUAL LABEL NAME=L_fileext1 VALUE="For these file extensions:&nbsp;&nbsp;" -->
+For these file extensions:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F399 TEXTUAL INPUT NAME=fileext1
+SIZE=6 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=6 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F400 TEXTUAL LABEL NAME=L_fileext2 VALUE="&nbsp;" -->
+&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F401 TEXTUAL INPUT NAME=fileext2
+SIZE=6 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=6 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F402 TEXTUAL LABEL NAME=L_fileext3 VALUE="&nbsp;" -->
+&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F403 TEXTUAL INPUT NAME=fileext3
+SIZE=6 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=6 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F404 TEXTUAL LABEL NAME=L_fileext4 VALUE="&nbsp;" -->
+&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F405 TEXTUAL INPUT NAME=fileext4
+SIZE=6 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=6 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F406 TEXTUAL LABEL NAME=L_fileext5 VALUE="&nbsp;" -->
+&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F407 TEXTUAL INPUT NAME=fileext5
+SIZE=6 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=6 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F408 TEXTUAL LABEL NAME=L_fileext6 VALUE="&nbsp;" -->
+&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F409 TEXTUAL INPUT NAME=fileext6
+SIZE=6 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=6 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F410 TEXTUAL LABEL NAME=L_exec VALUE="Permit SSI #exec command?&nbsp;&nbsp;" -->
+Permit SSI #exec command?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F411 BOOLEAN INPUT NAME=exec
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F412 TEXTUAL LABEL NAME=L_timefmt VALUE="Format for time fields:&nbsp;&nbsp;" -->
+Format for time fields:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F413 TEXTUAL INPUT NAME=timefmt
+SIZE=40 MAX=80 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F414 TEXTUAL LABEL NAME=L_sizefmt VALUE="Format for size fields:&nbsp;&nbsp;" -->
+Format for size fields:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F415 TEXTUAL INPUT NAME=sizefmt
+SIZE=10 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=10 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F416 TEXTUAL LABEL NAME=L_errmsg VALUE="SSI error message:&nbsp;&nbsp;" -->
+SSI error message:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F417 TEXTUAL INPUT NAME=errmsg
+SIZE=40 MAX=80 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F418 TEXTUAL LABEL NAME=L_timeout VALUE="Timeout for #exec calls:&nbsp;&nbsp;" -->
+Timeout for #exec calls:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F419 NUMERIC INPUT NAME=timeout
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=8 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=8 VALUE="" >
+<!--FML /FIELD-->
+seconds
+</TD></TR>
+</TABLE>
+
+<!--FML FIELD=message_to_user SIZE=120 TEXTUAL HIDDEN -->
+<!--FML /FIELD -->
+</FORM>
+<SCRIPT LANGUAGE="JavaScript">
+    if ("#(_focus)" != "jsaction" && document.forms[0].#(_focus))
+        document.forms[0].#(_focus).focus();
+</SCRIPT>
+<HR>
+<TABLE WIDTH=100%><TR>
+<TD><IMG SRC="/admin/imatix.gif"
+WIDTH=96 HEIGHT=41>
+<TD ALIGN=CENTER><FONT SIZE=-1>Copyright &#169 1996-2002 iMatix Corporation
+<BR>Powered by iMatix Studio 2.5
+<TD ALIGN=RIGHT><FONT SIZE=-1>#(date) #(time)
+<BR>#(product) v2.5c2
+</TABLE>
+</BODY></HTML>

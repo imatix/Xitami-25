@@ -1,0 +1,89 @@
+.-----------------------------------------------------------------------------
+.-
+.-  ftpmesg.gsl - GSL script to format FTP welcome/sign-in messages
+.-
+.-  Written:  1999/05/31  Xitami team
+.-  Revised:  2000/02/01  Xitami team
+.-
+.-  If you want to modify this script, copy it, and modify the copy.  Then
+.-  change the ftp:message-script option to refer to your new script.
+.-
+.-  The root item has these attributes:
+.-      date                current date, 'yyyy/mm/dd'
+.-      time                current time, 'hh:mm:ss'
+.-      server_software     name of the web server
+.-      server_version      the server version in use
+.-      server_name         the current host name
+.-      server_port         port on which the web server is running
+.-      remote_user         authorised username, if any, else "-"
+.-      remote_host         remote host name, "xxx.xxx.xxx.xxx"
+.-      status              FTP status, 220, 221, or 230
+.-      curusers            Number of users connected including current
+.-      maxusers            Maximum permitted number of users - 0 = no limit
+.-      use_quotas          1 when quotas are enabled for this user, else 0
+.-      soft_quota          User's soft quota, if any, in bytes
+.-      hard_quota          User's hard quota, if any, in bytes
+.-      disk_usage          User's current disk usage, in bytes
+.-
+.-  To debug changes to this script, start Xitami in debug mode (server:debug
+.-  option) and provoke an error.  This creates a file 'ftpmesg.xml' that you
+.-  can feed to gslgen by hand:
+.-
+.-      gslgen -script:templates/myfile.sch ftpmesg.xml
+.-
+.-----------------------------------------------------------------------------
+.-
+.- Status 220 is 'Connected, ready for login'
+.-
+.if status = "220"
+Welcome to this Xitami FTP server, running version $(server_version) of Xitami.
+.   if maxusers > 0
+You are user number $(curusers) of a permitted $(maxusers) users.
+.   else
+You are user number $(curusers) on this system.
+.   endif
+.-
+.- Status 221 is 'Disconnecting'
+.-
+.elsif status = "221"
+
+Thank you for using this Xitami webserver.
+.   if use_quotas
+Your account is using $(disk_usage) bytes, out of a quota of $(soft_quota).
+.   endif
+.-
+.- Status 230 is 'Logged-in'
+.-
+.elsif status = "230"
+Logged in from $(remote_host) as $(remote_user:) on $(date), $(time).
+.   if use_quotas
+Your account is using $(disk_usage) bytes, out of a quota of $(soft_quota).
+.   endif
+
+Welcome to the FTP service of ftp.funkychicken-the-movie.com, hosted
+on a Googol system running GoogOS version 6.5.  Your server today is
+Xitami, the fast 'n free web/ftp server from iMatix Corporation, who
+will be happy to take your order at http://www.imatix.com.  In case of
+problems please contact the webmaster (joe@funkychicken-the-movie.com).
+
+This system is for the use of authorised users only.  Individuals
+using this computer system without authority, or in excess of their
+auhority are subject to having all their activities on this system
+monitored and recorded by system personnel.
+
+In the course of monitoring individuals improperly using this system,
+or in the course of system maintenance, the activities of authorised
+users may be monitored.  Anyone using this system expressly consents
+to such monitoring and is advised that if such monitoring reveals
+possible evidence of criminal activity, system personnel may provide
+the evidence of such monitoring to law enforcement officials.
+
+Have a really lovely day!
+.else
+.-
+.-  We should not have anything else
+.-
+ERROR: invalid FTP status passed to $(script).
+.echo "ERROR: invalid FTP status passed to $(script)."
+.endif
+

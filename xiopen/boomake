@@ -1,0 +1,3712 @@
+#!/bin/sh
+#
+#   Boom builder for Xitami/Open 2.5c2
+#   Generated from standard.pwl on 2004/07/22
+#   See www.imatix.com for more information.
+#   Copyright (c) 1991-2003 iMatix Corporation
+#
+#   Force environment variables to point to install location
+#   Start by using final IBASE, then handle local -install path
+self=$0
+_IBASE=$IBASE
+if [ -z "$_IBASE" ]; then
+    _IBASE=/usr/local/imatix
+fi
+INCDIR=$_IBASE/xitami-25/include
+LIBDIR=$_IBASE/xitami-25/lib
+PATH=.:$_IBASE/xitami-25/bin:$PATH
+PERLLIB=.:$_IBASE/xitami-25/bin:$PERLLIB
+_LOCAL=0
+export INCDIR LIBDIR PATH PERLLIB
+if [ "$1" = "-install" ]; then
+    _IBASE=$2
+    _LOCAL=1
+    PATH=$_IBASE/xitami-25/bin:$PATH
+    PERLLIB=$_IBASE/xitami-25/bin:$PERLLIB
+    INCDIR_ALT=$_IBASE/xitami-25/include
+    LIBDIR_ALT=$_IBASE/xitami-25/lib
+    export PATH PERLLIB INCDIR_ALT LIBDIR_ALT
+    shift;
+    shift;
+fi
+
+# --------------------------   BUILD BINARY FILES   ---------------------------
+
+a_build_binary_files() {
+:
+    echo "Building application..."
+    COPTS=-g
+    if [ ! -z "$INCDIR_ALT" ]; then
+        COPTS="$COPTS -li . -li $INCDIR_ALT"
+    fi
+    if [ ! -z "$LIBDIR_ALT" ]; then
+        COPTS="$COPTS -ll $LIBDIR_ALT"
+    fi
+    PUSHDIR=`pwd`; cd cgi-bin/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd cgi-src/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd debug/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd errors/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd ftproot/guest/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd ftproot/pub/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd ftproot/upload/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd ftproot/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd headers/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd logs/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd temp/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd templates/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd html/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd win32/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd webpages/xitami/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd webpages/images/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd webpages/private/
+    cd $PUSHDIR; PUSHDIR=
+    PUSHDIR=`pwd`; cd webpages/
+    cd $PUSHDIR; PUSHDIR=
+    c $COPTS xixlat
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xixlat' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xitami
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xitami' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xilite
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xilite' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xiwtp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xiwtp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -L xixlat
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -L xixlat' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -L xitami
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -L xitami' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -L xilite
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -L xilite' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -L xiwtp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -L xiwtp' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# -------------------------   BUILD SOURCE PACKAGES   -------------------------
+
+a_build_source_packages() {
+:
+    rm -f _package.lst
+    if [ -f "xiopen/cgi-bin/readme.txt" ]; then
+        echo xiopen/cgi-bin/readme.txt>>_package.lst
+    fi
+    if [ -f "xiopen/cgi-src/testcgi.c" ]; then
+        echo xiopen/cgi-src/testcgi.c>>_package.lst
+    fi
+    if [ -f "xiopen/cgi-src/testcgi1.c" ]; then
+        echo xiopen/cgi-src/testcgi1.c>>_package.lst
+    fi
+    if [ -f "xiopen/cgi-src/testcgi2.c" ]; then
+        echo xiopen/cgi-src/testcgi2.c>>_package.lst
+    fi
+    if [ -f "xiopen/cgi-src/testcgi3.c" ]; then
+        echo xiopen/cgi-src/testcgi3.c>>_package.lst
+    fi
+    if [ -f "xiopen/cgi-src/testcgi4.c" ]; then
+        echo xiopen/cgi-src/testcgi4.c>>_package.lst
+    fi
+    if [ -f "xiopen/cgi-src/testcgi5.c" ]; then
+        echo xiopen/cgi-src/testcgi5.c>>_package.lst
+    fi
+    if [ -f "xiopen/cgi-src/testcgi6.c" ]; then
+        echo xiopen/cgi-src/testcgi6.c>>_package.lst
+    fi
+    if [ -f "xiopen/cgi-src/testcgi7.c" ]; then
+        echo xiopen/cgi-src/testcgi7.c>>_package.lst
+    fi
+    if [ -f "xiopen/cgi-src/testperl.pl" ]; then
+        echo xiopen/cgi-src/testperl.pl>>_package.lst
+    fi
+    if [ -f "xiopen/debug/readme.txt" ]; then
+        echo xiopen/debug/readme.txt>>_package.lst
+    fi
+    if [ -f "xiopen/errors/footer.htm" ]; then
+        echo xiopen/errors/footer.htm>>_package.lst
+    fi
+    if [ -f "xiopen/errors/header.htm" ]; then
+        echo xiopen/errors/header.htm>>_package.lst
+    fi
+    if [ -f "xiopen/errors/text-400.htm" ]; then
+        echo xiopen/errors/text-400.htm>>_package.lst
+    fi
+    if [ -f "xiopen/errors/text-401.htm" ]; then
+        echo xiopen/errors/text-401.htm>>_package.lst
+    fi
+    if [ -f "xiopen/errors/text-402.htm" ]; then
+        echo xiopen/errors/text-402.htm>>_package.lst
+    fi
+    if [ -f "xiopen/errors/text-403.htm" ]; then
+        echo xiopen/errors/text-403.htm>>_package.lst
+    fi
+    if [ -f "xiopen/errors/text-404.htm" ]; then
+        echo xiopen/errors/text-404.htm>>_package.lst
+    fi
+    if [ -f "xiopen/errors/text-412.htm" ]; then
+        echo xiopen/errors/text-412.htm>>_package.lst
+    fi
+    if [ -f "xiopen/errors/text-413.htm" ]; then
+        echo xiopen/errors/text-413.htm>>_package.lst
+    fi
+    if [ -f "xiopen/errors/text-500.htm" ]; then
+        echo xiopen/errors/text-500.htm>>_package.lst
+    fi
+    if [ -f "xiopen/errors/text-501.htm" ]; then
+        echo xiopen/errors/text-501.htm>>_package.lst
+    fi
+    if [ -f "xiopen/errors/text-502.htm" ]; then
+        echo xiopen/errors/text-502.htm>>_package.lst
+    fi
+    if [ -f "xiopen/ftproot/guest/index.htm" ]; then
+        echo xiopen/ftproot/guest/index.htm>>_package.lst
+    fi
+    if [ -f "xiopen/ftproot/guest/index.txt" ]; then
+        echo xiopen/ftproot/guest/index.txt>>_package.lst
+    fi
+    if [ -f "xiopen/ftproot/pub/index.htm" ]; then
+        echo xiopen/ftproot/pub/index.htm>>_package.lst
+    fi
+    if [ -f "xiopen/ftproot/pub/index.txt" ]; then
+        echo xiopen/ftproot/pub/index.txt>>_package.lst
+    fi
+    if [ -f "xiopen/ftproot/upload/index.htm" ]; then
+        echo xiopen/ftproot/upload/index.htm>>_package.lst
+    fi
+    if [ -f "xiopen/ftproot/upload/index.txt" ]; then
+        echo xiopen/ftproot/upload/index.txt>>_package.lst
+    fi
+    if [ -f "xiopen/ftproot/readme.txt" ]; then
+        echo xiopen/ftproot/readme.txt>>_package.lst
+    fi
+    if [ -f "xiopen/headers/readme.txt" ]; then
+        echo xiopen/headers/readme.txt>>_package.lst
+    fi
+    if [ -f "xiopen/logs/readme.txt" ]; then
+        echo xiopen/logs/readme.txt>>_package.lst
+    fi
+    if [ -f "xiopen/temp/readme.txt" ]; then
+        echo xiopen/temp/readme.txt>>_package.lst
+    fi
+    if [ -f "xiopen/templates/errors.gsl" ]; then
+        echo xiopen/templates/errors.gsl>>_package.lst
+    fi
+    if [ -f "xiopen/templates/ftpmesg.gsl" ]; then
+        echo xiopen/templates/ftpmesg.gsl>>_package.lst
+    fi
+    if [ -f "xiopen/templates/httpdir.gsl" ]; then
+        echo xiopen/templates/httpdir.gsl>>_package.lst
+    fi
+    if [ -f "xiopen/html/anchor.def" ]; then
+        echo xiopen/html/anchor.def>>_package.lst
+    fi
+    if [ -f "xiopen/html/macros.def" ]; then
+        echo xiopen/html/macros.def>>_package.lst
+    fi
+    if [ -f "xiopen/html/prelude.def" ]; then
+        echo xiopen/html/prelude.def>>_package.lst
+    fi
+    if [ -f "xiopen/html/xitami1.txt" ]; then
+        echo xiopen/html/xitami1.txt>>_package.lst
+    fi
+    if [ -f "xiopen/html/xitami2.txt" ]; then
+        echo xiopen/html/xitami2.txt>>_package.lst
+    fi
+    if [ -f "xiopen/html/testssi.ssi" ]; then
+        echo xiopen/html/testssi.ssi>>_package.lst
+    fi
+    if [ -f "xiopen/html/private.htm" ]; then
+        echo xiopen/html/private.htm>>_package.lst
+    fi
+    if [ -f "xiopen/html/default.htm" ]; then
+        echo xiopen/html/default.htm>>_package.lst
+    fi
+    if [ "`echo xiopen/html/index*.htm`" != "xiopen/html/index*.htm" ]; then
+        for file in `echo xiopen/html/index*.htm`; do
+            echo $file>>_package.lst
+        done
+    fi
+    if [ -f "xiopen/html/license.htm" ]; then
+        echo xiopen/html/license.htm>>_package.lst
+    fi
+    if [ -f "xiopen/html/belgium.htm" ]; then
+        echo xiopen/html/belgium.htm>>_package.lst
+    fi
+    if [ -f "xiopen/html/mapfail.htm" ]; then
+        echo xiopen/html/mapfail.htm>>_package.lst
+    fi
+    if [ -f "xiopen/html/os2-readme.htm" ]; then
+        echo xiopen/html/os2-readme.htm>>_package.lst
+    fi
+    if [ -f "xiopen/html/unix-readme.htm" ]; then
+        echo xiopen/html/unix-readme.htm>>_package.lst
+    fi
+    if [ -f "xiopen/html/windows.htm" ]; then
+        echo xiopen/html/windows.htm>>_package.lst
+    fi
+    if [ -f "xiopen/win32/about.ico" ]; then
+        echo xiopen/win32/about.ico>>_package.lst
+    fi
+    if [ -f "xiopen/win32/active.bmp" ]; then
+        echo xiopen/win32/active.bmp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/bitmap4.bmp" ]; then
+        echo xiopen/win32/bitmap4.bmp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/bitmap5.bmp" ]; then
+        echo xiopen/win32/bitmap5.bmp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/bug100.bmp" ]; then
+        echo xiopen/win32/bug100.bmp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/gsl.dsp" ]; then
+        echo xiopen/win32/gsl.dsp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/imatix1.bmp" ]; then
+        echo xiopen/win32/imatix1.bmp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/off.bmp" ]; then
+        echo xiopen/win32/off.bmp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/off.ico" ]; then
+        echo xiopen/win32/off.ico>>_package.lst
+    fi
+    if [ -f "xiopen/win32/on.bmp" ]; then
+        echo xiopen/win32/on.bmp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/on.ico" ]; then
+        echo xiopen/win32/on.ico>>_package.lst
+    fi
+    if [ -f "xiopen/win32/resource.h" ]; then
+        echo xiopen/win32/resource.h>>_package.lst
+    fi
+    if [ -f "xiopen/win32/sfl.dsp" ]; then
+        echo xiopen/win32/sfl.dsp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/smt.dsp" ]; then
+        echo xiopen/win32/smt.dsp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/studio.dsp" ]; then
+        echo xiopen/win32/studio.dsp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/xiadmin.dsp" ]; then
+        echo xiopen/win32/xiadmin.dsp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/xicpl32.c" ]; then
+        echo xiopen/win32/xicpl32.c>>_package.lst
+    fi
+    if [ -f "xiopen/win32/xicpl32.def" ]; then
+        echo xiopen/win32/xicpl32.def>>_package.lst
+    fi
+    if [ -f "xiopen/win32/xigui32.c" ]; then
+        echo xiopen/win32/xigui32.c>>_package.lst
+    fi
+    if [ -f "xiopen/win32/xiprocpl.def" ]; then
+        echo xiopen/win32/xiprocpl.def>>_package.lst
+    fi
+    if [ -f "xiopen/win32/xisrv32.c" ]; then
+        echo xiopen/win32/xisrv32.c>>_package.lst
+    fi
+    if [ -f "xiopen/win32/Xitami_Console.dsp" ]; then
+        echo xiopen/win32/Xitami_Console.dsp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/Xitami_Control_Panel.dsp" ]; then
+        echo xiopen/win32/Xitami_Control_Panel.dsp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/Xitami_Service.dsp" ]; then
+        echo xiopen/win32/Xitami_Service.dsp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/Xitami_Win32.dsp" ]; then
+        echo xiopen/win32/Xitami_Win32.dsp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/xitami.dsw" ]; then
+        echo xiopen/win32/xitami.dsw>>_package.lst
+    fi
+    if [ -f "xiopen/win32/xitami.h" ]; then
+        echo xiopen/win32/xitami.h>>_package.lst
+    fi
+    if [ -f "xiopen/win32/xitami1.bmp" ]; then
+        echo xiopen/win32/xitami1.bmp>>_package.lst
+    fi
+    if [ -f "xiopen/win32/xiwin.rc" ]; then
+        echo xiopen/win32/xiwin.rc>>_package.lst
+    fi
+    if [ "`echo xiopen/webpages/xitami/index*.htm`" != "xiopen/webpages/xitami/index*.htm" ]; then
+        for file in `echo xiopen/webpages/xitami/index*.htm`; do
+            echo $file>>_package.lst
+        done
+    fi
+    if [ -f "xiopen/webpages/xitami/license.htm" ]; then
+        echo xiopen/webpages/xitami/license.htm>>_package.lst
+    fi
+    if [ -f "xiopen/webpages/images/buttons.gif" ]; then
+        echo xiopen/webpages/images/buttons.gif>>_package.lst
+    fi
+    if [ -f "xiopen/webpages/images/imatix.gif" ]; then
+        echo xiopen/webpages/images/imatix.gif>>_package.lst
+    fi
+    if [ -f "xiopen/webpages/images/xitami1.gif" ]; then
+        echo xiopen/webpages/images/xitami1.gif>>_package.lst
+    fi
+    if [ "`echo xiopen/webpages/images/powered*.gif`" != "xiopen/webpages/images/powered*.gif" ]; then
+        for file in `echo xiopen/webpages/images/powered*.gif`; do
+            echo $file>>_package.lst
+        done
+    fi
+    if [ -f "xiopen/webpages/private/private.htm" ]; then
+        echo xiopen/webpages/private/private.htm>>_package.lst
+    fi
+    if [ -f "xiopen/webpages/buttons.map" ]; then
+        echo xiopen/webpages/buttons.map>>_package.lst
+    fi
+    if [ -f "xiopen/webpages/testssi.inc" ]; then
+        echo xiopen/webpages/testssi.inc>>_package.lst
+    fi
+    if [ -f "xiopen/webpages/testssi.ssi" ]; then
+        echo xiopen/webpages/testssi.ssi>>_package.lst
+    fi
+    if [ -f "xiopen/webpages/default.htm" ]; then
+        echo xiopen/webpages/default.htm>>_package.lst
+    fi
+    if [ -f "xiopen/webpages/mapfail.htm" ]; then
+        echo xiopen/webpages/mapfail.htm>>_package.lst
+    fi
+    if [ -f "xiopen/webpages/windows.htm" ]; then
+        echo xiopen/webpages/windows.htm>>_package.lst
+    fi
+    if [ -f "xiopen/version.h" ]; then
+        echo xiopen/version.h>>_package.lst
+    fi
+    if [ -f "xiopen/xiopen.xml" ]; then
+        echo xiopen/xiopen.xml>>_package.lst
+    fi
+    if [ -f "xiopen/ddnsdef.xml" ]; then
+        echo xiopen/ddnsdef.xml>>_package.lst
+    fi
+    if [ -f "xiopen/pipedef.xml" ]; then
+        echo xiopen/pipedef.xml>>_package.lst
+    fi
+    if [ -f "xiopen/ftpadios.txt" ]; then
+        echo xiopen/ftpadios.txt>>_package.lst
+    fi
+    if [ -f "xiopen/ftphello.txt" ]; then
+        echo xiopen/ftphello.txt>>_package.lst
+    fi
+    if [ -f "xiopen/ftplogin.txt" ]; then
+        echo xiopen/ftplogin.txt>>_package.lst
+    fi
+    if [ -f "xiopen/ftpdirs.aut" ]; then
+        echo xiopen/ftpdirs.aut>>_package.lst
+    fi
+    if [ -f "xiopen/ftpusers.aut" ]; then
+        echo xiopen/ftpusers.aut>>_package.lst
+    fi
+    if [ -f "xiopen/xitami.aut" ]; then
+        echo xiopen/xitami.aut>>_package.lst
+    fi
+    if [ -f "xiopen/xitami.cfg" ]; then
+        echo xiopen/xitami.cfg>>_package.lst
+    fi
+    if [ -f "xiopen/xixlat.c" ]; then
+        echo xiopen/xixlat.c>>_package.lst
+    fi
+    if [ -f "xiopen/xiconfig.htp" ]; then
+        echo xiopen/xiconfig.htp>>_package.lst
+    fi
+    if [ -f "xiopen/perlssi" ]; then
+        echo xiopen/perlssi>>_package.lst
+    fi
+    if [ -f "xiopen/prelude.pdl" ]; then
+        echo xiopen/prelude.pdl>>_package.lst
+    fi
+    if [ -f "xiopen/license.gpl" ]; then
+        echo xiopen/license.gpl>>_package.lst
+    fi
+    if [ -f "xiopen/project.pdl" ]; then
+        echo xiopen/project.pdl>>_package.lst
+    fi
+    if [ -f "xiopen/readme.txt" ]; then
+        echo xiopen/readme.txt>>_package.lst
+    fi
+    if [ -f "xiopen/xitami.c" ]; then
+        echo xiopen/xitami.c>>_package.lst
+    fi
+    if [ -f "xiopen/xilite.c" ]; then
+        echo xiopen/xilite.c>>_package.lst
+    fi
+    if [ -f "xiopen/xiwtp.c" ]; then
+        echo xiopen/xiwtp.c>>_package.lst
+    fi
+    if [ -f "xiopen/boomake" ]; then
+        echo xiopen/boomake>>_package.lst
+    fi
+    if [ -f "xiopen/boomake.bat" ]; then
+        echo xiopen/boomake.bat>>_package.lst
+    fi
+    echo "Building xit_2_5c2_src.tar.gz..."
+    tar -czf xit_2_5c2_src.tar.gz -T _package.lst
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'tar -czf xit_2_5c2_src.tar.gz -T _package.lst' failed with exit status $status. Stop.
+        exit 1
+    fi
+    rm _package.lst
+}
+
+# -----------------------   CHECK BINARY FILES EXIST   ------------------------
+
+a_check_binary_files_exist() {
+:
+    if [ -d "cgi-bin" ]; then
+        cd cgi-bin
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../cgi-bin" ]; then
+        cd ..
+    fi
+    if [ -d "cgi-src" ]; then
+        cd cgi-src
+    fi
+    if [ ! -f "testcgi.c" ]; then
+        echo "testcgi.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi1.c" ]; then
+        echo "testcgi1.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi2.c" ]; then
+        echo "testcgi2.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi3.c" ]; then
+        echo "testcgi3.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi4.c" ]; then
+        echo "testcgi4.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi5.c" ]; then
+        echo "testcgi5.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi6.c" ]; then
+        echo "testcgi6.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi7.c" ]; then
+        echo "testcgi7.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testperl.pl" ]; then
+        echo "testperl.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../cgi-src" ]; then
+        cd ..
+    fi
+    if [ -d "debug" ]; then
+        cd debug
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../debug" ]; then
+        cd ..
+    fi
+    if [ -d "errors" ]; then
+        cd errors
+    fi
+    if [ ! -f "footer.htm" ]; then
+        echo "footer.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "header.htm" ]; then
+        echo "header.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-400.htm" ]; then
+        echo "text-400.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-401.htm" ]; then
+        echo "text-401.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-402.htm" ]; then
+        echo "text-402.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-403.htm" ]; then
+        echo "text-403.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-404.htm" ]; then
+        echo "text-404.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-412.htm" ]; then
+        echo "text-412.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-413.htm" ]; then
+        echo "text-413.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-500.htm" ]; then
+        echo "text-500.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-501.htm" ]; then
+        echo "text-501.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-502.htm" ]; then
+        echo "text-502.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../errors" ]; then
+        cd ..
+    fi
+    if [ -d "ftproot" ]; then
+        cd ftproot
+    fi
+    if [ -d "guest" ]; then
+        cd guest
+    fi
+    if [ ! -f "index.htm" ]; then
+        echo "index.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "index.txt" ]; then
+        echo "index.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../guest" ]; then
+        cd ..
+    fi
+    if [ -d "pub" ]; then
+        cd pub
+    fi
+    if [ ! -f "index.htm" ]; then
+        echo "index.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "index.txt" ]; then
+        echo "index.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../pub" ]; then
+        cd ..
+    fi
+    if [ -d "upload" ]; then
+        cd upload
+    fi
+    if [ ! -f "index.htm" ]; then
+        echo "index.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "index.txt" ]; then
+        echo "index.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../upload" ]; then
+        cd ..
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../ftproot" ]; then
+        cd ..
+    fi
+    if [ -d "headers" ]; then
+        cd headers
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../headers" ]; then
+        cd ..
+    fi
+    if [ -d "logs" ]; then
+        cd logs
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../logs" ]; then
+        cd ..
+    fi
+    if [ -d "temp" ]; then
+        cd temp
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../temp" ]; then
+        cd ..
+    fi
+    if [ -d "templates" ]; then
+        cd templates
+    fi
+    if [ ! -f "errors.gsl" ]; then
+        echo "errors.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpmesg.gsl" ]; then
+        echo "ftpmesg.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "httpdir.gsl" ]; then
+        echo "httpdir.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../templates" ]; then
+        cd ..
+    fi
+    if [ -d "html" ]; then
+        cd html
+    fi
+    if [ ! -f "macros.def" ]; then
+        echo "macros.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "prelude.def" ]; then
+        echo "prelude.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../html" ]; then
+        cd ..
+    fi
+    if [ -d "win32" ]; then
+        cd win32
+    fi
+    if [ -d "../win32" ]; then
+        cd ..
+    fi
+    if [ -d "webpages" ]; then
+        cd webpages
+    fi
+    if [ -d "xitami" ]; then
+        cd xitami
+    fi
+    if [ "`echo index*.htm`" = "index*.htm" ]; then
+        echo "index*.htm is missing, cannot continue"
+    fi
+    if [ ! -f "license.htm" ]; then
+        echo "license.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../xitami" ]; then
+        cd ..
+    fi
+    if [ -d "images" ]; then
+        cd images
+    fi
+    if [ ! -f "buttons.gif" ]; then
+        echo "buttons.gif is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "imatix.gif" ]; then
+        echo "imatix.gif is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami1.gif" ]; then
+        echo "xitami1.gif is missing, cannot continue"
+        exit 1
+    fi
+    if [ "`echo powered*.gif`" = "powered*.gif" ]; then
+        echo "powered*.gif is missing, cannot continue"
+    fi
+    if [ -d "../images" ]; then
+        cd ..
+    fi
+    if [ -d "private" ]; then
+        cd private
+    fi
+    if [ ! -f "private.htm" ]; then
+        echo "private.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../private" ]; then
+        cd ..
+    fi
+    if [ ! -f "buttons.map" ]; then
+        echo "buttons.map is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testssi.inc" ]; then
+        echo "testssi.inc is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testssi.ssi" ]; then
+        echo "testssi.ssi is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "default.htm" ]; then
+        echo "default.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "mapfail.htm" ]; then
+        echo "mapfail.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "windows.htm" ]; then
+        echo "windows.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../webpages" ]; then
+        cd ..
+    fi
+    if [ ! -f "xitami" ]; then
+        echo "xitami is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xilite" ]; then
+        echo "xilite is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiwtp" ]; then
+        echo "xiwtp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ddnsdef.xml" ]; then
+        echo "ddnsdef.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "pipedef.xml" ]; then
+        echo "pipedef.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpadios.txt" ]; then
+        echo "ftpadios.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftphello.txt" ]; then
+        echo "ftphello.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftplogin.txt" ]; then
+        echo "ftplogin.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpdirs.aut" ]; then
+        echo "ftpdirs.aut is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpusers.aut" ]; then
+        echo "ftpusers.aut is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami.aut" ]; then
+        echo "xitami.aut is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami.cfg" ]; then
+        echo "xitami.cfg is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "perlssi" ]; then
+        echo "perlssi is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# ------------------------   CHECK OPERATING CONTEXT   ------------------------
+
+a_check_operating_context() {
+:
+    event=source
+    if [ -d "CVS" ]; then
+        event=rawcvs
+    fi
+}
+
+# -----------------------   CHECK PROJECT FILES EXIST   -----------------------
+
+a_check_project_files_exist() {
+:
+    if [ ! -d "cgi-bin" ]; then
+        echo "directory cgi-bin is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "cgi-bin" ]; then
+        cd cgi-bin
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../cgi-bin" ]; then
+        cd ..
+    fi
+    if [ ! -d "cgi-src" ]; then
+        echo "directory cgi-src is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "cgi-src" ]; then
+        cd cgi-src
+    fi
+    if [ ! -f "testcgi.c" ]; then
+        echo "testcgi.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi1.c" ]; then
+        echo "testcgi1.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi2.c" ]; then
+        echo "testcgi2.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi3.c" ]; then
+        echo "testcgi3.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi4.c" ]; then
+        echo "testcgi4.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi5.c" ]; then
+        echo "testcgi5.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi6.c" ]; then
+        echo "testcgi6.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi7.c" ]; then
+        echo "testcgi7.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testperl.pl" ]; then
+        echo "testperl.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../cgi-src" ]; then
+        cd ..
+    fi
+    if [ ! -d "debug" ]; then
+        echo "directory debug is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "debug" ]; then
+        cd debug
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../debug" ]; then
+        cd ..
+    fi
+    if [ ! -d "errors" ]; then
+        echo "directory errors is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "errors" ]; then
+        cd errors
+    fi
+    if [ ! -f "footer.htm" ]; then
+        echo "footer.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "header.htm" ]; then
+        echo "header.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-400.htm" ]; then
+        echo "text-400.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-401.htm" ]; then
+        echo "text-401.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-402.htm" ]; then
+        echo "text-402.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-403.htm" ]; then
+        echo "text-403.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-404.htm" ]; then
+        echo "text-404.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-412.htm" ]; then
+        echo "text-412.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-413.htm" ]; then
+        echo "text-413.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-500.htm" ]; then
+        echo "text-500.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-501.htm" ]; then
+        echo "text-501.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-502.htm" ]; then
+        echo "text-502.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../errors" ]; then
+        cd ..
+    fi
+    if [ ! -d "ftproot" ]; then
+        echo "directory ftproot is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "ftproot" ]; then
+        cd ftproot
+    fi
+    if [ ! -d "guest" ]; then
+        echo "directory guest is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "guest" ]; then
+        cd guest
+    fi
+    if [ ! -f "index.htm" ]; then
+        echo "index.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "index.txt" ]; then
+        echo "index.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../guest" ]; then
+        cd ..
+    fi
+    if [ ! -d "pub" ]; then
+        echo "directory pub is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "pub" ]; then
+        cd pub
+    fi
+    if [ ! -f "index.htm" ]; then
+        echo "index.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "index.txt" ]; then
+        echo "index.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../pub" ]; then
+        cd ..
+    fi
+    if [ ! -d "upload" ]; then
+        echo "directory upload is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "upload" ]; then
+        cd upload
+    fi
+    if [ ! -f "index.htm" ]; then
+        echo "index.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "index.txt" ]; then
+        echo "index.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../upload" ]; then
+        cd ..
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../ftproot" ]; then
+        cd ..
+    fi
+    if [ ! -d "headers" ]; then
+        echo "directory headers is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "headers" ]; then
+        cd headers
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../headers" ]; then
+        cd ..
+    fi
+    if [ ! -d "logs" ]; then
+        echo "directory logs is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "logs" ]; then
+        cd logs
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../logs" ]; then
+        cd ..
+    fi
+    if [ ! -d "temp" ]; then
+        echo "directory temp is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "temp" ]; then
+        cd temp
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../temp" ]; then
+        cd ..
+    fi
+    if [ ! -d "templates" ]; then
+        echo "directory templates is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "templates" ]; then
+        cd templates
+    fi
+    if [ ! -f "errors.gsl" ]; then
+        echo "errors.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpmesg.gsl" ]; then
+        echo "ftpmesg.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "httpdir.gsl" ]; then
+        echo "httpdir.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../templates" ]; then
+        cd ..
+    fi
+    if [ ! -d "html" ]; then
+        echo "directory html is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "html" ]; then
+        cd html
+    fi
+    if [ ! -f "macros.def" ]; then
+        echo "macros.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "prelude.def" ]; then
+        echo "prelude.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami1.txt" ]; then
+        echo "xitami1.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami2.txt" ]; then
+        echo "xitami2.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../html" ]; then
+        cd ..
+    fi
+    if [ ! -d "win32" ]; then
+        echo "directory win32 is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "win32" ]; then
+        cd win32
+    fi
+    if [ ! -f "about.ico" ]; then
+        echo "about.ico is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "active.bmp" ]; then
+        echo "active.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "bitmap4.bmp" ]; then
+        echo "bitmap4.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "bitmap5.bmp" ]; then
+        echo "bitmap5.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "bug100.bmp" ]; then
+        echo "bug100.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "gsl.dsp" ]; then
+        echo "gsl.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "imatix1.bmp" ]; then
+        echo "imatix1.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "off.bmp" ]; then
+        echo "off.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "off.ico" ]; then
+        echo "off.ico is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "on.bmp" ]; then
+        echo "on.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "on.ico" ]; then
+        echo "on.ico is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "resource.h" ]; then
+        echo "resource.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfl.dsp" ]; then
+        echo "sfl.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smt.dsp" ]; then
+        echo "smt.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "studio.dsp" ]; then
+        echo "studio.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.dsp" ]; then
+        echo "xiadmin.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicpl32.c" ]; then
+        echo "xicpl32.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicpl32.def" ]; then
+        echo "xicpl32.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xigui32.c" ]; then
+        echo "xigui32.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiprocpl.def" ]; then
+        echo "xiprocpl.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xisrv32.c" ]; then
+        echo "xisrv32.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "Xitami_Console.dsp" ]; then
+        echo "Xitami_Console.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "Xitami_Control_Panel.dsp" ]; then
+        echo "Xitami_Control_Panel.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "Xitami_Service.dsp" ]; then
+        echo "Xitami_Service.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "Xitami_Win32.dsp" ]; then
+        echo "Xitami_Win32.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami.dsw" ]; then
+        echo "xitami.dsw is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami.h" ]; then
+        echo "xitami.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami1.bmp" ]; then
+        echo "xitami1.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiwin.rc" ]; then
+        echo "xiwin.rc is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../win32" ]; then
+        cd ..
+    fi
+    if [ ! -d "webpages" ]; then
+        echo "directory webpages is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "webpages" ]; then
+        cd webpages
+    fi
+    if [ ! -d "xitami" ]; then
+        echo "directory xitami is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "xitami" ]; then
+        cd xitami
+    fi
+    if [ -d "../xitami" ]; then
+        cd ..
+    fi
+    if [ ! -d "images" ]; then
+        echo "directory images is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "images" ]; then
+        cd images
+    fi
+    if [ ! -f "buttons.gif" ]; then
+        echo "buttons.gif is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "imatix.gif" ]; then
+        echo "imatix.gif is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami1.gif" ]; then
+        echo "xitami1.gif is missing, cannot continue"
+        exit 1
+    fi
+    if [ "`echo powered*.gif`" = "powered*.gif" ]; then
+        echo "powered*.gif is missing, cannot continue"
+    fi
+    if [ -d "../images" ]; then
+        cd ..
+    fi
+    if [ ! -d "private" ]; then
+        echo "directory private is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "private" ]; then
+        cd private
+    fi
+    if [ -d "../private" ]; then
+        cd ..
+    fi
+    if [ ! -f "buttons.map" ]; then
+        echo "buttons.map is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testssi.inc" ]; then
+        echo "testssi.inc is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../webpages" ]; then
+        cd ..
+    fi
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiopen.xml" ]; then
+        echo "xiopen.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ddnsdef.xml" ]; then
+        echo "ddnsdef.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "pipedef.xml" ]; then
+        echo "pipedef.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpadios.txt" ]; then
+        echo "ftpadios.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftphello.txt" ]; then
+        echo "ftphello.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftplogin.txt" ]; then
+        echo "ftplogin.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpdirs.aut" ]; then
+        echo "ftpdirs.aut is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpusers.aut" ]; then
+        echo "ftpusers.aut is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami.aut" ]; then
+        echo "xitami.aut is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlat.c" ]; then
+        echo "xixlat.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "perlssi" ]; then
+        echo "perlssi is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -----------------------   CHECK SOURCE FILES EXIST   ------------------------
+
+a_check_source_files_exist() {
+:
+    if [ -d "cgi-bin" ]; then
+        cd cgi-bin
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../cgi-bin" ]; then
+        cd ..
+    fi
+    if [ -d "cgi-src" ]; then
+        cd cgi-src
+    fi
+    if [ ! -f "testcgi.c" ]; then
+        echo "testcgi.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi1.c" ]; then
+        echo "testcgi1.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi2.c" ]; then
+        echo "testcgi2.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi3.c" ]; then
+        echo "testcgi3.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi4.c" ]; then
+        echo "testcgi4.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi5.c" ]; then
+        echo "testcgi5.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi6.c" ]; then
+        echo "testcgi6.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testcgi7.c" ]; then
+        echo "testcgi7.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testperl.pl" ]; then
+        echo "testperl.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../cgi-src" ]; then
+        cd ..
+    fi
+    if [ -d "debug" ]; then
+        cd debug
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../debug" ]; then
+        cd ..
+    fi
+    if [ -d "errors" ]; then
+        cd errors
+    fi
+    if [ ! -f "footer.htm" ]; then
+        echo "footer.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "header.htm" ]; then
+        echo "header.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-400.htm" ]; then
+        echo "text-400.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-401.htm" ]; then
+        echo "text-401.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-402.htm" ]; then
+        echo "text-402.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-403.htm" ]; then
+        echo "text-403.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-404.htm" ]; then
+        echo "text-404.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-412.htm" ]; then
+        echo "text-412.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-413.htm" ]; then
+        echo "text-413.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-500.htm" ]; then
+        echo "text-500.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-501.htm" ]; then
+        echo "text-501.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "text-502.htm" ]; then
+        echo "text-502.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../errors" ]; then
+        cd ..
+    fi
+    if [ -d "ftproot" ]; then
+        cd ftproot
+    fi
+    if [ -d "guest" ]; then
+        cd guest
+    fi
+    if [ ! -f "index.htm" ]; then
+        echo "index.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "index.txt" ]; then
+        echo "index.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../guest" ]; then
+        cd ..
+    fi
+    if [ -d "pub" ]; then
+        cd pub
+    fi
+    if [ ! -f "index.htm" ]; then
+        echo "index.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "index.txt" ]; then
+        echo "index.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../pub" ]; then
+        cd ..
+    fi
+    if [ -d "upload" ]; then
+        cd upload
+    fi
+    if [ ! -f "index.htm" ]; then
+        echo "index.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "index.txt" ]; then
+        echo "index.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../upload" ]; then
+        cd ..
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../ftproot" ]; then
+        cd ..
+    fi
+    if [ -d "headers" ]; then
+        cd headers
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../headers" ]; then
+        cd ..
+    fi
+    if [ -d "logs" ]; then
+        cd logs
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../logs" ]; then
+        cd ..
+    fi
+    if [ -d "temp" ]; then
+        cd temp
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../temp" ]; then
+        cd ..
+    fi
+    if [ -d "templates" ]; then
+        cd templates
+    fi
+    if [ ! -f "errors.gsl" ]; then
+        echo "errors.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpmesg.gsl" ]; then
+        echo "ftpmesg.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "httpdir.gsl" ]; then
+        echo "httpdir.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../templates" ]; then
+        cd ..
+    fi
+    if [ -d "html" ]; then
+        cd html
+    fi
+    if [ ! -f "anchor.def" ]; then
+        echo "anchor.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "macros.def" ]; then
+        echo "macros.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "prelude.def" ]; then
+        echo "prelude.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami1.txt" ]; then
+        echo "xitami1.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami2.txt" ]; then
+        echo "xitami2.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testssi.ssi" ]; then
+        echo "testssi.ssi is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "private.htm" ]; then
+        echo "private.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "default.htm" ]; then
+        echo "default.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ "`echo index*.htm`" = "index*.htm" ]; then
+        echo "index*.htm is missing, cannot continue"
+    fi
+    if [ ! -f "license.htm" ]; then
+        echo "license.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "belgium.htm" ]; then
+        echo "belgium.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "mapfail.htm" ]; then
+        echo "mapfail.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "os2-readme.htm" ]; then
+        echo "os2-readme.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "unix-readme.htm" ]; then
+        echo "unix-readme.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "windows.htm" ]; then
+        echo "windows.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../html" ]; then
+        cd ..
+    fi
+    if [ -d "win32" ]; then
+        cd win32
+    fi
+    if [ ! -f "about.ico" ]; then
+        echo "about.ico is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "active.bmp" ]; then
+        echo "active.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "bitmap4.bmp" ]; then
+        echo "bitmap4.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "bitmap5.bmp" ]; then
+        echo "bitmap5.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "bug100.bmp" ]; then
+        echo "bug100.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "gsl.dsp" ]; then
+        echo "gsl.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "imatix1.bmp" ]; then
+        echo "imatix1.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "off.bmp" ]; then
+        echo "off.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "off.ico" ]; then
+        echo "off.ico is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "on.bmp" ]; then
+        echo "on.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "on.ico" ]; then
+        echo "on.ico is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "resource.h" ]; then
+        echo "resource.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfl.dsp" ]; then
+        echo "sfl.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smt.dsp" ]; then
+        echo "smt.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "studio.dsp" ]; then
+        echo "studio.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiadmin.dsp" ]; then
+        echo "xiadmin.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicpl32.c" ]; then
+        echo "xicpl32.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicpl32.def" ]; then
+        echo "xicpl32.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xigui32.c" ]; then
+        echo "xigui32.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiprocpl.def" ]; then
+        echo "xiprocpl.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xisrv32.c" ]; then
+        echo "xisrv32.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "Xitami_Console.dsp" ]; then
+        echo "Xitami_Console.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "Xitami_Control_Panel.dsp" ]; then
+        echo "Xitami_Control_Panel.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "Xitami_Service.dsp" ]; then
+        echo "Xitami_Service.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "Xitami_Win32.dsp" ]; then
+        echo "Xitami_Win32.dsp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami.dsw" ]; then
+        echo "xitami.dsw is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami.h" ]; then
+        echo "xitami.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami1.bmp" ]; then
+        echo "xitami1.bmp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiwin.rc" ]; then
+        echo "xiwin.rc is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../win32" ]; then
+        cd ..
+    fi
+    if [ -d "webpages" ]; then
+        cd webpages
+    fi
+    if [ -d "xitami" ]; then
+        cd xitami
+    fi
+    if [ "`echo index*.htm`" = "index*.htm" ]; then
+        echo "index*.htm is missing, cannot continue"
+    fi
+    if [ ! -f "license.htm" ]; then
+        echo "license.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../xitami" ]; then
+        cd ..
+    fi
+    if [ -d "images" ]; then
+        cd images
+    fi
+    if [ ! -f "buttons.gif" ]; then
+        echo "buttons.gif is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "imatix.gif" ]; then
+        echo "imatix.gif is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami1.gif" ]; then
+        echo "xitami1.gif is missing, cannot continue"
+        exit 1
+    fi
+    if [ "`echo powered*.gif`" = "powered*.gif" ]; then
+        echo "powered*.gif is missing, cannot continue"
+    fi
+    if [ -d "../images" ]; then
+        cd ..
+    fi
+    if [ -d "private" ]; then
+        cd private
+    fi
+    if [ ! -f "private.htm" ]; then
+        echo "private.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../private" ]; then
+        cd ..
+    fi
+    if [ ! -f "buttons.map" ]; then
+        echo "buttons.map is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testssi.inc" ]; then
+        echo "testssi.inc is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testssi.ssi" ]; then
+        echo "testssi.ssi is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "default.htm" ]; then
+        echo "default.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "mapfail.htm" ]; then
+        echo "mapfail.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "windows.htm" ]; then
+        echo "windows.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../webpages" ]; then
+        cd ..
+    fi
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiopen.xml" ]; then
+        echo "xiopen.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ddnsdef.xml" ]; then
+        echo "ddnsdef.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "pipedef.xml" ]; then
+        echo "pipedef.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpadios.txt" ]; then
+        echo "ftpadios.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftphello.txt" ]; then
+        echo "ftphello.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftplogin.txt" ]; then
+        echo "ftplogin.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpdirs.aut" ]; then
+        echo "ftpdirs.aut is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ftpusers.aut" ]; then
+        echo "ftpusers.aut is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami.aut" ]; then
+        echo "xitami.aut is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami.cfg" ]; then
+        echo "xitami.cfg is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlat.c" ]; then
+        echo "xixlat.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiconfig.htp" ]; then
+        echo "xiconfig.htp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "perlssi" ]; then
+        echo "perlssi is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xitami.c" ]; then
+        echo "xitami.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xilite.c" ]; then
+        echo "xilite.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiwtp.c" ]; then
+        echo "xiwtp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -------------------------   INSTALL DELIVERABLES   --------------------------
+
+a_install_deliverables() {
+:
+    TARGET=$_IBASE/xitami-25/app
+    echo "Installing Xitami/Open into $TARGET..."
+    if [ ! -d "$TARGET" ]; then
+        if mkdir -p $TARGET; then
+            :
+        else
+            echo "Could not create directory \"$TARGET\". Stop."
+            exit 1
+        fi
+    fi
+    mkdir -p $TARGET/cgi-bin/
+    cp cgi-bin/readme.txt $TARGET/cgi-bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp cgi-bin/readme.txt $TARGET/cgi-bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/cgi-bin/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/cgi-bin/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/cgi-src/
+    cp cgi-src/testcgi.c $TARGET/cgi-src/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp cgi-src/testcgi.c $TARGET/cgi-src/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/cgi-src/testcgi.c
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/cgi-src/testcgi.c' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp cgi-src/testcgi1.c $TARGET/cgi-src/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp cgi-src/testcgi1.c $TARGET/cgi-src/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/cgi-src/testcgi1.c
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/cgi-src/testcgi1.c' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp cgi-src/testcgi2.c $TARGET/cgi-src/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp cgi-src/testcgi2.c $TARGET/cgi-src/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/cgi-src/testcgi2.c
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/cgi-src/testcgi2.c' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp cgi-src/testcgi3.c $TARGET/cgi-src/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp cgi-src/testcgi3.c $TARGET/cgi-src/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/cgi-src/testcgi3.c
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/cgi-src/testcgi3.c' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp cgi-src/testcgi4.c $TARGET/cgi-src/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp cgi-src/testcgi4.c $TARGET/cgi-src/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/cgi-src/testcgi4.c
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/cgi-src/testcgi4.c' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp cgi-src/testcgi5.c $TARGET/cgi-src/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp cgi-src/testcgi5.c $TARGET/cgi-src/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/cgi-src/testcgi5.c
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/cgi-src/testcgi5.c' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp cgi-src/testcgi6.c $TARGET/cgi-src/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp cgi-src/testcgi6.c $TARGET/cgi-src/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/cgi-src/testcgi6.c
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/cgi-src/testcgi6.c' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp cgi-src/testcgi7.c $TARGET/cgi-src/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp cgi-src/testcgi7.c $TARGET/cgi-src/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/cgi-src/testcgi7.c
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/cgi-src/testcgi7.c' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp cgi-src/testperl.pl $TARGET/cgi-src/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp cgi-src/testperl.pl $TARGET/cgi-src/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/cgi-src/testperl.pl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/cgi-src/testperl.pl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/debug/
+    cp debug/readme.txt $TARGET/debug/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp debug/readme.txt $TARGET/debug/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/debug/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/debug/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/errors/
+    cp errors/footer.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/footer.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/footer.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/footer.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp errors/header.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/header.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/header.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/header.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp errors/text-400.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/text-400.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/text-400.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/text-400.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp errors/text-401.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/text-401.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/text-401.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/text-401.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp errors/text-402.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/text-402.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/text-402.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/text-402.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp errors/text-403.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/text-403.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/text-403.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/text-403.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp errors/text-404.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/text-404.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/text-404.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/text-404.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp errors/text-412.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/text-412.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/text-412.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/text-412.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp errors/text-413.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/text-413.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/text-413.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/text-413.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp errors/text-500.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/text-500.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/text-500.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/text-500.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp errors/text-501.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/text-501.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/text-501.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/text-501.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp errors/text-502.htm $TARGET/errors/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp errors/text-502.htm $TARGET/errors/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/errors/text-502.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/errors/text-502.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/ftproot/guest/
+    cp ftproot/guest/index.htm $TARGET/ftproot/guest/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftproot/guest/index.htm $TARGET/ftproot/guest/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftproot/guest/index.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftproot/guest/index.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp ftproot/guest/index.txt $TARGET/ftproot/guest/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftproot/guest/index.txt $TARGET/ftproot/guest/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftproot/guest/index.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftproot/guest/index.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/ftproot/pub/
+    cp ftproot/pub/index.htm $TARGET/ftproot/pub/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftproot/pub/index.htm $TARGET/ftproot/pub/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftproot/pub/index.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftproot/pub/index.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp ftproot/pub/index.txt $TARGET/ftproot/pub/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftproot/pub/index.txt $TARGET/ftproot/pub/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftproot/pub/index.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftproot/pub/index.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/ftproot/upload/
+    cp ftproot/upload/index.htm $TARGET/ftproot/upload/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftproot/upload/index.htm $TARGET/ftproot/upload/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftproot/upload/index.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftproot/upload/index.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp ftproot/upload/index.txt $TARGET/ftproot/upload/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftproot/upload/index.txt $TARGET/ftproot/upload/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftproot/upload/index.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftproot/upload/index.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/ftproot/
+    cp ftproot/readme.txt $TARGET/ftproot/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftproot/readme.txt $TARGET/ftproot/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftproot/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftproot/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/headers/
+    cp headers/readme.txt $TARGET/headers/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp headers/readme.txt $TARGET/headers/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/headers/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/headers/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/logs/
+    cp logs/readme.txt $TARGET/logs/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp logs/readme.txt $TARGET/logs/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/logs/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/logs/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/temp/
+    cp temp/readme.txt $TARGET/temp/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp temp/readme.txt $TARGET/temp/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/temp/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/temp/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/templates/
+    cp templates/errors.gsl $TARGET/templates/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp templates/errors.gsl $TARGET/templates/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/templates/errors.gsl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/templates/errors.gsl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp templates/ftpmesg.gsl $TARGET/templates/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp templates/ftpmesg.gsl $TARGET/templates/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/templates/ftpmesg.gsl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/templates/ftpmesg.gsl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp templates/httpdir.gsl $TARGET/templates/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp templates/httpdir.gsl $TARGET/templates/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/templates/httpdir.gsl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/templates/httpdir.gsl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/html/
+    cp html/macros.def $TARGET/html/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp html/macros.def $TARGET/html/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/html/macros.def
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/html/macros.def' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp html/prelude.def $TARGET/html/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp html/prelude.def $TARGET/html/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/html/prelude.def
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/html/prelude.def' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/webpages/xitami/
+    cp webpages/xitami/index*.htm $TARGET/webpages/xitami/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/xitami/index*.htm $TARGET/webpages/xitami/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/xitami/index*.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/xitami/index*.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp webpages/xitami/license.htm $TARGET/webpages/xitami/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/xitami/license.htm $TARGET/webpages/xitami/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/xitami/license.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/xitami/license.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/webpages/images/
+    cp webpages/images/buttons.gif $TARGET/webpages/images/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/images/buttons.gif $TARGET/webpages/images/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/images/buttons.gif
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/images/buttons.gif' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp webpages/images/imatix.gif $TARGET/webpages/images/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/images/imatix.gif $TARGET/webpages/images/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/images/imatix.gif
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/images/imatix.gif' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp webpages/images/xitami1.gif $TARGET/webpages/images/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/images/xitami1.gif $TARGET/webpages/images/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/images/xitami1.gif
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/images/xitami1.gif' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp webpages/images/powered*.gif $TARGET/webpages/images/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/images/powered*.gif $TARGET/webpages/images/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/images/powered*.gif
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/images/powered*.gif' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/webpages/private/
+    cp webpages/private/private.htm $TARGET/webpages/private/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/private/private.htm $TARGET/webpages/private/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/private/private.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/private/private.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/webpages/
+    cp webpages/buttons.map $TARGET/webpages/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/buttons.map $TARGET/webpages/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/buttons.map
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/buttons.map' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp webpages/testssi.inc $TARGET/webpages/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/testssi.inc $TARGET/webpages/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/testssi.inc
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/testssi.inc' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp webpages/testssi.ssi $TARGET/webpages/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/testssi.ssi $TARGET/webpages/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/testssi.ssi
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/testssi.ssi' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp webpages/default.htm $TARGET/webpages/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/default.htm $TARGET/webpages/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/default.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/default.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp webpages/mapfail.htm $TARGET/webpages/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/mapfail.htm $TARGET/webpages/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/mapfail.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/mapfail.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp webpages/windows.htm $TARGET/webpages/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp webpages/windows.htm $TARGET/webpages/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/webpages/windows.htm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/webpages/windows.htm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/
+    cp xitami $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xitami $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0755 $TARGET/xitami
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0755 $TARGET/xitami' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp xilite $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xilite $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0755 $TARGET/xilite
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0755 $TARGET/xilite' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp xiwtp $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xiwtp $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0755 $TARGET/xiwtp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0755 $TARGET/xiwtp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp ddnsdef.xml $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ddnsdef.xml $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ddnsdef.xml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ddnsdef.xml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp pipedef.xml $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp pipedef.xml $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/pipedef.xml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/pipedef.xml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp ftpadios.txt $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftpadios.txt $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftpadios.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftpadios.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp ftphello.txt $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftphello.txt $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftphello.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftphello.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp ftplogin.txt $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftplogin.txt $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftplogin.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftplogin.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp ftpdirs.aut $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftpdirs.aut $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftpdirs.aut
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftpdirs.aut' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp ftpusers.aut $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ftpusers.aut $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/ftpusers.aut
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/ftpusers.aut' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp xitami.aut $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xitami.aut $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/xitami.aut
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/xitami.aut' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp xitami.cfg $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xitami.cfg $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/xitami.cfg
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/xitami.cfg' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp perlssi $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp perlssi $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0755 $TARGET/perlssi
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0755 $TARGET/perlssi' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp readme.txt $TARGET/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp readme.txt $TARGET/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# ------------------------   PRODUCE GENERATED FILES   ------------------------
+
+a_produce_generated_files() {
+:
+    gsl -q -build_doc:1 -build_config:1 xiconfig
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'gsl -q -build_doc:1 -build_config:1 xiconfig' failed with exit status $status. Stop.
+        exit 1
+    fi
+    if [ -d "cgi-bin" ]; then
+        cd cgi-bin
+    fi
+    if [ -d "../cgi-bin" ]; then
+        cd ..
+    fi
+    if [ -d "cgi-src" ]; then
+        cd cgi-src
+    fi
+    if [ -d "../cgi-src" ]; then
+        cd ..
+    fi
+    if [ -d "debug" ]; then
+        cd debug
+    fi
+    if [ -d "../debug" ]; then
+        cd ..
+    fi
+    if [ -d "errors" ]; then
+        cd errors
+    fi
+    if [ -d "../errors" ]; then
+        cd ..
+    fi
+    if [ -d "ftproot" ]; then
+        cd ftproot
+    fi
+    if [ -d "guest" ]; then
+        cd guest
+    fi
+    if [ -d "../guest" ]; then
+        cd ..
+    fi
+    if [ -d "pub" ]; then
+        cd pub
+    fi
+    if [ -d "../pub" ]; then
+        cd ..
+    fi
+    if [ -d "upload" ]; then
+        cd upload
+    fi
+    if [ -d "../upload" ]; then
+        cd ..
+    fi
+    if [ -d "../ftproot" ]; then
+        cd ..
+    fi
+    if [ -d "headers" ]; then
+        cd headers
+    fi
+    if [ -d "../headers" ]; then
+        cd ..
+    fi
+    if [ -d "logs" ]; then
+        cd logs
+    fi
+    if [ -d "../logs" ]; then
+        cd ..
+    fi
+    if [ -d "temp" ]; then
+        cd temp
+    fi
+    if [ -d "../temp" ]; then
+        cd ..
+    fi
+    if [ -d "templates" ]; then
+        cd templates
+    fi
+    if [ -d "../templates" ]; then
+        cd ..
+    fi
+    if [ -d "html" ]; then
+        cd html
+    fi
+    htmlpp xitami1.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'htmlpp xitami1.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    htmlpp xitami2.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'htmlpp xitami2.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    if [ -d "../html" ]; then
+        cd ..
+    fi
+    if [ -d "win32" ]; then
+        cd win32
+    fi
+    if [ -d "../win32" ]; then
+        cd ..
+    fi
+    if [ -d "webpages" ]; then
+        cd webpages
+    fi
+    if [ -d "xitami" ]; then
+        cd xitami
+    fi
+    if [ -d "../xitami" ]; then
+        cd ..
+    fi
+    if [ -d "images" ]; then
+        cd images
+    fi
+    if [ -d "../images" ]; then
+        cd ..
+    fi
+    if [ -d "private" ]; then
+        cd private
+    fi
+    if [ -d "../private" ]; then
+        cd ..
+    fi
+    if [ -d "../webpages" ]; then
+        cd ..
+    fi
+    gsl -q xiopen.xml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'gsl -q xiopen.xml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp -p html/index*.htm webpages/xitami/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp -p html/index*.htm webpages/xitami/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp -p html/license.htm webpages/xitami/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp -p html/license.htm webpages/xitami/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp -p html/private.htm webpages/private/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp -p html/private.htm webpages/private/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp -p html/testssi.ssi webpages/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp -p html/testssi.ssi webpages/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp -p html/default.htm webpages/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp -p html/default.htm webpages/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp -p html/mapfail.htm webpages/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp -p html/mapfail.htm webpages/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp -p html/windows.htm webpages/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp -p html/windows.htm webpages/' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# -----------------------   REMOVE GENERATED BINARIES   -----------------------
+
+a_remove_generated_binaries() {
+:
+    rm -f xitami
+    rm -f xilite
+    rm -f xiwtp
+    rm -f xitami.o
+    rm -f xitami
+    rm -f xilite.o
+    rm -f xilite
+    rm -f xiwtp.o
+    rm -f xiwtp
+    rm -f xixlat.o
+    rm -f xixlat
+    if [ -d "cgi-bin" ]; then
+        cd cgi-bin
+    fi
+    if [ -d "../cgi-bin" ]; then
+        cd ..
+    fi
+    if [ -d "cgi-src" ]; then
+        cd cgi-src
+    fi
+    if [ -d "../cgi-src" ]; then
+        cd ..
+    fi
+    if [ -d "debug" ]; then
+        cd debug
+    fi
+    if [ -d "../debug" ]; then
+        cd ..
+    fi
+    if [ -d "errors" ]; then
+        cd errors
+    fi
+    if [ -d "../errors" ]; then
+        cd ..
+    fi
+    if [ -d "ftproot" ]; then
+        cd ftproot
+    fi
+    if [ -d "guest" ]; then
+        cd guest
+    fi
+    if [ -d "../guest" ]; then
+        cd ..
+    fi
+    if [ -d "pub" ]; then
+        cd pub
+    fi
+    if [ -d "../pub" ]; then
+        cd ..
+    fi
+    if [ -d "upload" ]; then
+        cd upload
+    fi
+    if [ -d "../upload" ]; then
+        cd ..
+    fi
+    if [ -d "../ftproot" ]; then
+        cd ..
+    fi
+    if [ -d "headers" ]; then
+        cd headers
+    fi
+    if [ -d "../headers" ]; then
+        cd ..
+    fi
+    if [ -d "logs" ]; then
+        cd logs
+    fi
+    if [ -d "../logs" ]; then
+        cd ..
+    fi
+    if [ -d "temp" ]; then
+        cd temp
+    fi
+    if [ -d "../temp" ]; then
+        cd ..
+    fi
+    if [ -d "templates" ]; then
+        cd templates
+    fi
+    if [ -d "../templates" ]; then
+        cd ..
+    fi
+    if [ -d "html" ]; then
+        cd html
+    fi
+    if [ -d "../html" ]; then
+        cd ..
+    fi
+    if [ -d "win32" ]; then
+        cd win32
+    fi
+    if [ -d "../win32" ]; then
+        cd ..
+    fi
+    if [ -d "webpages" ]; then
+        cd webpages
+    fi
+    if [ -d "xitami" ]; then
+        cd xitami
+    fi
+    if [ -d "../xitami" ]; then
+        cd ..
+    fi
+    if [ -d "images" ]; then
+        cd images
+    fi
+    if [ -d "../images" ]; then
+        cd ..
+    fi
+    if [ -d "private" ]; then
+        cd private
+    fi
+    if [ -d "../private" ]; then
+        cd ..
+    fi
+    if [ -d "../webpages" ]; then
+        cd ..
+    fi
+}
+
+# -----------------------   REMOVE GENERATED SOURCES   ------------------------
+
+a_remove_generated_sources() {
+:
+    rm -f html/anchor.def
+    rm -f html/testssi.ssi
+    rm -f html/private.htm
+    rm -f html/default.htm
+    rm -f html/index*.htm
+    rm -f html/license.htm
+    rm -f html/belgium.htm
+    rm -f html/mapfail.htm
+    rm -f html/os2-readme.htm
+    rm -f html/unix-readme.htm
+    rm -f html/windows.htm
+    rm -f win32/xidos32.exe
+    rm -f win32/xigui32.exe
+    rm -f win32/xisrv32.exe
+    rm -f win32/xicpl32.cpl
+    rm -f webpages/xitami/index*.htm
+    rm -f webpages/xitami/license.htm
+    rm -f webpages/private/private.htm
+    rm -f webpages/testssi.ssi
+    rm -f webpages/default.htm
+    rm -f webpages/mapfail.htm
+    rm -f webpages/windows.htm
+    rm -f xitami.cfg
+    rm -f xiconfig.htp
+    rm -f xitami.c
+    rm -f xilite.c
+    rm -f xiwtp.c
+}
+
+# ------------------------   REPORT HELP INFORMATION   ------------------------
+
+a_report_help_information() {
+:
+    echo "boomake - Boom! builder for Xitami/Open 2.5c2"
+    echo "Copyright (c) 1991-2003 iMatix Corporation"
+    echo ""
+    echo "This script acts as a project 'make' tool.  Boom! uses an XML-based"
+    echo "project description and generates various make tools (including this"
+    echo "one) from it.  To find out more about Boom!, visit www.imatix.com."
+    echo ""
+    eval "actions_$state"
+}
+
+# -------------------------   RUN REGRESSION TESTS   --------------------------
+
+a_run_regression_tests() {
+:
+    :
+}
+
+actions_initial() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_initial_check() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_rawcvs() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the raw project sources, produces all generated files, and"
+    echo "    compiles all source files."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the raw project sources, removes all generated"
+    echo "    source and binary files from the project directory."
+    return
+}
+
+actions_source() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the packaged sources, compiles all source files without any"
+    echo "    code generation."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the packaged sources, removes all generated"
+    echo "    source files from the project directory."
+    return
+}
+
+actions_default() {
+    echo "The actions you can use in this state are:"
+echo "test:"
+    echo "  "
+    echo "    Runs regression tests for the project."
+echo "help:"
+    echo "  "
+    echo "    Shows a list of the available builder commands."
+    return
+}
+
+#   State machine starts here
+#
+firsttime=true
+while [ "$1" -o "$firsttime" ]; do
+  firsttime=
+  state=initial
+  event=ok
+  debug=
+  export state event debug
+  while [ -n "$state" ]; do
+    if [ "$inherit_state" ]; then
+        check_state=$inherit_state
+        inherit_state=
+    else
+        check_state=$state
+    fi
+    case "$check_state" in
+    initial)
+        if [ -n "$debug" ]; then
+            echo "State: initial"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        ok)
+            if [ -n "$debug" ]; then 
+                echo "Event: ok"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check operating context"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_operating_context
+            fi
+            state=initial_check
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    initial_check)
+        if [ -n "$debug" ]; then
+            echo "State: initial check"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        rawcvs)
+            if [ -n "$debug" ]; then 
+                echo "Event: rawcvs"
+            fi
+            event=
+            exception=
+            state=rawcvs
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        source)
+            if [ -n "$debug" ]; then 
+                echo "Event: source"
+            fi
+            event=
+            exception=
+            state=source
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    rawcvs)
+        if [ -n "$debug" ]; then
+            echo "State: rawcvs"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated sources"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_sources
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    source)
+        if [ -n "$debug" ]; then
+            echo "State: source"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    default)
+        if [ -n "$debug" ]; then
+            echo "State: default"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        test)
+            if [ -n "$debug" ]; then 
+                echo "Event: test"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: run regression tests"
+            fi
+            if [ -z "$exception" ]; then
+                a_run_regression_tests
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        help)
+            if [ -n "$debug" ]; then 
+                echo "Event: help"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        empty)
+            if [ -n "$debug" ]; then 
+                echo "Event: empty"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    esac
+  done
+done

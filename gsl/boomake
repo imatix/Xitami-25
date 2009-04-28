@@ -1,0 +1,1281 @@
+#!/bin/sh
+#
+#   Boom builder for GSL 2.01
+#   Generated from standard.pwl on 2004/07/22
+#   See www.imatix.com for more information.
+#   Copyright (c) 1991-2003 iMatix Corporation
+#
+#   Force environment variables to point to install location
+#   Start by using final IBASE, then handle local -install path
+self=$0
+_IBASE=$IBASE
+if [ -z "$_IBASE" ]; then
+    _IBASE=/usr/local/imatix
+fi
+INCDIR=$_IBASE/xitami-25/include
+LIBDIR=$_IBASE/xitami-25/lib
+PATH=.:$_IBASE/xitami-25/bin:$PATH
+PERLLIB=.:$_IBASE/xitami-25/bin:$PERLLIB
+_LOCAL=0
+export INCDIR LIBDIR PATH PERLLIB
+if [ "$1" = "-install" ]; then
+    _IBASE=$2
+    _LOCAL=1
+    PATH=$_IBASE/xitami-25/bin:$PATH
+    PERLLIB=$_IBASE/xitami-25/bin:$PERLLIB
+    INCDIR_ALT=$_IBASE/xitami-25/include
+    LIBDIR_ALT=$_IBASE/xitami-25/lib
+    export PATH PERLLIB INCDIR_ALT LIBDIR_ALT
+    shift;
+    shift;
+fi
+
+# --------------------------   BUILD BINARY FILES   ---------------------------
+
+a_build_binary_files() {
+:
+    echo "Building application..."
+    COPTS=-g
+    if [ ! -z "$INCDIR_ALT" ]; then
+        COPTS="$COPTS -li . -li $INCDIR_ALT"
+    fi
+    if [ ! -z "$LIBDIR_ALT" ]; then
+        COPTS="$COPTS -ll $LIBDIR_ALT"
+    fi
+    c $COPTS gslgen
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS gslgen' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS ggcode
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS ggcode' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS ggcomm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS ggcomm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS ggeval
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS ggeval' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS ggfile
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS ggfile' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS ggfunc
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS ggfunc' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS ggobjt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS ggobjt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS ggstrn
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS ggstrn' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS ggpars
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS ggpars' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libgsl ggcode
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libgsl ggcode' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libgsl ggcomm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libgsl ggcomm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libgsl ggeval
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libgsl ggeval' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libgsl ggfile
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libgsl ggfile' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libgsl ggfunc
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libgsl ggfunc' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libgsl ggobjt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libgsl ggobjt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libgsl ggstrn
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libgsl ggstrn' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libgsl ggpars
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libgsl ggpars' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -L gslgen
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -L gslgen' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# -------------------------   BUILD SOURCE PACKAGES   -------------------------
+
+a_build_source_packages() {
+:
+    rm -f _package.lst
+    if [ -f "gsl/version.h" ]; then
+        echo gsl/version.h>>_package.lst
+    fi
+    if [ -f "gsl/gslgen.c" ]; then
+        echo gsl/gslgen.c>>_package.lst
+    fi
+    if [ -f "gsl/gslgen.l" ]; then
+        echo gsl/gslgen.l>>_package.lst
+    fi
+    if [ -f "gsl/ggcode.c" ]; then
+        echo gsl/ggcode.c>>_package.lst
+    fi
+    if [ -f "gsl/ggcode.h" ]; then
+        echo gsl/ggcode.h>>_package.lst
+    fi
+    if [ -f "gsl/ggcomm.c" ]; then
+        echo gsl/ggcomm.c>>_package.lst
+    fi
+    if [ -f "gsl/ggeval.c" ]; then
+        echo gsl/ggeval.c>>_package.lst
+    fi
+    if [ -f "gsl/ggfile.c" ]; then
+        echo gsl/ggfile.c>>_package.lst
+    fi
+    if [ -f "gsl/ggfunc.c" ]; then
+        echo gsl/ggfunc.c>>_package.lst
+    fi
+    if [ -f "gsl/ggjs.h" ]; then
+        echo gsl/ggjs.h>>_package.lst
+    fi
+    if [ -f "gsl/ggobjt.c" ]; then
+        echo gsl/ggobjt.c>>_package.lst
+    fi
+    if [ -f "gsl/ggstrn.c" ]; then
+        echo gsl/ggstrn.c>>_package.lst
+    fi
+    if [ -f "gsl/ggpars.c" ]; then
+        echo gsl/ggpars.c>>_package.lst
+    fi
+    if [ -f "gsl/gsldoc.txt" ]; then
+        echo gsl/gsldoc.txt>>_package.lst
+    fi
+    if [ -f "gsl/guru.def" ]; then
+        echo gsl/guru.def>>_package.lst
+    fi
+    if [ -f "gsl/macros.def" ]; then
+        echo gsl/macros.def>>_package.lst
+    fi
+    if [ -f "gsl/prelude.def" ]; then
+        echo gsl/prelude.def>>_package.lst
+    fi
+    if [ -f "gsl/prelude.pdl" ]; then
+        echo gsl/prelude.pdl>>_package.lst
+    fi
+    if [ -f "gsl/license.gpl" ]; then
+        echo gsl/license.gpl>>_package.lst
+    fi
+    if [ -f "gsl/project.pdl" ]; then
+        echo gsl/project.pdl>>_package.lst
+    fi
+    if [ -f "gsl/readme.txt" ]; then
+        echo gsl/readme.txt>>_package.lst
+    fi
+    if [ -f "gsl/gslgen.i" ]; then
+        echo gsl/gslgen.i>>_package.lst
+    fi
+    if [ -f "gsl/gslgen.d" ]; then
+        echo gsl/gslgen.d>>_package.lst
+    fi
+    if [ -f "gsl/ggcode.l" ]; then
+        echo gsl/ggcode.l>>_package.lst
+    fi
+    if [ -f "gsl/ggcode.i" ]; then
+        echo gsl/ggcode.i>>_package.lst
+    fi
+    if [ -f "gsl/ggcode.d" ]; then
+        echo gsl/ggcode.d>>_package.lst
+    fi
+    if [ -f "gsl/ggcomm.h" ]; then
+        echo gsl/ggcomm.h>>_package.lst
+    fi
+    if [ -f "gsl/ggeval.h" ]; then
+        echo gsl/ggeval.h>>_package.lst
+    fi
+    if [ -f "gsl/ggfile.h" ]; then
+        echo gsl/ggfile.h>>_package.lst
+    fi
+    if [ -f "gsl/ggfunc.h" ]; then
+        echo gsl/ggfunc.h>>_package.lst
+    fi
+    if [ -f "gsl/ggobjt.h" ]; then
+        echo gsl/ggobjt.h>>_package.lst
+    fi
+    if [ -f "gsl/ggstrn.h" ]; then
+        echo gsl/ggstrn.h>>_package.lst
+    fi
+    if [ -f "gsl/ggpars.l" ]; then
+        echo gsl/ggpars.l>>_package.lst
+    fi
+    if [ -f "gsl/ggpars.i" ]; then
+        echo gsl/ggpars.i>>_package.lst
+    fi
+    if [ -f "gsl/ggpars.d" ]; then
+        echo gsl/ggpars.d>>_package.lst
+    fi
+    if [ -f "gsl/ggpars.h" ]; then
+        echo gsl/ggpars.h>>_package.lst
+    fi
+    if [ -f "gsl/boomake" ]; then
+        echo gsl/boomake>>_package.lst
+    fi
+    if [ -f "gsl/boomake.bat" ]; then
+        echo gsl/boomake.bat>>_package.lst
+    fi
+    if [ -f "gsl/makefile" ]; then
+        echo gsl/makefile>>_package.lst
+    fi
+    echo "Building gsl_2_01_src.tar.gz..."
+    tar -czf gsl_2_01_src.tar.gz -T _package.lst
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'tar -czf gsl_2_01_src.tar.gz -T _package.lst' failed with exit status $status. Stop.
+        exit 1
+    fi
+    rm _package.lst
+}
+
+# -----------------------   CHECK BINARY FILES EXIST   ------------------------
+
+a_check_binary_files_exist() {
+:
+    if [ ! -f "ggcode.h" ]; then
+        echo "ggcode.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "libgsl.a" ]; then
+        echo "libgsl.a is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# ------------------------   CHECK OPERATING CONTEXT   ------------------------
+
+a_check_operating_context() {
+:
+    event=source
+    if [ -d "CVS" ]; then
+        event=rawcvs
+    fi
+}
+
+# -----------------------   CHECK PROJECT FILES EXIST   -----------------------
+
+a_check_project_files_exist() {
+:
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "gslgen.c" ]; then
+        echo "gslgen.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "gslgen.l" ]; then
+        echo "gslgen.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcode.c" ]; then
+        echo "ggcode.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcode.h" ]; then
+        echo "ggcode.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcomm.c" ]; then
+        echo "ggcomm.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggeval.c" ]; then
+        echo "ggeval.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggfile.c" ]; then
+        echo "ggfile.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggfunc.c" ]; then
+        echo "ggfunc.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggjs.h" ]; then
+        echo "ggjs.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggobjt.c" ]; then
+        echo "ggobjt.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggstrn.c" ]; then
+        echo "ggstrn.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggpars.c" ]; then
+        echo "ggpars.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "gsldoc.txt" ]; then
+        echo "gsldoc.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "guru.def" ]; then
+        echo "guru.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "macros.def" ]; then
+        echo "macros.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "prelude.def" ]; then
+        echo "prelude.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcode.l" ]; then
+        echo "ggcode.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcomm.h" ]; then
+        echo "ggcomm.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggeval.h" ]; then
+        echo "ggeval.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggfile.h" ]; then
+        echo "ggfile.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggfunc.h" ]; then
+        echo "ggfunc.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggobjt.h" ]; then
+        echo "ggobjt.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggstrn.h" ]; then
+        echo "ggstrn.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggpars.l" ]; then
+        echo "ggpars.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggpars.h" ]; then
+        echo "ggpars.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "makefile" ]; then
+        echo "makefile is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -----------------------   CHECK SOURCE FILES EXIST   ------------------------
+
+a_check_source_files_exist() {
+:
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "gslgen.c" ]; then
+        echo "gslgen.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "gslgen.l" ]; then
+        echo "gslgen.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcode.c" ]; then
+        echo "ggcode.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcode.h" ]; then
+        echo "ggcode.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcomm.c" ]; then
+        echo "ggcomm.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggeval.c" ]; then
+        echo "ggeval.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggfile.c" ]; then
+        echo "ggfile.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggfunc.c" ]; then
+        echo "ggfunc.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggjs.h" ]; then
+        echo "ggjs.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggobjt.c" ]; then
+        echo "ggobjt.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggstrn.c" ]; then
+        echo "ggstrn.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggpars.c" ]; then
+        echo "ggpars.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "gsldoc.txt" ]; then
+        echo "gsldoc.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "guru.def" ]; then
+        echo "guru.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "macros.def" ]; then
+        echo "macros.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "prelude.def" ]; then
+        echo "prelude.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "gslgen.i" ]; then
+        echo "gslgen.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "gslgen.d" ]; then
+        echo "gslgen.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcode.l" ]; then
+        echo "ggcode.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcode.i" ]; then
+        echo "ggcode.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcode.d" ]; then
+        echo "ggcode.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggcomm.h" ]; then
+        echo "ggcomm.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggeval.h" ]; then
+        echo "ggeval.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggfile.h" ]; then
+        echo "ggfile.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggfunc.h" ]; then
+        echo "ggfunc.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggobjt.h" ]; then
+        echo "ggobjt.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggstrn.h" ]; then
+        echo "ggstrn.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggpars.l" ]; then
+        echo "ggpars.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggpars.i" ]; then
+        echo "ggpars.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggpars.d" ]; then
+        echo "ggpars.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ggpars.h" ]; then
+        echo "ggpars.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "makefile" ]; then
+        echo "makefile is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -------------------------   INSTALL DELIVERABLES   --------------------------
+
+a_install_deliverables() {
+:
+    TARGET=$_IBASE/xitami-25
+    echo "Installing GSL into $TARGET..."
+    if [ ! -d "$TARGET" ]; then
+        if mkdir -p $TARGET; then
+            :
+        else
+            echo "Could not create directory \"$TARGET\". Stop."
+            exit 1
+        fi
+    fi
+    mkdir -p $TARGET/include/
+    cp ggcode.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ggcode.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/ggcode.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/ggcode.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/lib/
+    cp libgsl.a $TARGET/lib/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp libgsl.a $TARGET/lib/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/lib/libgsl.a
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/lib/libgsl.a' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/bin/
+    mkdir -p $TARGET/doc/GSL/
+    cp readme.txt $TARGET/doc/GSL/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp readme.txt $TARGET/doc/GSL/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/doc/GSL/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/doc/GSL/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+
+    if [ ! -f "$TARGET/bin/setvars.sh" ]; then
+        echo "Creating $TARGET/bin/setvars.sh..."
+        echo "if [ -z \"\$INCDIR\" ]; then"          >$TARGET/bin/setvars.sh
+        echo "    INCDIR=$TARGET/include"            >>$TARGET/bin/setvars.sh
+        echo "    LIBDIR=$TARGET/lib"                >>$TARGET/bin/setvars.sh
+        echo "    PATH=$TARGET/bin:\$PATH"           >>$TARGET/bin/setvars.sh
+        echo "    PERLLIB=$TARGET/bin:\$PATH"        >>$TARGET/bin/setvars.sh
+        echo "    export INCDIR LIBDIR PATH PERLLIB" >>$TARGET/bin/setvars.sh
+        echo "fi"                                    >>$TARGET/bin/setvars.sh
+    fi
+}
+
+# ------------------------   PRODUCE GENERATED FILES   ------------------------
+
+a_produce_generated_files() {
+:
+    lr gslgen.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr gslgen.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr ggcode.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr ggcode.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr ggpars.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr ggpars.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# -----------------------   REMOVE GENERATED BINARIES   -----------------------
+
+a_remove_generated_binaries() {
+:
+    rm -f libgsl.a
+    rm -f gslgen.o
+    rm -f gslgen
+    rm -f ggcode.o
+    rm -f ggcomm.o
+    rm -f ggeval.o
+    rm -f ggfile.o
+    rm -f ggfunc.o
+    rm -f ggobjt.o
+    rm -f ggstrn.o
+    rm -f ggpars.o
+}
+
+# -----------------------   REMOVE GENERATED SOURCES   ------------------------
+
+a_remove_generated_sources() {
+:
+    rm -f gslgen.i
+    rm -f gslgen.d
+    rm -f ggcode.i
+    rm -f ggcode.d
+    rm -f ggpars.i
+    rm -f ggpars.d
+}
+
+# ------------------------   REPORT HELP INFORMATION   ------------------------
+
+a_report_help_information() {
+:
+    echo "boomake - Boom! builder for GSL 2.01"
+    echo "Copyright (c) 1991-2003 iMatix Corporation"
+    echo ""
+    echo "This script acts as a project 'make' tool.  Boom! uses an XML-based"
+    echo "project description and generates various make tools (including this"
+    echo "one) from it.  To find out more about Boom!, visit www.imatix.com."
+    echo ""
+    eval "actions_$state"
+}
+
+# -------------------------   RUN REGRESSION TESTS   --------------------------
+
+a_run_regression_tests() {
+:
+    :
+}
+
+actions_initial() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_initial_check() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_rawcvs() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the raw project sources, produces all generated files, and"
+    echo "    compiles all source files."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the raw project sources, removes all generated"
+    echo "    source and binary files from the project directory."
+    return
+}
+
+actions_source() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the packaged sources, compiles all source files without any"
+    echo "    code generation."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the packaged sources, removes all generated"
+    echo "    source files from the project directory."
+    return
+}
+
+actions_default() {
+    echo "The actions you can use in this state are:"
+echo "test:"
+    echo "  "
+    echo "    Runs regression tests for the project."
+echo "help:"
+    echo "  "
+    echo "    Shows a list of the available builder commands."
+    return
+}
+
+#   State machine starts here
+#
+firsttime=true
+while [ "$1" -o "$firsttime" ]; do
+  firsttime=
+  state=initial
+  event=ok
+  debug=
+  export state event debug
+  while [ -n "$state" ]; do
+    if [ "$inherit_state" ]; then
+        check_state=$inherit_state
+        inherit_state=
+    else
+        check_state=$state
+    fi
+    case "$check_state" in
+    initial)
+        if [ -n "$debug" ]; then
+            echo "State: initial"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        ok)
+            if [ -n "$debug" ]; then 
+                echo "Event: ok"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check operating context"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_operating_context
+            fi
+            state=initial_check
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    initial_check)
+        if [ -n "$debug" ]; then
+            echo "State: initial check"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        rawcvs)
+            if [ -n "$debug" ]; then 
+                echo "Event: rawcvs"
+            fi
+            event=
+            exception=
+            state=rawcvs
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        source)
+            if [ -n "$debug" ]; then 
+                echo "Event: source"
+            fi
+            event=
+            exception=
+            state=source
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    rawcvs)
+        if [ -n "$debug" ]; then
+            echo "State: rawcvs"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated sources"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_sources
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    source)
+        if [ -n "$debug" ]; then
+            echo "State: source"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    default)
+        if [ -n "$debug" ]; then
+            echo "State: default"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        test)
+            if [ -n "$debug" ]; then 
+                echo "Event: test"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: run regression tests"
+            fi
+            if [ -z "$exception" ]; then
+                a_run_regression_tests
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        help)
+            if [ -n "$debug" ]; then 
+                echo "Event: help"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        empty)
+            if [ -n "$debug" ]; then 
+                echo "Event: empty"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    esac
+  done
+done

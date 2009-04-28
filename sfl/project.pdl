@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<pdl
+    name      = "SFL"
+    acronym   = "sfl"
+    install   = "xitami-25"
+    version   = "2.50"
+    copyright = "Copyright (c) 1991-2003 iMatix Corporation"
+    workflow  = "standard.pwl"
+    library   = "libsfl">
+
+<include filename = "prelude.pdl" />
+<file name = "version.h"    class = "c version"       >Project version header</file>
+
+<file name = "prelude.h"    class = "private resource"/>
+<file name = "sflhead.h"    class = "private resource"/>
+<file name = "sflbits.c"    class = "library module"  />
+<file name = "sflcomp.c"    class = "library module"  />
+<file name = "sflcons.c"    class = "library module"  />
+<file name = "sflconv.c"    class = "library module"  />
+<file name = "sflcryp.c"    class = "library module"  />
+<file name = "sflcvbs.c"    class = "sub program"     />
+<file name = "sflcvdp.c"    class = "sub program"     />
+<file name = "sflcvds.c"    class = "sub program"     />
+<file name = "sflcvns.c"    class = "sub program"     />
+<file name = "sflcvsb.c"    class = "sub program"     />
+<file name = "sflcvsd.c"    class = "sub program"     />
+<file name = "sflcvsn.c"    class = "sub program"     />
+<file name = "sflcvst.c"    class = "c/libero"        />
+<file name = "sflcvtp.c"    class = "sub program"     />
+<file name = "sflcvts.c"    class = "sub program"     />
+<file name = "sfldate.c"    class = "library module"  />
+<file name = "sfldbio.c"    class = "library module"  />
+<file name = "sfldir.c"     class = "library module"  />
+<file name = "sflenv.c"     class = "library module"  />
+<file name = "sflexdr.c"    class = "library module"  />
+<file name = "sflfile.c"    class = "library module"  />
+<file name = "sflfind.c"    class = "library module"  />
+<file name = "sflfort.c"    class = "library module"  />
+<file name = "sflhttp.c"    class = "library module"  />
+<file name = "sflini.c"     class = "library module"  />
+<file name = "sfllang.c"    class = "library module"  />
+<file name = "sfllbuf.c"    class = "library module"  />
+<file name = "sfllist.c"    class = "library module"  />
+<file name = "sflmail.c"    class = "library module"  />
+<file name = "sflmath.c"    class = "library module"  />
+<file name = "sflmem.c"     class = "library module"  />
+<file name = "sflmesg.c"    class = "library module"  />
+<file name = "sflmime.c"    class = "library module"  />
+<file name = "sflmysql.c"   class = "library module"  />
+<file name = "sflmysql.h"   class = "public header"   />
+<file name = "sflnode.c"    class = "library module"  />
+<file name = "sflprint.c"   class = "library module"  />
+<file name = "sflproc.c"    class = "library module"  />
+<file name = "sflprocx.h"   class = "private resource"/>
+<file name = "sflproco.imp" class = "private resource"/>
+<file name = "sflprocu.imp" class = "private resource"/>
+<file name = "sflprocv.imp" class = "private resource"/>
+<file name = "sflprocw.imp" class = "private resource"/>
+<file name = "sflprocx.imp" class = "private resource"/>
+<file name = "sflslot.c"    class = "library module"  />
+<file name = "sflsock.c"    class = "library module"  />
+<file name = "sflstr.c"     class = "library module"  />
+<file name = "sflsymb.c"    class = "library module"  />
+<file name = "sflsyst.c"    class = "library module"  />
+<file name = "sfltok.c"     class = "library module"  />
+<file name = "sfltree.c"    class = "library module"  />
+<file name = "sfltron.c"    class = "library module"  />
+<file name = "sfluid.c"     class = "library module"  />
+<file name = "sflxml.c"     class = "library module"  />
+<file name = "sflxmll.c"    class = "library module"  />
+<file name = "sflxmll.l"    class = "c dialog"        />
+
+<actions>
+  <generate>
+    <collect into = "sfl.h" class = "public header" >
+      <file name = "sflhead.h"  />
+      <file name = "prelude.h"  />
+      <file name = "sflbits.h"  />
+      <file name = "sflcomp.h"  />
+      <file name = "sflcons.h"  />
+      <file name = "sflconv.h"  />
+      <file name = "sflcryp.h"  />
+      <file name = "sfldate.h"  />
+      <file name = "sfldbio.h"  />
+      <file name = "sflexdr.h"  />
+      <file name = "sflfind.h"  />
+      <file name = "sflfile.h"  />
+      <file name = "sfllang.h"  />
+      <file name = "sfllbuf.h"  />
+      <file name = "sfllist.h"  />
+      <file name = "sflmath.h"  />
+      <file name = "sflmesg.h"  />
+      <file name = "sflmem.h"   />
+      <file name = "sflmime.h"  />
+      <file name = "sflmysql.h" />
+      <file name = "sflnode.h"  />
+      <file name = "sfldir.h"   />
+      <file name = "sflslot.h"  />
+      <file name = "sflstr.h"   />
+      <file name = "sflsock.h"  />
+      <file name = "sflsymb.h"  />
+      <file name = "sflproc.h"  />
+      <file name = "sflprint.h" />
+      <file name = "sflsyst.h"  />
+      <file name = "sflhttp.h"  />
+      <file name = "sflini.h"   />
+      <file name = "sflenv.h"   />
+      <file name = "sfltok.h"   />
+      <file name = "sfltree.h"  />
+      <file name = "sfltron.h"  />
+      <file name = "sfluid.h"   />
+      <file name = "sflxml.h"   />
+      <file name = "sflxmll.h"  />
+    </collect>
+  </generate>
+</actions>
+
+<!-- Deliverables   -->
+<file name = "libsfl"       class = "public library"  />
+
+</pdl>

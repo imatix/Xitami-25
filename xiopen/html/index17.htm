@@ -1,0 +1,365 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Extending Xitami with External Peer Processes</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index16.htm">&lt;</A>
+ | <A href="index18.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+
+<A NAME="lrwp">&nbsp;</A>
+<H2><A NAME="TOC139">Extending Xitami with External Peer Processes</A></H2>
+
+<P>By Robin Dunn <robind@earthling.net>
+
+<H3><A NAME="TOC140">Introduction</A></H3>
+
+<P>Any serious web-based application relies, possibly quite heavily, on
+dynamic content. In other words, dynamically generated pages.
+
+<H4><A NAME="TOC141">CGI</A></H4>
+
+<P>To facilitate the need for dynamic content, CGI was invented back in the
+dark-ages of the Web (just a few years ago.) While CGI provides the ability
+to do dynamic generation of web pages as well as quite an elegant and
+flexible interface, it also has a very big wart. It is <B>too slow</B> for
+serious work. The basic model that CGI follows is:
+<OL>
+<LI>The web server receives a request that maps to a CGI handler.
+<LI>The web server starts a new process with the specified CGI command,
+feeding the CGI data to it.
+<LI>The web server waits for the process to terminate.
+<LI>The output of the process is sent to the browser.
+</OL>
+
+<P>Unfortunately, each time the CGI process is started, it can be several
+seconds before it is able to even begin processing the request. Depending on
+the OS there may be a large amount of overhead in creating a new process.
+There may be a Perl or other language interpreter to load and initialize,
+followed by loading and parsing the CGI script itself. Database connections
+may have to be made, files opened, etc.
+
+<H4><A NAME="TOC142">Server Extensions</A></H4>
+
+<P>Because of the shortcomings of CGI, server extension APIs were created by
+the various web server vendors.  For example, Netscape provides NSAPI,
+Microsoft ISAPI, Apache ASAPI, and even Xitami has WSX. (Isn't it refreshing
+to <B>not</B> have &quot;SAPI&quot; at the end?)
+
+<P>While these extension APIs do away with the overhead of process creation
+they introduce a few warts of their own:
+<OL>
+<LI>The extension is linked into the server itself, (either statically at
+compile/link time or dynamically at runtime) so bugs in the extension can
+potentially bring down the entire web-server.
+<LI>Server extensions by their nature are highly specific to the API it is
+written for. It would be very difficult to be portable to another
+server.
+<LI>You are limited in your choice of languages to what is supported by
+the API.
+</OL>
+
+<H4><A NAME="TOC143">Persistent CGI</A></H4>
+
+<P>There have been several alternatives that combine the ease of use and
+flexibility of CGI with the efficiency of Server extension APIs.  One of the
+most popular of these is called <A HREF="http://www.fastcgi.com/">FastCGI</A>
+developed by <A HREF="http://www.openmarket.com/">Open Market, Inc.</A>
+FastCGI or other persistent CGI alternatives are, as the name suggests, a CGI
+type of interface that is Faster than CGI.  It could potentially be up to 20
+times faster, or more, depending on what kind of startup/initialization
+overhead the script has.  It does this phenomenal feat by allowing the CGI
+process to handle more than a single request each time it starts up.  The web
+server communicates with the running persistent CGI process via a socket and
+sends the appropriate data to the persistent CGI process when the reqest is
+made.  The persistent CGI process does its thing, generates an html page or
+other response and sends it back over the socket and then instead of
+terminating, it waits for the next request.
+
+<H3><A NAME="TOC144">LRWP</A></H3>
+<P>Begining with version 2.2a, Xitami includes a persistent CGI extension
+called LRWP, (which stands for Long Running Web Process.)  LRWP is written as
+a WSX agent which implements a simple protocol for communicating with external
+processes called Peers.  The peer process simply waits for the requests to
+come from Xitami and then responds with a valid http response, just like a
+CGI program.  The main difference is that like other persistent CGI
+solutions, the LRWP peer waits around for another HTTP request instead of
+terminating.
+
+<P>LRWP is not FastCGI, but it is very similar.  The protocol between Xitami
+and the LRWP Peer is much simpler than the FastCGI protocol, and therefore
+less prone to implementation differences or errors.  However, given the right
+circumstances it is possible to run the same program as both a LRWP Peer and
+a FastCGI Peer with only minor differences in the startup code.
+
+<H3><A NAME="TOC145">The LRWP protocol</A></H3>
+
+<P>As mentioned above, the communications protocol between the LRWP Peer and
+the LRWP Agent within Xitami is quite simple.
+
+<OL>
+<LI>The Peer connects to the port specified in the [LRWP] section of the
+Xitami configuration file, (offset by portbase if needed,) and sends a
+startup string.  The startup string has three components:
+<OL TYPE=a>
+<LI>The appname or alias.  This is what will be used to redirect HTTP
+requests to the Peer.  For example, if you use "testapp" as the
+alias, then requests begining with http://yourhostname.com/testapp
+will be sent to the peer.  If the alias is "this/is/a/test" then
+requets begining with http://yourhostname.com/this/is/a/test will be
+sent.
+<P>If multiple peers connect with the same alias name, then multiple
+simultaneous requests will be able to be handled.  If there are more
+simultaneous requests then there are peers to handle them, then the
+LRWP Agent in Xitami will queue up the requests and wait for a peer
+to complete its current request.
+<LI>The next component of the startup string is the name of the
+virtual host to be associated with.  If a name is passed, then the
+peer will only be given requests that are directed to that virtual
+host.  Otherwise, the peer will be sent requests from any virtual or
+nonvirtual host that matches the alias.
+<LI>The third component of the startup string is reserved for a
+currently unimplemented feature.
+</OL>
+
+<P>Each component of the startup string is separated by a character with
+an ASCII value of 255.
+<LI>The LRWP Agent then responds with either "OK" or an error message
+that begins with "ERROR".  If "OK" then the peer is good to go,
+otherwise the LRWP Agent is rejecting the connection for some reason and
+you have some debugging to do.
+<LI>At this point the Peer simply waits for a request to be sent to
+it.  When the request comes, it is formatted as follows:
+
+<CENTER>
+<P>
+<TABLE BORDER=1 CELLSPACING=1>
+<TR>
+<TD> ENV size </TD>
+<TD> ENV data as a series of name=value pairs </TD>
+<TD> POST size </TD>
+<TD> POST data, if any </TD>
+</TR>
+</TABLE>
+</CENTER>
+
+<OL TYPE=a>
+<LI>A nine-digit, zero-filled number representing the size of the
+CGI-environment data.  For example, "000001234".
+<LI>Immediately following the size is that number of bytes of
+data formatted as NAME=VALUE pairs, each separated by a NULL byte.
+<LI>The next component is another nine-digit, zero-filled number,
+this time representing the size of the POST data, if any.
+<LI>If there is any POST data, the specifed number of bytes comes
+next.
+</OL>
+
+<LI>The Peer now has everything it needs to handle the request, so at
+this point it should do whatever it needs to create a HTML document, or
+some other type of data to return.  The Peer then sends back on the
+socket the number of bytes it will be sending, formatted as a nine-digit,
+zero-filled number, followed by that number of bytes of data.
+
+<P>The content returned to the server will be treated just like the
+output from CGI programs, so content-type and other headers are
+significant.
+
+<LI>At this point the Peer should either exit or go back to wait for
+another request.  If it exits, and if there are no other peers attached
+to the server with the same alias name, then that URI will
+fall-back to default Xitami handling.  For example, if the URI
+doesn't match a real file or directory then it returns an access
+error, otherwise the physical file or directory will be processed
+normally.
+
+<P>There may be situations where this is a highly desirable feature, for
+example if you are running a contest and only want to collect 100
+entries, the peer could exit after collecting the desired amount and
+then Xitami will fall-back to a static document at the same URI that
+explains that the contest is now closed.
+
+<P>Another reason to exit is to ensure that any memory leaks in your
+program or the interpreter it is built upon are released.  In order for
+this to be effective you probably will want to have the ability to
+automatically restart your peer processes.  (UPM is currently being
+modified to allow this type of functionality.)  For example, I know
+people with scripts running in the FastCGI environment that only allow
+the processes to handle 50 requests and then they exit and get restarted
+by an external process monitor.
+</OL>
+
+<H3><A NAME="TOC146">LRWP Environment Variables</A></H3>
+<P>LRWP programs receive the same environment variables as a CGI program.
+If you're in doubt as to which ones these are, either read this manual again
+or run the testcgi program supplied with Xitami.
+
+<H3><A NAME="TOC147">The LRWP Library</A></H3>
+<P>Included with Xitami is a small library of C functions to assist
+in writing LRWP Peers.  The source files are lrwplib.h and lrwplib.c and
+contain the following functions:
+
+
+<p><hr WIDTH="60%" ALIGN=Center><pre>
+char* lrwp_connect(LRWP* lrwp,        /* pointer to UNCONNECTED LRWP object */
+                   char* appname,     /* Name or alias of Peer app         */
+                   char* host,        /* hostname/IP address to connect to */
+                   char* port,        /* string containing port number     */
+                   char* vhost)       /* optional virtual hostname         */
+</pre>
+
+Connects to the LRWP agent running in Xitami on host and port.  Sends
+the given appname to use as the URI alias that will trigger requests to
+be sent to this peer.  If vhost is given, this peer will only be sent
+requests origininating from that virtual host.  This function assumes
+that the LRWP structure is uninitialized and clears it before use.
+
+<p>Returns NULL on success and a pointer to an error message otherwise.
+
+<p><hr WIDTH="60%" ALIGN=Center><pre>
+int  lrwp_accept_request(LRWP* lrwp)    /* pointer to CONNECTED LRWP object  */
+</pre>
+
+This funation waits for and recieves a request from the LRWP agent, and
+populates the LRWP structure with the request data.
+<p>
+Returns 0 on success and -1 otherwise.
+
+<p><hr WIDTH="60%" ALIGN=Center><pre>
+int  lrwp_send_string(LRWP* lrwp,       /* pointer to CONNECTED LRWP object  */
+                      char* st)         /* an ouput string                   */
+</pre>
+This function appends a string to the response buffer.
+lrwp_finish_request() must be called to send the response back to Xitami.
+<p>
+Returns 0 on success and -1 otherwise.
+
+<p><hr WIDTH="60%" ALIGN=Center><pre>
+int  lrwp_send_data(LRWP* lrwp,         /* pointer to CONNECTED LRWP object  */
+                    void* data,         /* pointer to a data buffer          */
+                    size_t len)         /* size of the data buffer           */
+</pre>
+Appends a buffer of (possibly binary) data of the specified size to
+the response buffer.  lrwp_finish_request() must be called to send the
+response back to Xitami.
+<p>
+Returns 0 on success and -1 otherwise.
+
+<p><hr WIDTH="60%" ALIGN=Center><pre>
+int  lrwp_finish_request(LRWP* lrwp)    /* pointer to CONNECTED LRWP object  */
+</pre>
+Completes the request by sending the response buffer back to Xitami
+and prepares the lwrp structure to receive another request.
+<p>
+Returns 0 on success and -1 otherwise.
+
+<p><hr WIDTH="60%" ALIGN=Center><pre>
+int  lrwp_close(LRWP* lrwp)             /* pointer to CONNECTED LRWP object  */
+</pre>
+Closes the connection to Xitami.
+<p>
+Returns 0 on success and -1 otherwise.
+
+<p><hr WIDTH="60%" ALIGN=Center>
+
+<H3><A NAME="TOC148">A Simple Example Using C</A></H3>
+
+<PRE>
+#include "sfl.h"
+#include "lrwplib.h"
+
+void main()
+{
+    LRWP    lrwp;
+    int     count = 0;
+    int     err;
+    char*   errMsg;
+    char    buf[256];
+
+    sock_init();
+    errMsg = lrwp_connect(&lrwp, "hello", "localhost", "81", "");
+    if (errMsg) {
+        fprintf(stderr, "%s\n", errMsg);
+        exit(1);
+    }
+        /* only handle 5 reqests, then exit */
+    while (count &lt; 5 && lrwp_accept_request(&lrwp) != -1) {
+        count += 1;
+        lrwp_send_string(&lrwp, "Content-type: text/html\r\n\r\n");
+        lrwp_send_string(&lrwp,
+                "&lt;HTML>&lt;HEAD>&lt;TITLE>hello&lt;/TITLE>&lt;/HEAD>\n&lt;BOD
+
+        sprintf(buf, "&lt;H2>Hello from LRWP&lt;/H2>\nCount = %d", count);
+        lrwp_send_string(&lrwp, buf);
+
+        lrwp_send_string(&lrwp, "\n&lt;/BODY>&lt;/HTML>\n");
+        lrwp_finish_request(&lrwp);
+    }
+    lrwp_close(&lrwp);
+    sock_term();
+}
+
+</PRE>
+
+<H3><A NAME="TOC149">A Simple Example Using Python</A></H3>
+
+<PRE>
+from lrwplib import LRWP
+
+def main():
+    lrwp = LRWP('hello', 'localhost', 81)
+    lrwp.connect()
+    count = 0
+    while count &lt; 5:        # exit after servicing 5 requests
+        count = count + 1
+        req = lrwp.acceptRequest()
+        req.out.write('Content-type: text/html\r\n\r\n')
+        req.out.write('&lt;HTML>&lt;HEAD>&lt;TITLE>hello&lt;/TITLE>&lt;')
+        req.out.write('&lt;/HEAD>\n')
+        req.out.write('&lt;H2>Hello from LRWP&lt;/H2>\nCount = ' + str(count))
+        req.out.write('\n&lt;/BODY>&lt;/HTML>\n')
+        req.finish()
+
+    lrwp.close()
+
+if __name__ == '__main__':
+    main()
+
+</PRE>
+
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index16.htm">&lt;</A>
+ | <A href="index18.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <EM>Extending Xitami with External Peer Processes</EM>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

@@ -1,0 +1,27 @@
+.---------------------------------------------------------------------
+.-  prelude.def
+.---------------------------------------------------------------------
+.define imatix http://www.imatix.com
+.define TABLE_WIDTH 90%
+
+.block header
+Cache-control: no-cache
+Expires: 0
+
+<HTML>
+<HEAD>
+<TITLE>$(TITLE)</TITLE>
+<META http-equiv=Content-Language content=en>
+<META http-equiv=Content-Type content="text/html">
+</HEAD>
+<BODY onLoad="focus()">
+<H1>$(TITLE)</H1>
+.end
+
+.block footer
+</BODY></HTML>
+.end
+
+.block anchor
+<A NAME="$(ANCHOR)">&nbsp;</A>
+.end

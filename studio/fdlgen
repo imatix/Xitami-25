@@ -1,0 +1,3201 @@
+#! /usr/bin/perl
+#=============================================================================
+#                                                                            
+#   fdlgen - Form Definition Language generator                              
+#                                                                            
+#   Copyright (c) 1991-2003 iMatix Corporation                               
+#                                                                            
+#   ------------------ GPL Licensed Source Code ------------------           
+#   iMatix makes this software available under the GNU General               
+#   Public License (GPL) license for open source projects.  For              
+#   details of the GPL license please see www.gnu.org or read the            
+#   file license.gpl provided in this package.                               
+#                                                                            
+#   This program is free software; you can redistribute it and/or            
+#   modify it under the terms of the GNU General Public License as           
+#   published by the Free Software Foundation; either version 2 of           
+#   the License, or (at your option) any later version.                      
+#                                                                            
+#   This program is distributed in the hope that it will be useful,          
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of           
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            
+#   GNU General Public License for more details.                             
+#                                                                            
+#   You should have received a copy of the GNU General Public                
+#   License along with this program in the file 'license.gpl'; if            
+#   not, write to the Free Software Foundation, Inc., 59 Temple              
+#   Place - Suite 330, Boston, MA 02111-1307, USA.                           
+#                                                                            
+#   You can also license this software under iMatix's General Terms          
+#   of Business (GTB) for commercial projects.  If you have not              
+#   explicitly licensed this software under the iMatix GTB you may           
+#   only use it under the terms of the GNU General Public License.           
+#                                                                            
+#   For more information, send an email to info@imatix.com.                  
+#   --------------------------------------------------------------           
+#=============================================================================
+
+require 'sflcvdp.pl';                   #   SFL date picture formatting
+require 'shellwd.pl';                   #   Perl word-splitting module
+require 'findfile.pl';                  #   Find file on path
+
+require 'fdlgen.fmt';                   #   Include HTML formats
+require 'fdlgen.d';                     #   Include dialog interpreter
+
+
+##########################   INITIALISE THE PROGRAM   #########################
+
+sub initialise_the_program
+{
+    $version = "3.1a1";
+    $me      = "fdlgen";                #   For all messages
+    $ext     = ".fdl";                  #   Default argument file extension
+
+    if (@ARGV > 0) {                    #   1 or more arguments in @ARGV?
+        $the_next_event = $ok_event;
+        $next_arg = 0;                  #   Arguments start at 0
+    }
+    else {
+        print "$me - Studio FDL compiler V$version\n";
+        print "Copyright (c) 1995-2002 iMatix Corporation\n";
+        print "syntax: $me [-debug] [-env] <filename>...\n";
+        $the_next_event = $error_event;
+    }
+}
+
+
+#########################   INITIALISE PROGRAM DATA   #########################
+
+sub initialise_program_data
+{
+    #   These are the preprocessor keywords that we recognise
+    #   Inherited from htmlpp
+    $keyword {"block"}    = $block_event;
+    $keyword {"endblock"} = $end_block_event;
+    $keyword {"end"}      = $end_block_event;
+    $keyword {"build"}    = $build_event;
+    $keyword {"define"}   = $define_event;
+    $keyword {"const"}    = $const_event;
+    $keyword {"echo"}     = $echo_event;
+    $keyword {"ignore"}   = $ignore_event;
+    $keyword {"include"}  = $include_event;
+    $keyword {"page"}     = $page_event;
+    $keyword {"if"}       = $if_event;
+    $keyword {"else"}     = $else_event;
+    $keyword {"endif"}    = $end_if_event;
+    $keyword {"for"}      = $for_event;
+    $keyword {"endfor"}   = $end_for_event;
+    $keyword {"macro"}    = $macro_event;
+
+    #   Proper to fxpre
+    $keyword {"livelink"}  = $livelink_event;
+    $keyword {"fields"}    = $fields_event;
+    $keyword {"endfields"} = $end_fields_event;
+    $keyword {"table"}     = $table_event;
+    $keyword {"endtable"}  = $end_table_event;
+    $keyword {"do"}        = $do_event;
+    $keyword {"enddo"}     = $end_do_event;
+    $keyword {"textual"}   = $textual_event;
+    $keyword {"textbox"}   = $textbox_event;
+    $keyword {"numeric"}   = $numeric_event;
+    $keyword {"date"}      = $date_event;
+    $keyword {"time"}      = $time_event;
+    $keyword {"boolean"}   = $boolean_event;
+    $keyword {"select"}    = $select_event;
+    $keyword {"radio"}     = $radio_event;
+    $keyword {"action"}    = $action_event;
+    $keyword {"label"}     = $label_event;
+    $keyword {"index"}     = $index_event;
+    $keyword {"formend"}   = $form_end_event;
+    $keyword {"file"}      = $file_event;
+
+    #   These are the standard block types that we handle
+    $standard_block {"header"}      = 1;
+    $standard_block {"footer"}      = 1;
+    $standard_block {"toc_open"}    = 1;
+    $standard_block {"toc_entry"}   = 1;
+    $standard_block {"toc_close"}   = 1;
+    $standard_block {"dir_open"}    = 1;
+    $standard_block {"dir_entry"}   = 1;
+    $standard_block {"dir_close"}   = 1;
+    $standard_block {"index"}       = 1;
+    $standard_block {"index_open"}  = 1;
+    $standard_block {"index_close"} = 1;
+    $standard_block {"index_entry"} = 1;
+    $standard_block {"anchor"}      = 1;
+
+    #   We log all errors to $errors.lst
+    unless (open (ERRORS, ">errors.lst")) {
+        print "$me E: can't create errors.lst: $!";
+        &raise_exception ($exception_event);
+    }
+    $debug_mode  = 0;
+    $guru_mode   = 0;
+    $getenv_mode = 0;
+
+    #   Prepare date and time variables
+    ($sec, $min, $hour, $day, $month, $year) = localtime;
+    $date = sprintf ("%02d/%02d/%02d", $year, $month + 1, $day);
+    $time = sprintf ("%2d:%02d:%02d", $hour, $min, $sec);
+
+    #   Initialise accented-character tables, using a horrible youzine
+    #   (fr. 'Usine a gaz') to figure-out whether we're under MS-DOS, or
+    #   UNIX, or something else.
+    #   If you add to these tables, provide me with updates! 8-/
+    #
+    if (-f "/etc/passwd") {             #   We're on a UNIX, assume ISO-8859-1
+        $translate {"\304"} = "Auml";
+        $translate {"\305"} = "Aring";
+        $translate {"\306"} = "AElig";
+        $translate {"\326"} = "Ouml";
+        $translate {"\330"} = "Oslash";
+        $translate {"\334"} = "Uuml";
+        $translate {"\340"} = "agrave";
+        $translate {"\341"} = "aacute";
+        $translate {"\342"} = "acirc";
+        $translate {"\344"} = "auml";
+        $translate {"\345"} = "aring";
+        $translate {"\346"} = "aelig";
+        $translate {"\347"} = "ccedil";
+        $translate {"\350"} = "egrave";
+        $translate {"\351"} = "eacute";
+        $translate {"\352"} = "ecirc";
+        $translate {"\353"} = "euml";
+        $translate {"\354"} = "igrave";
+        $translate {"\355"} = "iacute";
+        $translate {"\356"} = "icirc";
+        $translate {"\357"} = "iuml";
+        $translate {"\362"} = "ograve";
+        $translate {"\363"} = "oacute";
+        $translate {"\364"} = "ocirc";
+        $translate {"\366"} = "ouml";
+        $translate {"\370"} = "oslash";
+        $translate {"\371"} = "ugrave";
+        $translate {"\372"} = "uacute";
+        $translate {"\373"} = "ucirc";
+        $translate {"\374"} = "uuml";
+        $translate {"\375"} = "yuml";
+    }
+    elsif ($ENV {"COMSPEC"}) {          #   Looks like MS-DOS...
+        $translate {"\201"} = "uuml";
+        $translate {"\202"} = "eacute";
+        $translate {"\203"} = "acirc";
+        $translate {"\204"} = "auml";
+        $translate {"\205"} = "agrave";
+        $translate {"\206"} = "aring";
+        $translate {"\207"} = "ccedil";
+        $translate {"\210"} = "ecirc";
+        $translate {"\211"} = "euml";
+        $translate {"\212"} = "egrave";
+        $translate {"\213"} = "iuml";
+        $translate {"\214"} = "icirc";
+        $translate {"\215"} = "igrave";
+        $translate {"\216"} = "Auml";
+        $translate {"\217"} = "Aring";
+        $translate {"\221"} = "aelig";
+        $translate {"\222"} = "AElig";
+        $translate {"\223"} = "ocirc";
+        $translate {"\224"} = "ouml";
+        $translate {"\225"} = "ograve";
+        $translate {"\226"} = "ucirc";
+        $translate {"\227"} = "ugrave";
+        $translate {"\230"} = "yuml";
+        $translate {"\231"} = "Ouml";
+        $translate {"\232"} = "Uuml";
+        $translate {"\233"} = "oslash";
+        $translate {"\235"} = "Oslash";
+        $translate {"\240"} = "aacute";
+        $translate {"\241"} = "iacute";
+        $translate {"\242"} = "oacute";
+        $translate {"\243"} = "uacute";
+        $translate {"\341"} = "szlig";
+    }
+}
+
+
+#########################   PARSE FORMIO HEADER FILE   ########################
+
+sub parse_formio_header_file
+{
+    #   We load all enums from the formio.h header file, thus avoiding
+    #   messy maintenance problems.
+
+    local ($filepath);
+    $filepath = &findfile ("formio.h", "INCDIR");
+    $filepath = &findfile ("formio.h", "INCDIR_ALT")  unless $filepath;
+    $filepath = &findfile ("formio.h", "STUDIO_DATA") unless $filepath;
+    
+    if ($filepath && open (HEADER, $filepath)) {
+        while (<HEADER>) {
+            $enum = 1 if /enum\s\{/;
+            $enum = 0 if /\};/;
+            eval "\$$1 = $2"
+                if ($enum && /^\s*([A-Z0-9_]+)\s+=\s+([0-9]+)/);
+        }
+        close (HEADER);
+    }
+    else {
+        print "$me E: can't read formio.h: $!\n";
+        &raise_exception ($exception_event);
+    }
+}
+
+
+#########################   LOAD ANCHOR DEFINITIONS   #########################
+
+sub load_anchor_definitions
+{
+    undef %anchors;                     #   Clear assoc. arrays in any case
+    undef %atitles;
+    if (open (ANCHOR, "anchor.def")) {
+        while (<ANCHOR>) {
+            next if /^#/;               #   Skip comments
+            chop;
+            /(\S+)\s+(\S+)(\s+(.*))?/;  #   Break $_ into name and value
+            $anchors {$1} = $2;         #     and load into assoc. array
+            $atitles {$1} = $4 if $4;
+        }
+        close (ANCHOR);
+    }
+}
+
+
+#########################   SAVE ANCHOR DEFINITIONS   #########################
+
+sub save_anchor_definitions
+{
+    local ($key, $value);
+
+    if (open (ANCHOR, ">anchor.def")) {
+        print ANCHOR "#  Anchor definitions - created by $me\n";
+        print ANCHOR "#  Delete this file to reset all anchors\n";
+        while (($key, $value) = each %anchors) {
+            printf (ANCHOR "%-20s %-12s %s\n", $key, $value, $atitles {$key});
+        }
+        close (ANCHOR);
+    }
+    else {
+        print "$me E: can't create anchor.def: $!";
+        &raise_exception ($exception_event);
+    }
+}
+
+
+#########################   GET NEXT ARGUMENT VALUE   #########################
+
+sub get_next_argument_value
+{
+    if ($next_arg < @ARGV) {
+        $_ = $ARGV [$next_arg++];
+        if (/^-/) {
+            $the_next_event = $switch_event;
+        }
+        else {
+            $_ .= $ext if !/\./;        #   Add extension if missing
+            $main_document = $_;
+            $the_next_event = $ok_event;
+            print "$me I: processing $main_document...\n";
+        }
+    }
+    else {
+        $the_next_event = $finished_event;
+    }
+}
+
+
+############################   PROCESS THE SWITCH   ###########################
+
+sub process_the_switch
+{
+    if ($_ eq "-debug") {
+        $debug_mode = 1;
+    }
+    elsif ($_ eq "-guru") {
+        $guru_mode = 1;
+    }
+    elsif ($_ eq "-env") {
+        $getenv_mode = 1;
+    }
+}
+
+
+#############################   START FIRST PASS   ############################
+
+sub start_first_pass
+{
+    #   Clear document structure tables
+    undef @toc_title;                   #   Table of contents titles
+    undef @toc_file;                    #   Table of contents filenames
+    undef @toc_level;                   #   Table of contents levels
+
+    undef @page_list;                   #   Clear page name table
+    undef @page_title;                  #   Clear page title table
+    undef @user_blocks;                 #   Clear user text blocks table
+    undef @work_files;                  #   Clear list of work files
+    undef %index_ignore;                #   Clear index ignore table
+    undef %already_seen;                #   Reset .include handling
+    undef %macros;                      #   Clear table of macros
+    undef %actions;                     #   Action names
+
+    $have_errors = 0;                   #   No errors detected so far
+    $pass = 0;                          #   Pass 0 = scan, pass 1..n = output
+    $final_pass = 0;                    #   Not in final pass
+    $work_file_number = 0;              #   Work files are numbered
+    $default_warning = 0;               #   No 'defaults' error message yet
+    $collect_pages = 1;                 #   Collect .page names now
+
+    &reset_symbols;                     #   Reset symbol table
+    &reset_counters;                    #   Reset document counters
+
+    print "$me I: pass 1 through $main_document...\n"
+        unless $symbols {"SILENT"} == 1;
+
+    $file_field = 0;                    #   File field in fdl file
+}
+
+sub reset_symbols {
+    undef %symbols;                     #   Clear symbol table
+    undef %preproc;                     #   Clear preprocessing table
+    undef %postproc;                    #   Clear postprocessing table
+    undef %constants;                   #   Clear constants table
+
+    #   Prepare built-in symbols
+    &define ("DATE",       $date);
+    &define ("TIME",       $time);
+    &define ("SILENT",     0);          #   If 1, will shut-up
+    &define ("BASE",       "doc");      #   For default page filenames
+    &define ("EXT",        "htm");      #   For default page filenames
+    &define ("LINEMAX",    79);         #   Warns for longer lines
+    &define ("DEBUG_MODE", $debug_mode);
+    &define ("DOCBASE",    &basename ($main_document));
+    if ($getenv_mode) {
+        foreach $key (keys %ENV) {
+            &define ($key, $ENV {$key});
+        }
+    }
+
+    #   Define form cosmetics
+    &define ("FORM_WIDTH", "750");
+    &define ("DATA_WIDTH", "80%");
+    &define ("ALIGN",      "LEFT");
+    &define ("LALIGN",     "LEFT");
+    &define ("VALIGN",     "TOP");
+    &define ("TALIGN",     "CENTER");
+    &define ("TLALIGN",    "CENTER");
+    &define ("TVALIGN",    "TOP");
+    &define ("LATTR",      "LABEL");
+    &define ("COMPACT",    "0");
+
+    &define ("SILENT",  1);             #   If 1, will shut-up
+    &define ("LINEMAX", 999);           #   Warns for longer lines
+}
+
+sub reset_counters {                    #   Reset document counters
+    $lines_read    = 0;                 #   Nothing processed so far
+    $header_nbr    = 0;                 #   Header numbering for TOC
+    $page_nbr      = 0;                 #   Index into @page_list
+    $ignore_header = 0;                 #   Ignore next header for TOC?
+    $ignore_level  = 99;                #   Ignore what header levels?
+    $ignore_pages  = 0;                 #   Ignore all .page commands?
+    $ignore_page   = 0;                 #   Ignore next .page command?
+    $output_open   = 0;                 #   No output file open yet
+    $inside_page   = 0;                 #   Inside a page
+
+    &define ("PASS", $pass++);          #   Start new pass
+    &define ("INC++", "");              #   Standard counter
+}
+
+
+##########################   OPEN OUTPUT WORK FILE   ##########################
+
+sub open_output_work_file
+{
+    $work_file = sprintf ("html%04d.wrk", ++$work_file_number);
+    if (!open (OUTPUT, ">$work_file")) {
+        &error ("$me E: ($document $.) can't create $work_file: $!");
+        &raise_exception ($exception_event);
+    }
+    $output_open = 1;
+    push (@work_files, $work_file);
+}
+
+
+#########################   REUSE WORK FILE AS INPUT   ########################
+
+sub reuse_work_file_as_input
+{
+    close (OUTPUT);
+    $document = $work_file;
+    &open_the_document;                 #   Read from old work file
+}
+
+
+#############################   START MAIN PASS   #############################
+
+sub start_main_pass
+{
+    &reset_counters;                    #   Reset document counters
+    $more_commands = 0;                 #   Do we need to reprocess output?
+    $collect_pages = 0
+        if @page_list > 0;
+    print "$me I: pass $pass through $main_document...\n"
+        unless $symbols {"SILENT"} == 1;
+}
+
+
+#############################   START INTER PASS   ############################
+
+sub start_inter_pass
+{
+    &start_main_pass;
+}
+
+
+#############################   START FINAL PASS   ############################
+
+sub start_final_pass
+{
+    &reset_counters;                    #   Reset document counters
+    $final_pass = 1;                    #   Yes, in final pass
+    $collect_pages = 0
+        if @page_list > 0;
+    print "$me I: final pass through $main_document...\n"
+        unless $symbols {"SILENT"} == 1;
+}
+
+
+############################   OPEN MAIN DOCUMENT   ###########################
+
+sub open_main_document
+{
+    $document = $main_document;
+    &open_the_document;                 #   Go open main document
+}
+
+
+############################   OPEN THE DOCUMENT   ############################
+
+sub open_the_document
+{
+    local ($filepath);
+    $filepath = &findfile ($document, "STUDIO_DATA");
+    $filepath = &findfile ($document, "PATH")
+        unless $filepath;
+
+    if ($filepath && open ($document, $filepath)) {
+        $file_is_open {$document} = 1;  #   Keep track of open documents
+    }
+    else {
+        &error ("$me E: ($document $.) can't open $document: $!");
+        &raise_exception ($exception_event);
+    }
+}
+
+
+#   Subroutine prints an error message to the console and the ERROR file
+#
+sub error {
+    ($_) = @_;                          #   Get argument
+    print "$_\n";
+    print ERRORS "$_\n";
+    $have_errors = 1;                   #   We have 1 or more errors
+}
+
+
+##########################   GET NEXT DOCUMENT LINE   #########################
+
+sub get_next_document_line
+{
+    local ($command);                   #   Action line keyword
+    local ($delimiter);                 #   For handling continuation lines
+    local ($line);                      #   For handling continuation lines
+
+    if ($_ = <$document>) {             #   Get next line of input
+        chop while /\s$/;               #   Remove trailing whitespace
+        $lines_read++;                  #   Count the line
+                                        #   Warn if line > LINEMAX chars long
+        if ($symbols {"PASS"} == 0
+        &&  $symbols {"LINEMAX"} < length
+        &&  $symbols {"LINEMAX"} > 0) {
+            print "$me W: ($document $.) line > ".$symbols {"LINEMAX"}.
+                  " chars\n";
+        }
+        if (/^$/) {                     #   Blank lines
+            $the_next_event = $blank_line_event;
+        }
+        elsif (/^\.\s*\-/) {            #   Comments
+            $the_next_event = $comment_event;
+        }
+        elsif (/^\.\s*(\w+)/) {         #   Action line
+            #   Look at action line, figure-out what it is supposed to be
+            ($command = $1) =~ tr/A-Z/a-z/;
+            if (defined ($keyword {$command})) {
+                $the_next_event = $keyword {$command};
+                if ($command eq "macro") {
+                    $delimiter = "\n";  #   Keep as multiple lines
+                }
+                else {
+                    $delimiter = " ";   #   Concatenate into one line
+                }
+                $file_field = 1 if $command eq "file";
+            }
+            elsif (defined ($macros {$command})) {
+                $the_next_event = $macro_text_event;
+                $delimiter = " ";       #   Concatenate into one line
+            }
+            else {
+                $action_line = $_;
+                &syntax_error ("undefined keyword '$1'");
+                return;                 #   Nothing more we can do here
+            }
+            #   Now pick-up any continuation lines
+            while (/\-$/) {
+                s/\-$/$delimiter/;      #   Replace hyphen by multiline delim
+                ($line = <$document>) || last;
+                chop ($line);           #   Get next line and remove newline
+                if ($line =~ /^\.-/) {
+                    $_ .= "-";
+                }
+                else {
+                    $line =~ s/^\s*|\s*$//; # Remove leading/trailing spaces
+                    $_ .= $line;            # and attach to current line
+                }
+            }
+            $action_line = $_;          #   Save original line
+            /^\.\s*\w+\s*((.|\n)*)/;    #   Get full command arguments
+            if ($the_next_event == $macro_text_event) {
+                $_ = &macro_value ($command, $1);
+            }
+            else {
+                $_ = $1;                #   Get remainder of line
+            }
+        }
+        else {
+            $the_next_event = $body_text_event;
+        }
+    }
+    else {
+        $the_next_event = $finished_event;
+    }
+}
+
+sub syntax_error {
+    &error ("$action_line");
+    &error ("$me E: ($document $.) syntax error");
+    &error ("$me E: ($document $.) @_");
+    &raise_exception ($exception_event);
+}
+
+
+#########################   STORE SYMBOL DEFINITION   #########################
+
+sub store_symbol_definition
+{
+    #   .define symbol ""       -- define symbol as empty string
+    #   .define symbol = expr   -- evaluate as Perl expression
+    #   .define symbol value    -- define or redefine symbol
+    #   .define symbol          -- undefine symbol
+    #
+    #   --name, ++name          -- decrement/increment before using
+    #   name--, name++          -- decrement/increment after using
+    #
+    #   Symbol names can consist of letters, digits, embedded -._+
+    #   The order of the following tests is important, as we need
+    #   to treat the special cases first:
+    #
+    if (/^([A-Za-z0-9-\+\._]+)\s+""/) {
+        &define ($1, "");               #   .define symbol ""
+    }
+    elsif (/^([A-Za-z0-9-\+\._]+)\s+=\s+(.+)/) {
+        &expand_symbols_in_line;        #   Need an evaluated expression
+        /^([A-Za-z0-9-\+\._]+)\s*=\s*(.+)/;
+        &define ($1, eval ($2));        #   .define symbol = expr
+    }
+    elsif (/^([A-Za-z0-9-\+\._]+)\s+(.+)/) {
+        &define ($1, $2);               #   .define symbol value
+    }
+    elsif (/^([A-Za-z0-9-\+\._]+)/) {
+        undef $symbols {$1};            #   .define symbol
+    }
+    else {
+        &syntax_error ("this is not a valid '.define' command");
+    }
+}
+
+#   Define symbol, taking into account any -- or ++ attached to the
+#   symbol name.
+
+sub define {
+    local ($symbol, $value) = @_;       #   Get subroutine arguments
+
+    if ($symbol =~ /^(--|\+\+)/) {
+        $symbol = $';
+        $preproc  {$symbol} = $1;
+        $postproc {$symbol} = "";
+    }
+    elsif ($symbol =~ /(--|\+\+)$/) {
+        $symbol = $`;
+        $preproc  {$symbol} = "";
+        $postproc {$symbol} = $1;
+    }
+    else {
+        $preproc  {$symbol} = "";
+        $postproc {$symbol} = "";
+    }
+    $symbols {$symbol} = $value;
+}
+
+
+########################   STORE CONSTANT DEFINITION   ########################
+
+sub store_constant_definition
+{
+    #   .const symbol value
+    #
+    if (/^([A-Za-z0-9-\+\._]+)\s+(.+)/) {
+        $constants {$1} = $2;
+        &define ($1, $2);
+    }
+    else {
+        &syntax_error ("this is not a valid '.const' command");
+    }
+}
+
+
+##########################   STORE MACRO DEFINITION   #########################
+
+sub store_macro_definition
+{
+    #   .macro name body|""
+    #
+    local ($name, $value);
+
+    if (/^([A-Za-z0-9-\+\._]+)\s+((.|\n)+)/) {
+        if (defined ($keyword {$1})) {
+            &syntax_error ("you cannot use $1 as a macro name");
+        }
+        else {
+            ($name = $1) =~ tr/A-Z/a-z/;
+            $value = $2 eq '""'? "": $2;
+            $macros {$name} = $value;
+        }
+    }
+    else {
+        &syntax_error ("this is not a valid '.macro' command");
+    }
+}
+
+
+##########################   EXPAND SYMBOLS IN LINE   #########################
+
+sub expand_symbols_in_line
+{
+    #   Expands symbols in $_ variable, then resolves escape sequences
+    #   if in the final pass:
+    #   \(  - (
+    #   \{  - {
+    #   \.  - . at start of line
+    #
+    #   Note that the entire symbol must be on one line; if the symbol or
+    #   its label is broken over two lines it won't be expanded.  After we
+    #   expand symbols, we drop trailing whitespace on the line.  The link
+    #   symbols $(*...) omit the <A> and </A> tags if the symbol value is
+    #   empty.  In a symbol label, underlines are converted to spaces.
+    #
+    $_ = &expand_symbols ($_);
+    if ($final_pass) {
+        s/\\\(/\(/g;                    #   Replace \( by ( in whole line
+        s/\\\{/\{/g;                    #   Replace \{ by { in whole line
+        s/\\\./\./g;                    #   Replace \. by . in whole line
+    }
+    chop while /\s$/;                   #   Remove trailing whitespace
+}
+
+#   Recursively expand symbols like this (and in this order):
+#
+#   $(Hn)             - value of header-numbering symbol
+#   $(xxx)            - value of variable
+#   $(xxx?zzz)        - value of variable, or zzz if undefined
+#   $(*xxx)           - create link: <A HREF="value">xxx</A>
+#   $(*xxx="label")   - create link: <A HREF="value">label</A>
+#   $(*xxx=label)     - create link: <A HREF="value">label</A>
+#   $(*xxx=)          - create link: <A HREF="value">value</A>
+#   &("text")         - output of Perl program fragment
+#   &(text)           - output of Perl program fragment
+#   %(text?zzz)       - value of environment variable, or zzz if undefined
+#   &abc(text)        - intrinsic htmlpp function with arguments
+#   <!--.name args--> - value of expanded macro
+#   <.name args>      - value of expanded macro
+#
+sub expand_symbols {
+    local ($_) = @_;
+    local ($before,
+           $match,
+           $after,
+           $expr);
+
+    return unless ($_);                 #   Quit if input string is empty
+    for (;;) {
+        #   Force expansion from end of string first, so things like
+        #   $(xxx?$(yyy)) work properly.
+        if (/[\$&%]\(/) {
+            $before = $`;
+            $match  = $&;
+            $after  = &expand_symbols ($');
+            $_ = $before.$match.$after;
+        }
+        #   $(xxx)
+        if (/\$\(H([1-9])\)/) {
+            $_ = $`.&header_number ($1).$';
+        }
+        elsif (/\$\(([A-Za-z0-9-_\.]+)\)/) {
+            $_ = $`.&valueof ($1).$';
+        }
+        #   $(xxx?zzz)
+        elsif (/\$\(([A-Za-z0-9-_\.]+)\?([^)\$]*)\)/) {
+            $_ = $`.&valueof ($1, $2).$';
+        }
+        #   $(*xxx)
+        elsif (/\$\(\*([A-Za-z0-9-_\.]+)\)/) {
+            last if !defined ($symbols {$1}) && !$final_pass;
+            #   If we're referring to an anchor, it may have a label
+            if (!defined ($symbols {$1})
+            &&   defined ($anchors {$1})) {
+                $label = $atitles {$1};
+            }
+            else {
+                $label = $1;
+            }
+            $_ = $`.&make_link ($1, $label).$';
+        }
+        #   $(*xxx="label")
+        elsif (/\$\(\*([A-Za-z0-9-_\.]+)="([^"\$]+)"\)/) {
+            last if !defined ($symbols {$1}) && !$final_pass;
+            $_ = $`.&make_link ($1, $2).$';
+        }
+        #   $(*xxx=label)
+        elsif (/\$\(\*([A-Za-z0-9-_\.]+)=([^)\$]+)\)/) {
+            last if !defined ($symbols {$1}) && !$final_pass;
+            $_ = $`.&make_link ($1, $2).$';
+        }
+        #   $(*xxx=)
+        elsif (/\$\(\*([A-Za-z0-9-_\.]+)=\)/) {
+            last if !defined ($symbols {$1}) && !$final_pass;
+            $_ = $`.&make_link ($1, &valueof ($1)).$';
+        }
+        #   &("text")
+        #   &(text)
+        elsif (/\&\("([^"]+)"\)/
+        ||     /\&\(([^\)]+)\)/) {
+            $expr =~ s/\\(.)/$1/g;      #   Turn \) into ), etc. */
+            $_ = $`.eval ($expr).$';
+            if ($@) {                   #   Syntax error in Perl statement?
+                $action_line = "$`&($1)$'";
+                &syntax_error ("this is not valid Perl: $1");
+                last;
+            }
+        }
+        #   %(text)
+        elsif (/\%\(([^\)]+)\)/) {
+            $_ = $`.$ENV {$1}.$';
+        }
+        #   %(text?zzz)
+        elsif (/\%\(([^\)]+)\?([^)\$]*)\)/) {
+            $_ = $`.($ENV {$1}? $ENV {$1}: $2).$';
+        }
+        #   &abc(text)
+        elsif (/\&([a-z_]+)\s*\(([^\)]*)\)/i) {
+            $function = $1;
+            $args     = $2;
+            $before   = $`;
+            $after    = $';
+            $args     =~ s/"/'/g;       #   Ensure string arguments use '
+            $_ = $before.eval ("&intrinsic_$function ($args)").$after;
+            if ($@) {                   #   Syntax error in Perl statement?
+                &syntax_error ("$function is not a valid intrinsic function");
+                last;
+            }
+        }
+        #   <!--.name args-->
+        elsif (/\<!--\.([A-Za-z0-9-_\.]+)\s*(.*)-->/) {
+            $_ = $`.&macro_value ($1, $2).$';
+        }
+        #   <.name args>
+        elsif (/\<\.([A-Za-z0-9-_\.]+)\s*([^>]*)>/) {
+            $_ = $`.&macro_value ($1, $2).$';
+        }
+        elsif (/[\200-\377]/ && defined (%translate)) {
+            &translate_accents_in_line;
+        }
+        else {
+            last;
+        }
+    }
+    return $_;
+}
+
+
+#   Subroutine returns the value of the specified symbol; it issues a
+#   warning message and returns 'UNDEF' if the symbol is not defined
+#   and the default value is empty.
+#
+sub valueof {
+    local ($symbol, $default) = @_;     #   Argument is symbol name
+    local ($return);                    #   Returned value
+
+    if (defined ($symbols {$symbol})) {
+        $preproc  {$symbol} eq "--" && $symbols {$symbol}--;
+        $preproc  {$symbol} eq "++" && $symbols {$symbol}++;
+        $return = $symbols {$symbol};
+        $postproc {$symbol} eq "--" && $symbols {$symbol}--;
+        $postproc {$symbol} eq "++" && $symbols {$symbol}++;
+        return $return;
+    }
+    elsif (defined ($anchors {$symbol})) {
+        return ($anchors {$symbol} eq $cur_file? $symbol:
+                $anchors {$symbol}."#".$symbol);
+    }
+    elsif (defined ($default)) {
+        return ($default);
+    }
+    &error ("$_");
+    &error ("$me E: ($document $.) undefined symbol \"$symbol\"");
+    $default_warning == 1 || do {
+        &error ("$me I: Use \$($symbol?default) for default values.");
+        $default_warning = 1;
+    };
+    &define ($symbol, "UNDEF");
+    return $symbols {$symbol};
+}
+
+#   Subroutine formats and returns a header-number.  Uses symbols with
+#   the name Hn where n is 1 to 9.
+#
+sub header_number {
+    local ($level)  = @_;               #   Argument is level number
+    local ($symbol) = "H$level";
+    local ($value);
+
+    if (defined ($symbols {$symbol})) {
+        #   Get previous value and increment it
+        $value = $symbols {$symbol};
+        $value++;
+    }
+    else {                              #   Initialise new symbol value
+        $value = "1";
+    }
+    #   Store next level symbol
+    if ($level < 9) {
+        $symbols {"H".($level + 1)} = "0";
+    }
+    #   Now build full value from all parent levels
+    $symbols {$symbol} = $value;
+    while (--$level > 0) {
+        $value = $symbols {"H".$level}.".".$value;
+    }
+    return ($value);
+}
+
+
+#   Subroutine returns a formatted link between <A> and </A>: the first
+#   argument is the symbol to translate; the second is the label for the
+#   link.  If the symbol has an empty value, the <A> and </A> tags are
+#   omitted.
+#
+sub make_link {
+    local ($symbol, $label) = @_;
+
+    $label  =~ tr/_/ /;
+    $symbol = &valueof ($symbol);
+    return $symbol? "<A HREF=\"$symbol\">$label</A>": $label;
+}
+
+
+#   Macros are expanded like this:
+#
+#   $0            Name of macro
+#   $1 .. $9      Arguments 1 to 9
+#   $#            Number of arguments
+#   $*            Full arguments string
+#   $+            Full unused arguments string
+#   { ..$n.. }    Text within '{' and '}' repeated for each argument
+#
+#   Arguments can be supplied in single/double quotes; they can also be
+#   typed with underlines in place of spaces.  Macro names are always
+#   normalised to lowercase.
+#
+sub macro_value {
+    local ($name, $args) = @_;
+    local (@args) = &shellwords ($args);
+    local ($arg);                       #   Macro argument
+    local ($last_arg) = 0;              #   Highest argument used
+    local ($_);
+
+    $name =~ tr/A-Z/a-z/;
+    if (defined ($macros {$name})) {
+        $_ = $macros {$name};
+    }
+    else {
+        &error ("$_");
+        &error ("$me E: ($document $.) undefined macro \"$name\"");
+        return "";
+    }
+    #   Replace $1 to $9, and $*, within macro body
+    #   Repeat text within {...} for macro argument
+    s/\\\{/\001/g;                      #   Replace escaped \{ by \001
+    for (;;) {
+        if (/\$0/) {                    #   $0 = name of macro
+            $_ = $`.$name.$';
+        }
+        elsif (/\$([1-9])/) {           #   $1 to $9
+            $_ = $`.$args [$1 - 1].$';
+            $last_arg = $1 if $last_arg < $1;
+        }
+        elsif (/\$#/) {                 #   $# = number of arguments
+            $_ = $`.($#args+1).$';
+        }
+        elsif (/\$\*/) {                #   $* = all arguments
+            $_ = $`.$args.$';
+        }
+        elsif (/\$\+/) {                #   $+ = remaining unused arguments
+            $_ = $`;
+            for ($arg = $last_arg; $arg < @args; $arg++) {
+                $_ .= $args [$arg]." ";
+            }
+            $_ .= $';
+        }
+        elsif (/\{([^}]*)\}/) {         #   {...$n...}
+            $_ = $`;
+            local ($repeat) = $1;
+            local ($after)  = $';
+            foreach $arg (@args) {
+                local ($repeat_this) = $repeat;
+                $repeat_this =~ s/\$n/$arg/;
+                $_ .= $repeat_this;
+            }
+            $_ .= $after;
+        }
+        else {
+            last;
+        }
+    }
+    s/\001/\\\{/g;                      #   Replace escaped \{ by \001
+    return $_;
+}
+
+
+#   Function translates accented characters into HTML representations
+#
+sub translate_accents_in_line {
+    while (/([\200-\377])/) {
+        if (defined ($translate {$1})) {
+            $_ = "$`&".$translate {$1}.";$'";
+        }
+        else {
+            $_ = "$`?$'";               #   Replace by '?' if not known
+        }
+    }
+}
+
+
+#   INTRINSIC FUNCTIONS
+#
+#   date("picture", date)      - Format specified date using picture
+#   date("picture")            - Format current date using picture
+#   date()                     - Return current date value
+#   time()                     - Format current time as hh:mm:ss
+#   week_day([date])           - Get day of week, 0=Sunday to 6=Saturday
+#   year_week([date])          - Get week of year, 1 is first full week
+#   julian_date([date])        - Get Julian date for date
+#   lillian_date([date])       - Get Lillian date for date
+#   image_height("image.ext")  - Get image height (GIF, JPEG)
+#   image_width("image.ext")   - Get image width (GIF, JPEG)
+#   file_size("filename",arg)  - Get size of file: optional arg K or M
+#   file_date("filename")      - Get date of file
+#   file_time("filename")      - Get time of file as hh:mm:ss
+#   normalise("filename")      - Normalise filename to UNIX format
+#   lower("string")            - Convert string to lower case
+#   upper("string")            - Convert string to upper case
+#
+
+sub intrinsic_date {
+    local ($picture, $value) = @_;
+    $value = &date_now unless $value;
+    if ($picture) {
+        return (&conv_date_pict (&date_now, $_ [0]));
+    }
+    else {
+        return (&date_now);
+    }
+}
+
+sub intrinsic_time {
+    local ($sec, $min, $hour, $day, $month, $year) = localtime;
+    return (sprintf ("%2d:%02d:%02d", $hour, $min, $sec));
+}
+
+sub intrinsic_week_day {
+    return (&day_of_week ($_ [0]? $_ [0]: &date_now));
+}
+
+sub intrinsic_year_week {
+    return (&week_of_year ($_ [0]? $_ [0]: &date_now));
+}
+
+sub intrinsic_julian_date {
+    return (&julian_date ($_ [0]? $_ [0]: &date_now));
+}
+
+sub intrinsic_lillian_date {
+    return (&date_to_days ($_ [0]? $_ [0]: &date_now));
+}
+
+sub intrinsic_image_height {
+    local ($filename) = @_;
+    if (! -e $filename) {
+        &error ("$me E: ($document $.) file not found: \"$filename\"");
+    }
+    else {
+        return (&image_height ($filename));
+    }
+}
+
+sub intrinsic_image_width {
+    local ($filename) = @_;
+    if (! -e $filename) {
+        &error ("$me E: ($document $.) file not found: \"$filename\"");
+    }
+    else {
+        return (&image_width ($filename));
+    }
+}
+
+sub intrinsic_file_size {
+    local ($filename, $arg) = @_;
+    local ($size) = (stat ($filename)) [7];
+
+    if (! -e $filename) {
+        &error ("$me E: ($document $.) file not found: \"$filename\"");
+    }
+    elsif ($arg eq "K") {
+        $size /= 1024;
+    }
+    elsif ($arg eq "M") {
+        $size /= 1048576;
+    }
+    return (int ($size));
+}
+
+sub intrinsic_file_date {
+    local ($filename) = @_;
+    if (! -e $filename) {
+        &error ("$me E: ($document $.) file not found: \"$filename\"");
+    }
+    else {
+        local ($mtime) = (stat ($filename)) [9];
+        local ($sec,$min,$hour,$mday,$mon,$year) = localtime ($mtime);
+        return (($year + 1900) * 10000 + ($mon + 1) * 100 + $mday);
+    }
+}
+
+sub intrinsic_file_time {
+    local ($filename) = @_;
+    if (! -e $filename) {
+        &error ("$me E: ($document $.) file not found: \"$filename\"");
+    }
+    else {
+        local ($mtime) = (stat ($filename)) [9];
+        local ($sec,$min,$hour,$mday,$mon,$year) = localtime ($mtime);
+        return (sprintf ("%2d:%02d:%02", $hour, $min, $sec));
+    }
+}
+
+sub intrinsic_normalise {
+    local ($_) = @_;                    #   Get filename argument
+    s/\\/\//g;                          #   Replace DOS-style \ by /
+    s/\s/_/g;                           #   Replace white space by _
+    return ($_);
+}
+
+sub intrinsic_lower {
+    local ($_) = @_;                    #   Get filename argument
+    tr/A-Z/a-z/;
+    return ($_);
+}
+
+sub intrinsic_upper {
+    local ($_) = @_;                    #   Get filename argument
+    tr/a-z/A-Z/;
+    return ($_);
+}
+
+
+#########################   EXPAND SYMBOLS IN MACRO   #########################
+
+sub expand_symbols_in_macro
+{
+    #   Expands symbols in $_ variable, allowing $\( escape sequence
+    #
+    $_ = &expand_symbols ($_);
+    s/\\\(/\(/g;                        #   Replace \( by ( in whole line
+}
+
+
+###########################   COPY LINE TO OUTPUT   ###########################
+
+sub copy_line_to_output
+{
+    if ($output_open) {
+        print OUTPUT "$_\n";
+        $last_blank = 0;
+
+        #   Any action except a .page means we need to reprocess the
+        #   file in an intermediate pass.
+        if (/^\.\s*(\w+)/) {            #   Get word after dot
+            $more_commands = 1 unless $1 eq "page";
+        }
+    }
+}
+
+
+########################   COPY ACTION LINE TO OUTPUT   #######################
+
+sub copy_action_line_to_output
+{
+    if ($output_open) {
+        print OUTPUT "$action_line\n";
+        $had_blank = 0;
+    }
+}
+
+
+########################   COPY LINE TO FINAL OUTPUT   ########################
+
+sub copy_line_to_final_output
+{
+    if ($output_open) {
+        #   Add a newline unless the line ends in '\'
+        if (/^(.*)\\$/) {
+            print OUTPUT "$1";
+        }
+        else {
+            print OUTPUT "$_\n";
+        }
+        $last_blank = 0;
+
+        #   Any action except a .page means we need to reprocess the
+        #   file in an intermediate pass.
+        if (/^\.\s*(\w+)/) {            #   Get word after dot
+            $more_commands = 1 unless $1 eq "page";
+        }
+    }
+}
+
+
+##########################   TAKE INCLUDE FILE NAME   #########################
+
+sub take_include_file_name
+{
+    #   .include `command`      -- include output from command
+    #   .include filename       -- include file first time only
+    #   .include filename!      -- include file in any case
+    #
+    if (/^`([^`]+)`/) {                 #  .include `command`
+        if (open (CMD, "$1|")) {
+            while (<CMD>) {
+                &expand_symbols_in_line;
+                &copy_line_to_output;
+            }
+            #   We tell the dialog to treat this line as a comment,
+            #   since no further action is now needed.
+            &raise_exception ($comment_event);
+            close (CMD);
+        }
+        else {
+            &error ("$me E: ($document $.) can't run command: $!");
+            &raise_exception ($exception_event);
+        }
+    }
+    elsif (/^([^\s!]+)(!)?/) {          #  .include filename[!]
+        if ($file_is_open {$1}) {
+            &error ("$_");
+            &error ("$me E: ($document $.) $1 is already open");
+            &raise_exception ($exception_event);
+        };
+        #   If include file already seen and not forced by !, skip it
+        if ($already_seen {$1} && $2 ne "!") {
+            &raise_exception ($comment_event);
+        }
+        else {
+            #   Save current document name and switch to new document
+            push (@document_stack, $document);
+            $document = $1;
+            $already_seen {$1} = 1;
+        }
+    }
+    else {
+        &syntax_error ("this is not a valid '.include' command");
+    }
+}
+
+
+##########################   HANDLE IGNORE COMMAND   ##########################
+
+sub handle_ignore_command
+{
+    #   .ignore header    - ignore next header
+    #   .ignore header n  - ignore headers Hn and greater
+    #   .ignore pages     - ignore all future .page commands
+    #   .ignore page      - ignore next .page in index table
+    #
+    if (/^header$/) {
+        $ignore_header = 1;
+    }
+    elsif (/^header\s+([0-9]+)$/) {
+        $ignore_level = $1;
+    }
+    elsif (/^pages$/) {
+        $ignore_pages = 1;
+    }
+    elsif (/^page$/) {
+        $ignore_page = 1;
+    }
+    else {
+        &syntax_error ("this is not a valid '.ignore' command");
+    }
+}
+
+
+##########################   CHECK IF IGNORE PAGES   ##########################
+
+sub check_if_ignore_pages
+{
+    $ignore_pages && &raise_exception ($ignore_pages_event);
+}
+
+
+#########################   COLLECT TITLE IF PRESENT   ########################
+
+sub collect_title_if_present
+{
+    #   If the line contains a value between header tags, get that value
+    #   and add it to the @toc table.  We don't check that the tags are
+    #   correct, and we don't handle multiple titles on the same line.
+
+    if (/<H([1-9])[^>]*>(.*)<\/H[1-9]>/i) {
+        unless ($ignore_header || $1 >= $ignore_level) {
+            push (@toc_level, $1);      #   Store header level 1..9
+            push (@toc_title, $2);      #   Store header title text
+            push (@toc_file, $cur_page);
+        }
+        $ignore_header = 0;
+    }
+}
+
+
+#########################   PARSE PAGE TITLE FOR TOC   ########################
+
+sub parse_page_title_for_toc
+{
+    if (&parse_page_command) {
+        push (@page_list,  $cur_page);
+        push (@page_title, $cur_title);
+        &set_symbols_for_new_page;
+    }
+    #   Set $index_ignore if this page is not wanted in index table
+    $index_ignore {$cur_page} = 1 if $ignore_page == 1;
+    $ignore_page = 0;
+}
+
+
+#   Subroutine parses the .page command and sets the symbols PAGE and
+#   TITLE appropriately.  The .page command can take various forms:
+#
+#   .page <filename> = "<title>"    Filename fully specified
+#   .page <filename> = <title>      Filename fully specified
+#   .page "<title>"                 Filename built from $(BASE)$(INC).$(EXT)
+#   .page <title>                   Filename built from $(BASE)$(INC).$(EXT)
+#
+#   Returns 1 if the .page command was parsed okay, else 0.  Sets $cur_page
+#   to the current page filename and $cur_title to the current page title.
+#   Issues a warning if a filename built from $(BASE)$(INC) exceeds 8+3
+#   characters.
+
+sub parse_page_command {
+    if (/^(\S+)\s*=\s*"(.*)"/           #   .page <filename> = "title"
+    ||  /^(\S+)\s*=\s*(.*)/) {          #   .page <filename> = title
+        $cur_page  = $1;                #   Keep current output filename
+        $cur_title = $2;                #   Keep current output filename
+        $cur_page .= ".".&valueof ("EXT")
+            unless $cur_page =~ /\./;
+        &define ("PAGE", $cur_page);
+        &define ("TITLE", $cur_title);
+        $inside_page = 1;               #   Command parsed okay
+    }
+    elsif (/^"(.*)"/                    #   .page "title"
+    ||     /^(.*)/ ) {                  #   .page title
+        $_ = &valueof ("BASE").&valueof ("INC").".".&valueof ("EXT");
+        &expand_symbols_in_line;
+        $cur_page  = $_;
+        $cur_title = $1;
+        &define ("PAGE",  $cur_page);
+        &define ("TITLE", $cur_title);
+        $inside_page = 1;               #   Command parsed okay
+        if ($cur_page =~ /([^.]*).(.*)/) {
+            if ((length ($1) > 8 || length ($2) > 3) && !$basename_warning) {
+                $basename_warning = 1;
+                print "$me W: filename '$cur_page' exceeds 8+3 characters\n";
+            }
+        }
+    }
+    else {
+        &syntax_error ("this is not a valid '.page' command");
+        $inside_page = 0;               #   Command failed
+    }
+    return ($inside_page);
+}
+
+
+sub set_symbols_for_new_page {
+    #   Get symbols for first/last/previous/next pages
+    #   $(...PAGE) is name of file, for HREF
+    #   $(...TITLE) is name of file, for description
+    &define ("FIRST_PAGE",  $page_list  [0]);
+    &define ("FIRST_TITLE", $page_title [0]);
+    &define ("LAST_PAGE",   $page_list  [@page_list - 1]);
+    &define ("LAST_TITLE",  $page_title [@page_title - 1]);
+    if ($page_nbr < @page_list - 1) {
+        &define ("NEXT_PAGE",  $page_list  [$page_nbr + 1]);
+        &define ("NEXT_TITLE", $page_title [$page_nbr + 1]);
+    }
+    else {
+        &define ("NEXT_PAGE",  "");
+        &define ("NEXT_TITLE", "");
+    }
+    if ($page_nbr > 0) {
+        &define ("PREV_PAGE",  $page_list  [$page_nbr - 1]);
+        &define ("PREV_TITLE", $page_title [$page_nbr - 1]);
+    }
+    else {
+        &define ("PREV_PAGE",  "");
+        &define ("PREV_TITLE", "");
+    }
+    $page_nbr++;
+}
+
+
+########################   PARSE PAGE TITLE AND NAME   ########################
+
+sub parse_page_title_and_name
+{
+    if (&parse_page_command) {
+        if ($collect_pages) {
+            push (@page_list,  $cur_page);
+            push (@page_title, $cur_title);
+        }
+    }
+    &set_symbols_for_new_page;
+}
+
+
+##########################   PARSE PAGE TITLE ONLY   ##########################
+
+sub parse_page_title_only
+{
+    #   .page [<filename> =] ["]<title>["]
+    #
+    local ($old_page)  = $cur_page;     #   Save current page name
+    &parse_page_command;                #   Parse .page command
+                                        #     and restore old page name
+    $cur_page = $old_page;
+    &define ("PAGE", $cur_page);
+}
+
+
+###########################   OPEN NEW OUTPUT PAGE   ##########################
+
+sub open_new_output_page
+{
+    #   .page [<filename> =] ["]<title>["]
+    #
+    if (open (OUTPUT, ">$cur_page")) {
+        print "$me I: creating $cur_page...\n"
+            unless $symbols {"SILENT"} == 1;
+        &set_symbols_for_new_page;
+        $output_open = 1;
+    }
+    else {
+        &error ("$me E: ($document $.) can't create $cur_page: $!");
+        &raise_exception ($exception_event);
+    }
+}
+
+
+#########################   ANCHOR TITLE IF PRESENT   #########################
+
+sub anchor_title_if_present
+{
+    #   If the line contains a value between header tags, add an anchor
+    #   tag so that the table of contents can refer to the header.
+    #
+    if (/<H([1-9])(.*)>(.*)<\/H[1-9]>/i) {
+        unless ($ignore_header || $ignore_level <= $1) {
+            $_ = $`."<H$1$2><A NAME=\"TOC".++$header_nbr."\">$3</A></H$1>".$';
+        }
+        $ignore_header = 0;
+    }
+}
+
+
+##########################   OUTPUT HEADER FOR PAGE   #########################
+
+sub output_header_for_page
+{
+    &output_block (*header);
+    @header = @saved_header if defined (@saved_header);
+
+    #   Specific code for fxpre
+    $form_open = 0;                     #   Form not yet opened
+    $fnumber   = 0;                     #   Number of fields in form
+    undef (@do_block);                  #   Keep track of nested .do blocks
+
+    #   Standard JavaScript functions required at start of page
+    print OUTPUT <<".";
+<SCRIPT LANGUAGE="JavaScript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function subform(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+</SCRIPT>
+.
+}
+
+sub output_block {
+    local (*the_block)  = @_;           #   Get reference to argument
+    local ($saved_line) = $_;           #   We manipulate $_
+    local ($line);                      #   Each line in array
+    local ($forlevel) = 0;
+
+    foreach $line (@the_block) {        #   We cannot use $_ directly
+        $_ = $line;                     #     or the array is modified
+        &expand_symbols_in_line unless $for_level;
+        &copy_line_to_output;
+        $for_level++ if /^\.\s*for/;
+        $for_level-- if /^\.\s*endfor/;
+    }
+    $_ = $saved_line;
+}
+
+
+#   Subroutine prepares output format and writes it to the specified
+#   output stream.
+#
+sub format_output {
+    local ($stream, $format) = @_;      #  Get subroutine arguments
+    local ($write_okay);
+    select ($stream);
+    $~ = "$format";
+    eval "write";
+    select (STDOUT);
+    if ($@) {
+        &error ("$me E: ($document $.) can't write $format");
+    }
+}
+
+
+##########################   OUTPUT FOOTER FOR PAGE   #########################
+
+sub output_footer_for_page
+{
+    if ($inside_page) {
+        if ($form_open) {
+            &format_output (OUTPUT, "FORM_END");
+        }
+        #   Position cursor on first input field, if any
+        print OUTPUT <<".";
+<SCRIPT LANGUAGE="JavaScript">
+    if ("#(_focus)" != "jsaction" && document.forms[0].#(_focus))
+        document.forms[0].#(_focus).focus();
+</SCRIPT>
+.
+        &output_block (*footer);
+        @footer = @saved_footer if defined (@saved_footer);
+    }
+}
+
+
+##########################   CLEAR SPECIFIED BLOCK   ##########################
+
+sub clear_specified_block
+{
+    #   .block <name> [local]
+    #
+    /^(\S+)\s*(local)?/;                #   Get name after .block
+    if ($standard_block {$1}) {
+        eval ("*cur_block = *$1");
+        eval ("\@saved_$1 = \@$1")
+            if ($2);                    #   If 'local', save previous
+        undef $user_block;
+        undef @cur_block;
+    }
+    else {                              #   User-defined block
+        $user_block = $1;
+        $user_line  = 0;                #   Line into user block
+    }
+}
+
+
+############################   ADD LINE TO BLOCK   ############################
+
+sub add_line_to_block
+{
+    if (defined ($user_block)) {
+        $user_blocks {$user_block, ++$user_line} .= $_;
+    }
+    else {
+        push (@cur_block, $_);
+    }
+}
+
+
+#########################   ADD ACTION LINE TO BLOCK   ########################
+
+sub add_action_line_to_block
+{
+    #   When we parse an action line we removes the action and leaves
+    #   the action arguments in $_.  So, when we need the original action
+    #   line -- as here -- we use the $action_line that we saved earlier.
+
+    $_ = $action_line;
+    &add_line_to_block;
+}
+
+
+##########################   BUILD SPECIFIED TABLE   ##########################
+
+sub build_specified_table
+{
+    #   .build <block_name> <arguments>
+    #
+    /^(\S+)/;                           #   Get name after .build
+    {
+        $1 eq "toc"     && do { &build_toc_block;    last; };
+        $1 eq "dir"     && do { &build_dir_block;    last; };
+        $1 eq "index"   && do { &build_index_block;  last; };
+        $1 eq "anchor"  && do { &build_anchor_block; last; };
+        defined ($user_blocks {$1, 1})
+                        && do { &build_user_block ($1); last; };
+        &error ("$_");
+        &error ("$me E: ($document $.) undefined block '$1'");
+        &raise_exception ($exception_event);
+    }
+}
+
+#   .build toc
+#
+#   Build table of contents for document, using @toc_open, @toc_entry and
+#   @toc_close blocks.
+
+sub build_toc_block {
+    local ($line);                      #   Index into @toc tables
+    local ($level);                     #   Current indentation level
+    local ($level_base);                #   Minimum indentation level
+    local ($header_nbr);                #   Generate header anchors
+    local ($reference);                 #   HREF for toc entry
+
+    $level =
+    $level_base = $toc_level [0] - 1;
+    $ignore_pages && return;            #   No TOC if we're ignoring pages
+    for ($line = 0; $line < @toc_title; $line++) {
+        #   Close old level in TOC (with @toc_close) if necessary
+        while ($toc_level [$line] < $level) {
+            &output_block (*toc_close);
+            $level--;
+        }
+        #   Open new level in TOC (with @toc_open) if necessary
+        while ($toc_level [$line] > $level) {
+            &output_block (*toc_open);
+            $level++;
+        }
+        $reference = $toc_file [$line] eq $cur_page? "": $toc_file [$line];
+        $reference .= "#TOC".++$header_nbr;
+
+        #   Update the symbols used to build the table of contents
+        &define ("TOC_LEVEL", $level);
+        &define ("TOC_HREF",  $reference);
+        &define ("TOC_TITLE", $toc_title [$line]);
+
+        &output_block (*toc_entry);
+    }
+    while ($level > $level_base) {
+        &output_block (*toc_close);
+        $level--;
+    }
+}
+
+#   .build dir <directory> [<filename>...]
+#
+#   Build one or more lines of directory listing, using @dir_open, @dir_entry,
+#   and @dir_close blocks.  The filename(s) can be complete names (no path),
+#   or regular expressions.  If no filenames are supplied, the entire
+#   directory is read.  Assumes $(LOCAL) in front of the directory name;
+#   places $(SERVER) in front of the HREF name.
+
+sub build_dir_block {
+    local ($dir);                       #   Directory name
+    local ($local_dir);                 #   LOCAL directory name
+    local ($files);                     #   List of files, or empty
+    local (@filelist);                  #   List of file specifications
+    local (@matches);                   #   List of files that match
+
+    #   Check that $(LOCAL) and $(SERVER) are defined
+    unless (defined ($symbols {"LOCAL"})) {
+        &error ("$me E: ($document $.) .define LOCAL is required");
+        &raise_exception ($exception_event);
+    }
+    unless (defined ($symbols {"SERVER"})) {
+        &error ("$me E: ($document $.) .define SERVER is required");
+        &raise_exception ($exception_event);
+    }
+
+    #   .build dir <directory> [<filename>...]
+    #   Get directory name, and optional list of files from .build command
+    ($dir, $files) = /^dir\s+(\S+)\s*(.*)/;
+    $files = "*" if $files eq "";       #   If nothing specified, assume *
+    $dir   =~ s/\\/\//g;                #   Replace any \ by /
+    chop $dir if $dir =~ /\/$/;         #   Remove trailing / if any
+
+    foreach (split (/\s/, $files)) {    #   Flag each file specified
+        if (/^"(.*)"$/) {               #   Quoted filename
+            $_ = $1;                    #     may be regular expression
+        }
+        else {                          #   Convert normal wildcards
+            s/\./\\./g;                 #   . becomes \.
+            s/\+/\\+/g;                 #   + becomes \+
+            s/\?/./g;                   #   ? becomes .
+            s/\*/.*/g;                  #   * becomes .*
+        }
+        push (@filelist, $_);
+    };
+
+    #   Stick $(LOCAL) in front of directory name and expand symbols
+    $_ = $symbols {"LOCAL"}.$dir;
+    &expand_symbols_in_line;
+    $local_dir = $_;
+
+    #   Process the directory
+    if (opendir (DIR, $local_dir)) {
+        #   Process each file in the directory except "." and ".."
+        foreach (grep (!/^\.\.?$/, readdir (DIR))) {
+            #   Look for file or pattern in @filelist (may get slow!)
+            foreach $files (@filelist) {
+                if (/$files/i) {        #   If we have a match, process $_
+                    tr/A-Z/a-z/;        #   Force filename to lowercase
+                    push (@matches, $_);
+                    last;
+                }
+            }
+        }
+        #   Now build the directory listing
+        @matches = sort @matches;
+        &output_block (*dir_open);
+        foreach (@matches) {
+            &build_dir_entry ("$local_dir/$_", $symbols {"SERVER"}."$dir/$_");
+        }
+        &output_block (*dir_close);
+        closedir (DIR);
+    }
+    else {
+        &error ("$me E: ($document $.) can't read directory $local_dir");
+        &raise_exception ($exception_event);
+    }
+}
+
+sub build_dir_entry {
+    local ($lname, $sname) = @_;        #   Get local and server filenames
+    local ($ext) = $lname =~ /(\..*$)/; #   Find extension in filename
+    $ext =~ tr/A-Z/a-z/;                #     and convert to lowercase
+    $ext = ".NONE" if $ext eq "";       #   If no extension, use .NONE
+    local (@stats) = stat ("$lname");   #   [7] = file size, [9] = time
+    local ($size) = @stats [7];
+    local ($sec, $min, $hour, $day, $mon, $year) = localtime (@stats [9]);
+
+    #   Populate symbols and generate @dir_entry block
+    &define ("DIR_HREF", $sname);
+    &define ("DIR_NAME", sprintf ("%-13s", $_));
+    &define ("DIR_EXT",  $ext);
+    &define ("DIR_SIZE", sprintf ("%8d", $size));
+    &define ("DIR_DATE", sprintf ("%2d/%02d/%02d", $year, $mon + 1, $day));
+    &define ("DIR_TIME", sprintf ("%2d:%02d:%02d", $hour, $min, $sec));
+    &output_block (*dir_entry);
+}
+
+#   .build index
+#
+#   Build index for document using @index_entry block.  The index lists
+#   all pages in the document; a kind of summarised table of contents.
+
+sub build_index_block {
+    local ($line);                      #   Index into tables
+
+    $ignore_pages && return;            #   No index if we're ignoring pages
+    &output_block (*index_open);
+    for ($line = 0; $line < @page_list; $line++) {
+        #   Update the symbols used to build the index
+        &define ("INDEX_PAGE",  $page_list  [$line]);
+        &define ("INDEX_TITLE", $page_title [$line]);
+        &output_block (*index_entry)
+            unless $index_ignore { $page_list [$line] } == 1;
+        &output_block (*index)
+            unless $index_ignore { $page_list [$line] } == 1;
+    }
+    &output_block (*index_close);
+}
+
+#   .build anchor <anchor_name>[=title]
+#
+#   Create an anchor definition at the specified point in the document,
+#   and (re)define the anchor variable appropriately.
+
+sub build_anchor_block {
+    #   Get name and title (if any) after ".build anchor"
+    if (/^anchor\s+([^=\s]+)(\s*=\s*(.*))?/) {
+        &define ("ANCHOR", $1);
+        $anchors {$1} = $cur_page;
+        $atitles {$1} = $3 if $3;
+        &output_block (*anchor);
+    }
+    else {
+        &syntax_error ("this is not a valid '.build anchor' command");
+    }
+    @anchor = @saved_anchor if defined (@saved_anchor);
+}
+
+#   .build <user_block_name>
+#
+#   Output the user-defined block of text at the current point in the
+#   document.
+
+sub build_user_block {
+    local ($name) = @_;                 #   Get reference to argument
+    local ($line);                      #   Index into block array
+    local ($forlevel) = 0;
+
+    for ($line = 1; ; $line++) {
+        !defined ($user_blocks {$name, $line}) && last;
+        $_ = $user_blocks {$name, $line};
+        &expand_symbols_in_line unless $for_level;
+        &copy_line_to_output;
+        $for_level++ if /^\.\s*for/;
+        $for_level-- if /^\.\s*endfor/;
+    }
+}
+
+
+##########################   SKIP IF BLOCK IF FALSE   #########################
+
+sub skip_if_block_if_false
+{
+    #   .if <expression>
+    #
+    if (/^(.+)/) {                      #   Get expression into $1
+        $if_level++;                    #   We started a new .if block
+        &skip_conditional_block unless eval ($1);
+    }
+    else {
+        &syntax_error ("this is not a valid '.if' command");
+    }
+}
+
+#   We skip input from the document until we close the current block.  If
+#   the current block started at an .if, it ends with an .else or an
+#   .endif.  If the current block started at an .else, it ends with an
+#   .endif only.  We count down $if_level if we find an .endif.  Note that
+#   the whole .if block must be in the same file.
+
+sub skip_conditional_block {
+    local ($level) = 1;                 #   Current nesting level
+    local ($line)  = $.;                #   Current input line number
+
+    while (<$document>) {               #   Get next line of input
+        $lines_read++;                  #   Count the line
+        if (/^\.\s*if/i) {
+            $level++;                   #   Open indentation level at if
+            $if_level++;
+        }
+        elsif (/^\.\s*endif/i) {        #   Close indentation level at endif
+            $level--;
+            $if_level--;
+        }                               #   .else at top level ends block
+        if ($level == 1 && /\.\s*else/) {
+            $level = 0;
+        }
+        last if $level == 0;            #   End of local block
+    }
+    #   If we ran-out of input, bitch a little
+    if ($level > 0) {
+        &error ("$me E: ($document $line) .endif missing");
+        &raise_exception ($exception_event);
+    }
+}
+
+
+##########################   SKIP ELSE BLOCK ALWAYS   #########################
+
+sub skip_else_block_always
+{
+    &skip_conditional_block;
+}
+
+
+##########################   CLOSE IF BLOCK IF OPEN   #########################
+
+sub close_if_block_if_open
+{
+    if (--$if_level < 0) {
+        &error ("$me E: ($document $.) .endif not expected");
+        &raise_exception ($exception_event);
+    }
+}
+
+
+#########################   REPEAT FOR LOOP CONTENTS   ########################
+
+sub repeat_for_loop_contents
+{
+    #   .for <variable> in `<command>`
+    #   .for <variable> in @<filename>
+    #   .for <variable> in <item> <item>...
+    #   .for <variable> from <start> to <end>
+    #
+    local ($for_counter);
+    local ($for_step);
+
+    undef @for_list;
+    if (/^([A-Za-z0-9-\+\._]+)\s+in\s+`([^`]+)`$/) {
+        if (open (CMD, "$2|")) {
+            while (<CMD>) {
+                chop;
+                &expand_symbols_in_line;
+                push (@for_list, $_);
+            }
+            close (CMD);
+            &do_for_loop ($1, @for_list);
+        }
+        else {
+            &error ("$me E: ($document $.) can't run command: $!");
+            &raise_exception ($exception_event);
+        }
+    }
+    elsif (/^([A-Za-z0-9-\+\._]+)\s+in\s+\@([\S]+)$/) {
+        if (open (LIST, "$2")) {
+            while (<LIST>) {
+                chop;
+                &expand_symbols_in_line;
+                push (@for_list, $_);
+            }
+            close (LIST);
+            &do_for_loop ($1, @for_list);
+        }
+        else {
+            &error ("$me E: ($document $.) can't open $2: $!");
+            &raise_exception ($exception_event);
+        }
+    }
+    elsif (/^([A-Za-z0-9-\+\._]+)\s+in\s*(.*)/) {
+        @for_list = split (/\s/, $2);
+        &do_for_loop ($1, @for_list);
+    }
+    elsif (/^([A-Za-z0-9-\+\._]+)\s+from\s+([0-9]+)\s+to\s+([0-9]+)$/) {
+        $for_step    = $3 > $2? 1: -1;
+        $for_counter = $2;
+        while ($for_counter != $3) {
+            push (@for_list, $for_counter);
+            $for_counter += $for_step;
+        }
+        push (@for_list, $for_counter);
+        &do_for_loop ($1, @for_list);
+    }
+    else {
+        &syntax_error ("this is not a valid '.for' command");
+    }
+}
+
+#   Subroutine generates a .for block as specified.  Any embedded commands
+#   are copied without modification (except variable expansion).  This may
+#   result in extra passes to handle those commands.
+#
+sub do_for_loop {
+    local ($for_var, @for_list) = @_;
+    local ($level) = 1;                 #   Current nesting level
+    local ($line)  = $.;                #   Current input line number
+    local (@for_block);
+    local ($for_item);
+    local ($indent);                    #   Indented .for?
+    local ($index);                     #   Words in line
+
+    while (<$document>) {               #   Get next line of input
+        $lines_read++;                  #   Count the line
+        $level++ if /^\.\s*for/i;       #   We found the end of the .for
+        $level-- if /^\.\s*endfor/i;    #     block when $level is zero
+        last if $level == 0;            #   End of local block
+        chop;                           #   Kill trailing newline
+        push (@for_block, $_);          #   Else store the line
+    }
+    #   If we ran-out of input, bitch a little
+    if ($level > 0) {
+        &error ("$me E: ($document $line) .endfor missing");
+        &raise_exception ($exception_event);
+    }
+    #   Output .for block for each instance in the for loop
+    #   We only expand symbols in the outermost .for loop; if it
+    #   contains further .for loops, these are handled in the next
+    #   pass.  This allows access to $(1)..$(n) inside each loop.
+
+    foreach $for_item (@for_list) {
+        @fields = &shellwords ($for_item);
+        $indent = 0;
+        foreach $line (@for_block) {    #   We cannot use $_ directly
+            $_ = $line;                 #     or the array is modified
+            $indent++ if /^\.for/;
+            $indent-- if /^\.endfor/;
+
+            #   Expand $(1)..$(n) and for_var in line
+            if (!$indent) {
+                for (;;) {
+                    if (/\$\($for_var\)/) {
+                        $_ = $`.$for_item.$';
+                    }
+                    elsif (/\$\(([0-9]+)\)/) {
+                        $_ = $`.$fields [$1 - 1].$';
+                    }
+                    else {
+                        last;
+                    }
+                }
+            }
+            &copy_line_to_output;
+        }
+    }
+}
+
+
+###########################   ECHO TEXT TO CONSOLE   ##########################
+
+sub echo_text_to_console
+{
+    #   .echo [-] <text>
+    #   .echo [-] "<text>"
+    #   .echo [-] '<text>'
+    #
+    /^(-\s+)?/;                         #   Parse .echo command
+    local ($newline) = $1 eq ""? "\n": "";
+
+    $_ = $';                            #   Get text after .echo [-]
+    $_ = $2 if /^(["'])(.*)\1$/;        #   Remove " or ' if any
+    print "$_$newline";                 #   Print text + $newline
+}
+
+
+########################   CHECK IF INTER PASS NEEDED   #######################
+
+sub check_if_inter_pass_needed
+{
+    &raise_exception ($need_inter_pass_event) if $more_commands;
+}
+
+
+########################   STORE LIVELINK DEFINITION   ########################
+
+sub store_livelink_definition
+{
+    #   .livelink xxxx
+    #
+    #   For now, livelinks will never return form data.  This is actually
+    #   possible; generate HREF="javascript:submit('L$lower')".
+    #   However, this behaviour cannot be toggled at runtime, and thus
+    #   breaks the model where JavaScript support can be switched on and
+    #   off.  So, for now, livelinks do not return form data.  PH980120.
+    #
+    local ($lower);
+
+    if (length ($_) > $FORMIO_LIVELINK_MAX) {
+        &syntax_error ("livelink names are limited to 8 characters");
+    }
+    ($lower = $_) =~ tr/A-Z/a-z/;
+
+    &define ($_, "#(uri)&~L$lower=1");
+}
+
+
+###########################   START FORM IF NEEDED   ##########################
+
+sub start_form_if_needed
+{
+    if (!$form_open) {
+        undef %table_names;             #   List of all variable tables
+        undef %field_names;             #   List of all plain fields
+        if ($file_field == 0) {
+            &format_output (OUTPUT, "FORM_START");
+        }
+        else {
+            &format_output (OUTPUT, "FORM_MULTI_START");
+        }
+        $form_open = 1;
+    }
+}
+
+
+#########################   START FIELDS DEFINITION   #########################
+
+sub start_fields_definition
+{
+    #   .fields [compact=yes] [border=yes] [width=xxx]
+
+    undef @field_data;                  #   Clear field list
+    undef @field_type;
+
+    &parse_values ($_);
+    $table_border  = &true  ($values {"border"});
+    $table_compact = &true  (&value ("compact", $symbols {"COMPACT"}));
+    $table_width   = &value ("width", $symbols {"FORM_WIDTH"});
+    $table_attrs   = &value ("attrs", "");
+}
+
+
+##########################   STORE BODY TEXT FIELD   ##########################
+
+sub store_body_text_field
+{
+    chop while /\s$/;                   #   Kill trailing whitespace
+    if ($_) {
+        push (@field_type, "body_text");
+        push (@field_data, $_);
+    }
+}
+
+
+###########################   STORE DO DEFINITION   ###########################
+
+sub store_do_definition
+{
+    push (@field_type, "do");
+    push (@field_data, $_);
+}
+
+
+#########################   STORE END DO DEFINITION   #########################
+
+sub store_end_do_definition
+{
+    push (@field_type, "enddo");
+    push (@field_data, $_);
+}
+
+
+###########################   STORE TEXTUAL FIELD   ###########################
+
+sub store_textual_field
+{
+    push (@field_type, "textual");
+    push (@field_data, $_);
+}
+
+
+#############################   STORE FILE FIELD   ############################
+
+sub store_file_field
+{
+    push (@field_type, "file");
+    push (@field_data, $_);
+}
+
+
+###########################   STORE TEXTBOX FIELD   ###########################
+
+sub store_textbox_field
+{
+    push (@field_type, "textbox");
+    push (@field_data, $_);
+}
+
+
+###########################   STORE NUMERIC FIELD   ###########################
+
+sub store_numeric_field
+{
+    push (@field_type, "numeric");
+    push (@field_data, $_);
+}
+
+
+#############################   STORE DATE FIELD   ############################
+
+sub store_date_field
+{
+    push (@field_type, "date");
+    push (@field_data, $_);
+}
+
+
+#############################   STORE TIME FIELD   ############################
+
+sub store_time_field
+{
+    push (@field_type, "time");
+    push (@field_data, $_);
+}
+
+
+###########################   STORE BOOLEAN FIELD   ###########################
+
+sub store_boolean_field
+{
+    push (@field_type, "boolean");
+    push (@field_data, $_);
+}
+
+
+############################   STORE SELECT FIELD   ###########################
+
+sub store_select_field
+{
+    push (@field_type, "select");
+    push (@field_data, $_);
+}
+
+
+############################   STORE RADIO FIELD   ############################
+
+sub store_radio_field
+{
+    push (@field_type, "radio");
+    push (@field_data, $_);
+}
+
+
+########################   STORE ACTION BUTTON FIELD   ########################
+
+sub store_action_button_field
+{
+    push (@field_type, "action");
+    push (@field_data, $_);
+}
+
+
+#########################   STORE SIMPLE LABEL FIELD   ########################
+
+sub store_simple_label_field
+{
+    #   Since we handle labels like other fields, we fake a label 'name',
+    #   so that the rest of the code -- &parse_field_definition -- will
+    #   not complain.
+    #
+    if (/^"([^"]*)"(.*)/) {
+        $_ = "\"$1\""." noname".++$noname.$2;
+    }
+    push (@field_type, "label");
+    push (@field_data, $_);
+}
+
+
+##########################   END FIELDS DEFINITION   ##########################
+
+sub end_fields_definition
+{
+    local ($field);                     #   Index into @field_data
+    local ($type);                      #   Field type keyword
+    local ($data);                      #   Field data definition
+
+    return if @field_data == 0;         #   Ignore an empty fields block
+
+    $border  = $table_border?  " BORDER=1":                    "";
+    $compact = $table_compact? " CELLPADDING=0 CELLSPACING=0": "";
+    $attrs   = $table_attrs?   " $table_attrs":                "";
+
+    &format_output (OUTPUT, "FIELDS_START");
+    $name_suffix = "";                  #   Not in a table group
+    $have_body_text = 0;                #   Whether we're inside body text
+    $table_row_open = 0;                #   Whether we're inside a table row
+
+    for ($field = 0; $field < @field_data; $field++) {
+        $data = $field_data [$field];
+        $type = $field_type [$field];
+
+        if ($type eq "body_text") {
+            $lalign = &value ("lalign", $symbols {"LALIGN"});
+            $lalign =~ tr/a-z/A-Z/;
+            $valign = &value ("valign", $symbols {"VALIGN"});
+            $valign =~ tr/a-z/A-Z/;
+
+            if ($table_row_open && !$have_body_text) {
+                &format_output (OUTPUT, "CLOSE_FIELD");
+                $table_row_open = 0;
+            }
+            &create_body_text_field ($data);
+        }
+        elsif ($type eq "do") {
+            $_ = $data;
+            &start_do_definition;
+        }
+        elsif ($type eq "enddo") {
+            &end_do_definition;
+        }
+        elsif (&parse_field_definition ($data)) {
+            #   Get values for keywords that apply to all fields
+            $fattr  = &value ("attr", "INPUT");
+            $fattr  =~ tr/a-z/A-Z/;
+            $falign = &value ("align",  $symbols {"ALIGN"});
+            $falign =~ tr/a-z/A-Z/;
+            $lalign = &value ("lalign", $symbols {"LALIGN"});
+            $lalign =~ tr/a-z/A-Z/;
+            $valign = &value ("valign", $symbols {"VALIGN"});
+            $valign =~ tr/a-z/A-Z/;
+            if ($symbols {"DATA_WIDTH"}) {
+                $fwidth = " WIDTH=\"".$symbols {"DATA_WIDTH"}."\"";
+            }
+            else {
+                $fwidth = "";
+            }
+            $fwrap = &true (&value ("wrap", 1))? "": " NOWRAP";
+
+            #   Output label on same line or new line, as required
+            if (&true ($values {"join"})) {
+                if ($flabel) {
+                    #   Prefix with couple of spaces if it looks like text
+                    $flabel = "&nbsp;&nbsp;$flabel&nbsp;&nbsp;"
+                        if $flabel =~ /^(<[^>]>)?\w\w/;
+                    $fnumber++;         #   Count label as field
+                    &format_output (OUTPUT, "LABEL_SAME_LINE")
+                }
+            }
+            else {
+                &format_output (OUTPUT, "CLOSE_FIELD")
+                    if ($table_row_open);
+                if ($flabel) {
+                    #   Prefix with couple of spaces if it looks like text
+                    $flabel .= "&nbsp;&nbsp;";
+                    $fnumber++;         #   Count label as field
+                    &format_output (OUTPUT, "LABEL_NEW_LINE");
+                }
+                else {
+                    &format_output (OUTPUT, "LABEL_NEW_LINE_EMPTY");
+                }
+            }
+            #   Call create_xxx_field subroutine
+            $command = "&create_".$type."_field ()";
+            eval $command;
+            $have_body_text = 0;
+            print OUTPUT $values {"notes"}."\n"
+                if defined ($values {"notes"});
+            $table_row_open = 1;
+            $field_names {$fname} = 1;
+        }
+    }
+    &format_output (OUTPUT, "CLOSE_FIELD")
+        if ($table_row_open);
+    &format_output (OUTPUT, "FIELDS_END");
+}
+
+
+#   Subroutine parses a field definition of this format:
+#   {"label"|'label'} [name] [keyword=value]...
+#   Sets $flabel and $fname.
+#   All keywords are placed into the associated array %values.
+#   Returns 1 if okay, 0 if there was a syntax error.
+#   Formats $flattr with tags if lattr= was specified.
+#   Formats $ffattr with tags if fattr= was specified.
+#
+sub parse_field_definition {
+    local ($_) = @_;                    #   Get current line to work with
+
+    if (/^"([^"]*)"\s*(\S+)?/
+    ||  /^'([^']*)'\s*(\S+)?/) {
+        $flabel = $1;                   #   Get label, may be empty
+        if ($2) {                       #   Get name
+            &parse_values ($');         #   Parse remainder of line
+            $fname = $2.$name_suffix;
+            &check_name ($fname);       #   Check field name is valid
+            $flattr = &value ("lattr", $symbols {"LATTR"});
+            $ffattr = &value ("fattr", "");
+            1;                          #   No errors
+        }
+        else {
+            $action_line = $_;
+            &syntax_error ("field name expected after label");
+            0;                          #   Syntax error
+        }
+    }
+    else {
+        $action_line = $_;
+        &syntax_error ("cannot find field label and name");
+        0;                              #   Syntax error
+    }
+}
+
+#   Subroutine parses a line in this format:
+#   [keyword=value]...
+#   All keywords are placed into the associated array %values.
+#   Returns 1 if okay, 0 if there was a syntax error.
+#
+sub parse_values {
+    local ($_) = @_;                    #   Get current line to work with
+
+    undef %values;                      #   Clear values array
+    $action_line = $_;
+    while ($_) {                        #   Parse line until finished
+        if (/^\s*(\w+)="([^"]*)"/       #     name="value"
+        ||  /^\s*(\w+)='([^']*)'/       #     name='value'
+        ||  /^\s*(\w+)=(\S+)/) {        #     name=value
+            $_ = $1;                    #   Get keyword name
+            tr/A-Z/a-z/;                #     in lowercase
+            $values {$_} = $2;          #   Store keyword=value
+            $_ = $';                    #   Remainder of line
+        }
+        else {
+            &syntax_error ("cannot parse field values in '$_'");
+            return (0);                 #   Syntax error
+        }
+    }
+    1;                                  #   No errors
+}
+
+#   Checks that argument conforms to name rules: e.g. letter followed by
+#   letters, digits, or embedded _ or -.  Displays message and raises
+#   exception if there is an error.
+#
+sub check_name {
+    local ($name) = @_;                 #   Get subroutine arguments
+
+    if ($name !~ /^[A-Za-z]([A-Za-z0-9_-]*[A-Za-z0-9])?$/) {
+        $action_line = $_;
+        &syntax_error ("name must be letters, digits, and embedded '_', '-'");
+    }
+}
+
+#   Returns 1 if argument is yes, true, or 1.  Ignores case and tests
+#   only the first letter of the argument.  Returns 0 if the argument
+#   is false.
+#
+sub true {
+    local ($_) = @_;
+    tr/A-Z/a-z/;
+    (/^y/ || /^t/ || /^1$/) && return 1;
+    return 0;
+}
+
+sub create_body_text_field {
+    &format_output (OUTPUT, "BODY_TEXT_FIELD")
+        unless $table_row_open;
+    print OUTPUT "@_\n";
+    $table_row_open = 1;
+    $have_body_text = 1;
+}
+
+sub create_textual_field {
+    #   .textual "label" <name> ...
+
+    allow ("max", "upper", "value", "size");
+    
+    $fmax   = &value ("max", "?");
+    $fupper = &true  ($values {"upper"});
+    $fvalue = $values {"value"};
+    $fsize  = &value ("size", length ($fvalue));
+    $fsize  = 80 if $fsize == 0;
+    $fnumber++;                         #   $fnumber is 1..n
+    &format_fvalue_string;
+    &format_output (OUTPUT, "TEXTUAL_FIELD");
+}
+
+
+#   Subroutine flags any keywords that are not in the list
+#
+sub allow {
+    undef %keywords;
+
+    #   Allowed for all field types
+    $keywords {"attr"}   = 1;
+    $keywords {"lattr"}  = 1;
+    $keywords {"fattr"}  = 1;
+    $keywords {"align"}  = 1;
+    $keywords {"lalign"} = 1;
+    $keywords {"valign"} = 1;
+    $keywords {"wrap"}   = 1;
+    $keywords {"join"}   = 1;
+    $keywords {"span"}   = 1;
+    $keywords {"width"}  = 1;
+    $keywords {"notes"}  = 1;
+    
+    foreach $name (@_) {
+        $keywords {$name} = 1;
+    }
+
+    while (($key, $value) = each %values) {
+        if ($key =~ /^[0-9]+$/ && $keywords {"*num"} == 1) {
+            #   Do nothing 
+        }
+	    elsif ($keywords {$key} != 1) {
+	        syntax_error ("Undefined keyword: $key=$value");
+        }
+    }
+}
+
+
+#   Subroutine ensures that any < and > characters in $fvalue are
+#   replaced by their HTML metacharacters.
+#
+sub format_fvalue_string {
+    $fvalue =~ s/</&lt;/g;
+    $fvalue =~ s/>/&gt;/g;
+}
+
+
+sub create_file_field {
+    #   .file "label" <name> ...
+
+    local ($name) = $fname;
+    local ($attr) = $fattr;
+    local ($old_number) = ++$fnumber;
+
+    allow ("max", "value", "size");
+
+    $fmax   = &value ("max", "?");
+    $fupper = 0;
+    $fvalue = $values {"value"};
+    $fsize  = &value ("size", length ($fvalue));
+    $fsize  = 10 if $fsize == 0;
+    $fnumber = $fnumber."_tmp";                     #   $fnumber is 1..n
+    $fname  = $fname."_tmp";
+    $fattr  = "HIDDEN";
+    &format_fvalue_string;
+    &format_output (OUTPUT, "TEXTUAL_FIELD");
+    $fname  = $name;
+    $fattr  = $attr;
+    $fnumber = $old_number;                       #   $fnumber is 1..n
+
+    &format_output (OUTPUT, "FILE_FIELD");
+}
+
+#   Return value for keyword, or default value
+#
+sub value {
+    local ($key, $default) = @_;
+    return ($values {$key})
+        if (defined ($values {$key}));
+    return ($default);
+}
+
+sub create_textbox_field {
+    #   .textbox "label" <name> ..
+
+    allow ("rows", "cols", "max", "upper", "value");
+
+    $frows  = &value ("rows", 4);
+    $fcols  = &value ("cols", 30);
+    $fmax   = &value ("max", "?");
+    $fupper = &true  ($values {"upper"});
+    $fvalue = $values {"value"};
+    $fnumber++;                         #   $fnumber is 1..n
+    &format_fvalue_string;
+    &format_output (OUTPUT, "TEXTBOX_FIELD");
+}
+
+sub create_numeric_field {
+    #   .numeric "label" <name> ...
+
+    allow ("size", "max", "sign", "decs", "decfmt", "fill", "blank", "comma", "value");
+
+    $fsize   = &value ("size",     8);
+    $fmax    = &value ("max",    "?");
+    $fsign   = &value ("sign",   "?");
+    $fdecs   = &value ("decs",   "0");
+    $fdecfmt = &value ("decfmt", "?");
+    $ffill   = &value ("fill",   "?");
+    $fblank  = &true  ($values {"blank"});
+    $fcomma  = &true  ($values {"comma"});
+    $fvalue  = $values {"value"};
+    $fnumber++;                         #   $fnumber is 1..n
+    &format_output (OUTPUT, "NUMERIC_FIELD");
+}
+
+sub create_date_field {
+    #   .date "label" <name> ...
+
+    allow ("size", "max", "picture", "show", "format", "year", "month", "day", "value");
+
+    $fsize    = 12;
+    $fmax     = 20;
+    $fpicture = &value ("picture", "");
+    $fshow    = &value ("show",    "?");
+    $fformat  = &value ("format",  "?");
+    $fyear    = &value ("year",    "?");
+    $fmonth   = &value ("month",   "?");
+    $fday     = &value ("day",     "?");
+    $fvalue   = $values {"value"};
+    $fnumber++;                         #   $fnumber is 1..n
+    &format_output (OUTPUT, "DATE_FIELD");
+}
+
+sub create_time_field {
+    #   .time "label" <name> ...
+
+    allow ("size", "max", "picture", "value");
+
+    $fmax     = 20;
+    $fsize    = &value ("size",     8);
+    $fpicture = &value ("picture", "hh:mm:ss");
+    $fvalue   = $values {"value"};
+    $fnumber++;                         #   $fnumber is 1..n
+    &format_output (OUTPUT, "TIME_FIELD");
+}
+
+sub create_boolean_field {
+    #   .boolean "label" <name> ...
+
+    allow ("value", "true", "false");
+
+    $fvalue = &value ("value", 0);
+    $ftrue  = &value ("true",  "yes");
+    $ffalse = &value ("false", "no");
+    $fnumber++;                         #   $fnumber is 1..n
+    &format_output (OUTPUT, "BOOLEAN_FIELD");
+}
+
+sub create_select_field {
+    #   .select "label" <name> <values>...
+
+    local ($option_nbr);                #   Option 1..N
+
+    allow ("size", "value", "type", "change", "*num");
+
+    $fsize   = &value ("size",      0);
+    $fvalue  = &value ("value",     0);
+    $ftype   = &value ("type",    "?");
+    $fchange = &value ("change", "no");
+    $fnumber++;                         #   $fnumber is 0..n
+    &build_fvalue_list;
+    $fvalue_0 = &value ("0", "No selection");
+    &format_fvalue_string;
+    &format_output (OUTPUT, "SELECT_HEAD");
+    for ($option_nbr = 1; defined $values {$option_nbr}; $option_nbr++) {
+        $option_value = $values {$option_nbr};
+        &format_output (OUTPUT, "SELECT_ENTRY");
+        $fvalue = "";
+    }
+    &format_output (OUTPUT, "SELECT_FOOT");
+}
+
+sub create_radio_field {
+    #   .radio "label" <name> <1=value> <2=value>...
+
+    local ($option_nbr);                #   Option 1..N
+
+    allow ("column", "value", "type", "change", "*num");
+
+    $fvalue  = &value ("value",     0);
+    $fcolumn = &true  ($values {"column"});
+    $ftype   = &value ("type",    "?");
+    $fchange = &value ("change", "no");
+    $fnumber++;                         #   $fnumber is 1..n
+    &build_fvalue_list;
+    $fvalue_0 = &value ("0", "No selection");
+    &format_fvalue_string;
+    &format_output (OUTPUT, "RADIO_HEAD");
+
+    for ($option_nbr = 1; defined $values {$option_nbr}; $option_nbr++) {
+        #   If necessary, align radio buttons vertically after first one
+        if (&true ($values {"column"}) && $option_nbr > 1) {
+            $radio_break = "<BR>";
+        }
+        else {
+            $radio_break = "";
+        }
+        $option_value = $values {$option_nbr};
+        &format_output (OUTPUT, "RADIO_ENTRY");
+        $fvalue = "";
+    }
+    &format_output (OUTPUT, "RADIO_FOOT");
+}
+
+#   Subroutine builds $fvalue_list holding the set of values for the radio
+#   or select field.
+#
+sub build_fvalue_list {
+    $fvalue_list = "";
+    for ($option_nbr = 1; defined $values {$option_nbr}; $option_nbr++) {
+        $fvalue_list .= " " if $fvalue_list;
+        $fvalue_list .= $option_nbr.'="'.$values {$option_nbr}.'"';
+    }
+}
+
+sub create_action_field {
+    #   .action "label" <name> <values> ...
+
+    local ($type);
+
+    allow ("type", "event", "value", "href", "rollover", "width", "height", "confirm");
+
+    $type      = &value ("type", "button");
+    $fevent    = &value ("event",     "");
+    $fvalue    = &value ("value",     $fname);
+    $fhref     = &value ("href",      "#");
+    $frollover = &value ("rollover",  "");
+    $fconfirm  = &value ("confirm",   "");
+    &format_fvalue_string;
+
+    #   Actions don't need a unique name if they have a value
+    #   If the user duplicated the action name, un-duplicate it.
+    if (defined ($values {"value"}) && defined ($actions {$fname})) {
+        $filler = $filler + 1;
+        $fname  = $fname . $filler;
+    }
+    $actions {$fname} = 1;
+
+    if ($fevent eq "") {
+        &syntax_error ("event=xxx must be specified for actions");
+    }
+    if ($type eq "button") {
+        &format_output (OUTPUT, "ACTION_FIELD_BUTTON");
+    }
+    elsif ($type eq "image") {
+        $fwidth  = &value ("width",  &image_width  ($fvalue));
+        $fheight = &value ("height", &image_height ($fvalue));
+        $fwidth  = "?" if $fwidth  == 0;
+        $fheight = "?" if $fheight == 0;
+        &format_output (OUTPUT, "ACTION_FIELD_IMAGE");
+    }
+    elsif ($type eq "plain") {
+        &format_output (OUTPUT, "ACTION_FIELD_PLAIN");
+    }
+    else {
+        &syntax_error ("invalid action type '$type'");
+    }
+}
+
+
+#   Subroutine returns width of GIF or JPG image, if found, else 0
+#
+sub image_width {
+    local ($_) = @_;                    #   Get arguments
+    local ($hi, $lo);
+
+    if (-e && (/\.gif/ || /\.jpg/)) {
+        open (IMAGE, $_) || die "Can't read $_: $!";
+        if (/\.gif/) {
+            seek (IMAGE, 6, 0);         #   Width is at bytes 6 and 7 (lohi)
+            read (IMAGE, $lo, 1);
+            read (IMAGE, $hi, 1);
+        }
+        elsif (/\.jpg/) {
+            seek (IMAGE, 165, 0);       #   Width is at bytes 165, 166 (hilo)
+            read (IMAGE, $hi, 1);
+            read (IMAGE, $lo, 1);
+        }
+        return (ord ($hi) * 256 + ord ($lo));
+        close (IMAGE);
+    }
+    else {
+        return (0);
+    }
+}
+
+
+#   Subroutine returns height of GIF or JPG image, if found, else 0
+#
+sub image_height {
+    local ($_) = @_;                    #   Get arguments
+    local ($hi, $lo);
+
+    if (-e && (/\.gif/ || /\.jpg/)) {
+        open (IMAGE, $_) || die "Can't read $_: $!";
+        if (/\.gif/) {
+            seek (IMAGE, 8, 0);         #   Height is at bytes 8 and 9 (lohi)
+            read (IMAGE, $lo, 1);
+            read (IMAGE, $hi, 1);
+        }
+        elsif (/\.jpg/) {
+            seek (IMAGE, 163, 0);       #   Height is at bytes 163, 164 (hilo)
+            read (IMAGE, $hi, 1);
+            read (IMAGE, $lo, 1);
+        }
+        return (ord ($hi) * 256 + ord ($lo));
+        close (IMAGE);
+    }
+    else {
+        return (0);
+    }
+}
+
+
+sub create_label_field {
+    #   .label "text"
+
+    #   No field output for a label field
+}
+
+
+########################   BUILD ACTION BUTTON FIELD   ########################
+
+sub build_action_button_field
+{
+    #   Output action outside fields block
+
+    if (&parse_field_definition ($_)) {
+        #   We only start a form if needed for real buttons, not image
+        #   or hyperlink actions.
+        #
+        &start_form_if_needed
+            if &value ("type", "button") eq "button";
+        &create_action_field;
+    }
+}
+
+
+##########################   START TABLE DEFINITION   #########################
+
+sub start_table_definition
+{
+    #   .table [type=variable] rows=<number> name=<name> ...
+    #   .table type=fixed rows=<number> ...
+
+    undef @field_data;                  #   Clear field list
+    undef @field_type;
+    &parse_values ($_);
+
+    allow ("rows", "type", "name", "border", "compact", "width", "attrs");
+
+    $table_rows    = &value ("rows", "");
+    $table_type    = &value ("type", "variable");
+    $table_name    = &value ("name", "");
+    $table_border  = &true  ($values {"border"});
+    $table_compact = &true  (&value ("compact", $symbols {"COMPACT"}));
+    $table_width   = &value ("width", "100%");
+    $table_attrs   = &value ("attrs", "");
+
+    &syntax_error ("rows= required for .table definitions")
+        unless $table_rows;
+
+    if ($table_type eq "variable") {
+        if ($table_name) {
+            $table_names {$table_name} = $table_rows;
+        }
+        else {
+            &syntax_error ("name= required for variable tables")
+        }
+    }
+    elsif ($table_type eq "fixed") {
+        &syntax_error ("name= not used for fixed tables")
+            if $table_name;
+    }
+    else {
+        &syntax_error ("invalid .table command syntax");
+    }
+}
+
+
+###########################   END TABLE DEFINITION   ##########################
+
+sub end_table_definition
+{
+    local ($field);                     #   Index into @field_data
+    local ($type);                      #   Field type keyword
+    local ($data);                      #   Field data definition
+    local ($fixvar);                    #   Type of table to create
+
+    $border  = $table_border?  " BORDER=1":                    "";
+    $compact = $table_compact? " CELLPADDING=0 CELLSPACING=0": "";
+    $attrs   = $table_attrs?   " $table_attrs":                "";
+
+    $fixvar = $table_type eq "fixed"? "FIX": "VAR";
+    &format_output (OUTPUT, $fixvar."_TABLE_START");
+
+    #   Format field titles
+    &format_output (OUTPUT, $fixvar."_TABLE_TITLE_HEAD");
+    $name_suffix = "";
+    $spanning = 0;                      #   Column spanning indicator
+
+    for ($field = 0; $field < @field_data; $field++) {
+        $data = $field_data [$field];
+        if (&parse_field_definition ($data)) {
+            $lalign = &value ("lalign", $symbols {"TLALIGN"});
+            $lalign =~ tr/a-z/A-Z/;
+            $valign = &value ("valign", $symbols {"TVALIGN"});
+            $valign =~ tr/a-z/A-Z/;
+            $fwidth = "";
+            if (&value ("width", 0)) {
+                $fwidth = "$fwidth WIDTH=\"".&value ("width", 0)."\"";
+            }
+            if (&value ("span", 0)) {
+                $spanning = &value ("span", 0);
+                $fwidth = "$fwidth COLSPAN=$spanning";
+                $spanning--;
+                if ($flabel) {
+                    $fnumber++;         #   Count label as field
+                    &format_output (OUTPUT, $fixvar."_TABLE_TITLE");
+                }
+                else {
+                    &format_output (OUTPUT, $fixvar."_TABLE_TITLE_EMPTY");
+                }
+            }
+            elsif ($spanning > 0) {
+                $spanning--;
+            }
+            else {
+                if ($flabel) {
+                    $fnumber++;         #   Count label as field
+                    &format_output (OUTPUT, $fixvar."_TABLE_TITLE");
+                }
+                else {
+                    &format_output (OUTPUT, $fixvar."_TABLE_TITLE_EMPTY");
+                }
+            }
+        }
+    }
+    &format_output (OUTPUT, $fixvar."_TABLE_TITLE_FOOT");
+
+    #   Format field rows
+    for ($row = 0; $row < $table_rows; $row++) {
+        &format_output (OUTPUT, $fixvar."_TABLE_ITEM_HEAD");
+        $name_suffix = "_".($row + 1)
+            if $table_type eq "fixed";
+        for ($field = 0; $field < @field_data; $field++) {
+            $data = $field_data [$field];
+            $type = $field_type [$field];
+
+            if ($type eq "body_text") {
+                &create_body_text_field ($data);
+            }
+            elsif (&parse_field_definition ($data)) {
+                $fattr  = &value ("attr", "INPUT");
+                $fattr  =~ tr/a-z/A-Z/;
+                $falign = &value ("align",  $symbols {"TALIGN"});
+                $falign =~ tr/a-z/A-Z/;
+                $valign = &value ("valign", $symbols {"TVALIGN"});
+                $valign =~ tr/a-z/A-Z/;
+                $fwrap  = &true (&value ("wrap", 1))? "": " NOWRAP";
+
+                &format_output (OUTPUT, $fixvar."_TABLE_ITEM_START");
+                if ($type eq "textual") {
+                    &create_textual_field ($data);
+                }
+                elsif ($type eq "file") {
+                    &create_file_field    ($data);
+                }
+                elsif ($type eq "textbox") {
+                    &create_textbox_field ($data);
+                }
+                elsif ($type eq "numeric") {
+                    &create_numeric_field ($data);
+                }
+                elsif ($type eq "date") {
+                    &create_date_field    ($data);
+                }
+                elsif ($type eq "time") {
+                    &create_time_field    ($data);
+                }
+                elsif ($type eq "boolean") {
+                    &create_boolean_field ($data);
+                }
+                elsif ($type eq "radio") {
+                    &create_radio_field   ($data);
+                }
+                elsif ($type eq "select") {
+                    &create_select_field  ($data);
+                }
+                elsif ($type eq "action") {
+                    &create_action_field  ($data);
+                }
+                elsif ($type eq "label") {
+                    &create_label_field   ($data);
+                }
+                print OUTPUT $values {"notes"}."\n"
+                    if defined ($values {"notes"});
+                &format_output (OUTPUT, $fixvar."_TABLE_ITEM_END");
+            }
+        }
+        &format_output (OUTPUT, $fixvar."_TABLE_ITEM_FOOT");
+        last if $table_type eq "variable";
+    }
+    &format_output (OUTPUT, $fixvar."_TABLE_END");
+    $name_suffix = "";
+}
+
+
+#   Subroutine parses a field label with this format:
+#   {"label"|'label'} ...
+#   Sets $flabel.
+#   Returns 1 if okay, 0 if there was a syntax error.
+
+sub parse_field_label {
+    local ($_) = @_;                    #   Get argument for subroutine
+
+    if (/^"([^"]*)"/
+    ||  /^'([^']*)'/) {
+        $flabel = $1;
+        1;                              #   No errors
+    }
+    else {
+        $action_line = $_;
+        &syntax_error ("cannot find field label in line");
+        0;                              #   Syntax error
+    }
+}
+
+
+###########################   START DO DEFINITION   ###########################
+
+sub start_do_definition
+{
+    #   .do if <name> [value=<number>]
+    #   .do unless <name> [value=<number>]
+    #   .do repeat <name> rows=<rows>
+    if (/if\s+(\S+)(\s+value=(\S+))?/i) {
+        $fname  = $1;
+        $fvalue = $3? $3: "1";
+        &format_output (OUTPUT, "DO_START_IF");
+        push (@do_block, "DO_END_IF");
+    }
+    elsif (/unless\s+(\S+)(\s+value=(\S+))?/i) {
+        $fname  = $1;
+        $fvalue = $3? $3: "1";
+        &format_output (OUTPUT, "DO_START_UNLESS");
+        push (@do_block, "DO_END_UNLESS");
+    }
+    elsif (/repeat\s+(\S+)\s+rows=(\S+)/i) {
+        $fname = $1;
+        $frows = $2;
+        &format_output (OUTPUT, "DO_START_REPEAT");
+        push (@do_block, "DO_END_REPEAT");
+    }
+    else {
+        &syntax_error ("invalid .do command syntax");
+    }
+}
+
+
+############################   END DO DEFINITION   ############################
+
+sub end_do_definition
+{
+    #   .enddo
+
+    $_ = pop (@do_block);
+    if ($_) {
+        &format_output (OUTPUT, $_);
+    }
+    else {
+        &syntax_error (".enddo not expected here");
+    }
+}
+
+
+#########################   BUILD SIMPLE INDEX FIELD   ########################
+
+sub build_simple_index_field
+{
+    #   .index <name> [value=<number>]
+
+    if (/(\S+)(\s+value=(\S+))?/i) {
+        $fname  = $1;
+        $fvalue = $3? $3: "1";
+        &format_output (OUTPUT, "INDEX_FIELD");
+        $field_names {$fname} = 1;
+    }
+    else {
+        &syntax_error ("invalid .index command syntax");
+    }
+}
+
+
+#########################   BUILD TABLE INDEX FIELDS   ########################
+
+sub build_table_index_fields
+{
+    foreach $key (keys (%table_names)) {
+        if (!defined ($field_names {$key})) {
+            $fname  = $key;
+            $fvalue = $table_names {$key};
+            &format_output (OUTPUT, "INDEX_FIELD");
+        }
+    }
+    undef %table_names;
+    undef %field_names;
+}
+
+
+############################   GENERATE CONSTANTS   ###########################
+
+sub generate_constants
+{
+    foreach (keys (%constants)) {
+        $fname = $_;
+        $fvalue = $constants {$fname};
+        &format_output (OUTPUT, "CONSTANT");
+    }
+}
+
+
+#########################   SAVE DOCUMENT PAGE LIST   #########################
+
+sub save_document_page_list
+{
+    #   Log all page filenames in $main_document.log
+    $pagefile = &basename ($main_document).".log";
+
+    if (open (PAGELIST, ">$pagefile")) {
+        print PAGELIST "#  List of pages in $main_document\n";
+        print PAGELIST "#  Generated by $me on ".$symbols {"DATE"}."\n";
+        for ($line = 0; $line < @page_list; $line++) {
+            print PAGELIST $page_list [$line]."\n";
+        }
+        close (PAGELIST);
+    }
+    else {
+        print "$me E: can't create $pagefile: $!";
+        &raise_exception ($exception_event);
+    }
+}
+
+#   Return filename, without extension
+
+sub basename {
+    local ($name) = @_;                 #   Get argument
+    $name =~ s/\..*//;                  #   Remove extension, if any
+    return ($name);
+}
+
+
+#######################   SIGNAL INVALID WITHIN TABLE   #######################
+
+sub signal_invalid_within_table
+{
+    &syntax_error ("not a valid action within a .table");
+}
+
+
+#########################   SIGNAL END NOT EXPECTED   #########################
+
+sub signal_end_not_expected
+{
+    &syntax_error ("end of file not expected");
+}
+
+
+#########################   REJECT TEXT INSIDE TABLE   ########################
+
+sub reject_text_inside_table
+{
+    &syntax_error ("text not allowed inside .table");
+}
+
+
+###########################   SIGNAL OUTSIDE FIELD   ##########################
+
+sub signal_outside_field
+{
+    &syntax_error ("not valid outside .fields or .table block");
+}
+
+
+#######################   SIGNAL INVALID INSIDE FIELDS   ######################
+
+sub signal_invalid_inside_fields
+{
+    &syntax_error ("not valid inside .fields or .table block");
+}
+
+
+#######################   SIGNAL INVALID INSIDE TABLE   #######################
+
+sub signal_invalid_inside_table
+{
+    &syntax_error ("not valid inside .table block");
+}
+
+
+########################   SIGNAL DOCUMENT PROCESSED   ########################
+
+sub signal_document_processed
+{
+    print "$me I: $lines_read lines processed\n"
+        unless $symbols {"SILENT"} == 1;
+}
+
+
+#######################   SIGNAL UNEXPECTED END BLOCK   #######################
+
+sub signal_unexpected_end_block
+{
+    &syntax_error (".endblock not expected");
+}
+
+
+########################   SIGNAL UNEXPECTED END FOR   ########################
+
+sub signal_unexpected_end_for
+{
+    &syntax_error (".endfor not expected");
+}
+
+
+#########################   SIGNAL INTERNAL FAILURE   #########################
+
+sub signal_internal_failure
+{
+    &syntax_error ("unexpected command");
+}
+
+
+############################   CLOSE THE DOCUMENT   ###########################
+
+sub close_the_document
+{
+    #   Close current document, and see if we can unstack a level
+    #
+    close ($document);
+    undef $file_is_open {$document};
+
+    if (@document_stack > 0) {
+        $document = pop (@document_stack);
+        &raise_exception ($finished_include_event);
+    }
+}
+
+
+###########################   CLEAN UP WORK FILES   ###########################
+
+sub clean_up_work_files
+{
+    foreach (@work_files) {
+        unlink unless $debug_mode;
+    }
+}
+
+
+############################   GET EXTERNAL EVENT   ###########################
+
+sub get_external_event
+{
+}
+
+
+##########################   TERMINATE THE PROGRAM    #########################
+
+sub terminate_the_program
+{
+    $the_next_event = $terminate_event;
+    close (ERRORS);
+    unlink ("errors.lst") unless ($have_errors == 1);
+}
+
+

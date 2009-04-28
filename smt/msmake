@@ -1,0 +1,212 @@
+#
+#   Boom make file for SMT 2.80
+#   Generated from standard.pwl on 2004/07/22
+#   See www.imatix.com for more information.
+#   Copyright (c) 1991-2003 iMatix Corporation
+#
+
+#   Default values for object, library, and executable extensions.
+#
+OBJ = .obj
+LIB = .lib
+EXE = .exe
+
+#   Reset the suffixes that will be considered to just our own list.
+#
+#   Unix make programs use the .SUFFIXES psuedo rule for this
+
+.SUFFIXES:
+.SUFFIXES: $(EXE) $(LIB) $(OBJ) .c .d .i .l
+
+#   Objects depend on source files with the same name; and are compiled
+#   with the iMatix c script without any arguments.
+#
+.c$(OBJ):
+	c -q $<
+#
+#   Default rule -- all depends on everything.
+#   We do this so that we can define the rule at the end.
+#
+all: everything
+#
+#   Dependencies
+#
+libsmt$(LIB): smtecho$(OBJ) smtftpc$(OBJ) smtftpd$(OBJ) smtftpl$(OBJ) smthlog$(OBJ) smthttp$(OBJ) smthttpl$(OBJ) smtlib$(OBJ) smtlog$(OBJ) smtoper$(OBJ) smtpipe$(OBJ) smtrdns$(OBJ) smtrdnsl$(OBJ) smtsimu$(OBJ) smtslot$(OBJ) smtsock$(OBJ) smttime$(OBJ) smttran$(OBJ) smttst1$(OBJ) smttst2$(OBJ) smttst3$(OBJ) smtupmc$(OBJ) smtupmd$(OBJ) xiddns$(OBJ) xierror$(OBJ) xiredir$(OBJ) xiimap$(OBJ) xilrwp$(OBJ) xisuper$(OBJ) xixlog$(OBJ) xixssi$(OBJ) xixxml$(OBJ) smtmsg$(OBJ) smtsslm$(OBJ) xixlogm$(OBJ) 
+	c -q -r libsmt$(LIB) smtecho$(OBJ) smtftpc$(OBJ) smtftpd$(OBJ) smtftpl$(OBJ) smthlog$(OBJ) smthttp$(OBJ) smthttpl$(OBJ) smtlib$(OBJ) smtlog$(OBJ) smtoper$(OBJ) smtpipe$(OBJ) smtrdns$(OBJ) smtrdnsl$(OBJ) smtsimu$(OBJ) smtslot$(OBJ) smtsock$(OBJ) smttime$(OBJ) smttran$(OBJ) smttst1$(OBJ) smttst2$(OBJ) smttst3$(OBJ) smtupmc$(OBJ) smtupmd$(OBJ) xiddns$(OBJ) xierror$(OBJ) xiredir$(OBJ) xiimap$(OBJ) xilrwp$(OBJ) xisuper$(OBJ) xixlog$(OBJ) xixssi$(OBJ) xixxml$(OBJ) smtmsg$(OBJ) smtsslm$(OBJ) xixlogm$(OBJ) 
+smtmsg.h: smtmsg.xml
+	gsl -q smtmsg.xml
+smtsslm.h: smtsslm.xml
+	gsl -q smtsslm.xml
+xixlogm.h: xixlogm.xml
+	gsl -q xixlogm.xml
+smtecho$(OBJ): smtecho.c #!mkdep
+smtftpc$(OBJ): smtftpc.c #!mkdep
+smtftpd$(OBJ): smtftpd.c #!mkdep
+smtftpl$(OBJ): smtftpl.c #!mkdep
+smthlog$(OBJ): smthlog.c #!mkdep
+smthttp$(OBJ): smthttp.c #!mkdep
+smthttpl$(OBJ): smthttpl.c #!mkdep
+smtlib$(OBJ): smtlib.c #!mkdep
+smtlog$(OBJ): smtlog.c #!mkdep
+smtoper$(OBJ): smtoper.c #!mkdep
+smtpipe$(OBJ): smtpipe.c #!mkdep
+smtrdns$(OBJ): smtrdns.c #!mkdep
+smtrdnsl$(OBJ): smtrdnsl.c #!mkdep
+smtsimu$(OBJ): smtsimu.c #!mkdep
+smtslot$(OBJ): smtslot.c #!mkdep
+smtsock$(OBJ): smtsock.c #!mkdep
+smttime$(OBJ): smttime.c #!mkdep
+smttran$(OBJ): smttran.c #!mkdep
+smttst1$(OBJ): smttst1.c #!mkdep
+smttst2$(OBJ): smttst2.c #!mkdep
+smttst3$(OBJ): smttst3.c #!mkdep
+smtupmc$(OBJ): smtupmc.c #!mkdep
+smtupmd$(OBJ): smtupmd.c #!mkdep
+xiddns$(OBJ): xiddns.c #!mkdep
+xierror$(OBJ): xierror.c #!mkdep
+xiredir$(OBJ): xiredir.c #!mkdep
+xiimap$(OBJ): xiimap.c #!mkdep
+xilrwp$(OBJ): xilrwp.c #!mkdep
+xisuper$(OBJ): xisuper.c #!mkdep
+xixlog$(OBJ): xixlog.c #!mkdep
+xixssi$(OBJ): xixssi.c #!mkdep
+xixxml$(OBJ): xixxml.c #!mkdep
+smtecho.i: smtecho.l
+	lr smtecho.l
+smtecho.d: smtecho.l
+	lr smtecho.l
+smtftpc.i: smtftpc.l
+	lr smtftpc.l
+smtftpc.d: smtftpc.l
+	lr smtftpc.l
+smtftpd.i: smtftpd.l
+	lr smtftpd.l
+smtftpd.d: smtftpd.l
+	lr smtftpd.l
+smthlog.i: smthlog.l
+	lr smthlog.l
+smthlog.d: smthlog.l
+	lr smthlog.l
+smthttp.i: smthttp.l
+	lr smthttp.l
+smthttp.d: smthttp.l
+	lr smthttp.l
+smtlog.i: smtlog.l
+	lr smtlog.l
+smtlog.d: smtlog.l
+	lr smtlog.l
+smtoper.i: smtoper.l
+	lr smtoper.l
+smtoper.d: smtoper.l
+	lr smtoper.l
+smtpipe.i: smtpipe.l
+	lr smtpipe.l
+smtpipe.d: smtpipe.l
+	lr smtpipe.l
+smtrdns.i: smtrdns.l
+	lr smtrdns.l
+smtrdns.d: smtrdns.l
+	lr smtrdns.l
+smtsimu.i: smtsimu.l
+	lr smtsimu.l
+smtsimu.d: smtsimu.l
+	lr smtsimu.l
+smtslot.i: smtslot.l
+	lr smtslot.l
+smtslot.d: smtslot.l
+	lr smtslot.l
+smtsock.i: smtsock.l
+	lr smtsock.l
+smtsock.d: smtsock.l
+	lr smtsock.l
+smttime.i: smttime.l
+	lr smttime.l
+smttime.d: smttime.l
+	lr smttime.l
+smttran.i: smttran.l
+	lr smttran.l
+smttran.d: smttran.l
+	lr smttran.l
+smttst1.i: smttst1.l
+	lr smttst1.l
+smttst1.d: smttst1.l
+	lr smttst1.l
+smttst2.i: smttst2.l
+	lr smttst2.l
+smttst2.d: smttst2.l
+	lr smttst2.l
+smttst3.i: smttst3.l
+	lr smttst3.l
+smttst3.d: smttst3.l
+	lr smttst3.l
+smtupmc.i: smtupmc.l
+	lr smtupmc.l
+smtupmc.d: smtupmc.l
+	lr smtupmc.l
+smtupmd.i: smtupmd.l
+	lr smtupmd.l
+smtupmd.d: smtupmd.l
+	lr smtupmd.l
+xiddns.i: xiddns.l
+	lr xiddns.l
+xiddns.d: xiddns.l
+	lr xiddns.l
+xierror.i: xierror.l
+	lr xierror.l
+xierror.d: xierror.l
+	lr xierror.l
+xiredir.i: xiredir.l
+	lr xiredir.l
+xiredir.d: xiredir.l
+	lr xiredir.l
+xiimap.i: xiimap.l
+	lr xiimap.l
+xiimap.d: xiimap.l
+	lr xiimap.l
+xilrwp.i: xilrwp.l
+	lr xilrwp.l
+xilrwp.d: xilrwp.l
+	lr xilrwp.l
+xisuper.i: xisuper.l
+	lr xisuper.l
+xisuper.d: xisuper.l
+	lr xisuper.l
+xixlog.i: xixlog.l
+	lr xixlog.l
+xixlog.d: xixlog.l
+	lr xixlog.l
+xixssi.i: xixssi.l
+	lr xixssi.l
+xixssi.d: xixssi.l
+	lr xixssi.l
+xixxml.i: xixxml.l
+	lr xixxml.l
+xixxml.d: xixxml.l
+	lr xixxml.l
+wsxrc.d: wsxrc.l
+	lr wsxrc.l
+smtmsg$(OBJ): smtmsg.c #!mkdep
+smtmsg.c: smtmsg.xml
+	gsl -q smtmsg.xml
+smtmsg.c: smtmsg.xml
+	gsl -q smtmsg.xml
+smtsslm$(OBJ): smtsslm.c #!mkdep
+smtsslm.c: smtsslm.xml
+	gsl -q smtsslm.xml
+smtsslm.c: smtsslm.xml
+	gsl -q smtsslm.xml
+xixlogm$(OBJ): xixlogm.c #!mkdep
+xixlogm.c: xixlogm.xml
+	gsl -q xixlogm.xml
+xixlogm.c: xixlogm.xml
+	gsl -q xixlogm.xml
+xicorpro.d: xicore.xml
+	gsl -q xicore.xml
+xicorpro.i: xicore.xml
+	gsl -q xicore.xml
+xicorstd.d: xicore.xml
+	gsl -q xicore.xml
+xicorstd.i: xicore.xml
+	gsl -q xicore.xml
+
+everything: libsmt$(LIB) 

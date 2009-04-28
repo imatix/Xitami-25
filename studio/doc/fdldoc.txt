@@ -1,0 +1,1144 @@
+The Form Definition Language
+****************************
+
+Author:
+  Pieter Hintjens <ph@imatix.com>
+Revised:
+  2003-1012
+
+The iMatix Studio Forms system provides a high-level programmed
+interface to HTML forms.  FDL is the primary Studio Forms specification
+language.  FDL is a specification language that defines the form in terms of
+fields and HTML preprocessing commands.  It was designed to provide easy
+control of HTML constructs as well as form constructs.
+
+Introduction
+************
+
+The FDL Process
+===============
+
+An FDL file is a plain text file consisting of HTML text mixed with FDL
+commands. The Studio Forms preprocessor (called "fdlgen") translates the
+FDL file into an FML (Form Markup Language) file.  The FML file is then
+translated into native C code by the Studio Forms compiler (called
+"fmlgen").
+
+FDL is a high-level language, where one command generates a mix of HTML
+and FML actions.  FML is a low-level language, where one command
+generates a single form entity or control structure.  This multilevel
+approach provides flexibility for the programmer, who can work at the
+FDL level for the majority of forms and FML when detailed control over
+the form presentation is needed.  It is permitted to mix FML commands
+into an FDL form definition.
+
+Command-line Syntax
+===================
+
+To run fdlgen, use the following syntax:
+
+    fdlgen filename ...
+
+Where 'filename' is assumed to have an extension '.fdl' if necessary.
+
+Installation
+============
+
+Refer to the iMatix Studio Installation Guide for details.
+
+General HTML Preprocessing Syntax
+*********************************
+
+This section describes commands that are used for general HTML
+preprocessing, rather than specifically for form generation.
+
+Inserting Symbols
+-----------------
+
+An fdlgen symbol is some text that you give a name; you can then define
+the text in one place and use it in several places.  fdlgen also
+predefines symbols for various purposes.  fdlgen replaces symbols in
+command lines and HTML text.  You can specify a symbol in various ways:
+
+$(name):
+  Inserts the symbol.  If the symbol is not defined (see .define
+  command below) you get an error message.
+
+$(name?default):
+  Inserts the symbol.  If the symbol is not defined, inserts the
+  supplied default value.
+
+$(*name):
+  Inserts an anchor for the symbol.  This is shorthand for:
+  <A HREF="$(name)">name</A>.
+  If the symbol name has an empty value, the <A...> and
+  </A> tags are left-out - i.e. the link is not active.
+
+$(*name=label):
+  Inserts an anchor for the symbol name, with label as specified.
+  This is shorthand for: <A HREF="$(name)">label</A>.
+  If the symbol name has an empty value, the <A...> and </A>
+  tags are left-out. You can use double quotes around the label if it
+  contains ')'.
+
+$(*name=):
+  Inserts an anchor for the symbol name, with the full reference as
+  label.  This is shorthand for:
+  <A HREF="$(name)">$(name)</A>.
+
+&(Perl program fragment):
+  Replaces the symbol by the output of the specified Perl code.  The
+  Perl code is executed using the eval command -- see the Perl
+  documentation if you want to use this feature.  This is how to
+  replace the symbol by the output of a Perl program:
+  &(`perl program`).  You must enclose the program fragment
+  in double quotes if it contains ( or ).
+
+&name(arguments):
+  Replaces the symbol by the result of an intrinsic function.  These
+  are predefined functions that fdlgen provides for various purposes.
+
+%(variable):
+  Replaces the symbol by the value of an environment variable.
+  If the variable does not exist, inserts an emptty value.  For
+  portability, always define environment variables in uppercase.
+
+\(:
+  Replaces this by "(".  This is to 'escape' symbol definitions so
+  that they are not translated.
+
+\.:
+  Replaces this by ".".  This is to 'escape' dots so that they are
+  not interpreted as commands at the start of a line.
+
+You can define symbols in terms of symbols: $($(name)) is quite okay,
+if you know what you are doing.  fdlgen inserts symbols in the above
+order, so it will translate all $(name)'s before looking at $(*name)'s.
+
+Types of Symbol
+---------------
+
+Symbols are of various types:
+
+- fdlgen provides various symbols when building certain blocks
+  like the table of contents;
+- fdlgen provides various symbols containg default values that
+  you can redefine if necessary;
+- you can define symbols using the .define command;
+- you can define symbols using the .build anchor command.
+
+Standard Symbols
+----------------
+
+fdlgen provides these standard symbols for use at any point in
+the document:
+
+$(DATE):
+  The date that fdlgen started, formatted as an 8-character
+  string: YY/MM/DD.
+$(TIME):
+  The time that fdlgen started, formatted as an 8-character
+  string: HH:MM:SS.
+$(DOCBASE):
+  The main document filename, without extension.
+$(INC):
+  A counter, which starts at zero and is bumped-up each time you
+  refer to it.  I use this to number filenames, in the .page
+  command.  The first time you use $(INC), it is empty - i.e. "".
+  The second time it is "1", then "2", "3",...
+$(PAGE):
+  After a .page command, this holds the page filename, exactly
+  as specified in the .page command.
+$(TITLE):
+  After a .page command, this holds the page title.  It is nice
+  to use this in the header .block.
+$(PASS):
+  Contains either 0 or 1, depending on whether fdlgen is
+  scanning for titles (0) or building the output files (1).
+
+You may want to .define some of these symbols to change their default
+values:
+
+$(BASE):
+  Defined as "doc".  This is used in .page commands for
+  automatic filename generation.
+$(EXT):
+  Defined as "htm", and commonly-used just after a $(BASE).
+$(SILENT):
+  Defined as 0.  If you .define this as 1, fdlgen will try to be
+  a bit quieter.
+  messages.
+
+Unless you use .ignore pages, these symbols are available in
+header and footer blocks (you can use them elsewhere, but you'll
+get warnings):
+
+$(FIRST_PAGE):
+  The filename for the first page of the document.
+$(LAST_PAGE):
+  The filename for the last page of the document.
+$(NEXT_PAGE):
+  The filename for the next page of the document.
+$(PREV_PAGE):
+  The filename for the previous first page of the document.
+$(FIRST_TITLE):
+  The title for the first page of the document.
+$(LAST_TITLE):
+  The title for the last page of the document.
+$(NEXT_TITLE):
+  The title for the next page of the document.
+$(PREV_TITLE):
+  The title for the previous first page of the document.
+
+fdlgen Commands
+===============
+
+A fdlgen command starts with a dot, in column 1, followed by a
+keyword.  You can put spaces between the dot and the keyword.  To
+continue the command line over the next line, end the line with a
+hyphen (though you need to at least put the dot and the keyword on
+the same line.  Commands can be in upper- or lower-case: .endblock
+and .EndBlock are equivalent.
+
+These are the commands that fdlgen understands:
+
+.define symbol [value]:
+  Define a symbol with the specified value.  The symbol name can
+  consist of letters, digits, -, ., and _.  The value is everything
+  else up to the end of the line.  If you omit the value, the
+  variable is un-defined.  You can redefine a variable as often as
+  you like simply by repeating the .define command.  Use lowercase
+  for your own symbols.  Predefined fdlgen symbols are uppercase.
+  Case is significant.  You can assign values to the built-in fdlgen
+  variables like INC if you want to.  In some cases this is even
+  useful.
+
+.const symbol value
+  Defines a symbol with a constant value.  This creates a definition
+  in the final generated code, allowing the programmer to use the
+  same constants in the FDL pages and resulting program.
+  
+.define symbol = expression:
+  Evaluates the expression and stores the result in symbol.
+  Note that you must use '=' to evaluate an expression.  Otherwise
+  the expression is considered as a string and stored as-is in the
+  symbol.  fdlgen passes the expression to Perl for evaluation, so
+  you can use any valid Perl syntax.  If you want your fdlgen files
+  to be portable to (future) non-Perl implementations of fdlgen,
+  restrict the expressions to simple arithmetic (+, -, *, /, and
+  parentheses).  It helps to know that fdlgen will evaluate all
+  variables before passing the expression to Perl to work out.
+  So, the second .define is evaluated as '1 + 1'.
+
+.define symbol++ initial_value:
+  Creates or re-initialises a counter with the initial value.
+  Each time you use the counter symbol, it is incremented.  The
+  $(INC) symbol is actually defined internally like this:
+  '.define INC++ ""' Note that the empty string is treated as zero;
+  the next time the symbol will be '1'.  You can also use '--' after
+  the symbol name to subtract one from its value each time it is used.
+  You can stick the '++' or '--' before the symbol name: then the
+  symbol is incremented or decremented before its value is taken.
+  The .define statement is resolved as late as possible: if the
+  statement refers to other variables, these are inserted when
+  the .define'd variable is used, rather than when it is defined.
+  For instance if you refer to a .define'd variable in the page
+  header, it will be re-evaulated each time the page header is
+  output.
+
+.include filename:
+  Start reading from the specified file.  You can nest .include
+  files as much as you like.  fdlgen checks for circular references.
+  If the same file was already included earlier, fdlgen ignores the
+  command, like the Perl 'require' operator.  fdlgen searches along
+  the environment variable FXPATH (which acts like PATH) for the
+  file.  If you do not define FXPATH, it will in any case search
+  the current directory.  If you specify the filename with a path,
+  fdlgen won't search the FXPATH path.
+
+.include filename!:
+  Include the file in any case, like a C #include directive.
+
+.include `command`:
+  Execute 'command' and include the output of the command in the
+  generated HTML text.  The command can be any program with
+  arguments; it should respect any operating system conventions or
+  limitations.  The output text can contain fdlgen symbols in the
+  normal manner.  It cannot contain fdlgen commands.
+
+.page filename = ["]title["]:
+  Start writing a new HTML file.  The title is required.  At any
+  point after the .page, you can refer to $(PAGE) and $(TITLE) for
+  the current file name and title.  For instance, you'll often see
+  this: <H1>$(TITLE)</H1>
+
+.page ["]title["]:
+  Equivalent to .page $(BASE)$(INC).$(EXT) = "title".  Just easier.
+
+.ignore header:
+  Ignore the next header line as far as the table of contents is
+  concerned.  This is good for headers like <H2>Table of
+  Contents</H2>.
+
+.ignore pages:
+  Ignore all .page commands except to pick-up the page titles.
+  Use this when you want to create a super-document.  When you use
+  .ignore pages, fdlgen also ignores the .build toc and .build index
+  commands. So, if you want a table of contents, do the .build toc
+  before you say .ignore pages.  You can also use .if commands to
+  skip blocks of text under certain conditions.
+
+.ignore page:
+  Ignore next .page command for any future .build index command.
+  This is the right way of keeping the index page itself out of the
+  index.  Note that the index page does take part in the general
+  page-to-page linking scheme provided by $(PREV_PAGE) and such.
+
+.if expression, [.else], .endif:
+  If the expression returns a false value, fdlgen skips until
+  the .else or .endif line.  You can nest .if blocks.  An .else is
+  always part of the closest preceding .if.  fdlgen passes the
+  expression to Perl for evaluation, so you can use any valid Perl
+  syntax.  If you want your fdlgen files to be portable to (future)
+  non-Perl implementations of fdlgen, restrict your expressions to
+  simple arithmetic and logical tests (<, >, =, etc.).
+  Otherwise, enjoy Perl's vast range of tests.
+
+.block blockname:
+  Define a piece of HTML text to be output as part of a .build
+  command.  You can end the .block with an .endblock or another
+  .block.  fdlgen knows about a number of standard block names, as
+  specified later:
+
+.endblock:
+  End the previous .block.  You can end a .block with an
+  .endblock or a further .block command. Any other command within
+  a .block is interpreted when the block has been generated.
+
+.block blockname local:
+  You can follow the .block command by the keyword local - this defines
+  a block that will be used one time only.  The local keyword applies to
+  header, footer, and anchor blocks.  Local blocks are used to change
+  the way a single page looks, without disturbing the headers and
+  footers of the whole document.  Typically, you would define a general
+  document header at the start of the document, then a local header and
+  footer for a specific .page.  Note that you should define the local
+  page footer after the .page command.  If you define a local footer
+  block before the first page, fdlgen handles this correctly.
+
+.build toc:
+  Build table of contents for document.  fdlgen scans the document and
+  all include files once to collect titles (<Hn>...</Hn>) and once to
+  create the HTML pages. Titles (<Hn>...</Hn>) must be entirely on a
+  single line, or fdlgen will not find them.  You can manage the contents
+  of the table of contents through the .ignore header command. You will
+  normally use a .build toc at the start of a document.
+
+.build dir directory [filespec...]:
+  Build directory listing as specified.  The .build dir command
+  only works if you mirror the server directory on some local disk
+  that fdlgen can access.  This is a Good Idea in any case.  Before
+  you can use .build dir you must define LOCAL and SERVER.  I define
+  these like this: .define LOCAL i:/site:, .define SERVER
+  http://www.imatix.com.
+  The directory must be relative to either of these two.  It should
+  start with '/' but not end with '/'.  You can specify zero or more
+  filenames or wildcards (fdlgen accepts * and ?, according to UNIX
+  rules).  If you specify no filespecs, fdlgen assumes you mean '*'.
+  The filespecs can include PERL regular expressions: place the
+  filespec between double quotes, e.g. to match all files with 'doc'
+  or 'txt' somewhere in the name: .build dir /pub "doc|txt".  <PRE>
+
+.build index:
+  Build file index for document.  This is basically a list of
+  all pages in the document with their titles.  If you use this,
+  you may want to put an .ignore page before the .page that starts
+  the index page.  It may be useful to do a .build index inside the
+  footer of a page -- this is quite okay.
+
+.build anchor anchor-name:
+  Build an anchor definition.  This is real useful.  Basically
+  you do a .build anchor somename in a document, then do a
+  $(*somename) or $(*somename="label") anywhere in any other
+  document.  fdlgen saves anchor symbols in the file anchor.def;
+  otherwise anchor symbols are treated much like normal .define'd
+  symbols.  One difference: anchor symbols and normal symbols do not
+  share the same namespace; if you .define a symbol with the same
+  name as the anchor symbol, the .define'd symbol takes precedence.
+  If you undefine the symbol, the anchor symbol reappears by magic.
+  This may or may not be useful, but it is the way it works.  If you
+  change the file structure of your document, run everything through
+  fdlgen *TWICE*, so that all anchor references can get really
+  solidly updated.  You can delete the anchor.def file at any time;
+  it is just kept to save some context between runs.
+
+.build user_block_name:
+  Output the user-defined block specified.  This is any amount
+  of text that you do not want to specifically put into a separate
+  file for use with the .include command.  You define the block
+  using the .block command.
+
+.echo [-] text:
+  Echoes the text to the console.  Strips-off any leading and
+  trailing spaces, but you can enclose the text in single or double
+  quotes if you want leading/trailing spaces.  Unless you place a
+  hyphen before the text, fdlgen adds a newline.
+
+.for name in item..., .endfor:
+  Repeats the text between .for and .endfor, where $(name) has
+  the value of each item in the list.  The item list is separated
+  by spaces.  Inside a .for loop you can access the item list in the
+  Perl array @for_list. For instance: &($for_list [0]).
+  The special variables $(1), $(2), and so on will hold each word
+  in the line.
+
+.for name in `command`:
+  Repeats the text between .for and .endfor, where $(name) has
+  the value of each line in the output generated by the command.
+  The special variables $(1), $(2), and so on will hold each word
+  in the line.
+
+.for name in @filename:
+  Repeats the text between .for and .endfor, where $(name) has
+  the value of each line in the specified file.  The special variables
+  $(1), $(2), and so on will hold each word in the line.
+
+.for name from start to end:
+  Repeats the text between .for and .endfor, where $(name) has a
+  numeric value from start to end inclusive. fdlgen will count up or
+  down as necessary.
+
+Standard Block Names
+--------------------
+
+The .block command works with these predefined blocks:
+
+Header:      Output at the start of each new HTML page; i.e. whenever you
+             use a .page command.
+Footer:      Output at the end of each HTML page.
+Toc_open:    Output at the start of a .build toc block (see below), and
+             whenever fdlgen decides to indent a new level.
+Toc_entry:   Output for each entry in the table of contents.  Use these
+             symbols: $(TOC_HREF) - the local URL for the file and section;
+             $(TOC_TITLE) - the title for the section, taken from the header
+             line.
+Toc_close:   Output whenever fdlgen decides to outdent a level, and at the
+             end of the table of contents.
+Dir_open:    Output at the start of a .build dir block (see below).
+Dir_entry:   Output for each entry in a .build dir block.  Use these
+             symbols: $(DIR_HREF) - URL for the file; $(DIR_NAME) - the
+             filename, left-justified; $(DIR_EXT) - the file extension,
+             always put into lowercase; $(DIR_SIZE) - the file size,
+             right-justified; $(DIR_DATE) - the file date; $(DIR_TIME) -
+             the file time.
+Dir_close:   Output at the end of a .build dir block.
+Index_open:  Output at the start of a .build index block (see below).
+Index_entry: Output for each entry in a .build index block.  Use these
+             symbols: $(INDEX_PAGE) - the filename; $(INDEX_TITLE) - the
+             file title.
+Index_close: Output at the end of a .build index block.
+Anchor:      Output whenever you use a .build anchor.  Use this symbol:
+             $(ANCHOR) - name of anchor.
+
+Any other block is treated as a user-defined block and can be
+output at any point using a matching .build command.
+
+Support For Accented Characters
+===============================
+
+You can type accented characters directly, and fdlgen will do
+its best to convert these into HTML metacharacters.  For instance,
+if your document contains an e-circumflex, fdlgen will replace it
+by the metacharacter '&ecirc;'.
+
+This function works within certain limitations only.  Firstly,
+your document will become non-portable: if you move it from a UNIX
+to a DOS box, the accents will get messed-up, unless your file
+transfer software can handle accents too.  Secondly, fdlgen uses
+a look-up table based on the ASCII value for each accented character
+it knows about.  These tables are system-specific, so fdlgen does a
+little testing of the wind to figure-out if it's running under a
+Unix or a DOS system.  if you use fdlgen on a Mac, or on documents
+encoded using another character set -- e.g. Windows -- it won't
+work.  Basically fdlgen handles MS-DOS accents if there is an
+environment variable 'COMPSPEC' defined, and Unix Latin-1 (aka.
+ISO-8859-1) accents if there is a file called "/etc/passwd" on the
+system.  Under Windows you should save documents as 'DOS text'.
+
+Syntax Notes
+============
+
+- Keywords are not case-sensitive; .LABEL is the same as .label.
+- Options are not case-sensitive; align=left is the same as ALIGN=LEFT.
+- Variables are case-sensitive; $(ABC) is different from $(abc).
+- You can place spaces between the '.' and the keyword.
+- You can continue a command over multiple lines by ending each line
+  (except the last) with a hyphen (-).
+
+Form Definition Syntax
+**********************
+
+These additional fdlgen commands are used specifically to define form
+fields:
+
+This Command:   Is used to:
+.fields:        Start two-column field table
+.endfields:     End two-column field table
+.table:         Start multi-column field table
+.endtable:      End multi-column field table
+.do_if:         Start conditional HTML block
+.do_unless:     Start conditional HTML block
+.do_repeat:     Start repeated HTML block
+.enddo:         End conditional or repeated HTML block
+.textual:       Define simple text field
+.textbox:       Define multiline text field
+.file           Define file upload/download field
+.numeric:       Define number field
+.date:          Define date field
+.boolean:       Define Boolean field
+.select:        Define multi-option select list field
+.radio:         Define multi-option radio field
+.action:        Define push-button action field
+.label:         Define stand-alone label
+.index:         Define stand-alone index field
+
+Defining A Two-Column Field Table
+=================================
+
+The normal presentation for simple data fields is a two-column format
+with the field label at the left-hand side and the field value at the
+right-hand side.  The fdlgen compiler automatically generates the label
+for the field.  You can:
+
+- define each field on a new line, with an appropriate label
+- define fields without labels
+- define fields on the same line, with or without labels
+- define a short text note to follow the field value
+
+Defining A Multi-Column Field Table
+===================================
+
+A multi-column field table can have a fixed-number of rows; 1 or more.
+It can also have a variable number of rows, where the output is
+controlled by a program variable at runtime.  You can:
+
+- specify the label for each field: this appears as a column heading
+- define fields without labels
+- define a short note to follow the field value
+- define a table with, or without a border
+
+FDL Commands
+============
+
+A command must come on one line; we break the commands for clarity.  You
+can continue a command over several lines by using the character '-' at
+the end of the line.  Spaces are not significant.  Field commands can only
+come after a .fields or .table command.  Field labels can be enclosed in '
+or ".  Field names can consist of letters, digits, hyphens, and underlines.
+Field names must be unique in a program.
+
+
+The .Field Command
+------------------
+
+    .fields             Start two-column field table
+        [border=yes]        Border?  Default is none.
+        [compact=yes]       Compact table? Default is COMPACT (no)
+        [width=<value>]     Eg. "100%". Default is FORM_WIDTH (90%)
+        [attrs="text"]      HTML attributes, e.g. colours
+        ...                 Field definitions
+    .endfields          End two-column field table
+
+Starts a two-column field table.  Use .endfield to end the table.  You must
+use a .field command or a .table command before defining a field.
+
+The .Table Command
+------------------
+
+    .table              Start variable multi-column table
+        name=<name>         Field on the form (often using .index)
+        rows=<number>       Max. number of rows in table; required
+        [border=yes]        Border?  Default is none.
+        [compact=yes]       Compact table? Default is COMPACT (no)
+        [width=<value>]     Eg. "100%". Default is FORM_WIDTH (90%)
+        [attrs="text"]      HTML attributes, e.g. colours
+        ...                 Field definitions
+    .endtable           End multi-column field table
+
+    .table              Start fixed multi-column table
+        type=fixed          Optional; the default type is variable
+        rows=<number>       Number of rows in table; required
+        [border=yes]        Border?  Default is none.
+        [compact=yes]       Compact table? Default is COMPACT (no)
+        [width=<value>]     Eg. "100%". Default is FORM_WIDTH (90%)
+        [attrs="text"]      HTML attributes, e.g. colours
+        ...                 Field definitions
+    .endtable           End multi-column field table
+
+Defines a multi-column table with a fixed or variable number of rows.  A
+variable table is tied to an index field (often defined using the .index
+command, but may also be any numeric field on the form).  You must use a
+.table command or a .field command before defining any fields.
+
+Variable tables are more efficient, since the HTML text is only stored
+once.  Fixed tables are generated statically, with the HTML text being
+repeated for each row.  In general we recommend using variable tables.
+If you do not define an index variable, fdlgen will generate one for you
+with the name of the table and an initial value equal to the size of the
+table.
+
+
+The .Do If Command
+------------------
+
+    .do if              Start conditional HTML block
+        <name>              Name of controlling form field, for programmer
+        value=<number>      Optional integer value
+        ...                 Any HTML text or FDL commands
+    .enddo              End conditional HTML block
+
+May be used outside a .field or .table block, or inside a .field block, to
+mark a conditional section of the form.  The form data between the .do and
+.enddo will only be output if the specified field is not empty (since all
+fields are held as text, 'empty' means "0" or "").  .do commands cannot be
+nested.  This is an example of a .do if command:
+
+    .do if modifying_record 1
+
+The controlling fields can be any field on the form; for example a boolean
+or numeric field.  It can also be an (invisible) index field.  Note that
+the .do if command allows value comparisons only against integer constants.
+
+The .Do Unless Command
+----------------------
+
+    .do unless          Start conditional HTML block
+        <name>              Name of controlling form field, for programmer
+        value=<number>      Optional integer value
+        ...                 Any HTML text or FDL commands
+    .enddo              End conditional HTML block
+
+May be used outside a .field or .table block, or inside a .field block, to
+mark a conditional section of the form.  The form data between the .do and
+.enddo will only be output if the specified field is empty, i.e. holds an
+empty string or the digit "0".  .do commands cannot be nested.
+This is an example of a .do unless command:
+
+    .do unless page_nbr 3
+
+The controlling fields can be any field on the form; for example a boolean
+or numeric field.  It can also be an (invisible) index field.
+
+The .Do Repeat Command
+----------------------
+
+    .do repeat          Start repeated HTML block
+        <name>              Name of controlling form field, for programmer
+        rows=<number>       Max. number of repetitions; required
+        ...                 Any HTML text or FDL commands
+    .enddo              End repeated HTML block
+
+May be used outside a .field or .table block, or inside a .field block, to
+mark a repeated section of the form.  The form data between the .do and
+.enddo will be repeated as many times as required by the specified form
+field.  .do commands cannot be nested.
+
+The .Textual Command
+--------------------
+
+    .textual            Define basic text field
+        "label"             Field label, can be empty ("") - required
+        <name>              Name of field - required
+        [size=<size>]       Size shown on screen - default 10
+        [max=<maxsize>]     Maximum size of contents, default = size
+        [join=yes]          Place after previous field - default no
+        [upper=yes]         Shown/accepted as uppercase - default no
+        [wrap=yes]          Allow field value to wrap - default no
+        [value=<string>]    Initial value, if any
+        [attr=<attribute>]  Field attribute; default is input
+        [notes=<text>]      Follow field with this text (can be HTML)
+        [align=<...>]       Align field value within column
+        [lalign=<...>]      Align field label within column
+        [valign=<...>]      Align field label up/down within column
+        [lattr=<...>]       Use HTML attribute for label
+        [fattr=<...>]       Use HTML attribute for field
+        [width=<...>]       Width of column, for tables only
+        [span=<...>]        Column spanning, for table headers only
+
+Defines a basic text field.  Text fields are shown on a single line, but can
+hold more data than is shown on the screen - the browser will scroll within
+the field as required.
+
+These are the field attributes that you can use in a .text field and all
+other types of field:
+
+This attribute:  Has this effect:
+input:           Input field: this is the default
+require:         Input field: must be input by user
+error:           Input field: shown as error (changed to input)
+absent:          Input field: shown as error (changed to require)
+secure:          Input field: shown as password
+protect:         Input field: protected from modification
+hidden:          Hidden field: not shown on form
+blank:           Hidden field: shown as spaces
+label:           Output field: shown as normal text
+title:           Output field: shown as bold text
+hilite:          Output field: shown as reversed text
+message:         Output field: shown as error message
+option:          Output field: shown as hyperlink
+
+The lalign option can take one of these values: 'left', 'center', or 'right'.
+The valign option can take one of these values: 'top', 'middle', 'bottom', or
+'baseline'.
+Field labels are enclosed by the lattr= value using standard HTML tags. For
+instance, if a field is specified as 'lattr=B', the label will be prefixed by
+and suffixed by .  The default value for label attributes is given by the
+field LATTR, defined by default as follows:
+
+    .define LATTR           ""
+
+A label attribute can consist of several values, separated by spaces. For
+instance: lattr="B I".  Note that you must use quotes when the value contains
+spaces.
+
+The .File Command
+--------------------
+
+    .file               Define file upload/download field
+        "label"             Field label, can be empty ("") - required
+        <name>              Name of field - required
+        [size=<size>]       Size shown on screen - default 10
+        [max=<maxsize>]     Maximum size of contents, default = size
+        [join=yes]          Place after previous field - default no
+        [wrap=yes]          Allow field value to wrap - default no
+        [value=<string>]    Initial value, if any
+        [attr=<attribute>]  Field attribute; default is input
+        [notes=<text>]      Follow field with this text (can be HTML)
+        [align=<...>]       Align field value within column
+        [lalign=<...>]      Align field label within column
+        [valign=<...>]      Align field label up/down within column
+        [lattr=<...>]       Use HTML attribute for label
+        [fattr=<...>]       Use HTML attribute for field
+        [width=<...>]       Width of column, for tables only
+        [span=<...>]        Column spanning, for table headers only
+
+Defines a file upload/download field.  Such fields are shown as an form-based
+file upload field (the browser must support RFC1867 uploads), or as a
+clickable hyperlink, depending on the current field attribute.
+
+
+The .Numeric Command
+--------------------
+
+    .numeric            Define number field
+        "label"             Field label, can be empty ("") - required
+        <name>              Name of field - required
+        [size=<size>]       Size shown on screen - default 8
+        [max=<maxsize>]     Maximum size of contents, default = size
+        [sign=<how>]        Sign format - default none
+        [decs=<number>]     Number of decimals - default zero
+        [decfmt=<format>]   Decimal format - default all
+        [fill=space|zero]   Right-justify with leading spaces or zeroes
+        [blank=yes]         Show zero number as blank - default no
+        [comma=yes]         Show thousand separators - default no
+        [join=yes]          Place after previous field - default no
+        [wrap=yes]          Allow field value to wrap - default no
+        [value=<number>]    Initial value, if any
+        [attr=<attribute>]  Field attribute; default is input
+        [notes=<text>]      Follow field with this text (can be HTML)
+        [align=<...>]       Align field value within column
+        [lalign=<...>]      Align field label within column
+        [valign=<...>]      Align field label up/down within column
+        [lattr=<...>]       Use HTML attribute for label
+        [fattr=<...>]       Use HTML attribute for field
+        [width=<...>]       Width of column, for tables only
+        [span=<...>]        Column spanning, for table headers only
+
+Defines a numeric field, allowing the Forms i/o module to validate and
+reject user input that is not acceptable.  Numeric fields can be shown with a
+variety of sign and formatting options.  These are the possible sign formats:
+
+Sign format:  Has this meaning:
+none:         Do not show any sign
+post:         Show only negative sign, after digits
+pre:          Show only negative sign, before digits
+post+:        Show non-zero sign, after digits
+pre+:         Show non-zero sign, before digits
+fin:          Financial: negative numbers are (123)
+
+These are the possible decimal formats:
+
+Decimal format:  Has this meaning:
+none:            Do not show decimals
+all:             Show all decimals (123.40)
+drop:            Drop zero decimals (123.4)
+
+The .Date Command
+-----------------
+
+    .date               Define date field
+        "label"             Field label, can be empty ("") - required
+        <name>              Name of field - required
+        [join=yes]          Place after previous field - default no
+        [wrap=yes]          Allow field value to wrap - default no
+        [value=<number>]    Initial value, if any (format: YYYYMMDD)
+        [attr=<attribute>]  Field attribute; default is input
+        [notes=<text>]      Follow field with this text (can be HTML)
+        [align=<...>]       Align field value within column
+        [lalign=<...>]      Align field label within column
+        [valign=<...>]      Align field label up/down within column
+        [lattr=<...>]       Use HTML attribute for label
+        [fattr=<...>]       Use HTML attribute for field
+        [width=<...>]       Width of column, for tables only
+        [span=<...>]        Column spanning, for table headers only
+        [picture=<string>]  Date picture - default ""
+        [show=YMD|YM|MD]    Show full or partial date (default YMD)
+        [format=COMPACT|SLASH|SPACE|COMMA]
+        [year=FULL|SHORT]
+        [month=NUMERIC|COUNTER|ALPHA|UPPER]
+        [day=NUMERIC|COUNTER]
+
+Defines a date field, allowing the Forms i/o module to validate and reject
+user input that is not acceptable.  When you use a date field only for
+output, you can explicitly specify the date formatting using a picture
+string.  When a date field is used for input and output, this is not a good
+idea, for several reasons:
+
+- Browsers do not support picture-based editing, so user input can come in
+  any format anyway.
+- Date year-month-date order can depend on the user language, and should not
+  be hard-coded through the use of a picture.
+
+To define the formatting for a date explicitly, use a picture string.  This
+can consist of any combination of the following:
+
+Picture element:  Has this meaning:
+cc:               century 2 digits, 01-99
+y:                day of year, 1-366
+yy:               year 2 digits, 00-99
+yyyy:             year 4 digits, 100-9999
+m:                month, 1-12
+mm:               month, 01-12
+mmm:              month, 3 letters
+mmmm:             month, full name
+MMM:              month, 3 letters, ucase
+MMMM:             month, full name, ucase
+d:                day, 1-31
+dd:               day, 01-31
+ddd:              day of week, Sun-Sat
+dddd:             day of week, Sunday-Saturday
+DDD:              day of week, SUN-SAT
+DDDD:             day of week, SUNDAY-SATURDAY
+w:                day of week, 1-7 (1=Sunday)
+ww:               week of year, 1-53
+q:                year quarter, 1-4
+\x:               literal character x
+other:            literal character
+
+Alternatively you can define dates using a combination of some or any of
+the 'show', 'format', 'year', 'month', and 'day' options, in which case
+the current form date_order is used to determine the year/month/day order
+on the external form:
+
+The 'show' option can take these values:
+YMD:         Show the full date (default)
+YM:          Show only the year and month
+MD:          Show only the month
+
+The 'format' option can take these values:
+compact:     Show date as 'yymmdd'
+slash:       Show date as 'yy/mm/dd' (default)
+space:       Show date as 'yy mm dd'
+comma:       Show date as 'yy mm,dd'
+
+The 'year' option can take these values:
+full:        Show year as 'yyyy'
+short:       Show year as 'yy' (default)
+
+The 'month' option can take these values:
+numeric:     Show month as '02' (default)
+counter:     Show month as '2'
+alpha:       Show month as 'Feb'
+upper:       Show month as 'FEB'
+
+The 'day' option can take these values:
+numeric:     Show day as '02' (default)
+counter:     Show day as '2'
+
+The .Time Command
+-----------------
+
+    .time               Define time field
+        "label"             Field label, can be empty ("") - required
+        <name>              Name of field - required
+        [join=yes]          Place after previous field - default no
+        [wrap=yes]          Allow field value to wrap - default no
+        [value=<number>]    Initial value, if any (format: HHMMSSCC)
+        [attr=<attribute>]  Field attribute; default is input
+        [notes=<text>]      Follow field with this text (can be HTML)
+        [align=<...>]       Align field value within column
+        [lalign=<...>]      Align field label within column
+        [valign=<...>]      Align field label up/down within column
+        [lattr=<...>]       Use HTML attribute for label
+        [fattr=<...>]       Use HTML attribute for field
+        [width=<...>]       Width of column, for tables only
+        [span=<...>]        Column spanning, for table headers only
+        [picture=<string>]  Time picture - default "hh:mm:ss"
+
+Defines a time field, allowing the Forms i/o module to validate and reject
+user input that is not acceptable.
+
+To define the formatting for a time field, use a picture string. This can
+consist of any combination of the following:
+
+Picture element:  Has this meaning:
+h:                hour, 0-23
+hh:               hour, 00-23
+m:                minute, 0-59
+mm:               minute, 00-59
+s:                second, 0-59
+ss:               second, 00-59
+c:                centisecond, 0-99
+cc:               centisecond, 00-99
+a:                a/p indicator - use 12-hour clock
+aa:               am/pm indicator - use 12-hour clock
+A:                A/P indicator - use 12-hour clock
+AA:               AM/PM indicator - use 12-hour clock
+\x:               literal character x
+other:            literal character
+
+
+The .Boolean Command
+--------------------
+
+    .boolean            Define Boolean field
+        "label"             Field label, can be empty ("") - required
+        <name>              Name of field - required
+        [join=yes]          Place after previous field - default no
+        [wrap=yes]          Allow field value to wrap - default no
+        [value=true|false]  Initial value, if any
+        [attr=<attribute>]  Field attribute; default is input
+        [notes=<text>]      Follow field with this text (can be HTML)
+        [align=<...>]       Align field value within column
+        [lalign=<...>]      Align field label within column
+        [valign=<...>]      Align field label up/down within column
+        [lattr=<...>]       Use HTML attribute for label
+        [fattr=<...>]       Use HTML attribute for field
+        [width=<...>]       Width of column, for tables only
+        [span=<...>]        Column spanning, for table headers only
+        [true=<text>]       Show text when TRUE (default = "yes")
+        [false=<text>]      Show text when FALSE (default = "no")
+
+Defines a boolean field, which is shown by the browser as a checkbox on
+input, and as 'yes' or 'no' on output.  You can override these values using
+the 'true' and 'false' options.
+
+The .Textbox Command
+--------------------
+
+    .textbox            Define multiline text field
+        "label"             Field label, can be empty ("") - required
+        <name>              Name of field - required
+        [rows=<rows>]       Number of rows - default 4
+        [cols=<cols>]       Number of columns - default 30
+        [max=<maxsize>]     Maximum size of contents, default rows x cols
+        [join=yes]          Place after previous field - default no
+        [upper=yes]         Shown/accepted as uppercase text
+        [wrap=yes]          Allow field value to wrap - default no
+        [value=<string>]    Initial value, if any (no newlines; 1 line only)
+        [attr=<attribute>]  Field attribute; default is input
+        [notes=<text>]      Follow field with this text (can be HTML)
+        [lalign=<...>]      Align field label left/right within column
+        [valign=<...>]      Align field label up/down within column
+        [align=<...>]       Align field value within column
+        [lattr=<...>]       Use HTML attribute for label
+        [fattr=<...>]       Use HTML attribute for field
+        [width=<...>]       Width of column, for tables only
+        [span=<...>]        Column spanning, for table headers only
+
+Defines a multiline textbox field.  Textbox fields are shown with a
+scrollable area, depending on the browser and the specified textbox size.
+
+The .Select Command
+-------------------
+
+    .select             Define multi-option select list field
+        "label"             Field label, can be empty ("") - required
+        <name>              Name of field - required
+        {values}            [0=xxx] 1=xxx 2=xxx 3=xxx...
+        [size=number]       Show as select list?  Default 1 = pop-down
+        [join=yes]          Place after previous field - default no
+        [wrap=yes]          Allow field value to wrap - default no
+        [value=number]      Initial value - default 1
+        [change=no]         Javascript code to handle on_change event
+        [type=<type>]       Whether select field values are fixed here
+        [attr=<attribute>]  Field attribute; default is input
+        [notes=<text>]      Follow field with this text (can be HTML)
+        [align=<...>]       Align field value within column
+        [lalign=<...>]      Align field label within column
+        [valign=<...>]      Align field label up/down within column
+        [lattr=<...>]       Use HTML attribute for label
+        [fattr=<...>]       Use HTML attribute for field
+        [width=<...>]       Width of column, for tables only
+        [span=<...>]        Column spanning, for table headers only
+
+Defines a selection list field.  If the 'size' option is 1, the list displays
+as a pop-down list, otherwise it looks like a normal scrollable list.  On
+output, the currently-selected item is shown, or 'No selection' if none.  You
+can override this text by spedifying a value for '0='.
+
+The default type for a select field is 'fixed'.  A 'dynamic' select field is
+populated at run-time.  The API for doing this is described in the Form I/O
+Interface guide.
+
+The .Radio Command
+------------------
+
+    .radio              Define multi-option radio field
+        "label"             Field label, can be empty ("") - required
+        <name>              Name of field - required
+        {values}            [0=xxx] 1=xxx 2=xxx 3=xxx...
+        [join=yes]          Place after previous field - default no
+        [column=yes]        Place options in column - default no
+        [wrap=yes]          Allow field value to wrap - default no
+        [value=number]      Initial value - default 1
+        [change=no]         Javascript code to handle on_change event
+        [type=<type>]       Whether radio field values are fixed here
+        [attr=<attribute>]  Field attribute; default is input
+        [notes=<text>]      Follow field with this text (can be HTML)
+        [align=<...>]       Align field value within column
+        [lalign=<...>]      Align field label within column
+        [valign=<...>]      Align field label up/down within column
+        [lattr=<...>]       Use HTML attribute for label
+        [fattr=<...>]       Use HTML attribute for field
+        [width=<...>]       Width of column, for tables only
+        [span=<...>]        Column spanning, for table headers only
+
+Defines a multi-option radio field.  The options normally come in a line, but
+you can also place them in a column by using the 'column=yes' option.  When
+the radio field is shown for output, the currently-selected option is
+displayed.  When you used 'column=yes', all options are shown, with the
+current option marked.
+
+On output, if the radio field value is zero, 'No selection' is displayed.
+You can override this text by spedifying a value for '0='.
+
+The default type for a radio field is 'fixed'.  A 'dynamic' radio field is
+populated at run-time using the same API as for select fields.
+
+The .Action Command
+-------------------
+
+    .action             Define push-button action field
+        "label"             Field label, can be empty ("") - required
+        <name>              Name of field - required
+        [value="string"]    Button label, if not same as name
+        [event=name]        Name of dialog event, exact spelling, if any
+        [join=yes]          Place after previous field - default no
+        [wrap=yes]          Allow field value to wrap - default no
+        [notes=<text>]      Follow field with this text (can be HTML)
+        [align=<...>]       Align field value within column
+        [lalign=<...>]      Align field label within column
+        [valign=<...>]      Align field label up/down within column
+        [lattr=<...>]       Use HTML attribute for label
+        [fattr=<...>]       Use HTML attribute for field
+        [width=<...>]       Width of column, for tables only
+        [span=<...>]        Column spanning, for table headers only
+        [type=<...>]        'button' (default), 'plain', or 'image'.
+        [href=<ref>]        HREF value, default is '#'.
+        [height=size>       Height of image, in pixels (type=image)
+        [width=size>        Width of image, in pixels (type=image)
+        [rollover=<name>]
+
+Defines a push-button or click field.  An action can look like a submit
+button, like a hyperlink option field, or like an image.  If you are using
+the Studio Forms dialog system, you can link an action to a dialog event; in
+this case only actions that are permitted in the current dialog state will be
+displayed on the form.
+
+To display an image action, use the value="..." option to specify the name
+of a file; this file must be located within the webpages directory of the
+web transaction server.  If the filename does not start with /, fdlgen
+prefixes '/images/' to the filename, since WTP does not support relative
+filenames for images (i.e. a filename without leading '/' will never be
+found).  For image actions, the rollover option can specify an image that
+shows when the mouse is positioned on top of the image field.
+
+The .action command can come outside a .fields or .table list.  In this
+case the action is positioned at the left margin, and without any label.
+You should format and break the lines as necessary around such .actions
+using normal HTML.
+
+The .Label Command
+------------------
+
+    .label "text"       Define stand-alone label
+        [lalign=<...>]      Align field label within column
+        [valign=<...>]      Align field label up/down within column
+        [width=<...>]       Width of column, for tables only
+        [span=<...>]        Column spanning, for table headers only
+
+Defines some label text.
+
+The .Index Command
+------------------
+
+    .index name         Define hidden field on form for use in tables
+                        and if/unless commands.  Field is always numeric.
+        [value=number]      Initial value - default zero
+
+Defines an index field, for use in variable tables and conditional blocks.
+Index fields are always numeric and always hidden.
+
+Examples
+--------
+
+How do I define a password field?
+
+    .textual "Enter password" password attr=secure size=40
+
+Multipage Documents
+===================
+
+Most programs will use a single form.  fdlgen allows multiple forms in a
+single FDL file.  In principle the program can select the desired form at
+runtime.  This functionality works as follows: each .page command defines
+a new form output file (FML file).  One FDL file can therefore generate
+many FML files.  fdlgen produces a log file that defines this relationship.
+The log file is read by fmlgen when it processes an FML file.
+
+Each FML file creates one .h file; the programmer must then include the
+required forms in the program.
+
+
+Modifying Form Cosmetics
+========================
+
+You can change the width of tables by setting the variable FORM_WIDTH.
+For instance, this command sets the width for following tables to 90%:
+
+    .define FORM_WIDTH 90%
+
+This command defines that the label-to-data ratio is 30%/70% (by default
+it is 20%/80%):
+
+    .define DATA_WIDTH 70%
+
+Note that the variable is DATA_WIDTH, in uppercase.  The .define
+can come anywhere in the FDL file; we suggest that a good place for
+global definitions is the prelude.def file.
+
+You can also change these values; default assignments are shown:
+
+    .define ALIGN           LEFT
+    .define LALIGN          LEFT
+    .define VALIGN          TOP
+    .define TALIGN          CENTER
+    .define TLALIGN         CENTER
+    .define TVALIGN         TOP
+    .define COMPACT         0
+
+These provide the defaults for the align= and align_label= options for
+fields in two-column and multi-column tables respectively.  VALIGN is for
+field labels.  If COMPACT is defined as 1, tables will be formatted as
+compactly as possible.

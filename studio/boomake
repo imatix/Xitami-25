@@ -1,0 +1,2268 @@
+#!/bin/sh
+#
+#   Boom builder for Studio 2.2
+#   Generated from standard.pwl on 2004/07/22
+#   See www.imatix.com for more information.
+#   Copyright (c) 1991-2003 iMatix Corporation
+#
+#   Force environment variables to point to install location
+#   Start by using final IBASE, then handle local -install path
+self=$0
+_IBASE=$IBASE
+if [ -z "$_IBASE" ]; then
+    _IBASE=/usr/local/imatix
+fi
+INCDIR=$_IBASE/xitami-25/include
+LIBDIR=$_IBASE/xitami-25/lib
+PATH=.:$_IBASE/xitami-25/bin:$PATH
+PERLLIB=.:$_IBASE/xitami-25/bin:$PERLLIB
+_LOCAL=0
+export INCDIR LIBDIR PATH PERLLIB
+if [ "$1" = "-install" ]; then
+    _IBASE=$2
+    _LOCAL=1
+    PATH=$_IBASE/xitami-25/bin:$PATH
+    PERLLIB=$_IBASE/xitami-25/bin:$PERLLIB
+    INCDIR_ALT=$_IBASE/xitami-25/include
+    LIBDIR_ALT=$_IBASE/xitami-25/lib
+    export PATH PERLLIB INCDIR_ALT LIBDIR_ALT
+    shift;
+    shift;
+fi
+
+# --------------------------   BUILD BINARY FILES   ---------------------------
+
+a_build_binary_files() {
+:
+    echo "Building application..."
+    COPTS=-g
+    if [ ! -z "$INCDIR_ALT" ]; then
+        COPTS="$COPTS -li . -li $INCDIR_ALT"
+    fi
+    if [ ! -z "$LIBDIR_ALT" ]; then
+        COPTS="$COPTS -ll $LIBDIR_ALT"
+    fi
+    PUSHDIR=`pwd`; cd doc/
+    cd $PUSHDIR; PUSHDIR=
+    c $COPTS ctxman
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS ctxman' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS wtplib
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS wtplib' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS formio
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS formio' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS wtpman
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS wtpman' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS browtp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS browtp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS brocgi
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS brocgi' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS testbro
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS testbro' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS fxtest1
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS fxtest1' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS fxtest2
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS fxtest2' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS fxtest3
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS fxtest3' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS fxdemo
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS fxdemo' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS fxdemo2
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS fxdemo2' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS fxdemo3
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS fxdemo3' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS wtpmsg
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS wtpmsg' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libstu ctxman
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libstu ctxman' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libstu wtplib
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libstu wtplib' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libstu formio
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libstu formio' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libstu wtpman
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libstu wtpman' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libstu browtp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libstu browtp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libstu brocgi
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libstu brocgi' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libstu fxtest1
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libstu fxtest1' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libstu fxtest2
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libstu fxtest2' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libstu fxtest3
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libstu fxtest3' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libstu wtpmsg
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libstu wtpmsg' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -L testbro
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -L testbro' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -L fxdemo
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -L fxdemo' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -L fxdemo2
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -L fxdemo2' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -L fxdemo3
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -L fxdemo3' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# -------------------------   BUILD SOURCE PACKAGES   -------------------------
+
+a_build_source_packages() {
+:
+    rm -f _package.lst
+    if [ -f "studio/doc/fdldoc.txt" ]; then
+        echo studio/doc/fdldoc.txt>>_package.lst
+    fi
+    if [ -f "studio/doc/fmldoc.txt" ]; then
+        echo studio/doc/fmldoc.txt>>_package.lst
+    fi
+    if [ -f "studio/doc/rfc001.txt" ]; then
+        echo studio/doc/rfc001.txt>>_package.lst
+    fi
+    if [ -f "studio/doc/rfc002.txt" ]; then
+        echo studio/doc/rfc002.txt>>_package.lst
+    fi
+    if [ -f "studio/version.h" ]; then
+        echo studio/version.h>>_package.lst
+    fi
+    if [ -f "studio/ctxman.c" ]; then
+        echo studio/ctxman.c>>_package.lst
+    fi
+    if [ -f "studio/ctxman.h" ]; then
+        echo studio/ctxman.h>>_package.lst
+    fi
+    if [ -f "studio/wtplib.c" ]; then
+        echo studio/wtplib.c>>_package.lst
+    fi
+    if [ -f "studio/wtplib.h" ]; then
+        echo studio/wtplib.h>>_package.lst
+    fi
+    if [ -f "studio/formio.c" ]; then
+        echo studio/formio.c>>_package.lst
+    fi
+    if [ -f "studio/formio.h" ]; then
+        echo studio/formio.h>>_package.lst
+    fi
+    if [ -f "studio/wtpman.c" ]; then
+        echo studio/wtpman.c>>_package.lst
+    fi
+    if [ -f "studio/browtp.c" ]; then
+        echo studio/browtp.c>>_package.lst
+    fi
+    if [ -f "studio/browtp.h" ]; then
+        echo studio/browtp.h>>_package.lst
+    fi
+    if [ -f "studio/brocgi.c" ]; then
+        echo studio/brocgi.c>>_package.lst
+    fi
+    if [ -f "studio/wtpmsg.xml" ]; then
+        echo studio/wtpmsg.xml>>_package.lst
+    fi
+    if [ -f "studio/wtpmsg.h" ]; then
+        echo studio/wtpmsg.h>>_package.lst
+    fi
+    if [ -f "studio/stupriv.h" ]; then
+        echo studio/stupriv.h>>_package.lst
+    fi
+    if [ -f "studio/defaults.cfg" ]; then
+        echo studio/defaults.cfg>>_package.lst
+    fi
+    if [ -f "studio/fdlgen" ]; then
+        echo studio/fdlgen>>_package.lst
+    fi
+    if [ -f "studio/fdlgen.fmt" ]; then
+        echo studio/fdlgen.fmt>>_package.lst
+    fi
+    if [ -f "studio/fmlgen" ]; then
+        echo studio/fmlgen>>_package.lst
+    fi
+    if [ -f "studio/fmlgen.fmt" ]; then
+        echo studio/fmlgen.fmt>>_package.lst
+    fi
+    if [ -f "studio/findfile.pl" ]; then
+        echo studio/findfile.pl>>_package.lst
+    fi
+    if [ -f "studio/shellwd.pl" ]; then
+        echo studio/shellwd.pl>>_package.lst
+    fi
+    if [ -f "studio/sflcvdp.pl" ]; then
+        echo studio/sflcvdp.pl>>_package.lst
+    fi
+    if [ -f "studio/sfldate.pl" ]; then
+        echo studio/sfldate.pl>>_package.lst
+    fi
+    if [ -f "studio/testbro.c" ]; then
+        echo studio/testbro.c>>_package.lst
+    fi
+    if [ -f "studio/fxdemo.adf" ]; then
+        echo studio/fxdemo.adf>>_package.lst
+    fi
+    if [ -f "studio/fxdemo.ini" ]; then
+        echo studio/fxdemo.ini>>_package.lst
+    fi
+    if [ -f "studio/fxtest1.c" ]; then
+        echo studio/fxtest1.c>>_package.lst
+    fi
+    if [ -f "studio/fxtest2.c" ]; then
+        echo studio/fxtest2.c>>_package.lst
+    fi
+    if [ -f "studio/fxtest3.c" ]; then
+        echo studio/fxtest3.c>>_package.lst
+    fi
+    if [ -f "studio/fxdemo.c" ]; then
+        echo studio/fxdemo.c>>_package.lst
+    fi
+    if [ -f "studio/fxdemo2.c" ]; then
+        echo studio/fxdemo2.c>>_package.lst
+    fi
+    if [ -f "studio/fxdemo3.c" ]; then
+        echo studio/fxdemo3.c>>_package.lst
+    fi
+    if [ -f "studio/index.htm" ]; then
+        echo studio/index.htm>>_package.lst
+    fi
+    if [ -f "studio/wtpcfg.ini" ]; then
+        echo studio/wtpcfg.ini>>_package.lst
+    fi
+    if [ -f "studio/adfgen.gsl" ]; then
+        echo studio/adfgen.gsl>>_package.lst
+    fi
+    if [ -f "studio/lrstudio.c" ]; then
+        echo studio/lrstudio.c>>_package.lst
+    fi
+    if [ -f "studio/anchor.def" ]; then
+        echo studio/anchor.def>>_package.lst
+    fi
+    if [ -f "studio/prelude.def" ]; then
+        echo studio/prelude.def>>_package.lst
+    fi
+    if [ -f "studio/prelude.pdl" ]; then
+        echo studio/prelude.pdl>>_package.lst
+    fi
+    if [ -f "studio/license.gpl" ]; then
+        echo studio/license.gpl>>_package.lst
+    fi
+    if [ -f "studio/project.pdl" ]; then
+        echo studio/project.pdl>>_package.lst
+    fi
+    if [ -f "studio/readme.txt" ]; then
+        echo studio/readme.txt>>_package.lst
+    fi
+    if [ -f "studio/wtpman.l" ]; then
+        echo studio/wtpman.l>>_package.lst
+    fi
+    if [ -f "studio/wtpman.i" ]; then
+        echo studio/wtpman.i>>_package.lst
+    fi
+    if [ -f "studio/wtpman.d" ]; then
+        echo studio/wtpman.d>>_package.lst
+    fi
+    if [ -f "studio/browtp.l" ]; then
+        echo studio/browtp.l>>_package.lst
+    fi
+    if [ -f "studio/browtp.i" ]; then
+        echo studio/browtp.i>>_package.lst
+    fi
+    if [ -f "studio/browtp.d" ]; then
+        echo studio/browtp.d>>_package.lst
+    fi
+    if [ -f "studio/brocgi.l" ]; then
+        echo studio/brocgi.l>>_package.lst
+    fi
+    if [ -f "studio/brocgi.i" ]; then
+        echo studio/brocgi.i>>_package.lst
+    fi
+    if [ -f "studio/brocgi.d" ]; then
+        echo studio/brocgi.d>>_package.lst
+    fi
+    if [ -f "studio/brocgi.h" ]; then
+        echo studio/brocgi.h>>_package.lst
+    fi
+    if [ -f "studio/wtpmsg.c" ]; then
+        echo studio/wtpmsg.c>>_package.lst
+    fi
+    if [ -f "studio/fdlgen.l" ]; then
+        echo studio/fdlgen.l>>_package.lst
+    fi
+    if [ -f "studio/fdlgen.d" ]; then
+        echo studio/fdlgen.d>>_package.lst
+    fi
+    if [ -f "studio/fdlgen.bat" ]; then
+        echo studio/fdlgen.bat>>_package.lst
+    fi
+    if [ -f "studio/fmlgen.l" ]; then
+        echo studio/fmlgen.l>>_package.lst
+    fi
+    if [ -f "studio/fmlgen.d" ]; then
+        echo studio/fmlgen.d>>_package.lst
+    fi
+    if [ -f "studio/fmlgen.bat" ]; then
+        echo studio/fmlgen.bat>>_package.lst
+    fi
+    if [ -f "studio/fxtest1.fdl" ]; then
+        echo studio/fxtest1.fdl>>_package.lst
+    fi
+    if [ -f "studio/fxtest1.htm" ]; then
+        echo studio/fxtest1.htm>>_package.lst
+    fi
+    if [ -f "studio/fxtest1.log" ]; then
+        echo studio/fxtest1.log>>_package.lst
+    fi
+    if [ -f "studio/fxtest1.h" ]; then
+        echo studio/fxtest1.h>>_package.lst
+    fi
+    if [ -f "studio/fxtest1.l" ]; then
+        echo studio/fxtest1.l>>_package.lst
+    fi
+    if [ -f "studio/fxtest1.i" ]; then
+        echo studio/fxtest1.i>>_package.lst
+    fi
+    if [ -f "studio/fxtest1.d" ]; then
+        echo studio/fxtest1.d>>_package.lst
+    fi
+    if [ -f "studio/fxtest2.fdl" ]; then
+        echo studio/fxtest2.fdl>>_package.lst
+    fi
+    if [ -f "studio/fxtest2.htm" ]; then
+        echo studio/fxtest2.htm>>_package.lst
+    fi
+    if [ -f "studio/fxtest2.log" ]; then
+        echo studio/fxtest2.log>>_package.lst
+    fi
+    if [ -f "studio/fxtest2.h" ]; then
+        echo studio/fxtest2.h>>_package.lst
+    fi
+    if [ -f "studio/fxtest2.l" ]; then
+        echo studio/fxtest2.l>>_package.lst
+    fi
+    if [ -f "studio/fxtest2.i" ]; then
+        echo studio/fxtest2.i>>_package.lst
+    fi
+    if [ -f "studio/fxtest2.d" ]; then
+        echo studio/fxtest2.d>>_package.lst
+    fi
+    if [ -f "studio/fxtest3.fdl" ]; then
+        echo studio/fxtest3.fdl>>_package.lst
+    fi
+    if [ -f "studio/fxtest3.htm" ]; then
+        echo studio/fxtest3.htm>>_package.lst
+    fi
+    if [ -f "studio/fxtest3.log" ]; then
+        echo studio/fxtest3.log>>_package.lst
+    fi
+    if [ -f "studio/fxtest3.h" ]; then
+        echo studio/fxtest3.h>>_package.lst
+    fi
+    if [ -f "studio/fxtest3.l" ]; then
+        echo studio/fxtest3.l>>_package.lst
+    fi
+    if [ -f "studio/fxtest3.i" ]; then
+        echo studio/fxtest3.i>>_package.lst
+    fi
+    if [ -f "studio/fxtest3.d" ]; then
+        echo studio/fxtest3.d>>_package.lst
+    fi
+    if [ -f "studio/studio.h" ]; then
+        echo studio/studio.h>>_package.lst
+    fi
+    if [ -f "studio/boomake" ]; then
+        echo studio/boomake>>_package.lst
+    fi
+    if [ -f "studio/boomake.bat" ]; then
+        echo studio/boomake.bat>>_package.lst
+    fi
+    if [ -f "studio/makefile" ]; then
+        echo studio/makefile>>_package.lst
+    fi
+    echo "Building stu_2_2_src.tar.gz..."
+    tar -czf stu_2_2_src.tar.gz -T _package.lst
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'tar -czf stu_2_2_src.tar.gz -T _package.lst' failed with exit status $status. Stop.
+        exit 1
+    fi
+    rm _package.lst
+}
+
+# -----------------------   CHECK BINARY FILES EXIST   ------------------------
+
+a_check_binary_files_exist() {
+:
+    if [ -d "doc" ]; then
+        cd doc
+    fi
+    if [ -d "../doc" ]; then
+        cd ..
+    fi
+    if [ ! -f "ctxman.h" ]; then
+        echo "ctxman.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtplib.h" ]; then
+        echo "wtplib.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "formio.h" ]; then
+        echo "formio.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "browtp.h" ]; then
+        echo "browtp.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpmsg.h" ]; then
+        echo "wtpmsg.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "defaults.cfg" ]; then
+        echo "defaults.cfg is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen" ]; then
+        echo "fdlgen is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen.fmt" ]; then
+        echo "fdlgen.fmt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen" ]; then
+        echo "fmlgen is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen.fmt" ]; then
+        echo "fmlgen.fmt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "findfile.pl" ]; then
+        echo "findfile.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "shellwd.pl" ]; then
+        echo "shellwd.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvdp.pl" ]; then
+        echo "sflcvdp.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldate.pl" ]; then
+        echo "sfldate.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "adfgen.gsl" ]; then
+        echo "adfgen.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "lrstudio.c" ]; then
+        echo "lrstudio.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "libstu.a" ]; then
+        echo "libstu.a is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen.d" ]; then
+        echo "fdlgen.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen.bat" ]; then
+        echo "fdlgen.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen.d" ]; then
+        echo "fmlgen.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen.bat" ]; then
+        echo "fmlgen.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "studio.h" ]; then
+        echo "studio.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# ------------------------   CHECK OPERATING CONTEXT   ------------------------
+
+a_check_operating_context() {
+:
+    event=source
+    if [ -d "CVS" ]; then
+        event=rawcvs
+    fi
+}
+
+# -----------------------   CHECK PROJECT FILES EXIST   -----------------------
+
+a_check_project_files_exist() {
+:
+    if [ ! -d "doc" ]; then
+        echo "directory doc is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "doc" ]; then
+        cd doc
+    fi
+    if [ ! -f "fdldoc.txt" ]; then
+        echo "fdldoc.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmldoc.txt" ]; then
+        echo "fmldoc.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "rfc001.txt" ]; then
+        echo "rfc001.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "rfc002.txt" ]; then
+        echo "rfc002.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../doc" ]; then
+        cd ..
+    fi
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ctxman.c" ]; then
+        echo "ctxman.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ctxman.h" ]; then
+        echo "ctxman.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtplib.c" ]; then
+        echo "wtplib.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtplib.h" ]; then
+        echo "wtplib.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "formio.c" ]; then
+        echo "formio.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "formio.h" ]; then
+        echo "formio.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpman.c" ]; then
+        echo "wtpman.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "browtp.c" ]; then
+        echo "browtp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "browtp.h" ]; then
+        echo "browtp.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "brocgi.c" ]; then
+        echo "brocgi.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpmsg.xml" ]; then
+        echo "wtpmsg.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "stupriv.h" ]; then
+        echo "stupriv.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "defaults.cfg" ]; then
+        echo "defaults.cfg is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen" ]; then
+        echo "fdlgen is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen.fmt" ]; then
+        echo "fdlgen.fmt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen" ]; then
+        echo "fmlgen is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen.fmt" ]; then
+        echo "fmlgen.fmt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "findfile.pl" ]; then
+        echo "findfile.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "shellwd.pl" ]; then
+        echo "shellwd.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvdp.pl" ]; then
+        echo "sflcvdp.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldate.pl" ]; then
+        echo "sfldate.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testbro.c" ]; then
+        echo "testbro.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxdemo.adf" ]; then
+        echo "fxdemo.adf is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxdemo.ini" ]; then
+        echo "fxdemo.ini is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest1.c" ]; then
+        echo "fxtest1.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest2.c" ]; then
+        echo "fxtest2.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest3.c" ]; then
+        echo "fxtest3.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "index.htm" ]; then
+        echo "index.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpcfg.ini" ]; then
+        echo "wtpcfg.ini is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "adfgen.gsl" ]; then
+        echo "adfgen.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "lrstudio.c" ]; then
+        echo "lrstudio.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "prelude.def" ]; then
+        echo "prelude.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpman.l" ]; then
+        echo "wtpman.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "browtp.l" ]; then
+        echo "browtp.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "brocgi.l" ]; then
+        echo "brocgi.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "brocgi.h" ]; then
+        echo "brocgi.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen.l" ]; then
+        echo "fdlgen.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen.bat" ]; then
+        echo "fdlgen.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen.l" ]; then
+        echo "fmlgen.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen.bat" ]; then
+        echo "fmlgen.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest1.fdl" ]; then
+        echo "fxtest1.fdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest1.l" ]; then
+        echo "fxtest1.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest2.fdl" ]; then
+        echo "fxtest2.fdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest2.l" ]; then
+        echo "fxtest2.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest3.fdl" ]; then
+        echo "fxtest3.fdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest3.l" ]; then
+        echo "fxtest3.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "makefile" ]; then
+        echo "makefile is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -----------------------   CHECK SOURCE FILES EXIST   ------------------------
+
+a_check_source_files_exist() {
+:
+    if [ -d "doc" ]; then
+        cd doc
+    fi
+    if [ ! -f "fdldoc.txt" ]; then
+        echo "fdldoc.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmldoc.txt" ]; then
+        echo "fmldoc.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "rfc001.txt" ]; then
+        echo "rfc001.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "rfc002.txt" ]; then
+        echo "rfc002.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ -d "../doc" ]; then
+        cd ..
+    fi
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ctxman.c" ]; then
+        echo "ctxman.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ctxman.h" ]; then
+        echo "ctxman.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtplib.c" ]; then
+        echo "wtplib.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtplib.h" ]; then
+        echo "wtplib.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "formio.c" ]; then
+        echo "formio.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "formio.h" ]; then
+        echo "formio.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpman.c" ]; then
+        echo "wtpman.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "browtp.c" ]; then
+        echo "browtp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "browtp.h" ]; then
+        echo "browtp.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "brocgi.c" ]; then
+        echo "brocgi.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpmsg.xml" ]; then
+        echo "wtpmsg.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpmsg.h" ]; then
+        echo "wtpmsg.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "stupriv.h" ]; then
+        echo "stupriv.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "defaults.cfg" ]; then
+        echo "defaults.cfg is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen" ]; then
+        echo "fdlgen is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen.fmt" ]; then
+        echo "fdlgen.fmt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen" ]; then
+        echo "fmlgen is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen.fmt" ]; then
+        echo "fmlgen.fmt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "findfile.pl" ]; then
+        echo "findfile.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "shellwd.pl" ]; then
+        echo "shellwd.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvdp.pl" ]; then
+        echo "sflcvdp.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldate.pl" ]; then
+        echo "sfldate.pl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "testbro.c" ]; then
+        echo "testbro.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxdemo.adf" ]; then
+        echo "fxdemo.adf is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxdemo.ini" ]; then
+        echo "fxdemo.ini is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest1.c" ]; then
+        echo "fxtest1.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest2.c" ]; then
+        echo "fxtest2.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest3.c" ]; then
+        echo "fxtest3.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxdemo.c" ]; then
+        echo "fxdemo.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxdemo2.c" ]; then
+        echo "fxdemo2.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxdemo3.c" ]; then
+        echo "fxdemo3.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "index.htm" ]; then
+        echo "index.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpcfg.ini" ]; then
+        echo "wtpcfg.ini is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "adfgen.gsl" ]; then
+        echo "adfgen.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "lrstudio.c" ]; then
+        echo "lrstudio.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "anchor.def" ]; then
+        echo "anchor.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "prelude.def" ]; then
+        echo "prelude.def is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpman.l" ]; then
+        echo "wtpman.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpman.i" ]; then
+        echo "wtpman.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpman.d" ]; then
+        echo "wtpman.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "browtp.l" ]; then
+        echo "browtp.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "browtp.i" ]; then
+        echo "browtp.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "browtp.d" ]; then
+        echo "browtp.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "brocgi.l" ]; then
+        echo "brocgi.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "brocgi.i" ]; then
+        echo "brocgi.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "brocgi.d" ]; then
+        echo "brocgi.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "brocgi.h" ]; then
+        echo "brocgi.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wtpmsg.c" ]; then
+        echo "wtpmsg.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen.l" ]; then
+        echo "fdlgen.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen.d" ]; then
+        echo "fdlgen.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fdlgen.bat" ]; then
+        echo "fdlgen.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen.l" ]; then
+        echo "fmlgen.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen.d" ]; then
+        echo "fmlgen.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fmlgen.bat" ]; then
+        echo "fmlgen.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest1.fdl" ]; then
+        echo "fxtest1.fdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest1.htm" ]; then
+        echo "fxtest1.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest1.log" ]; then
+        echo "fxtest1.log is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest1.h" ]; then
+        echo "fxtest1.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest1.l" ]; then
+        echo "fxtest1.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest1.i" ]; then
+        echo "fxtest1.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest1.d" ]; then
+        echo "fxtest1.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest2.fdl" ]; then
+        echo "fxtest2.fdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest2.htm" ]; then
+        echo "fxtest2.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest2.log" ]; then
+        echo "fxtest2.log is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest2.h" ]; then
+        echo "fxtest2.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest2.l" ]; then
+        echo "fxtest2.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest2.i" ]; then
+        echo "fxtest2.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest2.d" ]; then
+        echo "fxtest2.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest3.fdl" ]; then
+        echo "fxtest3.fdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest3.htm" ]; then
+        echo "fxtest3.htm is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest3.log" ]; then
+        echo "fxtest3.log is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest3.h" ]; then
+        echo "fxtest3.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest3.l" ]; then
+        echo "fxtest3.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest3.i" ]; then
+        echo "fxtest3.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "fxtest3.d" ]; then
+        echo "fxtest3.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "studio.h" ]; then
+        echo "studio.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "makefile" ]; then
+        echo "makefile is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -------------------------   INSTALL DELIVERABLES   --------------------------
+
+a_install_deliverables() {
+:
+    TARGET=$_IBASE/xitami-25
+    echo "Installing Studio into $TARGET..."
+    if [ ! -d "$TARGET" ]; then
+        if mkdir -p $TARGET; then
+            :
+        else
+            echo "Could not create directory \"$TARGET\". Stop."
+            exit 1
+        fi
+    fi
+    mkdir -p $TARGET/include/
+    cp ctxman.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ctxman.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/ctxman.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/ctxman.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp wtplib.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp wtplib.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/wtplib.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/wtplib.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp formio.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp formio.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/formio.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/formio.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp browtp.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp browtp.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/browtp.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/browtp.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp wtpmsg.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp wtpmsg.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/wtpmsg.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/wtpmsg.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/bin/
+    cp defaults.cfg $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp defaults.cfg $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/defaults.cfg
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/defaults.cfg' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp fdlgen $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp fdlgen $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0755 $TARGET/bin/fdlgen
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0755 $TARGET/bin/fdlgen' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp fdlgen.fmt $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp fdlgen.fmt $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/fdlgen.fmt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/fdlgen.fmt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp fmlgen $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp fmlgen $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0755 $TARGET/bin/fmlgen
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0755 $TARGET/bin/fmlgen' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp fmlgen.fmt $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp fmlgen.fmt $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/fmlgen.fmt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/fmlgen.fmt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp findfile.pl $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp findfile.pl $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/findfile.pl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/findfile.pl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp shellwd.pl $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp shellwd.pl $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/shellwd.pl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/shellwd.pl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp sflcvdp.pl $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp sflcvdp.pl $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/sflcvdp.pl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/sflcvdp.pl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp sfldate.pl $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp sfldate.pl $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/sfldate.pl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/sfldate.pl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp adfgen.gsl $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp adfgen.gsl $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/adfgen.gsl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/adfgen.gsl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp lrstudio.c $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp lrstudio.c $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/lrstudio.c
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/lrstudio.c' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/lib/
+    cp libstu.a $TARGET/lib/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp libstu.a $TARGET/lib/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/lib/libstu.a
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/lib/libstu.a' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/bin/
+    mkdir -p $TARGET/doc/Studio/
+    cp readme.txt $TARGET/doc/Studio/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp readme.txt $TARGET/doc/Studio/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/doc/Studio/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/doc/Studio/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/bin/
+    cp fdlgen.d $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp fdlgen.d $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/fdlgen.d
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/fdlgen.d' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp fdlgen.bat $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp fdlgen.bat $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/fdlgen.bat
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/fdlgen.bat' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp fmlgen.d $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp fmlgen.d $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/fmlgen.d
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/fmlgen.d' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp fmlgen.bat $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp fmlgen.bat $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/fmlgen.bat
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/fmlgen.bat' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/include/
+    cp studio.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp studio.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/studio.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/studio.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+
+    if [ ! -f "$TARGET/bin/setvars.sh" ]; then
+        echo "Creating $TARGET/bin/setvars.sh..."
+        echo "if [ -z \"\$INCDIR\" ]; then"          >$TARGET/bin/setvars.sh
+        echo "    INCDIR=$TARGET/include"            >>$TARGET/bin/setvars.sh
+        echo "    LIBDIR=$TARGET/lib"                >>$TARGET/bin/setvars.sh
+        echo "    PATH=$TARGET/bin:\$PATH"           >>$TARGET/bin/setvars.sh
+        echo "    PERLLIB=$TARGET/bin:\$PATH"        >>$TARGET/bin/setvars.sh
+        echo "    export INCDIR LIBDIR PATH PERLLIB" >>$TARGET/bin/setvars.sh
+        echo "fi"                                    >>$TARGET/bin/setvars.sh
+    fi
+}
+
+# ------------------------   PRODUCE GENERATED FILES   ------------------------
+
+a_produce_generated_files() {
+:
+    gsl -q fxdemo.adf
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'gsl -q fxdemo.adf' failed with exit status $status. Stop.
+        exit 1
+    fi
+    if [ -d "doc" ]; then
+        cd doc
+    fi
+    if [ -d "../doc" ]; then
+        cd ..
+    fi
+    gsl -q wtpmsg.xml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'gsl -q wtpmsg.xml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr wtpman.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr wtpman.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr browtp.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr browtp.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr brocgi.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr brocgi.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr fdlgen.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr fdlgen.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr fmlgen.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr fmlgen.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    perl fdlgen fxtest1.fdl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'perl fdlgen fxtest1.fdl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    perl fmlgen fxtest1.fdl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'perl fmlgen fxtest1.fdl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr fxtest1.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr fxtest1.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    perl fdlgen fxtest2.fdl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'perl fdlgen fxtest2.fdl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    perl fmlgen fxtest2.fdl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'perl fmlgen fxtest2.fdl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr fxtest2.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr fxtest2.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    perl fdlgen fxtest3.fdl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'perl fdlgen fxtest3.fdl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    perl fmlgen fxtest3.fdl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'perl fmlgen fxtest3.fdl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr fxtest3.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr fxtest3.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    gsl -q fxdemo.adf
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'gsl -q fxdemo.adf' failed with exit status $status. Stop.
+        exit 1
+    fi
+    rm -f studio.h
+    cat wtplib.h>>studio.h
+    cat wtpmsg.h>>studio.h
+    cat ctxman.h>>studio.h
+    cat formio.h>>studio.h
+    cat browtp.h>>studio.h
+    cat brocgi.h>>studio.h
+}
+
+# -----------------------   REMOVE GENERATED BINARIES   -----------------------
+
+a_remove_generated_binaries() {
+:
+    rm -f doc/libstu.a
+    rm -f libstu.a
+    rm -f ctxman.o
+    rm -f wtplib.o
+    rm -f formio.o
+    rm -f wtpman.o
+    rm -f browtp.o
+    rm -f brocgi.o
+    rm -f wtpmsg.c.o
+    rm -f testbro.o
+    rm -f testbro
+    rm -f fxtest1.o
+    rm -f fxtest2.o
+    rm -f fxtest3.o
+    rm -f fxdemo.o
+    rm -f fxdemo
+    rm -f fxdemo2.o
+    rm -f fxdemo2
+    rm -f fxdemo3.o
+    rm -f fxdemo3
+    rm -f wtpmsg.o
+    if [ -d "doc" ]; then
+        cd doc
+    fi
+    if [ -d "../doc" ]; then
+        cd ..
+    fi
+}
+
+# -----------------------   REMOVE GENERATED SOURCES   ------------------------
+
+a_remove_generated_sources() {
+:
+    rm -f wtpmsg.h
+    rm -f fxdemo.c
+    rm -f fxdemo2.c
+    rm -f fxdemo3.c
+    rm -f anchor.def
+    rm -f wtpman.i
+    rm -f wtpman.d
+    rm -f browtp.i
+    rm -f browtp.d
+    rm -f brocgi.i
+    rm -f brocgi.d
+    rm -f wtpmsg.c
+    rm -f fdlgen.d
+    rm -f fmlgen.d
+    rm -f fxtest1.htm
+    rm -f fxtest1.log
+    rm -f fxtest1.h
+    rm -f fxtest1.i
+    rm -f fxtest1.d
+    rm -f fxtest2.htm
+    rm -f fxtest2.log
+    rm -f fxtest2.h
+    rm -f fxtest2.i
+    rm -f fxtest2.d
+    rm -f fxtest3.htm
+    rm -f fxtest3.log
+    rm -f fxtest3.h
+    rm -f fxtest3.i
+    rm -f fxtest3.d
+    rm -f studio.h
+}
+
+# ------------------------   REPORT HELP INFORMATION   ------------------------
+
+a_report_help_information() {
+:
+    echo "boomake - Boom! builder for Studio 2.2"
+    echo "Copyright (c) 1991-2003 iMatix Corporation"
+    echo ""
+    echo "This script acts as a project 'make' tool.  Boom! uses an XML-based"
+    echo "project description and generates various make tools (including this"
+    echo "one) from it.  To find out more about Boom!, visit www.imatix.com."
+    echo ""
+    eval "actions_$state"
+}
+
+# -------------------------   RUN REGRESSION TESTS   --------------------------
+
+a_run_regression_tests() {
+:
+    :
+}
+
+actions_initial() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_initial_check() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_rawcvs() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the raw project sources, produces all generated files, and"
+    echo "    compiles all source files."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the raw project sources, removes all generated"
+    echo "    source and binary files from the project directory."
+    return
+}
+
+actions_source() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the packaged sources, compiles all source files without any"
+    echo "    code generation."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the packaged sources, removes all generated"
+    echo "    source files from the project directory."
+    return
+}
+
+actions_default() {
+    echo "The actions you can use in this state are:"
+echo "test:"
+    echo "  "
+    echo "    Runs regression tests for the project."
+echo "help:"
+    echo "  "
+    echo "    Shows a list of the available builder commands."
+    return
+}
+
+#   State machine starts here
+#
+firsttime=true
+while [ "$1" -o "$firsttime" ]; do
+  firsttime=
+  state=initial
+  event=ok
+  debug=
+  export state event debug
+  while [ -n "$state" ]; do
+    if [ "$inherit_state" ]; then
+        check_state=$inherit_state
+        inherit_state=
+    else
+        check_state=$state
+    fi
+    case "$check_state" in
+    initial)
+        if [ -n "$debug" ]; then
+            echo "State: initial"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        ok)
+            if [ -n "$debug" ]; then 
+                echo "Event: ok"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check operating context"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_operating_context
+            fi
+            state=initial_check
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    initial_check)
+        if [ -n "$debug" ]; then
+            echo "State: initial check"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        rawcvs)
+            if [ -n "$debug" ]; then 
+                echo "Event: rawcvs"
+            fi
+            event=
+            exception=
+            state=rawcvs
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        source)
+            if [ -n "$debug" ]; then 
+                echo "Event: source"
+            fi
+            event=
+            exception=
+            state=source
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    rawcvs)
+        if [ -n "$debug" ]; then
+            echo "State: rawcvs"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated sources"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_sources
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    source)
+        if [ -n "$debug" ]; then
+            echo "State: source"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    default)
+        if [ -n "$debug" ]; then
+            echo "State: default"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        test)
+            if [ -n "$debug" ]; then 
+                echo "Event: test"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: run regression tests"
+            fi
+            if [ -z "$exception" ]; then
+                a_run_regression_tests
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        help)
+            if [ -n "$debug" ]; then 
+                echo "Event: help"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        empty)
+            if [ -n "$debug" ]; then 
+                echo "Event: empty"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    esac
+  done
+done

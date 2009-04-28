@@ -1,0 +1,26 @@
+#   This is the login text file for the FTP service.  It is displayed
+#   by most browsers and FTP clients when a user connects to the server.
+#   Lines starting with '#' are ignored.
+#   You can change this file, or (better) copy it and change the
+#   ftp:login-text option.
+#
+
+Welcome to the FTP service of ftp.funkychicken-the-movie.com, hosted
+on a Googol system running GoogOS version 6.5.  Your server today is
+Xitami, the fast 'n free web/ftp server from iMatix Corporation, who
+will be happy to take your order at http://www.imatix.com.  In case of
+problems please contact the webmaster (joe@funkychicken-the-movie.com).
+
+This system is for the use of authorised users only.  Individuals
+using this computer system without authority, or in excess of their
+auhority are subject to having all their activities on this system
+monitored and recorded by system personnel.
+
+In the course of monitoring individuals improperly using this system,
+or in the course of system maintenance, the activities of authorised
+users may be monitored.  Anyone using this system expressly consents
+to such monitoring and is advised that if such monitoring reveals
+possible evidence of criminal activity, system personnel may provide
+the evidence of such monitoring to law enforcement officials.
+
+Have a really lovely day!

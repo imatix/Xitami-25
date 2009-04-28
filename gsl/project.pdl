@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<pdl
+    name      = "GSL"
+    acronym   = "gsl"
+    install   = "xitami-25"
+    version   = "2.01"
+    copyright = "Copyright (c) 1991-2003 iMatix Corporation"
+    workflow  = "standard.pwl"
+    library   = "libgsl">
+
+<include filename = "prelude.pdl" />
+<file name = "version.h"    class = "c version"       >Project version file</file>
+
+<file name = "gslgen.c"     class = "main program"    >Main program source</file>
+<file name = "gslgen.l"     class = "c dialog"        >Main program dialog</file>
+<file name = "ggcode.c"     class = "c/libero"        >Code generator</file>
+<file name = "ggcode.h"     class = "public header"   >Code generator header</file>
+<file name = "ggcomm.c"     class = "library module"  >Common functions</file>
+<file name = "ggeval.c"     class = "library module"  >Script evaluator</file>
+<file name = "ggfile.c"     class = "library module"  >File functions</file>
+<file name = "ggfunc.c"     class = "library module"  >Built-in GSL functions</file>
+<file name = "ggjs.h"       class = "private resource">JavaScript interface</file>
+<file name = "ggobjt.c"     class = "library module"  >Object module</file>
+<file name = "ggstrn.c"     class = "library module"  >String functions</file>
+<file name = "ggpars.c"     class = "dialog module"   >Script parser</file>
+<file name = "gsldoc.txt"   class = "private resource"></file>
+<file name = "guru.def"     class = "private resource"></file>
+<file name = "macros.def"   class = "private resource"></file>
+<file name = "prelude.def"  class = "private resource"></file>
+
+<!-- Deliverables -->
+<file name = "libgsl"       class = "public library"  >GSL runtime library</file>
+
+<use>
+    <library name = "libsfl" />
+    <library name = "libsmt" />
+</use>
+
+</pdl>

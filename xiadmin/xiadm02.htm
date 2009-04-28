@@ -1,0 +1,167 @@
+Cache-control: no-cache
+Expires: 0
+
+<HTML>
+<HEAD><TITLE>Xitami Administration</TITLE>
+<script type="text/javascript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function submit(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+function focus() {
+    if ("#(_focus)" != "jsaction")
+        document.forms[0].#(_focus).focus();
+}
+</script>
+</HEAD>
+<BODY onLoad="focus()" style="font-family: sans-serif" BGCOLOR="#87CEFA">
+<SCRIPT LANGUAGE="JavaScript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function subform(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+</SCRIPT>
+<TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100%>
+<FORM METHOD=POST ACTION="#(proto)#(host)#(uri)">
+<INPUT TYPE=HIDDEN NAME=jsaction VALUE="">
+<TR><TD ALIGN=LEFT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Back LABEL="/admin/$back.gif" EVENT=back_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/backa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$back.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=New LABEL="/admin/$new.gif" EVENT=new_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/newa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$new.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=First LABEL="/admin/$first.gif" EVENT=first_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/firsta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$first.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Next LABEL="/admin/$next.gif" EVENT=next_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/nexta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$next.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<A HREF="/xitami/index4.htm#virtual_hosts" TARGET="Help" TITLE="Help"
+onMouseOver="show('Help','/admin/helpa.gif')"
+onMouseOut="show('Help','/admin/$help.gif')"><IMG SRC="/admin/$help.gif" ALT="" BORDER=0 ALIGN=MIDDLE NAME="Help"
+WIDTH=40 HEIGHT=39></A><IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+<TD ALIGN=CENTER><FONT SIZE=+1>Virtual Hosts Configuration </FONT>
+<TD ALIGN=RIGHT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Console1 LABEL="/admin/$console.gif" EVENT=console_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/consolea.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$console.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Halt2 LABEL="/admin/$halt.gif" EVENT=halt_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/halta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$halt.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Restart3 LABEL="/admin/$restart.gif" EVENT=restart_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/restarta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$restart.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Exit4 LABEL="/admin/$exit.gif" EVENT=exit_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/exita.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$exit.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+</TABLE><p>
+
+<P>Select a configuration:<BR>
+<TABLE WIDTH="90%"  CELLPADDING=0 CELLSPACING=0>
+<TR>
+<TH ALIGN=CENTER VALIGN=TOP>
+<!--FML FIELD=F1 TEXTUAL LABEL NAME=L_filename VALUE="Name:" -->
+Name:
+<!--FML /FIELD-->
+</TH>
+<TH ALIGN=CENTER VALIGN=TOP COLSPAN=2>
+<!--FML FIELD=F2 TEXTUAL LABEL NAME=L_filedate VALUE="Last modified:" -->
+Last modified:
+<!--FML /FIELD-->
+</TH>
+<TH ALIGN=CENTER VALIGN=TOP>
+<!--FML FIELD=F3 TEXTUAL LABEL NAME=L_filesize VALUE="Size, lines:" -->
+Size, lines:
+<!--FML /FIELD-->
+</TH>
+<!--FML REPEAT=config-list ROWS=15 -->
+</TR>
+<TR>
+<TD ALIGN=LEFT VALIGN=TOP CLASS=tdfield>
+<!--FML FIELD=F4 TEXTUAL OPTION NAME=filename
+SIZE=40 MAX=80 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+</TD>
+<TD ALIGN=LEFT VALIGN=TOP CLASS=tdfield>
+<!--FML FIELD=F5 DATE LABEL NAME=filedate
+PICTURE="" SHOW=? FORMAT=? SIZE=15
+YEAR=? MONTH=? DAY=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=15 VALUE="" >
+<!--FML /FIELD-->
+</TD>
+<TD ALIGN=LEFT VALIGN=TOP CLASS=tdfield>
+<!--FML FIELD=F6 TIME LABEL NAME=filetime
+PICTURE="hh:mm:ss" SIZE=8 MAX=20 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=8 VALUE="" >
+<!--FML /FIELD-->
+</TD>
+<TD ALIGN=LEFT VALIGN=TOP CLASS=tdfield>
+<!--FML FIELD=F7 NUMERIC LABEL NAME=filesize
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=5 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=5 VALUE="" >
+<!--FML /FIELD-->
+</TD>
+</TR>
+<!--FML /REPEAT--></TABLE>
+
+<BR>
+<!--FML ACTION=Defaults LABEL="Defaults..." EVENT=default_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Defaults" VALUE="Defaults..." >
+<!--FML /ACTION-->
+ for all virtual hosts<BR>
+<!--FML ACTION=Basehost LABEL="Base host..." EVENT=basehost_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Basehost" VALUE="Base host..." >
+<!--FML /ACTION-->
+ for unresolved virtual hosts
+
+<!--FML FIELD=config-list NUMERIC BLANK SIZE=4 VALUE=15-->
+<!--FML /FIELD-->
+<!--FML FIELD=message_to_user SIZE=120 TEXTUAL HIDDEN -->
+<!--FML /FIELD -->
+</FORM>
+<SCRIPT LANGUAGE="JavaScript">
+    if ("#(_focus)" != "jsaction" && document.forms[0].#(_focus))
+        document.forms[0].#(_focus).focus();
+</SCRIPT>
+<HR>
+<TABLE WIDTH=100%><TR>
+<TD><IMG SRC="/admin/imatix.gif"
+WIDTH=96 HEIGHT=41>
+<TD ALIGN=CENTER><FONT SIZE=-1>Copyright &#169 1996-2002 iMatix Corporation
+<BR>Powered by iMatix Studio 2.5
+<TD ALIGN=RIGHT><FONT SIZE=-1>#(date) #(time)
+<BR>#(product) v2.5c2
+</TABLE>
+</BODY></HTML>

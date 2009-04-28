@@ -1,0 +1,101 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Image Maps</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index9.htm">&lt;</A>
+ | <A href="index11.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+
+<H2><A NAME="TOC88">Image Maps</A></H2>
+
+<P>Xitami supports NCSA-type clickable image maps.  When an image
+has the ISMAP attribute, Xitami will search for and use an image
+map file if the browser cooperates.  An image map file has the name
+of the image, the extension .map, and this syntax:
+<UL>
+<LI>Lines starting with # are ignored.
+<LI>Blank lines are ignored.
+<LI>Data lines consist of an element type, a URL, and optionally a
+list of coordinates, separated by spaces.
+</UL>
+<P>The URL can be any Internet URL, either an absolute image map,
+or a relative image map.  Xitami will recognise and handle these
+types of URLs:
+<UL>
+<LI>A filename with no path.  Xitami prefixes the path of the
+image map file.
+<LI>A filename with a path.  Xitami prefixes "http://", the name
+of the server host, and the port number if that is not 80.
+<LI>An absolute URL, starting with http: or another scheme
+such as mailto:, ftp:, etc.
+</UL>
+<P>You can use these elements types in the image map:
+<TABLE>
+<TR NOWRAP>
+<TH>Element syntax:
+<TH>Effect:
+<TR NOWRAP>
+<TD><TT>default</TT> <EM>url</EM>
+<TD>Defines the default URL for the image.
+<TR NOWRAP>
+<TD><TT>rect</TT> <EM>url</EM> <EM>x1,y1</EM>
+<EM>x2,y2</EM>
+<TD>Defines a rectangle between the two corner points
+specified.  Assumes x2 >= x1, y2 >= y1.
+<TR NOWRAP>
+<TD><TT>circle</TT> <EM>url</EM> <EM>x1,y1</EM>
+<EM>x2,y2</EM>
+<TD>Defines a circle where (x1,y1) is the circle's
+center, and (x2,y2) is any point on its circumference.
+<TR NOWRAP>
+<TD><TT>point</TT> <EM>url</EM> <EM>x,y</EM>
+<TD>Defines a point.  Accepts a click within about 3
+pixels of the point.
+<TR NOWRAP>
+<TD><TT>poly</TT> <EM>url</EM> <EM>x,y</EM>...
+<TD>Defines a polygon, where (x1,y1)..(xn,yn) defines
+the perimeter of the polygon.  You can specify up to 100
+points.
+</TABLE>
+
+<P>There are many freely-available tools to help you create
+image maps.  Xitami is compatible with these tools, so long as
+you create the image map in NSCA format.
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index9.htm">&lt;</A>
+ | <A href="index11.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <EM>Image Maps</EM>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

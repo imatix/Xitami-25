@@ -1,0 +1,272 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Credits</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index19.htm">&lt;</A>
+ | <A href="index21.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+
+<H2><A NAME="TOC165">Credits</A></H2>
+
+<H3><A NAME="TOC166">The Dream</A></H3>
+
+<P>Xitami was never meant to be the world success it is today.  Heck, we
+released version 1.0 just to demonstrate how internet servers *should* be
+written.  Unfortunately for our private lives, a screaming horde of people
+dragged poor little Xitami out of the door, into the bright light of day,
+and insisted that we beat it into the shape of a real web server.
+
+<P>Let's make it clear: the main motivating forces behind Xitami (at least
+as far as our team was concerned) were laziness and hubris. Larry Wall got
+this exactly right.  Frankly, we were too lazy to install Apache, and
+arrogant enough to think we could do better than Microsoft on their own
+systems.
+
+<P>From the first release of Xitami, the majority of changes, improvements,
+and fixes were provoked by its users.  Xitami consists of a small group of
+programmers surrounded by hundreds of vocal, and supportive users.  It's a
+great mix.
+
+<P>Our dream was to show the world that large, slow, and complex software
+is a deception.  Xitami does its job with a minimalistic grace, smoothly
+directing the traffic streaming through its arms.  No waste, no haste.
+Where other servers are traffic lights, Xitami is a round-about.
+
+<H3><A NAME="TOC167">The Machine</A></H3>
+
+<P>We built Xitami from the ground-up using an approach that should delight
+any student of engineering, software or otherwise. First step - ask the
+question: 'what are the real problems a web server has to solve?'. Step two
+- answer these problems. The real problems are, as far as we could see,
+ease of use, performance, stability, and portability. Basically, we wanted
+something that would install in a minute, always run fast, never crash, and
+run on every machine on our rather mixed-up network.  This is what we made,
+more or less.  In some situations, Xitami does crash, but it's quite rare.
+
+<P>A perfectionist design like this can't succeed without some kind of
+discipline and formality.  This is one of the basic debates in programming.
+Is programming a science or an art?  Do you use a free-wheeling, organic
+approach, or an organised, formalised approach?  This is like the debate
+about heredity against environment.  You need both to succeed.  Xitami was
+built using a tightly-defined method, but allowing any and all creativity
+on top of that.
+
+<P>To write a Xitami agent, like the LRWP agent that Robin Dunn wrote in
+1997, you need to learn: the C programming language, the Libero tool, the
+SFL library, the SMT kernel, and something about the HTTP protocol.  This
+is a fair challenge.  However, when you've absorbed this knowledge, the
+program you write runs on Windows 95, Windows NT, OS/2, Linux, and just
+about every other modern machine out there.  For a programmer, being able
+to write a truly portable program is akin to the promise of immortality.
+Certainly it drives thousands to learn languages like Java, putting-up with
+all the problems that young languages bring with them.
+
+<P>Xitami will run on every capable machine in existence for the next
+fifty years without significant difficulty at all.
+
+<P>A day will come when the use of C will look dated. For a long time we
+built tools using COBOL 74, a language that does not know about pointers,
+and dynamic allocation, or even lowercase letters. The tools we built were
+excellent, widely-used, and long-lasting. Linked-lists, recursive
+algorithms, virtual memory management, we did all of this in a language
+designed for writing accounting systems. This taught us that the choice of
+language is not as important as people often believe. But it can make your
+life easier or harder, and you can't produce better code than the compiler
+generates. Some COBOL compilers are attrociously bad.  On the AS/400, the
+generated code for a statement like 'ADD 1 TO A' consists of about ten
+instructions: take A, convert to floating point, take 1, convert to
+floating point, add to A, round the result to N digits, convert from
+floating point, store back in A.  The machine supports an instruction
+'increment' which would do the job in one step.
+
+<P>Most operating systems are written in C, and on modern systems, the C
+compiler is the most stable, optimised, and standardised available.  This
+is borne-out by our experience: we have found very few compiler errors
+despite running Xitami on a couple of dozen different C compilers.
+
+<P>If you look at the sources for Xitami, you'll see various references to
+something called 'Libero'.  This simple but magical tool is our most
+elementary weapon in the battle to render complex problems simple.  Libero
+is not dedicated to any single type of work - it's been used in many
+different domains.  When it comes to writing an Internet server, however,
+it's hard to imagine a better start.
+
+<P>There is a handy trick that you can use to understand and describe
+certain kinds of system.  Let's call this 'an event-driven approach'.
+Many problems (including many types of program) suddenly become much easier
+to understand and describe when you look at them in this way.  It's just a
+trick, because of course the real problem is unchanged.  But a good
+programmer, being lazy, will use any trick that makes life easier.  In a
+classic program, the programmer says 'okay, we do this, then this, then
+that'.  In an event-driven program, one says 'when this happens, do that.
+When that happens, do thus'.  It's strange at first, but quickly makes
+sense.  Libero takes this approach and turns it into actual code.  Suddenly
+we have a way to describe complex systems <I>and</I> produce the code that
+makes them work.  In the same breath.
+
+<P>By exceedingly good chance, servers, including web servers, fall smack
+bang into this category of problem.  When you look at the Libero
+description of the Xitami web service, you see on a couple of pages the
+complete logic of a web server.  This is stunningly simple compared to
+trying to read the Apache source code.
+
+<P>The main technical challenge behind any web server, however it's
+written, is performance. Writing a program that will answer one HTTP
+request is almost trivial. Writing a program that can answer several
+hundred in a few seconds is something else. Most existing web servers have
+tried to evolve from the first case to the second. Under Unix, they start
+dozens or hundreds of processes. Under Windows, they start dozens or
+hundreds of threads. Either way, each process or thread handles one single
+user request. The Windows threads approach is fast, but totally specific to
+one operating system. The Unix process approach is fast once it's started.
+But it takes ages to start and stop a server like this, and the web server
+inevitably takes over the entire system. There are 'portable' thread
+libraries, but frankly: writing real multi-threading code is like walking
+on eggshells.  We're too lazy to learn to do this.
+
+<P>The basic problem with a web server is that you have to handle many
+short-lived connections. When the cost of creating and eventually killing a
+process or thread is significant compared to the cost of handling the
+request, the server is not efficient.
+
+<P>Building on Libero's event-driven approach, we built a solution to this
+problem, with the catchy name 'SMT'. SMT dispenses with all the stress of
+creating processes and threads by handling everything in one single
+process. We call this 'multi-threading', but that's marketing. In fact SMT
+enforces an event-driven model onto the programs, and simulates a kind of
+event-driven thread. It's like writing Quicksort algorithms in COBOL. You
+don't need recursion built-in to the language to implement a recursive
+algorithm. Bizarrely enough, simulated recursion is often faster than the
+real thing. The same thing goes for SMT's event-driven threads. An SMT
+thread needs none of the adminstrative baggage of a normal multi-threaded
+program - locks, semaphores, and so on. It just handles the events it gets
+in its queue, and sends out events to other threads. A thread always runs
+exclusively, with SMT switching to another thread only between the major
+steps of the Libero 'dialog'.
+
+<P>SMT seems to be a perfect approach for Internet servers of all kinds. If
+there are flaws in it, we've not seen them yet.
+
+<P>It's pretty pointless building the perfect web server if it only runs on
+one operating system. This is like writing haiku in sand on the beach. The
+point of software, like art, is to reach a public. Unfortunately, the
+public for software is a moving target. Operating systems last a few years,
+and non-portable software dies with them when they go. There are different
+tactics to portability. Microsoft try 'portability by exclusion'. If
+everyone runs Windows, portability is easier (ignoring that new version of
+Windows coming up fast behind you). Java and Posix define 'portability by
+decree'. Presumably in the hope that people like Microsoft will tamely go
+along with the idea. Many projects do 'portability by patching', which
+means patching the software each time it is ported, leading to masses of
+'#ifdefs' throughout the programs.
+
+<P>At iMatix, we chose 'portability by paranoia'. A library, the SFL,
+provides all the functions our programs need that are not 100% portable. A
+program that uses SFL correctly is fully portable. The approach works
+because we're not dependent on the goodwill of other people. If some
+operating system decides to implement sockets in some bizarre way, we just
+add support in SFL. Xitami's portability is the flying carpet that takes it
+into the future.
+
+<P>Of course, we cheated a couple of times.  To run Xitami under Windows,
+we built a native Windows console program that lets a user manage the
+server.  It's not portable, but it does turn Xitami into a neat little
+Windows program.  Apart from that, the entire Xitami source code is
+fully portable.
+
+<H3><A NAME="TOC168">Thanks</A></H3>
+
+<P>The Xitami team itself consists of Pascal Antonnaux, Ewen McNeill,
+Jonathan Schultz, with Pieter Hintjens doing the co-ordination and
+production.  The Xitami team has been working together since the first
+release of Xitami, in January 1997.
+
+<P>Thanks to the folk at iMatix for providing technical support, coffee,
+and most of the finance for this project.  iMatix does not make a profit on
+Xitami, but it's become a kind of company mascot.
+
+<P>Providing the first buffer between ourselves and our users is the Xitami
+discussion list. This is run by Scott Drake, who took over in October 1997
+when the original list, run by Martyn Drake (no relation), lost its home.
+We owe a great deal to Scott, and his company, isonline.com.  Thanks also
+to Ewen McNeill for his clear and concise answers to many hundreds of
+questions on the list, and the many other people who have contributed
+information to the list.
+
+<P>We were lucky to find ourselves surrounded by a number of people, Xitami
+users with apparently infinite patience and tolerance for disasters, who
+adopted Xitami and regularly send us their comments and ideas. Some of
+these have built ISP businesses using Xitami, others use Xitami in their
+companies. Thanks to Ben Tremblay, Bruce Walter, Fabian Bess, Glenn
+Williams, Ignacio Bustamente, James Beasley, Jayson Minard, Jeff Wolkove,
+Jimi Joergensen, Josh Lydolph, Istvan Kovacs, Leif Svalgaard, Patrick
+Bedert, Paul Richards, Peter D'Hoye, Rob Judd, Thomas Grobicki, Wim
+Niemans, Dan, who's full name we never knew, and the many others who took
+time to send us their ideas, comments, and bug reports.
+
+<P>Thanks to Diego Antona, Wim Niemans, Robert White, and Taweewit Pensawat
+for providing Xitami mirror sites.
+
+<P>Thanks to DeXin and Chin Fang for providing an excellent home for Xitami
+on imatix.com, and a big "thanks" to Jayson Minard of OpenAvenue.com for
+giving a new home at OpenAvenue.com for xitami.com, finally allowing us to
+run xitami.com on a Xitami server.
+
+<P>Thanks to Mohammed Aziz and Rick Caccia of NetDynamics for including
+Xitami in their NetDynamics package in early 1997, proving that Xitami was
+up to scratch. As far as we know, Sun still includes Xitami in NetDynamics.
+
+<P>Thanks to Dr Dobb's Journal (and especially Eugene Eric Kim) for
+publishing our initial articles on Libero and Xitami.
+
+<P>Thanks to Robin Dunn for writing the LRWP agent, a great piece of work,
+and a great asset to Xitami, and to Scott Beasley for providing the mailto
+program. Thanks to Thomas Schroeter for supporting and managing xitami.de,
+the German Xitami site.  Since day one, about 8% of all Xitami users are
+from Germany.
+
+<P>Thanks to the several thousand of you who have emailed and registered,
+telling us what you thought about Xitami, being liberal with your criticism
+and compliments alike.
+
+<P>Finally, thanks to the literally hundreds of thousands of people who use
+Xitami every day without sending us emails.  We appreciate it more than you
+know!
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index19.htm">&lt;</A>
+ | <A href="index21.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <EM>Credits</EM>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

@@ -1,0 +1,122 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Server-Side XML Processing</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index7.htm">&lt;</A>
+ | <A href="index9.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+<A NAME="using_xml">&nbsp;</A>
+
+<H2><A NAME="TOC79">Server-Side XML Processing</A></H2>
+
+<P>XML is a data-definition language, used more and more to describe data
+coming from databases and other places.  Xitami can produce XML logfiles,
+and uses XML in other places.
+
+<P>With server-side XML processing, you can display XML files as HTML
+quickly and easily, with full control over the HTML that is produced.
+Xitami's XML processing is simpler and more powerful than stylesheets or
+other ways of processing XML.
+
+<P>Server-side XML processing is an excellent way to show data coming from
+databases, other applications, spreadsheets, and so on. All you need to do
+is to create the data in an XML format and write a GSL script that processes
+it (as described below).
+
+<H3><A NAME="TOC80">The GSL Language</A></H3>
+
+<P>Xitami uses the GSL language to describe how an XML file is shown. GSL
+is iMatix's Open Source template-based code-generation language. The GSLgen
+engine is built-in to Xitami, and GSLgen is also provided as a seperate
+command-line tool with Xitami.
+
+<P>If you want to use server-side XML processing, you should download the
+<A href="http://www.imatix.com/html/gslgen/">GSLgen</A> tool from imatix.com, and study the GSL language.  It's
+quite simple.  This is an example GSL script, provided as an example in
+the webpages directory:
+
+<PRE>&lt;HTML&gt;&lt;BODY&gt;&lt;CENTER&gt;
+&lt;H1&gt;Client Summary&lt;/H1&gt;
+&lt;P&gt;At $(date) $(time)
+.for client
+&lt;H3&gt;$(name:)&lt;/H3&gt;
+&lt;P&gt;$(address:)
+&lt;TABLE WIDTH="50%"&gt;
+&lt;TR&gt;&lt;TD&gt;Date:&lt;/TD&gt;&lt;TD&gt;Quantity:&lt;/TD&gt;&lt;TD&gt;Delivered:&lt;/TD&gt;&lt;/TR&gt;
+.define total = 0
+.for order
+&lt;TR&gt;&lt;TD&gt;$(date:)&lt;/TD&gt;&lt;TD&gt;$(quantity:)&lt;/TD&gt;&lt;TD&gt;$(delivered:)&lt;/TD&gt;&lt;/TR&gt;
+.define total = total + quantity
+.endfor
+&lt;/TABLE&gt;
+&lt;P&gt;Total ordered: $(total)
+.endfor
+&lt;/CENTER&gt;&lt;/BODY&gt;&lt;/HTML&gt;
+</PRE>
+
+<P>By default, Xitami uses a script with the same name as the XML file (but
+with the extension .gsl).  You can use a specific script by adding an
+attribute 'script' to the root item, e.g.:
+
+<PRE>&lt;data script = "testxml.gsl" &gt;
+</PRE>
+
+<P>This is useful if you process several XML files through the same script.
+
+<H3><A NAME="TOC81">Preparing Output From CGIs</A></H3>
+
+<P>One handy way to use XML files is in combination with CGIs.  Your CGI
+program can create an XML file, then use the 302 HTTP code to redirect the
+request to the XML file.
+
+<H3><A NAME="TOC82">Predefined Attributes</A></H3>
+
+<P>As well as the standard attributes (date, time, filename, script), the
+GSL script can access all the environment variables normally passed to a
+CGI program, such as REMOTE_USER.
+
+<H3><A NAME="TOC83">Passing Arguments to The XML File</A></H3>
+
+<P>You can pass arguments to the the XML file processor by using the
+query string syntax:
+<PRE>http://xx.xx.xx.xx/myfile.xml?arg=value;arg=value;...</PRE>
+<P>This is useful to override attributes like 'script'.  All arguments
+passed in the query string are defined in the XML root item.
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index7.htm">&lt;</A>
+ | <A href="index9.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <EM>Server-Side XML Processing</EM>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

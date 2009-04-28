@@ -1,0 +1,510 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>The FTP Service</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index11.htm">&lt;</A>
+ | <A href="index13.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+
+<H2><A NAME="TOC92">The FTP Service</A></H2>
+
+<H3><A NAME="TOC93">Overview</A></H3>
+
+<P>Xitami supports the FTP (file transfer) protocol. The FTP service was
+designed to be simple and easy to administer, while providing the security
+and speed necessary for a web site. You can administer the FTP service from
+the WBA screens, in the same way as you administer the rest of Xitami.
+
+<P>The current implementation of FTP does not support virtual hosts, so the
+FTP configuration applies to all virtual hosts defined for a web site.
+
+<P>The FTP service recognises these commands, and handles those not marked
+by '*':
+<PRE>
+ USER    PASV    STOU*   MAIL*   ALLO*   CWD     PWD     XMKD
+ PASS    TYPE    SYST    MSND*   REST    CDUP    RMD     XRMD
+ ACCT*   STRU    XSYS*   MSOM*   RNFR    XCWD    SITE*   XPWD
+ REIN    MODE    PASV    MSAM*   RNTO    LIST    STAT*   XCUP*
+ QUIT    RETR    APPE    MRSQ*   ABOR    MKD     HELP    XEXC*
+ PORT    STOR    MLFL*   MRCP*   DELE    NLST    NOOP    SIZE
+</PRE>
+
+<H3><A NAME="TOC94">FTP Configuration Options</A></H3>
+
+<P>The configuration of the FTP service is handled by specific
+sections in the standard configuration file.
+
+<A NAME="config_ftp">&nbsp;</A>
+<H4><A NAME="TOC95">The [FTP] Section</A></H4>
+
+<P>This section controls the FTP service.
+<DL>
+<DT><TT><B>enabled</B></TT>
+<DD>Specifies whether the FTP service is enabled or not. If you change this
+option you must stop and restart the server for it to take effect. (The WBA
+control panel 'Restart' action will not start the FTP service.)
+<DD>Default: 1 (enabled).
+
+<DT><TT><B>root</B></TT>
+<DD>Specifies the root directory for FTP logins, unless a specific
+directory is defined for the current user.
+<DD>Default: ftproot (below main Xitami directory).
+
+<DT><TT><B>port</B></TT>
+<DD>Specifies the FTP connection port.  The port is shifted by the
+portbase specified for the main HTTP service.  For instance if you
+specify a port 21, and a portbase of 8000, your server will accept
+FTP connections on port 8021 and HTTP connections on port 8080.
+<DD>Default: 21 (the standard FTP port).
+
+<DT><TT><B>timeout</B></TT>
+<DD>Specifies the time in seconds after which inactive control connections
+are closed. An FTP session requires one control connection, plus one data
+connection during file transfers. You should tune this timeout to suit the
+requirements of your system. For instance, under an OS like Windows 95,
+sockets are a limited resource, so a shorter timeout is a good idea. For
+sites with a small user group, you can use high timeouts, which users
+generally prefer.
+<DD>Default: 300 (5 minutes)
+
+<DT><TT><B>limit</B></TT>
+<DD>Specifies the maximum number of users that may login at once. On systems
+that can handle lots of open sockets (e.g. Unix, OS/2, WinNT, Win98), you
+may want to increase this. Xitami does not impose any fixed limit. If you
+set this value to 0, it means 'no limit'.
+<DD>Default: 25 users.
+</DL>
+
+<DT><TT><B>user-file</B></TT>
+<DD>Specifies the name of the user definition file. The syntax for this is
+described below.
+<DD>Default: ftpusers.aut.
+
+<DT><TT><B>directory-file</B></TT>
+<DD>Specifies the name of the directory definition file.  The syntax for
+this is described below.
+<DD>Default: ftpdirs.aut.
+
+<DT><TT><B>dirsort</B></TT>
+<DD>Specifies the sort order for directory listings.  You can sort by
+file name, extension, size, or modification date/time using any combination
+of the letters 'n', 'x', 's', and 't'.  For instance, dirsort=xnt will sort
+by extension, then name, then time.  To sort in reverse order, use capital
+letters.  For instance to show the most recent files first, use dirsort=T.
+<DD>Default: n (sort by name).
+
+<DT><TT><B>message-script</B></TT>
+<DD>Specifies the <A href="http://www.imatix.com/html/gslgen/">GSL</A> script that is used to format FTP messages.
+If you use this option, Xitami ignores the welcome, signoff, and login-text
+options.  You can edit the script to customise welcome and error messages.
+Look at the default script for a full description of the attributes you can
+use.
+<DD>Default: templates/ftpmesg.gsl.
+
+<DT><TT><B>welcome</B></TT>
+<DD>Specifies a text to be shown when a user connects to the FTP server.
+This can be literal text, or the name of a file, preceded by '@'. The file
+can contain up to 2000 characters. Any lines that start with '#' are ignored
+as comments. If you modify this file, it is safest to make a copy (call it
+welcome.txt or something) and change this option to refer to the changed
+file. This avoids unpleasant surprises when you reinstall the next latest
+greatest version of Xitami.
+<DD>Default: @ftphello.txt (an example file).
+
+<DT><TT><B>signoff</B></TT>
+<DD>Specifies a text to be shown when a user ends the FTP session. This can
+be literal text, or the name of a file, preceded by '@'. The file can
+contain up to 2000 characters. Any lines that start with '#' are ignored as
+comments. If you modify this file, it is safest to make a copy (call it
+goodbye.txt or something) and change this option to refer to the changed
+file. This avoids unpleasant surprises when you reinstall the next latest
+greatest version of Xitami.
+<DD>Default: @ftpadios.txt (an example file).
+
+<DT><TT><B>login-text</B></TT>
+<DD>Specifies a text to be shown when a user logs-in to the FTP server.
+This can be literal text, or the name of a file, preceded by '@'.  The
+file can contain up to 2000 characters.  Any lines that start with '#'
+are ignored as comments.  If you modify this file, it is safest to make
+a copy (call it login.txt or something) and change this option to
+refer to the changed file.  Xitami will search for this file first in
+the user's login directory, then in the main Xitami directory.
+<DD>Default: @ftplogin.txt (an example file).
+
+<DT><TT><B>user-at-host</B></TT>
+<DD>This flag controls whether Xitami allows virtual hosts using the syntax
+'username@hostname'.  This syntax is supported by some FTP clients, and
+allows you to use multiple FTP virtual hosts on a single IP address.
+<DD>Default: 1 (enabled).
+
+<DT><TT><B>email-check</B></TT>
+<DD>If 1, the FTP server will check that the e-mail address supplied
+for anonymous logins is a valid address.  The nature of the check is
+not documented (it may just look for an '@' in the address).
+<DD>Default: 0 (do not check addresses).
+
+<DT><TT><B>http-aliases</B></TT>
+<DD>Specifies whether the HTTP [Alias] section should be used by the
+FTP service.  This can be useful in configurations where you want to
+share the same data between services, but it can be a security risk
+if you want to use FTP aliases to access directories outside the HTTP
+space.
+<DD>Default: 0 (disabled).
+
+<DT><TT><B>soft-quota</B></TT>
+<DD>Specifies the default soft quota for FTP users who are subject to a
+quota.  You can also specify quota values for individual users.  This
+value is specified in megabytes, as a decimal number (using a decimal
+point, not comma, even in Europe).  When a user exceeds their soft quota,
+they start getting warning messages.
+<DD>2.5
+
+<DT><TT><B>hard-quota</B></TT>
+<DD>Specifies the default hard quota for FTP users who are subject to a
+quota.  You can also specify quota values for individual users.  This
+value is specified in megabytes, as a decimal number.  When a user exceeds
+their hard quota, they cannot upload new files.
+<DD>2.5
+
+<DT><TT><B>webmask</B></TT>
+<DD>Specifies the set of clients that can connect to the FTP server.
+The section on <A href="index4.htm#webmasks">webmasks</A> provides more details.
+
+<DT><TT><B>password-case</B></TT>
+<DD>If 1, FTP passwords are case-sensitive.  If 0, passwords are always
+converted to lower-case before validation. If you set this to 0, be sure to
+use only lower-case passwords in the password file.
+<DD>Default: 1 (case-sensitive)
+
+<DT><TT><B>data-port</B></TT>
+<DD>Specifies the port at which data connections will be made.  Xitami
+scans for free ports, so this is simply the start of a range of ports.
+The port is shifted by whatever value was used for the server portbase.
+<DD>Default: 200.
+
+<DT><TT><B>force-ip</B></TT>
+<DD>Indicates whether passive connections must be forced to the IP
+address specified in the 'ipaddress' option.
+<DD>Default: 0 (do not force).
+
+<DT><TT><B>ipaddress</B></TT>
+<DD>The IP address used for passive connections.  If '*', accepts passive
+connections on all local available IP addresses.
+<DD>Default: '*'.
+</DL>
+
+<A NAME="config_ftplog">&nbsp;</A>
+<H4><A NAME="TOC96">The [FTPLog] Section</A></H4>
+
+<P>This section controls the FTP access log.
+<DL>
+<DT><TT><B>enabled</B></TT>
+<DD>Specifies whether FTP accesses are logged or not.  FTP accesses are
+logged in a format similar to that used for HTTP accesses.
+<DD>Default: 1 (accesses are logged).
+
+<DT><TT><B>filename</B></TT>
+<DD>Specifies the filename for access logging.  This may be the same as
+the main HTTP access log file.
+<DD>Default: access.log.
+
+<DT><TT><B>cycle</B></TT>
+<DD>Specifies the cycle mode for the log file.
+<DD>Can be one of:
+<UL>
+<LI>startup, or 0 - cycle log when the server is starts;
+<LI>hourly, or 1 - cycle log each hour;
+<LI>daily, or 2 - cycle log each day;
+<LI>weekly, or 3 - cycle log each week;
+<LI>monthly, or 4 - cycle log each month, or
+<LI>manual, or 5 - manual cycling only.
+</UL>
+<DD>Default: daily.
+
+<DT><TT><B>local</B></TT>
+<DD>Specifies whether to include local addresses or not.
+<DD>Default: 1 (include local addresses).
+</DL>
+
+<A NAME="config_ftp_alias">&nbsp;</A>
+<H4><A NAME="TOC97">The [FTP-Alias] Section</A></H4>
+
+<P>This section lets you define multiple FTP file roots.  Each alias
+alias specifies a name and a path.  For example:
+<PRE>[FTP-Alias]
+volume-c=C:</PRE>
+<P>The alias name itself may not contain '/'. It is not case sensitive. FTP
+aliases are only shown to 'root' users, i.e. those with an empty root value,
+or those who have the 'aliases=1' option defined (see below). Like HTTP
+aliases, the FTP alias is always the first component of a filename (e.g.
+/volume-c/somefile).  Aliases are shown only if the user has no GET access,
+and if the specified user's root directory actually exists.
+
+<A NAME="config_ftperrlog">&nbsp;</A>
+<H4><A NAME="TOC98">The [FTPErrLog] Section</A></H4>
+
+<P>This section controls the FTP error log.
+<DL>
+<DT><TT><B>enabled</B></TT>
+<DD>Specifies whether FTP errors are logged or not.  FTP errors are
+logged in a format similar to that used for HTTP errors.
+<DD>Default: 1 (errors are logged).
+
+<DT><TT><B>filename</B></TT>
+<DD>Specifies the filename for error logging. This may be the same as
+the main HTTP error log file.
+<DD>Default: error.log.
+
+<DT><TT><B>cycle</B></TT>
+<DD>Specifies the cycle mode for the log file.
+<DD>Can be one of:
+<UL>
+<LI>startup, or 0 - cycle log when the server is starts;
+<LI>hourly, or 1 - cycle log each hour;
+<LI>daily, or 2 - cycle log each day;
+<LI>weekly, or 3 - cycle log each week;
+<LI>monthly, or 4 - cycle log each month, or
+<LI>manual, or 5 - manual cycling only.
+</UL>
+<DD>Default: daily.
+
+<DT><TT><B>local</B></TT>
+<DD>Specifies whether to include local addresses or not.
+<DD>Default: 1 (include local addresses).
+</DL>
+
+<A NAME="config_ftp_users">&nbsp;</A>
+<H3><A NAME="TOC99">FTP User File Syntax</A></H3>
+
+<P>The FTP user file defines all users that may log-in to the FTP
+server.  This is a typical user file:
+
+<PRE>
+[Admin]
+    Access=*
+    Password=-
+    Root=""
+    Aliases=1           #   Will have access to aliases
+[Anonymous]
+    Access=G
+    Password=*
+    Root=pub
+[Guest]
+    Access=G
+    Root=c:\public\guest
+[Upload]
+    Access=P
+    Password=upload
+    Root=/tempfiles/upload
+    Use-quotas=1
+    Soft-quota=10
+    Hard-quota=12
+</PRE>
+
+<P>The user name is specified like this: [Admin].  User names are
+not case-sensitive.  The password may be any text.  The password
+may be one of these special values:
+<UL>
+<LI>"*" - accepts anonymous logins.  If ftp:check-email is set to
+1, will check that the password looks like a valid e-mail address.
+<LI>"-" - rejects all logins for this user.  You can use this to
+disable an account temporarily.  This is the default password for
+accounts where no password is defined.
+<LI>"" (blank) - does not ask for a password.  Use this only for
+low-security (guest) accounts.
+</UL>
+
+<P>The access rights are any combination of:
+<UL>
+<LI>'G' - The user can list directories and get files from the server
+<LI>'P' - The user can upload (put) files to the server.
+<LI>'U' - The user can upload files to the server, but not overwrite
+existing files.
+<LI>'D' - The user can delete files on the server, and can rename files.
+<LI>'M' - The user can create directories
+<LI>'R' - The user can remove directories
+<LI>'*' - The user can do everything (same as GPUDMR).
+<LI>'-' - The user can do nothing; this can be used to disable access to a
+specific alias, for instance.
+</UL>
+
+<P>The 'root' option defines where the user can work. If this is not
+specified, the user can work anywhere below the FTP root directory. You can
+also specify a full path, for instance:
+<PRE>root=/home/users/guest
+</PRE>
+
+<P>The 'aliases' option defines whether or not a user has access to the
+FTP aliases.  By default this is true for all 'root' users, i.e. those
+with an empty root value.  You can override this default by specifying
+an explicit value for the aliases option.
+
+<P>Note that put-only directories should be treated as special cases, and
+used only as a user's root directory.  You cannot 'chdir' to a put-only
+directory.
+
+<P>You can enable/disable quotas per user. We defined a 'soft quota' and a
+'hard quota'.  Above the soft quota, the user gets warning messages. Above
+the hard limit, uploads are refused, and warnings are sent to the web
+server console.  The quota is calculated quite simply: it is the limit for
+all files in the user's login directory and subdirectories. You can
+therefore share a quota between users, or allocate a quota to individual
+users. The site administrator can decide whether log files are part of the
+quota or not, by putting them into the user's space, or into separate
+(non-quota) directories.  For quotas to work, keep a user limited to the
+login subtree.  I.e. do not allow writeable aliases.  Quotas are managed by
+the three configuration keys: use-quota, soft-quota, and hard-quota.
+
+<P>The 'pipe' option lets you specify a <A href="index14.htm#pipes">throttle pipe</A> for this
+account. You can define a default pipe for the entire FTP server. To
+specify that an account uses no pipe (runs at full speed) while a default
+pipe is defined for the server, specify the pipe name "-".
+
+<H3><A NAME="TOC100">FTP Directory File Syntax</A></H3>
+
+<P>The FTP directory file defines access rights per user for specific
+directories. Each section is a directory name; either an absolute directory
+(e.g. [/pub]) or a child of the ftproot directory (specified without a
+leading slash: [pub]).  To define rights for an alias directory, you must
+use the child's root directory plus the alias directory.  For instance if
+you define an aliase like 'info' which maps to a CD-ROM drive, protection
+for a user 'guest' who's initial root directory is 'guest' looks like this:
+<PRE>[guest/info]
+</PRE>
+
+<P>For instance, if the guest user has access to aliases, but you want to
+disable access to the 'info' alias, you could use an entry like this:
+<PRE>[guest/info]
+guest=-
+</PRE>
+
+<P>A directory entry covers all child directories, unless a more
+specific directory is defined for that user.  Directory names are not
+case significant.
+
+<P>Each entry specifies access rights for a user; the user must have
+been defined in the FTP users file.  The same access right codes are
+used.
+
+<H3><A NAME="TOC101">An Example FTP Configuration</A></H3>
+
+<P>This material for this section was provided by Paul C. Fretz,
+&lt;pcfretz@mha.shalom.k12.pa.us&gt;.
+
+<P>Install Xitami in its own directory.  Have your web pages in a
+separate directory such as c:\webpages
+
+<P>Setup 'defaults.cfg' to include:
+<PRE>[Server]
+    Webpages=c:\webpages
+[Ftp]
+    Root=c:\webpages
+    welcome="Welcome"                   #   text or @filename
+    login-text="Login"                  #   text or @filename
+    user-file=ftpulist.aut              #   Users authorization file
+[Security]
+    password-case=1                     #   Case-sensitive passwords
+    filename=password.aut               #   Authorization file
+<PRE>
+
+<P>Setup 'ftpulist.aut' to include:
+<PRE>[Anonymous]
+    Access=G
+    Password=*
+    Root=AnonFTP
+[WEBRoot]
+    Access=G
+    Password=123456
+    Root=""
+[U101]
+   Access=GPDMR
+   Password=123101
+   Root=User/U101
+[U102]
+   Access=GPDMR
+   Password=123102
+   Root=User/U102
+</PRE>
+
+<P>There are several things to keep in mind:
+<OL>
+<LI>The directory structure for the above is as follows:
+<PRE>c:\webpages
+       |-AnonFTP
+       |-User
+          |-U101
+          |-U102
+          |-...
+</PRE>
+<LI>For FTP access to c:\webpages\User\U101 the userid is U101 and the
+password is 123101.
+<LI>The WEBRoot entry gives FTP 'get' access to your whole website.
+</OL>
+
+<P>Setup 'password.aut' as follows if you want to password protect the same
+subdirectories for browsing:
+<PRE>
+[/admin]
+    Admin=-             #   By default, admin access is disabled
+    Webmask=local       #   <== when 'local', remote access is not allowed
+[User/U101]
+   U101=123101
+[User/U102]
+   U102=123102
+</PRE>
+
+<OL>
+<LI>'Admin=-' disables web-based administration. Change this if you wish.
+<LI>When you try to access with your browser anything located in
+c:\webpages\User\U101 (by using http://yourdomain/User/U101/) the browser
+will ask for user name and password. The username is U101 and the password
+is 123101. The first line [User/U101] refers to the subdirectory. The second
+line U101=123101 is the user name and password and does not have to be
+anything like the first line.
+<LI>A scheme like this allows users to have their own private subdirectory
+on the web server. They can access just theirs by FTP using Netscape or a
+program like WS-FTP. These pages are then available for anyone to browse
+or if you protect them as shown above in 'password.aut', they are private.
+<LI>Note that the default Xitami configuration requires that CGIs start with
+the string '/cgi-bin'.  The above configuration does not allow users to
+upload and run arbitrary CGIs, something that usually presents a security
+risk.
+</OL>
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index11.htm">&lt;</A>
+ | <A href="index13.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <EM>The FTP Service</EM>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

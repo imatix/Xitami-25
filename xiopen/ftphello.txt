@@ -1,0 +1,15 @@
+#   This is the welcome text file for the FTP service.
+#   Lines starting with '#' are ignored.
+#   You can change this file, or (better) copy it and change the
+#   ftp:welcome option.
+#
+
+XX    XXX XXX XXXXXXXXX X        XX     XX XXX   --------------  
+- X-- X--- X----- X---- XX------- XX-- XX-- X--- www.imatix.com --
+-- X X---- X----- X---- X X------ X X X X-- X---  (c) 1991-98   --
+--- X----- X----- X---- X- X----- X- X- X-- X---                --
+-- X X---- X----- X---- XXXXX---- X---- X-- X--- Windows - OS/2 --
+- X-- X--- X----- X---- X--- X--- X---- X-- X--- UNIX - OpenVMS --
+XXX    XX XXX    XXX   XXX   XXX XXX   XXX XXX   --------------  
+
+Ready for login.  All accesses to this server are logged.

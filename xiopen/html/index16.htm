@@ -1,0 +1,515 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Writing Web Server Extension (WSX) Agents</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index15.htm">&lt;</A>
+ | <A href="index17.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+
+<A NAME="wsx">&nbsp;</A>
+<H2><A NAME="TOC127">Writing Web Server Extension (WSX) Agents</A></H2>
+
+<H3><A NAME="TOC128">What is WSX?</A></H3>
+
+<P>WSX is the Xitami equivalent of protocols like ASAPI, ISAPI, etc.  A WSX
+program is always written as a multithreaded SMT agent, and is linked into
+the server executable.  Unlike the xxAPI protocols, WSX agents are not
+loaded at runtime from dynamic link libraries, but are bound into the Xitami
+executable.  This is done mainly to keep things simple, but also because SMT
+does not support dynamically-loaded agents.
+
+<P>A WSX agent handles some specific type of URL, based on the name of the
+URL. For example, Xitami comes with two standard WSX agents - xiadmin and
+xierror - which handle URLs starting with "/admin" and "/error"
+respectively.
+
+<P>Writing WSX agents is not trivial, but it's worth it for certain kinds of
+work.  If you want to write WSX agents, you should take a good look at the
+SMT documentation, and study the standard WSX agents.  WSX is <EM>not</EM> a
+'fast CGI' protocol.  A WSX agent is tightly-bound into the web server,
+while a CGI program is most definitely not.  I'll summarise the differences
+between a CGI program and a WSX agent:
+<UL>
+<LI>CGI programs are portable between web servers; WSX agents are a specific
+Xitami plug-in.
+<LI>If a CGI program crashes, the user gets a nice error message.  If a WSX
+agent crashes, the server is probably dead.
+<LI>CGI programs are single-threaded: each on-going request is handled by
+a separate CGI process; a WSX agent can handle multiple requests at once,
+in the same way as Xitami handles multiple connections at once.
+<LI>CGI programs are usually written by people with functional knowledge
+(by this, I mean they are developing some kind of business solution),
+whereas a WSX agent is a highly technical solution.
+<LI>WSX agents can be used to extend the web server's functionality in
+entirely new directions.  For instance, you could implement protocols like
+FastCGI using a WSX agent.  CGI cannot be used in this manner.
+<LI>WSX agents must be written using the SMT toolkit (including ANSI C and
+the Libero tool), while CGI programs can be written in a variety of
+languages (C, Perl, server-side Java, Basic, Awk).
+<LI>You can do things with CGIs (like accessing slow databases) that are not
+acceptable in WSX agents.
+</UL>
+
+<P>A WSX agent talks to the web server (actually, the smthttp agent) using a
+set of messages. When a user asks for a URL that matches WSX agent, smthttp
+sends the agent a WSX_REQUEST or WSX_REQBIN message. The WSX agent processes
+the request (which can be a HTTP GET or POST), and replies with a WSX_OK,
+WSX_MULTIPART, WSX_BIN, WSX_MBIN, WSX_ERROR, WSX_REDIRECT, WSX_RESTART, or
+WSX_KILL message.
+
+<P>The WSX agent gets a bunch of things from the web server: the URL that
+was asked for, any arguments, the current HTTP symbol table, and the posted
+data, if any. In return, it provides either the HTML data to show (for
+WSX_OK, WSX_MULTIPART, WSX_BIN, or WSX_MBIN), a HTTP error code (for
+WSX_ERROR), a redirected URL (for WSX_REDIRECT), or nothing (for the other
+messages).
+
+<H3><A NAME="TOC129">Writing WSX Programs</A></H3>
+
+<H4><A NAME="TOC130">Single-threaded or Multithreaded?</A></H4>
+
+<P>Like all SMT agents, a WSX agent is either single-threaded or
+multithreaded. A single-threaded agent is simpler to write than a
+multithreaded agent, but is more limited in what it can do. The two WSX
+agents provided with Xitami are both single-threaded.  More complex WSX
+agents, such as the xilrwp agent, are multithreaded.
+
+<P>The main difference is this: a single-threaded agent can only handle one
+request at a time.  A multithreaded agent can handle dozens or hundreds.
+If the agent can answer a request with little work, a single-thread can
+be sufficient.  If a request implies some 'slow' work, such as making a
+connection to another process or computer, or sending some message to another
+agent and waiting for a reply, a multithreaded agent is better.
+
+<P>In terms of programming, a single-threaded agent needs to use some
+specific SMT notation (such as setting the SINGLE_THREADED macro to TRUE)
+and does not handle any thread context.  A multithreaded agent in contrast
+works with a thread context block that contains all data for the thread.
+You'll find details of this in the SMT documentation, as well as examples of
+both types of agent in the SMT source code.  For example, smthttp itself is
+a multithreaded agent, while smtsock is single-threaded.
+
+<H4><A NAME="TOC131">Managing Session Context</A></H4>
+
+<P>There are two broad classes of WSX agent: those which have to handle
+session context, and those that do not.  Examples of agents that require
+session context are:
+<UL>
+<LI>The xiadmin administration agent; it has to know which screen the user
+was working in, and what they were doing.
+<LI>An agent that implements some kind of multi-transaction form; i.e. a
+form where the user can make changes and work with more than one exchange
+step.
+</UL>
+
+<P>Examples of agents that do not require session context are:
+<UL>
+<LI>The xierror error simulation agent; each request is totally independent
+of any previous request.
+<LI>An agent that implements CGI or a similar stateless protocol.
+<LI>An agent that satisfies any other kind of stateless request.
+</UL>
+
+<P>HTTP is often described as a 'stateless protocol', but there are in fact
+several ways to implement state. We can define state as a set of variables
+that the server (or the WSX agent) needs to distinguish one user from
+another, and to tell what state the user was in. I generally call this the
+'context' for a session. Context is necessary if you want a decent level of
+security, complexity, and ease of use. One commonly-used way to implement
+context is <EM>cookies</EM>. These have a bad press: cookies are too often
+abused to keep track of users' activity on a website. Another method is to
+encode the context in the URLs used in the form. For instance, each submit
+button or URL will invoke the same URL, but with an argument (?xxx) that
+contains the context data. This has several disadvantages: sensitive
+information that should be kept internally on the server may be sent to the
+browser; the HTML stream can become very large; and the arguments sent back
+to the server can also become very large. It has an advantages too: there is
+no need to save any kind of data in the server.
+
+<P>My preferred technique is to save the context in allocated memory, and
+then to encode a <EM>key</EM> in the URL, using the ?xxx technique.  When
+the WSX agent receives the request, it checks whether the key is present and
+valid, and if so, continues the session with that data.  If not, it can
+choose to show an error screen or reinitialise the session.  The HTML stream
+is not affected by the size of the context, since all that is transmitted is
+the session context key.
+
+<P>If you encode session in this way, you need to do a few things if you are
+building a serious server:
+<UL>
+<LI>You have to ensure that the session context key is unique, of course.
+<LI>You must either generate a new key for each session step, or add some
+kind of step counter, to enable the server to tell if the user uses the
+browser's Back action, and then tries to resubmit the form data.
+<LI>You must clean-up contexts when the user ends a session (if it is
+possible to determine this) or when the session has been inactive for a
+certain time (which you can determine using SMTTIME alarm messages).
+<LI>You may want to compress the context (there are functions in SFL to do
+this kind of thing).
+</UL>
+
+<P>One troublesome problem is the browser Back action.  There is no way to
+disable this, and HTTP/1.1 specifically states that there is no way to
+change the behaviour of a browser's history (which is what this is).  The
+problem arises because when a user uses the Back action, they can resubmit a
+form that is no longer meaningful in the current context.  One solution that
+we have used in this situation is to refresh the current form when we detect
+that the user has a valid session key but an invalid 'step' (i.e. has used
+the Back action).  Another solution is to simply redisplay the main form
+when this happens.  In any case, it's worth educating the user -- if only
+with a small message on the main form -- that the Back action is not a good
+idea within these forms.
+
+<H4><A NAME="TOC132">Messages From smthttp</A></H4>
+
+<P>A WSX agent talks to smthttp. The protocol is strictly binary: smthttp
+sends a WSX_REQUEST or WSX_REQBIN message to the agent; the agent processes
+this and sends back a reply. Each request has exactly one reply.
+
+<P>The smtmsg.h and smtmsg.c modules provide functions to send and decode
+WSX messages (as well as all the other SMT messages). These macros are used
+to send a message to a WSX agent. Normally only smthttp does this, but you
+may want to chain WSX agents so that one sends messages to another:
+<PRE>send_wsx_request (
+    QID  *to,                       /*  Destination thread queue       */
+    char *request_url,              /*  URL for WSX request            */
+    char *arguments,                /*  URL arguments, if any          */
+    char *virtual_host,             /*  Virtual host, if any           */
+    char *filename,                 /*  Physical filename for URL      */
+    char *post_data,                /*  POSTed data, if any            */
+    word  symbols_size,             /*  HTTP symbol table size         */
+    byte *symbols_data,             /*  HTTP symbol table data         */
+    word  config_size,              /*  HTTP config table size         */
+    byte *config_data);             /*  HTTP config table data         */
+);
+
+send_wsx_reqbin (
+    QID  *to,                       /*  Destination thread queue       */
+    char *request_url,              /*  URL for WSX request            */
+    char *arguments,                /*  URL arguments, if any          */
+    char *virtual_host,             /*  Virtual host, if any           */
+    word  post_size,                /*  POSTed data size               */
+    char *filename,                 /*  Physical filename for URL      */
+    byte *post_data,                /*  POSTed data                    */
+    word  symbols_size,             /*  HTTP symbol table size         */
+    byte *symbols_data,             /*  HTTP symbol table data         */
+    word  config_size,              /*  HTTP config table size         */
+    byte *config_data);             /*  HTTP config table data         */
+);
+</PRE>
+
+<P>The request URL is an alias used to indicate what URLs the WSX
+processes.  You can use '/' to indicate all URLs for a website or virtual
+host.
+
+<P>The HTTP symbol table is prepared as for a CGI process. That is, it
+contains the same CGI fields, and the HTTP header fields under the same
+conditions. Symbol names are converted to uppercase, with hyphens replaced
+by underlines. For instance, the 'Content-Type:' header value is held as a
+symbol called 'CONTENT_TYPE'. This block is stored as a table of strings of
+the format "name=value" and a single null. The table ends with a null string
+(two nulls in a row). To convert this block back into a usable symbol table
+you can use the SFL descr2symb() function (from sflsymb.c). To use this you
+must first prepare a DESCR block (which holds the size and data in a single
+structure) as follows:
+<PRE>DESCR symbols;
+SYMTAB *symtab;
+
+symbols.size = request-> symbols_size;
+symbols.data = request-> symbols_data;
+symtab = descr2symb (&symbols);
+</PRE>
+See below for an explanation of how to get the 'request' structure used in
+this example.
+
+<P>The virtual_host field is NULL if the request was made to the default
+host; if the request was made to a virtual host, this field contains the
+name or ip address of the virtual host as defined in the main config file
+under the [Virtual-Host] section.
+
+<P>The post_data field contains the POSTed HTTP data, if any.  In some cases
+this data may be placed in a temporary file; in this case the post_data
+field contains '@<I>filename</I>'.  The WSX agent should read the data from
+this file.  It does not need to delete the file: this is done by Xitami
+automatically.
+
+<P>This is the structure of a WSX request:
+<PRE>typedef struct {
+    char *request_url;              /*  URL for WSX request            */
+    char *arguments;                /*  URL arguments, if any          */
+    char *virtual_host;             /*  Virtual host, if any           */
+    char *filename;                 /*  Physical filename for URL      */
+    char *post_data;                /*  POSTed data, if any            */
+    word  symbols_size;             /*  HTTP symbol table size         */
+    byte *symbols_data;             /*  HTTP symbol table data         */
+    word  config_size;              /*  HTTP config table size         */
+    byte *config_data;              /*  HTTP config table data         */
+} struct_smt_wsx_request;
+
+typedef struct_smt_wsx_request WSXREQ;
+</PRE>
+
+<P>To unpack a WSX_REQUEST message into this structure, use this function:
+<PRE>int get_smt_wsx_request (byte *buffer, struct_smt_wsx_request *request);
+</PRE>
+
+<P>For example:
+<PRE>struct_smt_wsx_request
+    *request = NULL;               /*  Incoming smt_wsx request       */
+
+/*  Decode the WSX request using this standard function call          */
+get_smt_wsx_request (thread-> event-> body, &request);
+
+if (request)
+    the_next_event = ok_event;
+else
+  {
+    /*  The request can only be null if there is no memory left       */
+    send_wsx_error (&thread-> event-> sender, HTTP_RESPONSE_OVERLOADED);
+    the_next_event = exception_event;
+  }
+</PRE>
+
+<P>When you've finished with a request, you must deallocate it as follows:
+<PRE>/*  We're finished with the request structure - deallocate it         */
+free_smt_wsx_request (&request);
+</PRE>
+
+<P>This is the structure of a WSX binary request:
+<PRE>typedef struct {
+    char *request_url;              /*  URL for WSX request            */
+    char *arguments;                /*  URL arguments, if any          */
+    char *virtual_host;             /*  Virtual host, if any           */
+    word  post_size;                /*  POSTed data size               */
+    char *filename;                 /*  Physical filename for URL      */
+    byte *post_data;                /*  POSTed data                    */
+    word  symbols_size;             /*  HTTP symbol table size         */
+    byte *symbols_data;             /*  HTTP symbol table data         */
+    word  config_size;              /*  HTTP config table size         */
+    byte *config_data;              /*  HTTP config table data         */
+} struct_smt_wsx_request;
+</PRE>
+
+<P>To unpack a WSX_REQBIN message into this structure, use this function:
+<PRE>int get_smt_wsx_reqbin (byte *buffer, struct_smt_wsx_request *request);
+</PRE>
+
+<H4><A NAME="TOC133">Messages Back To smthttp</A></H4>
+
+<P>The WSX agent can reply to a WSX_REQUEST or WSX_REQBIN with one of these
+messages:
+<UL>
+<LI>WSX_OK - send a HTTP reply to the user (HTTP code 200).  This can be
+HTML text, or the name of a file containing binary data.
+<LI>WSX_MULTIPART - send a HTTP reply to the user, as for WSX_OK, but
+continue waiting for WSX messages from the WSX agent.  This allows a WSX
+agent to send multipart messages to the web browser.  The last message, if
+any, should be a WSX_OK.
+<LI>WSX_BIN - send a HTTP reply to the user, as for WSX_OK, but where the
+body contains arbitrary binary data, e.g. an image file.
+<LI>WSX_MBIN - As WSX_MULTIPART, for binary data.
+<LI>WSX_ERROR - return error status to the user (HTTP codes 3xx, 4xx, or
+5xx).  The user will get the error message as formatted by the web server
+according to the configuration profile.
+<LI>WSX_REDIRECT - redirect the request to another URL.  This is returned to
+the browser as a code 302.
+<LI>WSX_RESTART - show a page of HTML to the user (HTTP code 200), then
+restart the web server.  All open connections (HTTP and FTP) are killed by
+this action.
+<LI>WSX_KILL - show a page of HTML to the user (HTTP code 200), then
+terminate the web server.  All open connections (HTTP and FTP) are killed by
+this action.
+</UL>
+
+<P>The following macros prepare and send reply messages:
+<PRE>send_wsx_ok        (QID *to, char *html_data);
+send_wsx_multipart (QID *to, char *html_data);
+send_wsx_bin       (QID *to, qbyte html_size, byte *html_data);
+send_wsx_mbin      (QID *to, qbyte html_size, byte *html_data);
+send_wsx_error     (QID *to, dbyte error_code);
+send_wsx_redirect  (QID *to, char *new_url);
+send_wsx_restart   (QID *to, char *html_data);
+send_wsx_kill      (QID *to, char *html_data);
+</PRE>
+
+<P>Note that the 'to' argument in these calls is the queue id of the smthttp
+agent, which sent the original WSX_REQUEST or WSX_REQBIN message.
+
+<P>The code for unpacking these messages (if you're calling a WSX agent) is
+similar to that described above for WSX_REQUEST and WSX_REQBIN. You can see
+the details in smtmsg.h.
+
+<P>The WSX_OK, WSX_MULTIPART, WSX_RESTART, and WSX_KILL messages send
+'html_data' to the web server. This data should respect the rules for CGI
+output. Normally it would be a HTML page, e.g.:
+<PRE>&lt;HTML&gt;&lt;BODY&gt;
+&lt;P&gt;Hello World!
+&lt;/BODY&gt;&lt;/HTML&gt;
+</PRE>
+
+<P>You can also start the data with your own HTTP header fields if necessary,
+using the traditional blank line to separate the header from the body, e.g.:
+<PRE>Cache-control: no-cache
+
+&lt;HTML&gt;&lt;BODY&gt;
+&lt;P&gt;Hello World!
+&lt;/HTML&gt;&lt;/BODY&gt;
+</PRE>
+
+<P>This argument must be a string, so to transfer binary data, Xitami also
+understands the syntax '@filename', where <I>filename</I> refers to a
+<EM>temporary</EM> file that Xitami will parse, send, then delete.  The file
+should start with a 'Content-Type: some/type' header, followed by a blank
+line, and the file data.  A WSX_BIN or WSX_MBIN message is probably more
+efficient for transferring binary data, unless you already have a temporary
+file sitting around.
+
+<P>The WSX_BIN and WSX_MBIN messages send a binary block of data back to the
+web server. This should be formatted with a Content-Type: header, a blank
+line, and the binary data as follows:
+<PRE>Content-Type: xxxx/yyyy
+
+..binary data..
+</PRE>
+
+<H4><A NAME="TOC134">Starting From A Skeleton Program</A></H4>
+
+<P>If you start writing a new WSX program, start from a skeleton. The
+xierror program is a simple example of a single-threaded, context-free WSX
+agent. This is pretty much the simplest example you can make. You should
+start by copying xierror.l and xierror.c to new files (keep these
+extensions).
+
+<P>Like any SMT agent, you start the design phase in the dialog (.l file).
+Look at the dialog file, either using a text editor, or using the Libero
+tool (which is amply documented in the Libero documentation from the iMatix
+web site).  You'll need to install Libero to make any changes to the agent.
+
+<H4><A NAME="TOC135">Modifying The Server main() Function</A></H4>
+
+<P>Before you can test a WSX agent you must install it into the server
+main() function.  This is how the xierror agent is defined in the Xitami
+program (xitami.c).  First, we define a prototype near the start of the
+program:
+<PRE>int xierror_init (void);         /*  Xitami error simulation agent    */
+</PRE>
+
+<P>Then we initialise the xierror agent before starting the main HTTP agent.
+Here is the code which initialises all the WSX agents, then the main smthttp
+agent:
+<PRE>xiadmin_init ();                 /*  Xitami administration agent      */
+xierror_init ();                 /*  Xitami error simulation agent    */
+smthttp_init (rootdir, cgidir);
+</PRE>
+
+<P>The order of these initialisation functions can be important.  For
+example, if you want to install dynamic WSX aliases (see below) when your
+agent initialises, you must add the xxxx_init() call <I>after</I> the call
+to smthttp_init().  This provides smthttp the opportunity to create its
+main thread.
+
+<P>The Windows 95 and Windows NT source code is available for individual
+developers and companies at various prices - contact us for details. You can
+purchase this if you want to make OEM versions of the Windows servers.
+The OS/2, UNIX, and OpenVMS source code is supplied with the Xitami source
+package.
+
+<H4><A NAME="TOC136">Modifying The Server Config Files</A></H4>
+
+<P>To install a 'static' WSX agent you have to change the config files for
+the server; add an entry to the [WSX] section like this:
+<PRE>[WSX]
+path=agent
+</PRE>
+Where 'path' is a single word that identifies all URLs passed to this WSX
+agent, and 'agent' is the agent name (as defined internally in the agent).
+You can define a different path per virtual host, or organise your site so
+that specific WSX agents are only available on specific virtual hosts.
+
+<P>It is also possible to add and remove paths at runtime.  There are two
+macros that do this:
+<PRE>send_wsx_install (QID *to, char *vhost, char *path, char *agent);
+send_wsx_cancel  (QID *to, char *vhost, char *path);
+</PRE>
+
+<P>Note that the 'to' argument in these calls is the queue id of the smthttp
+agent. You should use the following style of code to identify this queue id:
+<PRE>THREAD *http_thread;
+
+/*  Find 'main' thread in smthttp agent             */
+http_thread = thread_lookup (SMT_HTTP, "main");
+ASSERT (http_thread);
+send_wsx_install (&http_thread-> queue-> qid, NULL, pattern, AGENT_NAME);
+</PRE>
+
+<P>The vhost argument tells the smthttp agent what virtual hosts the WSX
+agent should be accessible to. If this argument is NULL, the agent will be
+accessible to all virtual hosts. If the argument is a virtual host name or
+ip address as defined in the [Virtual-Hosts] section of the config file, the
+agent will be invisible to other virtual hosts. Note that you can send
+several WSX_INSTALL messages, for different virtual hosts, if required.
+
+<H4><A NAME="TOC137">Testing And Debugging The WSX Agent</A></H4>
+
+<P>The best way to test and debug a WSX agent (as for any SMT program) is to
+use the Libero animator.  This is a simple code-generation option (-anim)
+which causes the agent to display every step it goes through to handle the
+request.  Animation output is sent to the console or to one of the log
+files, depending on the way you set-up the server.
+
+<P>Since the effects of a bug in a WSX agent will show-up as browser error
+messages, or other funny reactions, you can also set the server:debug option
+on.  This causes all headers to be logged - a useful way of seeing what is
+actually being sent back to the browser.
+
+<H4><A NAME="TOC138">Writing Efficient WSX Agents</A></H4>
+
+<P>The basic rules of multithreaded SMT programming apply.  Your program
+should not block.  For example, it'd be a bad idea to try to access a
+relational database and execute some SQL code.  The entire web server would
+block while the SQL request was being satisfied.
+
+<P>If you need to do database access, there are other, more efficient ways
+to do this.  The best way we know is to work with more than one process; the
+web server passes requests (transactions) to a second process that handles
+them one by one.  You can scale this model up to very large systems handling
+tens of transactions per second.  This is the type of approach that is well-
+implemented using a WSX agent.
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index15.htm">&lt;</A>
+ | <A href="index17.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <EM>Writing Web Server Extension (WSX) Agents</EM>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

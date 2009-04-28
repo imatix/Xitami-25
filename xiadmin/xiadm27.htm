@@ -1,0 +1,281 @@
+Cache-control: no-cache
+Expires: 0
+
+<HTML>
+<HEAD><TITLE>Xitami Administration</TITLE>
+<script type="text/javascript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function submit(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+function focus() {
+    if ("#(_focus)" != "jsaction")
+        document.forms[0].#(_focus).focus();
+}
+</script>
+</HEAD>
+<BODY onLoad="focus()" style="font-family: sans-serif" BGCOLOR="#87CEFA">
+<SCRIPT LANGUAGE="JavaScript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function subform(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+</SCRIPT>
+<TABLE CELLSPACING=0 CELLPADDING=0 WIDTH=100%>
+<FORM METHOD=POST ACTION="#(proto)#(host)#(uri)">
+<INPUT TYPE=HIDDEN NAME=jsaction VALUE="">
+<TR><TD ALIGN=LEFT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Back212 LABEL="/admin/$back.gif" EVENT=back_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/backa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$back.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=New213 LABEL="/admin/$new.gif" EVENT=new_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/newa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$new.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Save214 LABEL="/admin/$save.gif" EVENT=save_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/savea.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$save.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Delete LABEL="/admin/$delete.gif" EVENT=delete_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/deletea.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$delete.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Default215 LABEL="/admin/$default.gif" EVENT=default_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/defaulta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$default.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Undo216 LABEL="/admin/$undo.gif" EVENT=undo_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/undoa.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$undo.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=First217 LABEL="/admin/$first.gif" EVENT=first_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/firsta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$first.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Next218 LABEL="/admin/$next.gif" EVENT=next_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/nexta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$next.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<A HREF="/xitami/index4.htm#config_ftp_users" TARGET="Help" TITLE="Help"
+onMouseOver="show('Help','/admin/helpa.gif')"
+onMouseOut="show('Help','/admin/$help.gif')"><IMG SRC="/admin/$help.gif" ALT="" BORDER=0 ALIGN=MIDDLE NAME="Help"
+WIDTH=40 HEIGHT=39></A><IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+<TD ALIGN=CENTER><FONT SIZE=+1>#(config) - FTP User Properties </FONT>
+<TD ALIGN=RIGHT>
+<IMG SRC="/admin/$left.gif" BORDER=0 ALIGN=MIDDLE><!--FML ACTION=Console219 LABEL="/admin/$console.gif" EVENT=console_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/consolea.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$console.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Halt220 LABEL="/admin/$halt.gif" EVENT=halt_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/halta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$halt.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Restart221 LABEL="/admin/$restart.gif" EVENT=restart_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/restarta.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$restart.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<!--FML ACTION=Exit222 LABEL="/admin/$exit.gif" EVENT=exit_event CONFIRM="" ATTR="" TYPE=IMAGE
+HEIGHT=39 WIDTH="40" ROLLOVER="/admin/exita.gif"-->
+<A HREF=# ><IMG ALIGN="top" SRC="/admin/$exit.gif" BORDER=0></A>
+<!--FML /ACTION-->
+<IMG SRC="/admin/$right.gif" BORDER=0 ALIGN=MIDDLE>
+</TABLE><p>
+<FONT SIZE=-1>
+<!--FML ACTION=Ok LABEL="Ok" EVENT=save_event CONFIRM="" ATTR="" TYPE=PLAIN -->
+<A HREF=# >Ok</A>
+<!--FML /ACTION-->
+<!--FML ACTION=Cancel LABEL="Cancel" EVENT=back_event CONFIRM="" ATTR="" TYPE=PLAIN -->
+<A HREF=# >Cancel</A>
+<!--FML /ACTION-->
+</FONT><HR>
+
+<TABLE WIDTH="100%">
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F365 TEXTUAL LABEL NAME=L_user-name VALUE="User name:&nbsp;&nbsp;" -->
+User name:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F366 TEXTUAL INPUT NAME=user-name
+SIZE=40 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F367 TEXTUAL LABEL NAME=L_password VALUE="Password:&nbsp;&nbsp;" -->
+Password:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F368 TEXTUAL INPUT NAME=password
+SIZE=40 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+Blank=none; -=disabled; *=anonymous
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F369 TEXTUAL LABEL NAME=L_rootdir VALUE="Login directory:&nbsp;&nbsp;" -->
+Login directory:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F370 TEXTUAL INPUT NAME=rootdir
+SIZE=40 MAX=100 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+below ftproot, or absolute
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F371 TEXTUAL LABEL NAME=L_aliases VALUE="User sees aliases?&nbsp;&nbsp;" -->
+User sees aliases?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F372 BOOLEAN INPUT NAME=aliases
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F373 TEXTUAL LABEL NAME=L_noname5 VALUE="User permissions:&nbsp;&nbsp;" -->
+User permissions:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F374 TEXTUAL LABEL NAME=L_access-get VALUE="&nbsp;&nbsp;Get:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;Get:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F375 BOOLEAN INPUT NAME=access-get
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+<!--FML FIELD=F376 TEXTUAL LABEL NAME=L_access-put VALUE="&nbsp;&nbsp;Put:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;Put:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F377 BOOLEAN INPUT NAME=access-put
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+<!--FML FIELD=F378 TEXTUAL LABEL NAME=L_access-upload VALUE="&nbsp;&nbsp;Upload:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;Upload:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F379 BOOLEAN INPUT NAME=access-upload
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+<!--FML FIELD=F380 TEXTUAL LABEL NAME=L_access-delete VALUE="&nbsp;&nbsp;Delete:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;Delete:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F381 BOOLEAN INPUT NAME=access-delete
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+<!--FML FIELD=F382 TEXTUAL LABEL NAME=L_access-mkdir VALUE="&nbsp;&nbsp;Mkdir:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;Mkdir:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F383 BOOLEAN INPUT NAME=access-mkdir
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+<!--FML FIELD=F384 TEXTUAL LABEL NAME=L_access-rmdir VALUE="&nbsp;&nbsp;Rmdir:&nbsp;&nbsp;" -->
+&nbsp;&nbsp;Rmdir:&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F385 BOOLEAN INPUT NAME=access-rmdir
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F386 TEXTUAL LABEL NAME=L_chooser VALUE="Permissions chooser:&nbsp;&nbsp;" -->
+Permissions chooser:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F387 SELECT INPUT NAME=chooser SIZE=0 VALUE=0
+CHANGE=no ATTR="" TYPE=? 0="Leave unchanged" 1="Full access" 2="Restricted access" 3="Full upload" 4="Restricted upload" 5="Download only" -->
+<SELECT SIZE=0 >
+<OPTION>Leave unchanged
+<OPTION>Full access
+<OPTION>Restricted access
+<OPTION>Full upload
+<OPTION>Restricted upload
+<OPTION>Download only
+</SELECT>
+<!--FML /FIELD-->
+<!--FML ACTION=Define LABEL="Define" EVENT=define_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Define" VALUE="Define" >
+<!--FML /ACTION-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F388 TEXTUAL LABEL NAME=L_use-quotas VALUE="Limit disk usage?&nbsp;&nbsp;" -->
+Limit disk usage?&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F389 BOOLEAN INPUT NAME=use-quotas
+TRUE=yes FALSE=no ATTR="" VALUE=0 -->
+<INPUT TYPE=CHECKBOX >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F390 TEXTUAL LABEL NAME=L_soft-quota VALUE=" - soft quota (Mb):&nbsp;&nbsp;" -->
+ - soft quota (Mb):&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F391 TEXTUAL INPUT NAME=soft-quota
+SIZE=8 MAX=10 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=8 VALUE="" >
+<!--FML /FIELD-->
+<!--FML FIELD=F392 TEXTUAL LABEL NAME=L_hard-quota VALUE="&nbsp;&nbsp;hard quota (Mb):&nbsp;&nbsp;" -->
+&nbsp;&nbsp;hard quota (Mb):&nbsp;&nbsp;
+<!--FML /FIELD-->
+<!--FML FIELD=F393 TEXTUAL INPUT NAME=hard-quota
+SIZE=8 MAX=10 UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=8 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F394 TEXTUAL LABEL NAME=L_pipe VALUE="Throttle pipe:&nbsp;&nbsp;" -->
+Throttle pipe:&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH=""80%"" CLASS=tdvalue>
+<!--FML FIELD=F395 SELECT INPUT NAME=pipe SIZE=0 VALUE=0
+CHANGE=no ATTR="" TYPE=dynamic 0="No selection"  -->
+<SELECT SIZE=0 >
+<OPTION>No selection
+</SELECT>
+<!--FML /FIELD-->
+</TD></TR>
+</TABLE>
+
+<!--FML FIELD=message_to_user SIZE=120 TEXTUAL HIDDEN -->
+<!--FML /FIELD -->
+</FORM>
+<SCRIPT LANGUAGE="JavaScript">
+    if ("#(_focus)" != "jsaction" && document.forms[0].#(_focus))
+        document.forms[0].#(_focus).focus();
+</SCRIPT>
+<HR>
+<TABLE WIDTH=100%><TR>
+<TD><IMG SRC="/admin/imatix.gif"
+WIDTH=96 HEIGHT=41>
+<TD ALIGN=CENTER><FONT SIZE=-1>Copyright &#169 1996-2002 iMatix Corporation
+<BR>Powered by iMatix Studio 2.5
+<TD ALIGN=RIGHT><FONT SIZE=-1>#(date) #(time)
+<BR>#(product) v2.5c2
+</TABLE>
+</BODY></HTML>

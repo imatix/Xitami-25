@@ -1,0 +1,8 @@
+#   Example image map file
+#
+#        URL                                             X,Y   X,Y
+default  mapfail.htm
+rect     http://www.imatix.com/html/xitami/index.htm    12,8  98,42
+rect     /cgi-bin/testcgi                              108,8  194,42
+rect     /private/private.htm                          205,8  291,42
+rect     /xitami/license.htm                           302,8  388,42

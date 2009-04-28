@@ -1,0 +1,83 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Using Filters</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index6.htm">&lt;</A>
+ | <A href="index8.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+<A NAME="filters">&nbsp;</A>
+
+<H2><A NAME="TOC78">Using Filters</A></H2>
+
+<P>Filters are
+programs that are run with the (usually) HTML file as input.  You
+can write filters in Perl, Awk, C, Rexx, or any other language that
+can handle standard input/output streams.  Filters are a little
+like CGI programs, except that they are invoked whenever a certain
+type of file is requested.
+
+<P>Each definition in this section consists of a file extension with a
+leading dot and a command. The command may be with a full path, or without,
+if the program is on the PATH. Xitami lets you run scripts directly under
+OS/2 and Windows 95/NT, if you respect the header conventions noted in the
+CGI section.
+
+<P>You can pass any type of input file to a filter program, with the
+restriction that it must be a text file. Binary files will probably not work
+under MS-DOS-like file systems. Under Unix there is no difference between
+text and binary files.
+<P>Xitami supports filter programs in Perl, C, or any other language that
+your system supports. A filter program runs when the HTML page is displayed,
+unlike a CGI program, which runs when the user posts data from a HTML form.
+An example of a filter program is PHP 3.0, which Xitami supports.
+
+<P>To add your own filter programs, you add an entry in the [Filter] section
+of the config file. A filter program is invoked whenever a file with the
+appropriate extension is displayed.
+
+<P>Filter programs need to respect the rules for CGI programs. That is, they
+should generate the same type of header (Content-Type: text/html). Filter
+programs also get the standard CGI environment, and are subject to the CGI
+timeouts and other constraints set in the [CGI] section.
+
+<P>When you POST to a filter program, the form data is supplied on the
+standard input as for CGI programs.  When you use the GET method, the file
+that is being filtered is provided on the standard input.
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index6.htm">&lt;</A>
+ | <A href="index8.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <A href="index2.htm">Installing Xitami</A>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <EM>Using Filters</EM>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

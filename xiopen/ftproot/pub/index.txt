@@ -1,0 +1,5 @@
+The Pub Directory
+
+This directory holds public information.  Uploads are not allowed into
+this directory.  Connect with user name 'upload', password 'upload' to
+send files to this system.

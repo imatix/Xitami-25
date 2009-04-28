@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<pdl
+    name      = "Studio"
+    acronym   = "stu"
+    install   = "xitami-25"
+    version   = "2.2"
+    copyright = "Copyright (c) 1991-2003 iMatix Corporation"
+    workflow  = "standard.pwl"
+    library   = "libstu">
+    
+<include filename = "prelude.pdl" />
+<file name = "version.h"    class = "c version"        >Project version file</file>
+
+<file name = "ctxman.c"     class = "library module"   >Context management functions</file>
+<file name = "ctxman.h"     class = "public header"    >Context management functions</file>
+<file name = "wtplib.c"     class = "library module"   >WTP interface functions</file>
+<file name = "wtplib.h"     class = "public header"    >WTP interface functions</file>
+<file name = "formio.c"     class = "library module"   >Form i/o functions</file>
+<file name = "formio.h"     class = "public header"    >Form i/o prototypes</file>
+<file name = "wtpman.c"     class = "c/libero"         >WTP manager WSX agent</file>
+<file name = "browtp.c"     class = "dialog module"    >WTP broker functions</file>
+<file name = "browtp.h"     class = "public header"    >WTP broker functions</file>
+<file name = "brocgi.c"     class = "dialog module"    >CGI broker functions</file>
+<file name = "wtpmsg.xml"   class = "gsl template"     >WTP message definitions</file>
+<file name = "wtpmsg.h"     class = "generated header" >WTP message definitions</file>
+<file name = "stupriv.h"    class = "private resource" >Private project header file</file>
+<file name = "defaults.cfg" class = "public resource"  >Xitami configuration</file>
+<file name = "fdlgen"       class = "perl/libero"      >Form Definition Language generator</file>
+<file name = "fdlgen.fmt"   class = "public resource"  >FDLgen code generation formats</file>
+<file name = "fmlgen"       class = "perl/libero"      >Form Markup Language generator</file>
+<file name = "fmlgen.fmt"   class = "public resource"  >FMLgen code generation formats</file>
+<file name = "findfile.pl"  class = "public resource"  >Perl routines</file>
+<file name = "shellwd.pl"   class = "public resource"  >Perl routines</file>
+<file name = "sflcvdp.pl"   class = "public resource"  >Perl routines</file>
+<file name = "sfldate.pl"   class = "public resource"  >Perl routines</file>
+<file name = "testbro.c"    class = "main program"     >Broker test program</file>
+<file name = "fxdemo.adf"   class = "private resource" >Demo application ADF file</file>
+<file name = "fxdemo.ini"   class = "private resource" >Demo application config file</file>
+<file name = "fxtest1.c"    class = "studio program"   >Test program 1</file>
+<file name = "fxtest2.c"    class = "studio program"   >Test program 2</file>
+<file name = "fxtest3.c"    class = "studio program"   >Test program 3</file>
+<file name = "fxdemo.c"     class = "studio broker"    >Broker application</file>
+<file name = "fxdemo2.c"    class = "studio broker"    >Broker application</file>
+<file name = "fxdemo3.c"    class = "studio broker"    >Broker application</file>
+<file name = "index.htm"    class = "private resource" >Example index file</file>
+<file name = "wtpcfg.ini"   class = "private resource" >Example WTP config file</file>
+<file name = "adfgen.gsl"   class = "public resource"  >GSL script to generate brokers</file>
+<file name = "lrstudio.c"   class = "public resource"  >Libero schema for Studio programs</file>
+<file name = "anchor.def"   class = "generated"        >Fdlgen anchors definition</file>
+<file name = "prelude.def"  class = "private resource" >Fdlgen prelude definition</file>
+
+<!-- Deliverables -->
+<file name = "libstu"       class = "public library"   >Studio runtime library</file>
+
+<directory name = "doc" class = "private resource">
+    <file name = "fdldoc.txt" class = "private resource" />
+    <file name = "fmldoc.txt" class = "private resource" />
+    <file name = "rfc001.txt" class = "private resource" />
+    <file name = "rfc002.txt" class = "private resource" />
+</directory>
+
+<actions when = "after" >
+  <generate>
+    <execute command = "gsl -q fxdemo.adf" />
+    <collect into = "studio.h" class = "public header" >
+      <file name = "wtplib.h" />
+      <file name = "wtpmsg.h" />
+      <file name = "ctxman.h" />
+      <file name = "formio.h" />
+      <file name = "browtp.h" />
+      <file name = "brocgi.h" />
+    </collect>
+  </generate>
+</actions>
+
+<actions>
+  <generate>
+    <execute command = "gsl -q fxdemo.adf" />
+  </generate>
+</actions>
+
+<use>
+    <library name = "libsmt" />
+    <library name = "libsfl" />
+</use>
+
+<!-- Studio project classes -->
+
+<class name = "studio program" inherit = "c/libero" >
+    <derive extension = ".fdl" class = "studio form" />
+</class>
+
+<class name = "studio broker" inherit = "main program" generated = "1" >
+</class>
+
+<class name = "studio form" inherit = "private resource" >
+    <generate>
+        <!-- Need to call via Perl since script is not installed on PATH yet    -->
+        <execute command = "perl fdlgen" />
+        <execute command = "perl fmlgen" />
+    </generate>
+    <derive extension = ".htm" class = "generated" />
+    <derive extension = ".log" class = "generated" />
+    <derive extension = ".h"   class = "generated" />
+</class>
+
+</pdl>

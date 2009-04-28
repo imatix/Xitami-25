@@ -1,0 +1,131 @@
+Cache-control: no-cache
+Expires: 0
+
+<HTML>
+<HEAD>
+<TITLE>Formatix Test Form 3</TITLE>
+<META http-equiv=Content-Language content=en>
+<META http-equiv=Content-Type content="text/html">
+</HEAD>
+<BODY onLoad="focus()">
+<H1>Formatix Test Form 3</H1>
+<SCRIPT LANGUAGE="JavaScript">
+function show(img,show) {
+    if (document.images)
+        document[img].src = show;
+}
+function subform(arguments) {
+    document.forms[0].jsaction.value = arguments;
+    document.forms[0].submit();
+}
+function subconf(arguments,message) {
+    if (message == '' || confirm (message)) {
+        document.forms[0].jsaction.value = arguments;
+        document.forms[0].submit();
+    }
+}
+</SCRIPT>
+
+<P>This is the third of several test forms.
+
+<FORM METHOD=POST ACTION="#(proto)#(host)#(uri)" ENCTYPE="multipart/form-data">
+<INPUT TYPE=HIDDEN NAME=jsaction VALUE="">
+<TABLE WIDTH="750">
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F1 TEXTUAL LABEL NAME=L_field-1 VALUE="Short text field&nbsp;&nbsp;" -->
+Short text field&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F2 TEXTUAL INPUT NAME=field-1
+SIZE=5 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=5 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F3 TEXTUAL LABEL NAME=L_field-2 VALUE="Long text field&nbsp;&nbsp;" -->
+Long text field&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F4 TEXTUAL INPUT NAME=field-2
+SIZE=80 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=80 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F5 TEXTUAL LABEL NAME=L_field-9 VALUE="File name&nbsp;&nbsp;" -->
+File name&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F6_tmp TEXTUAL HIDDEN NAME=field-9_tmp
+SIZE=80 MAX=? UPPER=0 ATTR="" VALUE="/upload/00000001.tmp" -->
+<INPUT TYPE=TEXT SIZE=80 VALUE="/upload/00000001.tmp" >
+<!--FML /FIELD-->
+<!--FML FIELD=F6 FILE LABEL NAME=field-9
+SIZE=80 MAX=? ATTR="" VALUE="/upload/00000001.tmp" -->
+<INPUT TYPE=FILE SIZE=80 VALUE="/upload/00000001.tmp" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F7 TEXTUAL LABEL NAME=L_field-3 VALUE="Numeric field&nbsp;&nbsp;" -->
+Numeric field&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F8 NUMERIC INPUT NAME=field-3
+SIGN=? DECS=0 DECFMT=? FILL=? BLANK=0
+COMMA=0 SIZE=12 MAX=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=12 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F9 TEXTUAL LABEL NAME=L_field-4 VALUE="Field number 3&nbsp;&nbsp;" -->
+Field number 3&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F10 DATE INPUT NAME=field-4
+PICTURE="yyyy-MMM-dd" SHOW=? FORMAT=? SIZE=15
+YEAR=? MONTH=? DAY=? ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=15 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F11 TEXTUAL LABEL NAME=L_params VALUE="Parameters&nbsp;&nbsp;" -->
+Parameters&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F12 TEXTUAL INPUT NAME=params
+SIZE=40 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<INPUT TYPE=TEXT SIZE=40 VALUE="" >
+<!--FML /FIELD-->
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F13 TEXTUAL LABEL NAME=L_comments VALUE="Comments&nbsp;&nbsp;" -->
+Comments&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML FIELD=F14 TEXTBOX INPUT NAME=comments
+ROWS=4 COLS=40 MAX=? UPPER=0 ATTR="" VALUE="" -->
+<TEXTAREA ROWS=4 COLS=40 WRAP="VIRTUAL" ></TEXTAREA>
+<!--FML /FIELD-->
+Free text
+</TD></TR>
+<TR><TD ALIGN=LEFT VALIGN=TOP NOWRAP CLASS=tdlabel>
+<!--FML FIELD=F15 TEXTUAL LABEL NAME=L_Return VALUE="Choose an action&nbsp;&nbsp;" -->
+Choose an action&nbsp;&nbsp;
+<!--FML /FIELD-->
+</TD><TD VALIGN=TOP ALIGN=LEFT WIDTH="80%" CLASS=tdvalue>
+<!--FML ACTION=Return LABEL="Return" EVENT=return_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Return" VALUE="Return" >
+<!--FML /ACTION-->
+<!--FML ACTION=Process LABEL="Process" EVENT=process_event CONFIRM="" ATTR="" TYPE=BUTTON -->
+<INPUT TYPE=SUBMIT NAME="Process" VALUE="Process" >
+<!--FML /ACTION-->
+</TD></TR>
+</TABLE>
+<!--FML FIELD=message_to_user SIZE=120 TEXTUAL HIDDEN -->
+<!--FML /FIELD -->
+</FORM>
+<SCRIPT LANGUAGE="JavaScript">
+    if ("#(_focus)" != "jsaction" && document.forms[0].#(_focus))
+        document.forms[0].#(_focus).focus();
+</SCRIPT>
+</BODY></HTML>

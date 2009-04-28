@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<!--
+     SMT messages for XIXLOG agent
+
+     To compile, use GSLgen with smtexdr.gsl script.
+     -->
+     
+<application script = "smtexdr.gsl" title = "Xixlog messages" module = "xixlogm">
+
+  <agent        name = "xixlog"         title = "Xitami Extended Logging Agent">
+    <message    name = "XIXLOG_SET_RDNS" type = "request" >
+      <field    name = "primary"        type = "string" title = "Primary DNS server" />
+      <field    name = "secondary"      type = "string" title = "Secondary DNS server" />
+      <field    name = "recursive"      type = "Bool"   title = "Do recursive lookups?" />
+      <field    name = "debug"          type = "Bool"   title = "Debug DNS queries?" />
+      <method   name = "SET_RDNS"       title = "Initialise RDNS interface" />
+    </message>
+    <message    name = "XIXLOG_OPEN"    type = "request" >
+      <field    name = "log_path"       type = "string" title = "Path for logfiles, or empty" />
+      <field    name = "log_file"       type = "string" title = "Name of logfile" />
+      <field    name = "log_format"     type = "string" title = "Desired logging format" />
+      <field    name = "log_header"     type = "string" title = "Log file header" />
+      <field    name = "cycle_when"     type = "string" title = "When to cycle logfile" />
+      <field    name = "cycle_how"      type = "string" title = "How to cycle logfile" />
+      <field    name = "cycle_time"     type = "string" title = "For time-based cycling" />
+      <field    name = "cycle_date"     type = "string" title = "For date-based cycling" />
+      <field    name = "cycle_size"     type = "string" title = "For size-based cycling" />
+      <field    name = "cycle_lines"    type = "string" title = "For size-based cycling" />
+      <field    name = "cycle_argument" type = "string" title = "For other cycle methods" />
+      <field    name = "translate"      type = "Bool"   title = "Do reverse-DNS translation?" />
+      <method   name = "OPEN"           title = "Open log file" />
+    </message>
+    <message    name = "XIXLOG_LOG"     type = "request" >
+      <field    name = "ip_client"      type = "string" title = "IP address of client" />
+      <field    name = "ip_server"      type = "string" title = "IP address of server" />
+      <field    name = "user_name"      type = "string" title = "User name, if known" />
+      <field    name = "service"        type = "string" title = "HTTP or FTP" />
+      <field    name = "request"        type = "string" title = "Request line (HTTP)" />
+      <field    name = "url"            type = "string" title = "Requested resource" />
+      <field    name = "query"          type = "string" title = "Query string (HTTP)" />
+      <field    name = "method"         type = "string" title = "HTTP method or FTP operation" />
+      <field    name = "response"       type = "string" title = "Response code, 3 digits" />
+      <field    name = "size_recd"      type = "qbyte"  title = "Request size in bytes" />
+      <field    name = "size_sent"      type = "qbyte"  title = "Response size in bytes" />
+      <field    name = "time_ms"        type = "qbyte"  title = "Processing time, in msecs" />
+      <field    name = "referer"        type = "string" title = "HTTP Referer field" />
+      <field    name = "agent"          type = "string" title = "HTTP User-Agent field" />
+      <field    name = "from"           type = "string" title = "HTTP From field" />
+      <field    name = "file_name"      type = "string" title = "Filename used for request" />
+      <field    name = "vhost_name"     type = "string" title = "Virtual host used for request" />
+      <method   name = "LOG"            title = "Log normal request" />
+    </message>
+    <message    name = "XIXLOG_PUT"     type = "request" >
+      <field    name = "message"        type = "string" title = "Line of text to log" />
+      <method   name = "PUT"            title = "Log plain text request" />
+    </message>
+    <message    name = "XIXLOG_CYCLE"   type = "request" >
+      <method   name = "CYCLE"          title = "Cycle log file" />
+    </message>
+    <message    name = "XIXLOG_CLEAR"   type = "request" >
+      <method   name = "CLEAR"          title = "Clear log file" />
+    </message>
+    <message    name = "XIXLOG_CLOSE"   type = "request" >
+      <method   name = "CLOSE"          title = "Close log file" />
+    </message>
+  </agent>
+</application>
+

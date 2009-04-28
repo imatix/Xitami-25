@@ -1,0 +1,6 @@
+LIBRARY      XICPL32.CPL
+DESCRIPTION  'Xitami Web Server NT Service Control'
+
+EXPORTS
+    ; Explicit exports can go here
+    CPlApplet

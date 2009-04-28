@@ -1,0 +1,76 @@
+<?xml?>
+<!-- 
+    ximodel.xml - Xitami model definitions
+                               
+    Copyright (c) 1991-2003 iMatix Corporation
+    
+    ------------------ GPL Licensed Source Code ------------------
+    iMatix makes this software available under the GNU General
+    Public License (GPL) license for open source projects.  For
+    details of the GPL license please see www.gnu.org or read the
+    file license.gpl provided in this package.
+    
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of
+    the License, or (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public
+    License along with this program in the file 'license.gpl'; if
+    not, write to the Free Software Foundation, Inc., 59 Temple
+    Place - Suite 330, Boston, MA 02111-1307, USA.
+    
+    You can also license this software under iMatix's General Terms
+    of Business (GTB) for commercial projects.  If you have not
+    explicitly licensed this software under the iMatix GTB you may
+    only use it under the terms of the GNU General Public License.
+    
+    For more information, send an email to info@imatix.com.
+    --------------------------------------------------------------
+-->
+
+<!-- Model classes for Xitami   -->
+
+<model name = "base full" >
+    <use agent = "xilrwp"  />
+    <use agent = "xiadmin" />
+    <use agent = "xisuper" />
+    <use agent = "xierror" />
+    <use agent = "xiredir" />
+    <use agent = "xiddns"  />
+    <use agent = "xiimap"  />
+    <use agent = "xixlog"  />
+    <use agent = "xixssi"  />
+    <use agent = "xixxml"  />
+    <use agent = "smthttp" />
+    <use agent = "smtftpc" />
+    <use agent = "smtpipe" />
+</model>
+
+<model name = "base lite" >
+    <use agent = "xiimap"  />
+    <use agent = "xixlog"  />
+    <use agent = "smthttp" />
+</model>
+
+<agent name = "smtpipe" title = "Transfer pipe agent"  params = "CONFIG (&quot;server:pipedef&quot;)" proto = "0" />
+<agent name = "smthttp" title = "HTTP agent, required" params = "rootdir, cgidir" proto = "0" />
+<agent name = "smtftpc" title = "FTP service agent"    params = "ftproot"         proto = "0" />
+<agent name = "smtssl"  title = "SSL interface"        config = "ssl-http:enabled"  />
+<agent name = "xilrwp"  title = "LRWP service agent"   config = "lrwp:enabled"      />
+<agent name = "xiadmin" title = "Administration agent" config = "security:admin"    />
+<agent name = "xisuper" title = "Supervisor agent"     config = "server:supervisor" />
+<agent name = "xierror" title = "Error-simulation agent"   />
+<agent name = "xiredir" title = "Redirection agent"        />
+<agent name = "xixssi"  title = "Internal SSI processor"   />
+<agent name = "xixxml"  title = "Internal XML processor"   />
+<agent name = "xiddns"  title = "Dynamic DNS registration" />
+<agent name = "xiimap"  title = "Image mapping agent"      />
+<agent name = "xixlog"  title = "Extended logging agent"   />
+<agent name = "wtpman"  title = "WTP service agent"        />
+

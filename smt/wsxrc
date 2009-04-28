@@ -1,0 +1,311 @@
+#! /usr/bin/perl
+#---------------------------------------------------------------------------- 
+#                                                                             
+#   wsxrc -                                                                   
+#                                                                             
+#   Copyright (c) 1991-2003 iMatix Corporation                                
+#                                                                             
+#   Compiles a binary resource file into a C include file so that it can be
+#   compiled with a WSX.  This is faster and safer at runtime than relying on
+#   external resources (e.g. images).
+#                                                                             
+#   ------------------ GPL Licensed Source Code ------------------            
+#   iMatix makes this software available under the GNU General                
+#   Public License (GPL) license for open source projects.  For               
+#   details of the GPL license please see www.gnu.org or read the             
+#   file license.gpl provided in this package.                                
+#                                                                             
+#   This program is free software; you can redistribute it and/or             
+#   modify it under the terms of the GNU General Public License as            
+#   published by the Free Software Foundation; either version 2 of            
+#   the License, or (at your option) any later version.                       
+#                                                                             
+#   This program is distributed in the hope that it will be useful,           
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of            
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             
+#   GNU General Public License for more details.                              
+#                                                                             
+#   You should have received a copy of the GNU General Public                 
+#   License along with this program in the file 'license.gpl'; if             
+#   not, write to the Free Software Foundation, Inc., 59 Temple               
+#   Place - Suite 330, Boston, MA 02111-1307, USA.                            
+#                                                                             
+#   You can also license this software under iMatix's General Terms           
+#   of Business (GTB) for commercial projects.  If you have not               
+#   explicitly licensed this software under the iMatix GTB you may            
+#   only use it under the terms of the GNU General Public License.            
+#                                                                             
+#   For more information, send an email to info@imatix.com.                   
+#   --------------------------------------------------------------            
+#---------------------------------------------------------------------------- 
+
+require 'wsxrc.d';                      #   Include dialog interpreter
+
+
+##########################   INITIALISE THE PROGRAM   #########################
+
+sub initialise_the_program
+{
+    $version = "1.1";                   #   Program version number
+    $me      = "wsxrc";                 #   For all messages
+
+    if (@ARGV > 0) {                    #   1 or more arguments in @ARGV?
+        $the_next_event = $ok_event;
+        $next_arg = 0;                  #   Arguments start at 0
+    }
+    else {
+        $the_next_event = $error_event;
+        print <<".";
+
+$me - Xitami WSX resource compiler V$version
+Copyright (c) 1998-2002 iMatix Corporation - http://www.imatix.com
+
+Syntax: wsxrc infile [outfile]
+    Converts the binary resource in infile into a C include file as
+    specified by outfile.  If outfile is omitted, creates a file with
+    the same name as infile, and the extension '.h'.  If infile starts
+    with '\@' it is assumed to contain a list of files to process, one
+    per line.
+.
+    }
+}
+
+
+#########################   INITIALISE PROGRAM DATA   #########################
+
+sub initialise_program_data
+{
+    #   Prepare date and time variables
+    ($sec, $min, $hour, $day, $month, $year) = localtime;
+    $date = sprintf ("%02d/%02d/%02d", $year, $month + 1, $day);
+    $time = sprintf ("%2d:%02d:%02d", $hour, $min, $sec);
+
+    ($sec, $min, $hour, $day, $month, $year, $wday) = gmtime;
+    @day_name = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+    @mon_name = ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+    $gmtime = sprintf ("%s, %02d %s %d %02d:%02d:%02d GMT",
+        $day_name [$wday], $day, $mon_name [$month], $year + 1900,
+        $hour, $min, $sec);
+}
+
+
+##########################   LOAD XITAMI MIME TYPES   #########################
+
+sub load_xitami_mime_types
+{
+    #   Get MIME types from Xitami.cfg if found locally
+    %mime_types = (
+        htm  => 'text/html',
+        html => 'text/html',
+        txt  => 'text/plain',
+        gif  => 'image/gif',
+        jpeg => 'image/jpeg',
+        jpg  => 'image/jpeg',
+        tif  => 'image/tiff',
+        wav  => 'audio/wav',
+        mid  => 'audio/midi'
+    );
+
+    if (open (CONFIG, "xitami.cfg")) {
+        $store_mime = 0;
+        while (<CONFIG>) {
+            $store_mime = 1 if /[Mime]/i;
+            if ($store_mime && /(\S+)=(\S+)/) {
+                $mime_type {$1} = $2;
+            }
+        }
+        close (CONFIG);
+    }
+}
+
+
+##########################   PARSE ARGUMENT VALUES   ##########################
+
+sub parse_argument_values
+{
+    #   Process arguments
+    $infile   = $ARGV [0];
+    $outfile  = $ARGV [1];
+
+    #   If @infile, load list of files to process from that file
+    if ($infile =~ /^@/) {
+        $infile = $';
+        open (INFILE, "$infile") || die "Could not open '$infile': $!";
+        while (<INFILE>) {
+            chop;
+            push (@infiles, $_) unless /^#/ || /^$/;
+        }
+        close (INFILE);
+    }
+    else {
+        push (@infiles, $infile);
+    }
+    $basename = $infile;
+    $basename =~ tr/A-Z/a-z/;               #   Get basename in lowercase
+    $basename = $` if $basename =~ /\./;    #   Drop extension if any
+    $outfile  = $basename.".h" unless defined ($outfile);
+    $BASENAME = $basename;
+    $BASENAME =~ tr/a-z/A-Z/;               #   Get BASENAME in uppercase
+    @sorted = sort (@infiles);
+}
+
+
+#############################   OPEN OUTPUT FILE   ############################
+
+sub open_output_file
+{
+    open (OUTFILE, ">$outfile") || die "Could not create '$outfile': $!";
+}
+
+
+##########################   GENERATE OUTPUT HEADER   #########################
+
+sub generate_output_header
+{
+    print OUTFILE <<".";
+/*
+ *  $outfile - resource file for $infile
+ *
+ *  Generated by wsxrc 1.0 on $date, $time
+ *  Copyright (c) 1998-2002 iMatix Corporation <www.imatix.com>
+ *
+ */
+
+#ifndef __RESOURCE_$BASENAME\_H__
+#define __RESOURCE_$BASENAME\_H__
+
+#ifndef __RESOURCE_TYPEDEF__
+#define __RESOURCE_TYPEDEF__
+typedef struct {
+    qbyte size;
+    byte  body [1];
+} RESOURCE;
+#endif
+
+.
+}
+
+
+###########################   GET NEXT INPUT FILE   ###########################
+
+sub get_next_input_file
+{
+    $infile = shift (@infiles);
+    if ($infile) {
+        $the_next_event = $ok_event;
+    }
+    else {
+        $the_next_event = $finished_event;
+    }
+}
+
+
+###########################   LOAD INPUT FILE DATA   ##########################
+
+sub load_input_file_data
+{
+    #   Read binary contents of file, up to 64k large
+    open (INFILE, "$infile") || die "Could not open '$infile': $!";
+    binmode (INFILE);
+    $file_size = read (INFILE, $buffer, 65536);
+    close (INFILE);
+}
+
+
+##########################   GENERATE RESOURCE ITEM   #########################
+
+sub generate_resource_item
+{
+    local ($basename);
+
+    $file_ext = $infile =~ /\./? $': ".";
+    $basename = $infile;
+    $basename =~ tr/A-Z/a-z/;               #   Get basename in lowercase
+    $basename = $` if $basename =~ /\./;    #   Drop extension if any
+    $basename = $' if $basename =~ /\\|\//; #   Drop path if any
+    $header   = "Content-Type: ".$mime_type {$file_ext}."\r\n";
+    $header  .= "Last-Modified: $gmtime\r\n";
+    $header  .= "\r\n";
+    $buffer   = $header.$buffer;
+
+    #   Generate data for binary file
+    $file_size += length ($header);
+
+    print OUTFILE <<".";
+static struct {
+    qbyte size;
+    byte  body [$file_size];
+} res_$basename = {
+    $file_size,
+    {
+.
+
+    $on_line = 0;
+    for ($counter = 0; $counter < $file_size; $counter++) {
+        $byte = ord (substr ($buffer, $counter, 1));
+        print  OUTFILE " " x 6 if $on_line == 0;
+        printf OUTFILE "0x%02x", $byte;
+        print  OUTFILE ", " unless $counter == $file_size - 1;
+        if (++$on_line == 12) {
+            $on_line = 0;
+            print OUTFILE "\n";
+        }
+    }
+    print OUTFILE "\n" unless $on_line == 0;
+    print OUTFILE "    }\n};\n\n";
+}
+
+
+##########################   GENERATE OUTPUT FOOTER   #########################
+
+sub generate_output_footer
+{
+    $size = int (@sorted);
+
+    if ($size > 1) {
+        print OUTFILE <<".";
+static struct {
+    char *filename;
+    void *resource;
+} lookup_$basename [$size] = {
+.
+        for ($count = 0; $count < $size; $count++) {
+            $_ = $sorted [$count];
+            $_ = $' if /\\|\//;             # Strip off path, if any
+            print OUTFILE "    { \"$_\", ";
+            $_ = $` if /\./;                # Strip off extension, if any
+            print OUTFILE "&res_$_ }";
+            print OUTFILE "," unless $count == $size - 1;
+            print OUTFILE "\n";
+        }
+        print OUTFILE "};\n";
+    }
+    print OUTFILE <<".";
+
+#endif                                  /*  If not already included          */
+.
+}
+
+
+############################   CLOSE OUTPUT FILE   ############################
+
+sub close_output_file
+{
+    close (OUTFILE);
+}
+
+
+############################   GET EXTERNAL EVENT   ###########################
+
+sub get_external_event
+{
+}
+
+
+##########################   TERMINATE THE PROGRAM   ##########################
+
+sub terminate_the_program
+{
+    $the_next_event = $terminate_event;
+}

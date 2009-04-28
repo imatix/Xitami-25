@@ -1,0 +1,2610 @@
+#!/bin/sh
+#
+#   Boom builder for SFL 2.50
+#   Generated from standard.pwl on 2004/07/22
+#   See www.imatix.com for more information.
+#   Copyright (c) 1991-2003 iMatix Corporation
+#
+#   Force environment variables to point to install location
+#   Start by using final IBASE, then handle local -install path
+self=$0
+_IBASE=$IBASE
+if [ -z "$_IBASE" ]; then
+    _IBASE=/usr/local/imatix
+fi
+INCDIR=$_IBASE/xitami-25/include
+LIBDIR=$_IBASE/xitami-25/lib
+PATH=.:$_IBASE/xitami-25/bin:$PATH
+PERLLIB=.:$_IBASE/xitami-25/bin:$PERLLIB
+_LOCAL=0
+export INCDIR LIBDIR PATH PERLLIB
+if [ "$1" = "-install" ]; then
+    _IBASE=$2
+    _LOCAL=1
+    PATH=$_IBASE/xitami-25/bin:$PATH
+    PERLLIB=$_IBASE/xitami-25/bin:$PERLLIB
+    INCDIR_ALT=$_IBASE/xitami-25/include
+    LIBDIR_ALT=$_IBASE/xitami-25/lib
+    export PATH PERLLIB INCDIR_ALT LIBDIR_ALT
+    shift;
+    shift;
+fi
+
+# --------------------------   BUILD BINARY FILES   ---------------------------
+
+a_build_binary_files() {
+:
+    echo "Building application..."
+    COPTS=-g
+    if [ ! -z "$INCDIR_ALT" ]; then
+        COPTS="$COPTS -li . -li $INCDIR_ALT"
+    fi
+    if [ ! -z "$LIBDIR_ALT" ]; then
+        COPTS="$COPTS -ll $LIBDIR_ALT"
+    fi
+    c $COPTS sflbits
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflbits' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcomp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcomp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcons
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcons' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflconv
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflconv' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcryp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcryp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcvbs
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcvbs' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcvdp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcvdp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcvds
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcvds' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcvns
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcvns' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcvsb
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcvsb' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcvsd
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcvsd' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcvsn
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcvsn' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcvst
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcvst' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcvtp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcvtp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflcvts
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflcvts' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sfldate
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sfldate' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sfldbio
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sfldbio' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sfldir
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sfldir' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflenv
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflenv' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflexdr
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflexdr' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflfile
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflfile' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflfind
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflfind' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflfort
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflfort' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflhttp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflhttp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflini
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflini' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sfllang
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sfllang' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sfllbuf
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sfllbuf' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sfllist
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sfllist' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflmail
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflmail' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflmath
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflmath' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflmem
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflmem' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflmesg
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflmesg' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflmime
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflmime' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflmysql
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflmysql' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflnode
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflnode' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflprint
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflprint' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflproc
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflproc' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflslot
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflslot' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflsock
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflsock' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflstr
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflstr' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflsymb
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflsymb' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflsyst
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflsyst' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sfltok
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sfltok' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sfltree
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sfltree' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sfltron
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sfltron' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sfluid
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sfluid' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflxml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflxml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS sflxmll
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS sflxmll' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflbits
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflbits' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcomp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcomp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcons
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcons' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflconv
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflconv' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcryp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcryp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcvbs
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcvbs' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcvdp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcvdp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcvds
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcvds' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcvns
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcvns' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcvsb
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcvsb' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcvsd
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcvsd' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcvsn
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcvsn' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcvst
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcvst' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcvtp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcvtp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflcvts
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflcvts' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sfldate
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sfldate' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sfldbio
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sfldbio' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sfldir
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sfldir' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflenv
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflenv' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflexdr
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflexdr' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflfile
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflfile' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflfind
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflfind' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflfort
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflfort' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflhttp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflhttp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflini
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflini' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sfllang
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sfllang' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sfllbuf
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sfllbuf' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sfllist
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sfllist' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflmail
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflmail' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflmath
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflmath' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflmem
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflmem' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflmesg
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflmesg' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflmime
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflmime' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflmysql
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflmysql' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflnode
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflnode' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflprint
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflprint' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflproc
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflproc' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflslot
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflslot' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflsock
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflsock' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflstr
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflstr' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflsymb
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflsymb' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflsyst
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflsyst' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sfltok
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sfltok' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sfltree
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sfltree' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sfltron
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sfltron' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sfluid
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sfluid' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflxml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflxml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsfl sflxmll
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsfl sflxmll' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# -------------------------   BUILD SOURCE PACKAGES   -------------------------
+
+a_build_source_packages() {
+:
+    rm -f _package.lst
+    if [ -f "sfl/version.h" ]; then
+        echo sfl/version.h>>_package.lst
+    fi
+    if [ -f "sfl/prelude.h" ]; then
+        echo sfl/prelude.h>>_package.lst
+    fi
+    if [ -f "sfl/sflhead.h" ]; then
+        echo sfl/sflhead.h>>_package.lst
+    fi
+    if [ -f "sfl/sflbits.c" ]; then
+        echo sfl/sflbits.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcomp.c" ]; then
+        echo sfl/sflcomp.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcons.c" ]; then
+        echo sfl/sflcons.c>>_package.lst
+    fi
+    if [ -f "sfl/sflconv.c" ]; then
+        echo sfl/sflconv.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcryp.c" ]; then
+        echo sfl/sflcryp.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcvbs.c" ]; then
+        echo sfl/sflcvbs.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcvdp.c" ]; then
+        echo sfl/sflcvdp.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcvds.c" ]; then
+        echo sfl/sflcvds.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcvns.c" ]; then
+        echo sfl/sflcvns.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcvsb.c" ]; then
+        echo sfl/sflcvsb.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcvsd.c" ]; then
+        echo sfl/sflcvsd.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcvsn.c" ]; then
+        echo sfl/sflcvsn.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcvst.c" ]; then
+        echo sfl/sflcvst.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcvtp.c" ]; then
+        echo sfl/sflcvtp.c>>_package.lst
+    fi
+    if [ -f "sfl/sflcvts.c" ]; then
+        echo sfl/sflcvts.c>>_package.lst
+    fi
+    if [ -f "sfl/sfldate.c" ]; then
+        echo sfl/sfldate.c>>_package.lst
+    fi
+    if [ -f "sfl/sfldbio.c" ]; then
+        echo sfl/sfldbio.c>>_package.lst
+    fi
+    if [ -f "sfl/sfldir.c" ]; then
+        echo sfl/sfldir.c>>_package.lst
+    fi
+    if [ -f "sfl/sflenv.c" ]; then
+        echo sfl/sflenv.c>>_package.lst
+    fi
+    if [ -f "sfl/sflexdr.c" ]; then
+        echo sfl/sflexdr.c>>_package.lst
+    fi
+    if [ -f "sfl/sflfile.c" ]; then
+        echo sfl/sflfile.c>>_package.lst
+    fi
+    if [ -f "sfl/sflfind.c" ]; then
+        echo sfl/sflfind.c>>_package.lst
+    fi
+    if [ -f "sfl/sflfort.c" ]; then
+        echo sfl/sflfort.c>>_package.lst
+    fi
+    if [ -f "sfl/sflhttp.c" ]; then
+        echo sfl/sflhttp.c>>_package.lst
+    fi
+    if [ -f "sfl/sflini.c" ]; then
+        echo sfl/sflini.c>>_package.lst
+    fi
+    if [ -f "sfl/sfllang.c" ]; then
+        echo sfl/sfllang.c>>_package.lst
+    fi
+    if [ -f "sfl/sfllbuf.c" ]; then
+        echo sfl/sfllbuf.c>>_package.lst
+    fi
+    if [ -f "sfl/sfllist.c" ]; then
+        echo sfl/sfllist.c>>_package.lst
+    fi
+    if [ -f "sfl/sflmail.c" ]; then
+        echo sfl/sflmail.c>>_package.lst
+    fi
+    if [ -f "sfl/sflmath.c" ]; then
+        echo sfl/sflmath.c>>_package.lst
+    fi
+    if [ -f "sfl/sflmem.c" ]; then
+        echo sfl/sflmem.c>>_package.lst
+    fi
+    if [ -f "sfl/sflmesg.c" ]; then
+        echo sfl/sflmesg.c>>_package.lst
+    fi
+    if [ -f "sfl/sflmime.c" ]; then
+        echo sfl/sflmime.c>>_package.lst
+    fi
+    if [ -f "sfl/sflmysql.c" ]; then
+        echo sfl/sflmysql.c>>_package.lst
+    fi
+    if [ -f "sfl/sflmysql.h" ]; then
+        echo sfl/sflmysql.h>>_package.lst
+    fi
+    if [ -f "sfl/sflnode.c" ]; then
+        echo sfl/sflnode.c>>_package.lst
+    fi
+    if [ -f "sfl/sflprint.c" ]; then
+        echo sfl/sflprint.c>>_package.lst
+    fi
+    if [ -f "sfl/sflproc.c" ]; then
+        echo sfl/sflproc.c>>_package.lst
+    fi
+    if [ -f "sfl/sflprocx.h" ]; then
+        echo sfl/sflprocx.h>>_package.lst
+    fi
+    if [ -f "sfl/sflproco.imp" ]; then
+        echo sfl/sflproco.imp>>_package.lst
+    fi
+    if [ -f "sfl/sflprocu.imp" ]; then
+        echo sfl/sflprocu.imp>>_package.lst
+    fi
+    if [ -f "sfl/sflprocv.imp" ]; then
+        echo sfl/sflprocv.imp>>_package.lst
+    fi
+    if [ -f "sfl/sflprocw.imp" ]; then
+        echo sfl/sflprocw.imp>>_package.lst
+    fi
+    if [ -f "sfl/sflprocx.imp" ]; then
+        echo sfl/sflprocx.imp>>_package.lst
+    fi
+    if [ -f "sfl/sflslot.c" ]; then
+        echo sfl/sflslot.c>>_package.lst
+    fi
+    if [ -f "sfl/sflsock.c" ]; then
+        echo sfl/sflsock.c>>_package.lst
+    fi
+    if [ -f "sfl/sflstr.c" ]; then
+        echo sfl/sflstr.c>>_package.lst
+    fi
+    if [ -f "sfl/sflsymb.c" ]; then
+        echo sfl/sflsymb.c>>_package.lst
+    fi
+    if [ -f "sfl/sflsyst.c" ]; then
+        echo sfl/sflsyst.c>>_package.lst
+    fi
+    if [ -f "sfl/sfltok.c" ]; then
+        echo sfl/sfltok.c>>_package.lst
+    fi
+    if [ -f "sfl/sfltree.c" ]; then
+        echo sfl/sfltree.c>>_package.lst
+    fi
+    if [ -f "sfl/sfltron.c" ]; then
+        echo sfl/sfltron.c>>_package.lst
+    fi
+    if [ -f "sfl/sfluid.c" ]; then
+        echo sfl/sfluid.c>>_package.lst
+    fi
+    if [ -f "sfl/sflxml.c" ]; then
+        echo sfl/sflxml.c>>_package.lst
+    fi
+    if [ -f "sfl/sflxmll.c" ]; then
+        echo sfl/sflxmll.c>>_package.lst
+    fi
+    if [ -f "sfl/sflxmll.l" ]; then
+        echo sfl/sflxmll.l>>_package.lst
+    fi
+    if [ -f "sfl/prelude.pdl" ]; then
+        echo sfl/prelude.pdl>>_package.lst
+    fi
+    if [ -f "sfl/license.gpl" ]; then
+        echo sfl/license.gpl>>_package.lst
+    fi
+    if [ -f "sfl/project.pdl" ]; then
+        echo sfl/project.pdl>>_package.lst
+    fi
+    if [ -f "sfl/readme.txt" ]; then
+        echo sfl/readme.txt>>_package.lst
+    fi
+    if [ -f "sfl/sflbits.h" ]; then
+        echo sfl/sflbits.h>>_package.lst
+    fi
+    if [ -f "sfl/sflcomp.h" ]; then
+        echo sfl/sflcomp.h>>_package.lst
+    fi
+    if [ -f "sfl/sflcons.h" ]; then
+        echo sfl/sflcons.h>>_package.lst
+    fi
+    if [ -f "sfl/sflconv.h" ]; then
+        echo sfl/sflconv.h>>_package.lst
+    fi
+    if [ -f "sfl/sflcryp.h" ]; then
+        echo sfl/sflcryp.h>>_package.lst
+    fi
+    if [ -f "sfl/sflcvst.l" ]; then
+        echo sfl/sflcvst.l>>_package.lst
+    fi
+    if [ -f "sfl/sflcvst.i" ]; then
+        echo sfl/sflcvst.i>>_package.lst
+    fi
+    if [ -f "sfl/sflcvst.d" ]; then
+        echo sfl/sflcvst.d>>_package.lst
+    fi
+    if [ -f "sfl/sfldate.h" ]; then
+        echo sfl/sfldate.h>>_package.lst
+    fi
+    if [ -f "sfl/sfldbio.h" ]; then
+        echo sfl/sfldbio.h>>_package.lst
+    fi
+    if [ -f "sfl/sfldir.h" ]; then
+        echo sfl/sfldir.h>>_package.lst
+    fi
+    if [ -f "sfl/sflenv.h" ]; then
+        echo sfl/sflenv.h>>_package.lst
+    fi
+    if [ -f "sfl/sflexdr.h" ]; then
+        echo sfl/sflexdr.h>>_package.lst
+    fi
+    if [ -f "sfl/sflfile.h" ]; then
+        echo sfl/sflfile.h>>_package.lst
+    fi
+    if [ -f "sfl/sflfind.h" ]; then
+        echo sfl/sflfind.h>>_package.lst
+    fi
+    if [ -f "sfl/sflfort.h" ]; then
+        echo sfl/sflfort.h>>_package.lst
+    fi
+    if [ -f "sfl/sflhttp.h" ]; then
+        echo sfl/sflhttp.h>>_package.lst
+    fi
+    if [ -f "sfl/sflini.h" ]; then
+        echo sfl/sflini.h>>_package.lst
+    fi
+    if [ -f "sfl/sfllang.h" ]; then
+        echo sfl/sfllang.h>>_package.lst
+    fi
+    if [ -f "sfl/sfllbuf.h" ]; then
+        echo sfl/sfllbuf.h>>_package.lst
+    fi
+    if [ -f "sfl/sfllist.h" ]; then
+        echo sfl/sfllist.h>>_package.lst
+    fi
+    if [ -f "sfl/sflmail.h" ]; then
+        echo sfl/sflmail.h>>_package.lst
+    fi
+    if [ -f "sfl/sflmath.h" ]; then
+        echo sfl/sflmath.h>>_package.lst
+    fi
+    if [ -f "sfl/sflmem.h" ]; then
+        echo sfl/sflmem.h>>_package.lst
+    fi
+    if [ -f "sfl/sflmesg.h" ]; then
+        echo sfl/sflmesg.h>>_package.lst
+    fi
+    if [ -f "sfl/sflmime.h" ]; then
+        echo sfl/sflmime.h>>_package.lst
+    fi
+    if [ -f "sfl/sflnode.h" ]; then
+        echo sfl/sflnode.h>>_package.lst
+    fi
+    if [ -f "sfl/sflprint.h" ]; then
+        echo sfl/sflprint.h>>_package.lst
+    fi
+    if [ -f "sfl/sflproc.h" ]; then
+        echo sfl/sflproc.h>>_package.lst
+    fi
+    if [ -f "sfl/sflslot.h" ]; then
+        echo sfl/sflslot.h>>_package.lst
+    fi
+    if [ -f "sfl/sflsock.h" ]; then
+        echo sfl/sflsock.h>>_package.lst
+    fi
+    if [ -f "sfl/sflstr.h" ]; then
+        echo sfl/sflstr.h>>_package.lst
+    fi
+    if [ -f "sfl/sflsymb.h" ]; then
+        echo sfl/sflsymb.h>>_package.lst
+    fi
+    if [ -f "sfl/sflsyst.h" ]; then
+        echo sfl/sflsyst.h>>_package.lst
+    fi
+    if [ -f "sfl/sfltok.h" ]; then
+        echo sfl/sfltok.h>>_package.lst
+    fi
+    if [ -f "sfl/sfltree.h" ]; then
+        echo sfl/sfltree.h>>_package.lst
+    fi
+    if [ -f "sfl/sfltron.h" ]; then
+        echo sfl/sfltron.h>>_package.lst
+    fi
+    if [ -f "sfl/sfluid.h" ]; then
+        echo sfl/sfluid.h>>_package.lst
+    fi
+    if [ -f "sfl/sflxml.h" ]; then
+        echo sfl/sflxml.h>>_package.lst
+    fi
+    if [ -f "sfl/sflxmll.h" ]; then
+        echo sfl/sflxmll.h>>_package.lst
+    fi
+    if [ -f "sfl/sflxmll.i" ]; then
+        echo sfl/sflxmll.i>>_package.lst
+    fi
+    if [ -f "sfl/sflxmll.d" ]; then
+        echo sfl/sflxmll.d>>_package.lst
+    fi
+    if [ -f "sfl/sfl.h" ]; then
+        echo sfl/sfl.h>>_package.lst
+    fi
+    if [ -f "sfl/boomake" ]; then
+        echo sfl/boomake>>_package.lst
+    fi
+    if [ -f "sfl/boomake.bat" ]; then
+        echo sfl/boomake.bat>>_package.lst
+    fi
+    if [ -f "sfl/makefile" ]; then
+        echo sfl/makefile>>_package.lst
+    fi
+    echo "Building sfl_2_50_src.tar.gz..."
+    tar -czf sfl_2_50_src.tar.gz -T _package.lst
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'tar -czf sfl_2_50_src.tar.gz -T _package.lst' failed with exit status $status. Stop.
+        exit 1
+    fi
+    rm _package.lst
+}
+
+# -----------------------   CHECK BINARY FILES EXIST   ------------------------
+
+a_check_binary_files_exist() {
+:
+    if [ ! -f "sflmysql.h" ]; then
+        echo "sflmysql.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "libsfl.a" ]; then
+        echo "libsfl.a is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfl.h" ]; then
+        echo "sfl.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# ------------------------   CHECK OPERATING CONTEXT   ------------------------
+
+a_check_operating_context() {
+:
+    event=source
+    if [ -d "CVS" ]; then
+        event=rawcvs
+    fi
+}
+
+# -----------------------   CHECK PROJECT FILES EXIST   -----------------------
+
+a_check_project_files_exist() {
+:
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "prelude.h" ]; then
+        echo "prelude.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflhead.h" ]; then
+        echo "sflhead.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflbits.c" ]; then
+        echo "sflbits.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcomp.c" ]; then
+        echo "sflcomp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcons.c" ]; then
+        echo "sflcons.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflconv.c" ]; then
+        echo "sflconv.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcryp.c" ]; then
+        echo "sflcryp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvbs.c" ]; then
+        echo "sflcvbs.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvdp.c" ]; then
+        echo "sflcvdp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvds.c" ]; then
+        echo "sflcvds.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvns.c" ]; then
+        echo "sflcvns.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvsb.c" ]; then
+        echo "sflcvsb.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvsd.c" ]; then
+        echo "sflcvsd.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvsn.c" ]; then
+        echo "sflcvsn.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvst.c" ]; then
+        echo "sflcvst.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvtp.c" ]; then
+        echo "sflcvtp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvts.c" ]; then
+        echo "sflcvts.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldate.c" ]; then
+        echo "sfldate.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldbio.c" ]; then
+        echo "sfldbio.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldir.c" ]; then
+        echo "sfldir.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflenv.c" ]; then
+        echo "sflenv.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflexdr.c" ]; then
+        echo "sflexdr.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfile.c" ]; then
+        echo "sflfile.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfind.c" ]; then
+        echo "sflfind.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfort.c" ]; then
+        echo "sflfort.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflhttp.c" ]; then
+        echo "sflhttp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflini.c" ]; then
+        echo "sflini.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllang.c" ]; then
+        echo "sfllang.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllbuf.c" ]; then
+        echo "sfllbuf.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllist.c" ]; then
+        echo "sfllist.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmail.c" ]; then
+        echo "sflmail.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmath.c" ]; then
+        echo "sflmath.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmem.c" ]; then
+        echo "sflmem.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmesg.c" ]; then
+        echo "sflmesg.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmime.c" ]; then
+        echo "sflmime.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmysql.c" ]; then
+        echo "sflmysql.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmysql.h" ]; then
+        echo "sflmysql.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflnode.c" ]; then
+        echo "sflnode.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprint.c" ]; then
+        echo "sflprint.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflproc.c" ]; then
+        echo "sflproc.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprocx.h" ]; then
+        echo "sflprocx.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflproco.imp" ]; then
+        echo "sflproco.imp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprocu.imp" ]; then
+        echo "sflprocu.imp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprocv.imp" ]; then
+        echo "sflprocv.imp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprocw.imp" ]; then
+        echo "sflprocw.imp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprocx.imp" ]; then
+        echo "sflprocx.imp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflslot.c" ]; then
+        echo "sflslot.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsock.c" ]; then
+        echo "sflsock.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflstr.c" ]; then
+        echo "sflstr.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsymb.c" ]; then
+        echo "sflsymb.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsyst.c" ]; then
+        echo "sflsyst.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltok.c" ]; then
+        echo "sfltok.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltree.c" ]; then
+        echo "sfltree.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltron.c" ]; then
+        echo "sfltron.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfluid.c" ]; then
+        echo "sfluid.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxml.c" ]; then
+        echo "sflxml.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxmll.c" ]; then
+        echo "sflxmll.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxmll.l" ]; then
+        echo "sflxmll.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflbits.h" ]; then
+        echo "sflbits.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcomp.h" ]; then
+        echo "sflcomp.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcons.h" ]; then
+        echo "sflcons.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflconv.h" ]; then
+        echo "sflconv.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcryp.h" ]; then
+        echo "sflcryp.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvst.l" ]; then
+        echo "sflcvst.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldate.h" ]; then
+        echo "sfldate.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldbio.h" ]; then
+        echo "sfldbio.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldir.h" ]; then
+        echo "sfldir.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflenv.h" ]; then
+        echo "sflenv.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflexdr.h" ]; then
+        echo "sflexdr.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfile.h" ]; then
+        echo "sflfile.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfind.h" ]; then
+        echo "sflfind.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfort.h" ]; then
+        echo "sflfort.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflhttp.h" ]; then
+        echo "sflhttp.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflini.h" ]; then
+        echo "sflini.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllang.h" ]; then
+        echo "sfllang.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllbuf.h" ]; then
+        echo "sfllbuf.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllist.h" ]; then
+        echo "sfllist.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmail.h" ]; then
+        echo "sflmail.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmath.h" ]; then
+        echo "sflmath.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmem.h" ]; then
+        echo "sflmem.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmesg.h" ]; then
+        echo "sflmesg.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmime.h" ]; then
+        echo "sflmime.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflnode.h" ]; then
+        echo "sflnode.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprint.h" ]; then
+        echo "sflprint.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflproc.h" ]; then
+        echo "sflproc.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflslot.h" ]; then
+        echo "sflslot.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsock.h" ]; then
+        echo "sflsock.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflstr.h" ]; then
+        echo "sflstr.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsymb.h" ]; then
+        echo "sflsymb.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsyst.h" ]; then
+        echo "sflsyst.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltok.h" ]; then
+        echo "sfltok.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltree.h" ]; then
+        echo "sfltree.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltron.h" ]; then
+        echo "sfltron.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfluid.h" ]; then
+        echo "sfluid.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxml.h" ]; then
+        echo "sflxml.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxmll.h" ]; then
+        echo "sflxmll.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "makefile" ]; then
+        echo "makefile is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -----------------------   CHECK SOURCE FILES EXIST   ------------------------
+
+a_check_source_files_exist() {
+:
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "prelude.h" ]; then
+        echo "prelude.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflhead.h" ]; then
+        echo "sflhead.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflbits.c" ]; then
+        echo "sflbits.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcomp.c" ]; then
+        echo "sflcomp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcons.c" ]; then
+        echo "sflcons.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflconv.c" ]; then
+        echo "sflconv.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcryp.c" ]; then
+        echo "sflcryp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvbs.c" ]; then
+        echo "sflcvbs.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvdp.c" ]; then
+        echo "sflcvdp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvds.c" ]; then
+        echo "sflcvds.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvns.c" ]; then
+        echo "sflcvns.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvsb.c" ]; then
+        echo "sflcvsb.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvsd.c" ]; then
+        echo "sflcvsd.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvsn.c" ]; then
+        echo "sflcvsn.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvst.c" ]; then
+        echo "sflcvst.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvtp.c" ]; then
+        echo "sflcvtp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvts.c" ]; then
+        echo "sflcvts.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldate.c" ]; then
+        echo "sfldate.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldbio.c" ]; then
+        echo "sfldbio.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldir.c" ]; then
+        echo "sfldir.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflenv.c" ]; then
+        echo "sflenv.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflexdr.c" ]; then
+        echo "sflexdr.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfile.c" ]; then
+        echo "sflfile.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfind.c" ]; then
+        echo "sflfind.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfort.c" ]; then
+        echo "sflfort.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflhttp.c" ]; then
+        echo "sflhttp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflini.c" ]; then
+        echo "sflini.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllang.c" ]; then
+        echo "sfllang.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllbuf.c" ]; then
+        echo "sfllbuf.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllist.c" ]; then
+        echo "sfllist.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmail.c" ]; then
+        echo "sflmail.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmath.c" ]; then
+        echo "sflmath.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmem.c" ]; then
+        echo "sflmem.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmesg.c" ]; then
+        echo "sflmesg.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmime.c" ]; then
+        echo "sflmime.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmysql.c" ]; then
+        echo "sflmysql.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmysql.h" ]; then
+        echo "sflmysql.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflnode.c" ]; then
+        echo "sflnode.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprint.c" ]; then
+        echo "sflprint.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflproc.c" ]; then
+        echo "sflproc.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprocx.h" ]; then
+        echo "sflprocx.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflproco.imp" ]; then
+        echo "sflproco.imp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprocu.imp" ]; then
+        echo "sflprocu.imp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprocv.imp" ]; then
+        echo "sflprocv.imp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprocw.imp" ]; then
+        echo "sflprocw.imp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprocx.imp" ]; then
+        echo "sflprocx.imp is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflslot.c" ]; then
+        echo "sflslot.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsock.c" ]; then
+        echo "sflsock.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflstr.c" ]; then
+        echo "sflstr.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsymb.c" ]; then
+        echo "sflsymb.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsyst.c" ]; then
+        echo "sflsyst.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltok.c" ]; then
+        echo "sfltok.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltree.c" ]; then
+        echo "sfltree.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltron.c" ]; then
+        echo "sfltron.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfluid.c" ]; then
+        echo "sfluid.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxml.c" ]; then
+        echo "sflxml.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxmll.c" ]; then
+        echo "sflxmll.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxmll.l" ]; then
+        echo "sflxmll.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflbits.h" ]; then
+        echo "sflbits.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcomp.h" ]; then
+        echo "sflcomp.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcons.h" ]; then
+        echo "sflcons.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflconv.h" ]; then
+        echo "sflconv.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcryp.h" ]; then
+        echo "sflcryp.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvst.l" ]; then
+        echo "sflcvst.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvst.i" ]; then
+        echo "sflcvst.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflcvst.d" ]; then
+        echo "sflcvst.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldate.h" ]; then
+        echo "sfldate.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldbio.h" ]; then
+        echo "sfldbio.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfldir.h" ]; then
+        echo "sfldir.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflenv.h" ]; then
+        echo "sflenv.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflexdr.h" ]; then
+        echo "sflexdr.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfile.h" ]; then
+        echo "sflfile.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfind.h" ]; then
+        echo "sflfind.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflfort.h" ]; then
+        echo "sflfort.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflhttp.h" ]; then
+        echo "sflhttp.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflini.h" ]; then
+        echo "sflini.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllang.h" ]; then
+        echo "sfllang.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllbuf.h" ]; then
+        echo "sfllbuf.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfllist.h" ]; then
+        echo "sfllist.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmail.h" ]; then
+        echo "sflmail.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmath.h" ]; then
+        echo "sflmath.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmem.h" ]; then
+        echo "sflmem.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmesg.h" ]; then
+        echo "sflmesg.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflmime.h" ]; then
+        echo "sflmime.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflnode.h" ]; then
+        echo "sflnode.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflprint.h" ]; then
+        echo "sflprint.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflproc.h" ]; then
+        echo "sflproc.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflslot.h" ]; then
+        echo "sflslot.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsock.h" ]; then
+        echo "sflsock.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflstr.h" ]; then
+        echo "sflstr.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsymb.h" ]; then
+        echo "sflsymb.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflsyst.h" ]; then
+        echo "sflsyst.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltok.h" ]; then
+        echo "sfltok.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltree.h" ]; then
+        echo "sfltree.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfltron.h" ]; then
+        echo "sfltron.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfluid.h" ]; then
+        echo "sfluid.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxml.h" ]; then
+        echo "sflxml.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxmll.h" ]; then
+        echo "sflxmll.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxmll.i" ]; then
+        echo "sflxmll.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sflxmll.d" ]; then
+        echo "sflxmll.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "sfl.h" ]; then
+        echo "sfl.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "makefile" ]; then
+        echo "makefile is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -------------------------   INSTALL DELIVERABLES   --------------------------
+
+a_install_deliverables() {
+:
+    TARGET=$_IBASE/xitami-25
+    echo "Installing SFL into $TARGET..."
+    if [ ! -d "$TARGET" ]; then
+        if mkdir -p $TARGET; then
+            :
+        else
+            echo "Could not create directory \"$TARGET\". Stop."
+            exit 1
+        fi
+    fi
+    mkdir -p $TARGET/include/
+    cp sflmysql.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp sflmysql.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/sflmysql.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/sflmysql.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/lib/
+    cp libsfl.a $TARGET/lib/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp libsfl.a $TARGET/lib/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/lib/libsfl.a
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/lib/libsfl.a' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/bin/
+    mkdir -p $TARGET/doc/SFL/
+    cp readme.txt $TARGET/doc/SFL/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp readme.txt $TARGET/doc/SFL/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/doc/SFL/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/doc/SFL/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/include/
+    cp sfl.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp sfl.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/sfl.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/sfl.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+
+    if [ ! -f "$TARGET/bin/setvars.sh" ]; then
+        echo "Creating $TARGET/bin/setvars.sh..."
+        echo "if [ -z \"\$INCDIR\" ]; then"          >$TARGET/bin/setvars.sh
+        echo "    INCDIR=$TARGET/include"            >>$TARGET/bin/setvars.sh
+        echo "    LIBDIR=$TARGET/lib"                >>$TARGET/bin/setvars.sh
+        echo "    PATH=$TARGET/bin:\$PATH"           >>$TARGET/bin/setvars.sh
+        echo "    PERLLIB=$TARGET/bin:\$PATH"        >>$TARGET/bin/setvars.sh
+        echo "    export INCDIR LIBDIR PATH PERLLIB" >>$TARGET/bin/setvars.sh
+        echo "fi"                                    >>$TARGET/bin/setvars.sh
+    fi
+}
+
+# ------------------------   PRODUCE GENERATED FILES   ------------------------
+
+a_produce_generated_files() {
+:
+    rm -f sfl.h
+    cat sflhead.h>>sfl.h
+    cat prelude.h>>sfl.h
+    cat sflbits.h>>sfl.h
+    cat sflcomp.h>>sfl.h
+    cat sflcons.h>>sfl.h
+    cat sflconv.h>>sfl.h
+    cat sflcryp.h>>sfl.h
+    cat sfldate.h>>sfl.h
+    cat sfldbio.h>>sfl.h
+    cat sflexdr.h>>sfl.h
+    cat sflfind.h>>sfl.h
+    cat sflfile.h>>sfl.h
+    cat sfllang.h>>sfl.h
+    cat sfllbuf.h>>sfl.h
+    cat sfllist.h>>sfl.h
+    cat sflmath.h>>sfl.h
+    cat sflmesg.h>>sfl.h
+    cat sflmem.h>>sfl.h
+    cat sflmime.h>>sfl.h
+    cat sflmysql.h>>sfl.h
+    cat sflnode.h>>sfl.h
+    cat sfldir.h>>sfl.h
+    cat sflslot.h>>sfl.h
+    cat sflstr.h>>sfl.h
+    cat sflsock.h>>sfl.h
+    cat sflsymb.h>>sfl.h
+    cat sflproc.h>>sfl.h
+    cat sflprint.h>>sfl.h
+    cat sflsyst.h>>sfl.h
+    cat sflhttp.h>>sfl.h
+    cat sflini.h>>sfl.h
+    cat sflenv.h>>sfl.h
+    cat sfltok.h>>sfl.h
+    cat sfltree.h>>sfl.h
+    cat sfltron.h>>sfl.h
+    cat sfluid.h>>sfl.h
+    cat sflxml.h>>sfl.h
+    cat sflxmll.h>>sfl.h
+    lr sflxmll.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr sflxmll.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr sflcvst.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr sflcvst.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# -----------------------   REMOVE GENERATED BINARIES   -----------------------
+
+a_remove_generated_binaries() {
+:
+    rm -f libsfl.a
+    rm -f sflbits.o
+    rm -f sflcomp.o
+    rm -f sflcons.o
+    rm -f sflconv.o
+    rm -f sflcryp.o
+    rm -f sflcvbs.o
+    rm -f sflcvdp.o
+    rm -f sflcvds.o
+    rm -f sflcvns.o
+    rm -f sflcvsb.o
+    rm -f sflcvsd.o
+    rm -f sflcvsn.o
+    rm -f sflcvst.o
+    rm -f sflcvtp.o
+    rm -f sflcvts.o
+    rm -f sfldate.o
+    rm -f sfldbio.o
+    rm -f sfldir.o
+    rm -f sflenv.o
+    rm -f sflexdr.o
+    rm -f sflfile.o
+    rm -f sflfind.o
+    rm -f sflfort.o
+    rm -f sflhttp.o
+    rm -f sflini.o
+    rm -f sfllang.o
+    rm -f sfllbuf.o
+    rm -f sfllist.o
+    rm -f sflmail.o
+    rm -f sflmath.o
+    rm -f sflmem.o
+    rm -f sflmesg.o
+    rm -f sflmime.o
+    rm -f sflmysql.o
+    rm -f sflnode.o
+    rm -f sflprint.o
+    rm -f sflproc.o
+    rm -f sflslot.o
+    rm -f sflsock.o
+    rm -f sflstr.o
+    rm -f sflsymb.o
+    rm -f sflsyst.o
+    rm -f sfltok.o
+    rm -f sfltree.o
+    rm -f sfltron.o
+    rm -f sfluid.o
+    rm -f sflxml.o
+    rm -f sflxmll.o
+}
+
+# -----------------------   REMOVE GENERATED SOURCES   ------------------------
+
+a_remove_generated_sources() {
+:
+    rm -f sflcvst.i
+    rm -f sflcvst.d
+    rm -f sflxmll.i
+    rm -f sflxmll.d
+    rm -f sfl.h
+}
+
+# ------------------------   REPORT HELP INFORMATION   ------------------------
+
+a_report_help_information() {
+:
+    echo "boomake - Boom! builder for SFL 2.50"
+    echo "Copyright (c) 1991-2003 iMatix Corporation"
+    echo ""
+    echo "This script acts as a project 'make' tool.  Boom! uses an XML-based"
+    echo "project description and generates various make tools (including this"
+    echo "one) from it.  To find out more about Boom!, visit www.imatix.com."
+    echo ""
+    eval "actions_$state"
+}
+
+# -------------------------   RUN REGRESSION TESTS   --------------------------
+
+a_run_regression_tests() {
+:
+    :
+}
+
+actions_initial() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_initial_check() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_rawcvs() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the raw project sources, produces all generated files, and"
+    echo "    compiles all source files."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the raw project sources, removes all generated"
+    echo "    source and binary files from the project directory."
+    return
+}
+
+actions_source() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the packaged sources, compiles all source files without any"
+    echo "    code generation."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the packaged sources, removes all generated"
+    echo "    source files from the project directory."
+    return
+}
+
+actions_default() {
+    echo "The actions you can use in this state are:"
+echo "test:"
+    echo "  "
+    echo "    Runs regression tests for the project."
+echo "help:"
+    echo "  "
+    echo "    Shows a list of the available builder commands."
+    return
+}
+
+#   State machine starts here
+#
+firsttime=true
+while [ "$1" -o "$firsttime" ]; do
+  firsttime=
+  state=initial
+  event=ok
+  debug=
+  export state event debug
+  while [ -n "$state" ]; do
+    if [ "$inherit_state" ]; then
+        check_state=$inherit_state
+        inherit_state=
+    else
+        check_state=$state
+    fi
+    case "$check_state" in
+    initial)
+        if [ -n "$debug" ]; then
+            echo "State: initial"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        ok)
+            if [ -n "$debug" ]; then 
+                echo "Event: ok"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check operating context"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_operating_context
+            fi
+            state=initial_check
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    initial_check)
+        if [ -n "$debug" ]; then
+            echo "State: initial check"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        rawcvs)
+            if [ -n "$debug" ]; then 
+                echo "Event: rawcvs"
+            fi
+            event=
+            exception=
+            state=rawcvs
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        source)
+            if [ -n "$debug" ]; then 
+                echo "Event: source"
+            fi
+            event=
+            exception=
+            state=source
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    rawcvs)
+        if [ -n "$debug" ]; then
+            echo "State: rawcvs"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated sources"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_sources
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    source)
+        if [ -n "$debug" ]; then
+            echo "State: source"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    default)
+        if [ -n "$debug" ]; then
+            echo "State: default"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        test)
+            if [ -n "$debug" ]; then 
+                echo "Event: test"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: run regression tests"
+            fi
+            if [ -z "$exception" ]; then
+                a_run_regression_tests
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        help)
+            if [ -n "$debug" ]; then 
+                echo "Event: help"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        empty)
+            if [ -n "$debug" ]; then 
+                echo "Event: empty"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    esac
+  done
+done

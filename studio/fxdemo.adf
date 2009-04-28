@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- Application definition file for FXDEMO
+
+     To compile, use gslgen
+  -->
+
+<application
+    script = "adfgen.gsl"
+    title  = "Studio test application"
+    name   = "fxdemo"
+    model  = "wtp"
+    root   = "fxtest1" >
+
+<server name = "fxdemo" type = "c" >
+    <program name = "fxtest1" />
+    <program name = "fxtest2" />
+    <program name = "fxtest3" />
+</server>
+
+<server name = "fxdemo2" type = "c" >
+    <program name = "fxtest1" />
+</server>
+
+<server name = "fxdemo3" type = "c" >
+    <program name = "fxtest2" />
+    <program name = "fxtest3" />
+</server>
+
+</application>
+

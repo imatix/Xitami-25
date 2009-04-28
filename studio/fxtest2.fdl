@@ -1,0 +1,31 @@
+.-
+.-   fxtest2    Test form #1
+.-
+.define author   Pieter Hintjens <ph@imatix.com>
+.define written  97/01/28
+.define revised  97/01/28
+
+.define PROCESSOR /cgi-bin/fxdemo
+
+.include prelude.def
+.page fxtest2 = "Formatix Test Form 2"
+
+<P>This is the second of several test forms.
+<H1>Form Symbols</H1>
+<P>Server software: #(SERVER_SOFTWARE) #(SERVER_VERSION)
+<BR>Server URL:     #(SERVER_URL)
+<BR>Server Name:    #(SERVER_NAME)
+<HR>
+
+.fields
+.textual  "Short text field" field-1 size=5
+.textual  "Long text field"  field-2 size=80
+.file     "File name"        field-3 size=80
+.numeric  "Numeric field"    field-4 size=12
+.date     "Field number 3"   field-5 picture="yyyy-MMM-dd"
+.textual  "Parameters"       params  size=40
+.textbox  "Comments" comments rows=4 cols=40 notes="Free text"
+.action   "Choose an action" Return  event=return_event
+.action   ""                 Test-3  join=yes event=test_3_event
+.action   ""                 Process join=yes event=process_event
+.endfields

@@ -1,0 +1,3253 @@
+#!/bin/sh
+#
+#   Boom builder for SMT 2.80
+#   Generated from standard.pwl on 2004/07/22
+#   See www.imatix.com for more information.
+#   Copyright (c) 1991-2003 iMatix Corporation
+#
+#   Force environment variables to point to install location
+#   Start by using final IBASE, then handle local -install path
+self=$0
+_IBASE=$IBASE
+if [ -z "$_IBASE" ]; then
+    _IBASE=/usr/local/imatix
+fi
+INCDIR=$_IBASE/xitami-25/include
+LIBDIR=$_IBASE/xitami-25/lib
+PATH=.:$_IBASE/xitami-25/bin:$PATH
+PERLLIB=.:$_IBASE/xitami-25/bin:$PERLLIB
+_LOCAL=0
+export INCDIR LIBDIR PATH PERLLIB
+if [ "$1" = "-install" ]; then
+    _IBASE=$2
+    _LOCAL=1
+    PATH=$_IBASE/xitami-25/bin:$PATH
+    PERLLIB=$_IBASE/xitami-25/bin:$PERLLIB
+    INCDIR_ALT=$_IBASE/xitami-25/include
+    LIBDIR_ALT=$_IBASE/xitami-25/lib
+    export PATH PERLLIB INCDIR_ALT LIBDIR_ALT
+    shift;
+    shift;
+fi
+
+# --------------------------   BUILD BINARY FILES   ---------------------------
+
+a_build_binary_files() {
+:
+    echo "Building application..."
+    COPTS=-g
+    if [ ! -z "$INCDIR_ALT" ]; then
+        COPTS="$COPTS -li . -li $INCDIR_ALT"
+    fi
+    if [ ! -z "$LIBDIR_ALT" ]; then
+        COPTS="$COPTS -ll $LIBDIR_ALT"
+    fi
+    c $COPTS smtecho
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtecho' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtftpc
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtftpc' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtftpd
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtftpd' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtftpl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtftpl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smthlog
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smthlog' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smthttp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smthttp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smthttpl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smthttpl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtlib
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtlib' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtlog
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtlog' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtoper
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtoper' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtpipe
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtpipe' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtrdns
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtrdns' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtrdnsl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtrdnsl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtsimu
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtsimu' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtslot
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtslot' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtsock
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtsock' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smttime
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smttime' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smttran
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smttran' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smttst1
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smttst1' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smttst2
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smttst2' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smttst3
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smttst3' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtupmc
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtupmc' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtupmd
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtupmd' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xiddns
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xiddns' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xierror
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xierror' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xiredir
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xiredir' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xiimap
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xiimap' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xilrwp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xilrwp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xisuper
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xisuper' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xixlog
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xixlog' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xixssi
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xixssi' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xixxml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xixxml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtmsg
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtmsg' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS smtsslm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS smtsslm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS xixlogm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS xixlogm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtecho
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtecho' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtftpc
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtftpc' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtftpd
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtftpd' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtftpl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtftpl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smthlog
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smthlog' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smthttp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smthttp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smthttpl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smthttpl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtlib
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtlib' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtlog
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtlog' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtoper
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtoper' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtpipe
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtpipe' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtrdns
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtrdns' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtrdnsl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtrdnsl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtsimu
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtsimu' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtslot
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtslot' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtsock
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtsock' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smttime
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smttime' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smttran
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smttran' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smttst1
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smttst1' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smttst2
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smttst2' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smttst3
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smttst3' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtupmc
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtupmc' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtupmd
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtupmd' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt xiddns
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt xiddns' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt xierror
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt xierror' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt xiredir
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt xiredir' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt xiimap
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt xiimap' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt xilrwp
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt xilrwp' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt xisuper
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt xisuper' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt xixlog
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt xixlog' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt xixssi
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt xixssi' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt xixxml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt xixxml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtmsg
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtmsg' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt smtsslm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt smtsslm' failed with exit status $status. Stop.
+        exit 1
+    fi
+    c $COPTS -r libsmt xixlogm
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'c $COPTS -r libsmt xixlogm' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# -------------------------   BUILD SOURCE PACKAGES   -------------------------
+
+a_build_source_packages() {
+:
+    rm -f _package.lst
+    if [ -f "smt/version.h" ]; then
+        echo smt/version.h>>_package.lst
+    fi
+    if [ -f "smt/smtdefn.h" ]; then
+        echo smt/smtdefn.h>>_package.lst
+    fi
+    if [ -f "smt/smtlib.h" ]; then
+        echo smt/smtlib.h>>_package.lst
+    fi
+    if [ -f "smt/smtmsg.h" ]; then
+        echo smt/smtmsg.h>>_package.lst
+    fi
+    if [ -f "smt/smtsslm.h" ]; then
+        echo smt/smtsslm.h>>_package.lst
+    fi
+    if [ -f "smt/smthttpl.h" ]; then
+        echo smt/smthttpl.h>>_package.lst
+    fi
+    if [ -f "smt/smtftpl.h" ]; then
+        echo smt/smtftpl.h>>_package.lst
+    fi
+    if [ -f "smt/xixlogm.h" ]; then
+        echo smt/xixlogm.h>>_package.lst
+    fi
+    if [ -f "smt/xixlog.h" ]; then
+        echo smt/xixlog.h>>_package.lst
+    fi
+    if [ -f "smt/smtupm.h" ]; then
+        echo smt/smtupm.h>>_package.lst
+    fi
+    if [ -f "smt/smtsimu.h" ]; then
+        echo smt/smtsimu.h>>_package.lst
+    fi
+    if [ -f "smt/xilrwp.h" ]; then
+        echo smt/xilrwp.h>>_package.lst
+    fi
+    if [ -f "smt/smtschm.c" ]; then
+        echo smt/smtschm.c>>_package.lst
+    fi
+    if [ -f "smt/smtecho.c" ]; then
+        echo smt/smtecho.c>>_package.lst
+    fi
+    if [ -f "smt/smtftpc.c" ]; then
+        echo smt/smtftpc.c>>_package.lst
+    fi
+    if [ -f "smt/smtftpd.c" ]; then
+        echo smt/smtftpd.c>>_package.lst
+    fi
+    if [ -f "smt/smtftpl.c" ]; then
+        echo smt/smtftpl.c>>_package.lst
+    fi
+    if [ -f "smt/smthlog.c" ]; then
+        echo smt/smthlog.c>>_package.lst
+    fi
+    if [ -f "smt/smthttp.c" ]; then
+        echo smt/smthttp.c>>_package.lst
+    fi
+    if [ -f "smt/smthttpl.c" ]; then
+        echo smt/smthttpl.c>>_package.lst
+    fi
+    if [ -f "smt/smtlib.c" ]; then
+        echo smt/smtlib.c>>_package.lst
+    fi
+    if [ -f "smt/smtlog.c" ]; then
+        echo smt/smtlog.c>>_package.lst
+    fi
+    if [ -f "smt/smtoper.c" ]; then
+        echo smt/smtoper.c>>_package.lst
+    fi
+    if [ -f "smt/smtpipe.c" ]; then
+        echo smt/smtpipe.c>>_package.lst
+    fi
+    if [ -f "smt/smtrdns.c" ]; then
+        echo smt/smtrdns.c>>_package.lst
+    fi
+    if [ -f "smt/smtrdnsl.c" ]; then
+        echo smt/smtrdnsl.c>>_package.lst
+    fi
+    if [ -f "smt/smtsimu.c" ]; then
+        echo smt/smtsimu.c>>_package.lst
+    fi
+    if [ -f "smt/smtslot.c" ]; then
+        echo smt/smtslot.c>>_package.lst
+    fi
+    if [ -f "smt/smtsock.c" ]; then
+        echo smt/smtsock.c>>_package.lst
+    fi
+    if [ -f "smt/smttime.c" ]; then
+        echo smt/smttime.c>>_package.lst
+    fi
+    if [ -f "smt/smttran.c" ]; then
+        echo smt/smttran.c>>_package.lst
+    fi
+    if [ -f "smt/smttst1.c" ]; then
+        echo smt/smttst1.c>>_package.lst
+    fi
+    if [ -f "smt/smttst2.c" ]; then
+        echo smt/smttst2.c>>_package.lst
+    fi
+    if [ -f "smt/smttst3.c" ]; then
+        echo smt/smttst3.c>>_package.lst
+    fi
+    if [ -f "smt/smtupmc.c" ]; then
+        echo smt/smtupmc.c>>_package.lst
+    fi
+    if [ -f "smt/smtupmd.c" ]; then
+        echo smt/smtupmd.c>>_package.lst
+    fi
+    if [ -f "smt/xiddns.c" ]; then
+        echo smt/xiddns.c>>_package.lst
+    fi
+    if [ -f "smt/xierror.c" ]; then
+        echo smt/xierror.c>>_package.lst
+    fi
+    if [ -f "smt/xiredir.c" ]; then
+        echo smt/xiredir.c>>_package.lst
+    fi
+    if [ -f "smt/xiimap.c" ]; then
+        echo smt/xiimap.c>>_package.lst
+    fi
+    if [ -f "smt/xilrwp.c" ]; then
+        echo smt/xilrwp.c>>_package.lst
+    fi
+    if [ -f "smt/xisuper.c" ]; then
+        echo smt/xisuper.c>>_package.lst
+    fi
+    if [ -f "smt/xixlog.c" ]; then
+        echo smt/xixlog.c>>_package.lst
+    fi
+    if [ -f "smt/xixssi.c" ]; then
+        echo smt/xixssi.c>>_package.lst
+    fi
+    if [ -f "smt/xixxml.c" ]; then
+        echo smt/xixxml.c>>_package.lst
+    fi
+    if [ -f "smt/wsxrc" ]; then
+        echo smt/wsxrc>>_package.lst
+    fi
+    if [ -f "smt/smtexdr.gsl" ]; then
+        echo smt/smtexdr.gsl>>_package.lst
+    fi
+    if [ -f "smt/smtmsg.xml" ]; then
+        echo smt/smtmsg.xml>>_package.lst
+    fi
+    if [ -f "smt/smtsslm.xml" ]; then
+        echo smt/smtsslm.xml>>_package.lst
+    fi
+    if [ -f "smt/xixlogm.xml" ]; then
+        echo smt/xixlogm.xml>>_package.lst
+    fi
+    if [ -f "smt/xiconfig.gsl" ]; then
+        echo smt/xiconfig.gsl>>_package.lst
+    fi
+    if [ -f "smt/xiconfig.xml" ]; then
+        echo smt/xiconfig.xml>>_package.lst
+    fi
+    if [ -f "smt/xiconfig.h" ]; then
+        echo smt/xiconfig.h>>_package.lst
+    fi
+    if [ -f "smt/ximodel.gsl" ]; then
+        echo smt/ximodel.gsl>>_package.lst
+    fi
+    if [ -f "smt/ximodel.xml" ]; then
+        echo smt/ximodel.xml>>_package.lst
+    fi
+    if [ -f "smt/xicore.xml" ]; then
+        echo smt/xicore.xml>>_package.lst
+    fi
+    if [ -f "smt/prelude.pdl" ]; then
+        echo smt/prelude.pdl>>_package.lst
+    fi
+    if [ -f "smt/license.gpl" ]; then
+        echo smt/license.gpl>>_package.lst
+    fi
+    if [ -f "smt/project.pdl" ]; then
+        echo smt/project.pdl>>_package.lst
+    fi
+    if [ -f "smt/readme.txt" ]; then
+        echo smt/readme.txt>>_package.lst
+    fi
+    if [ -f "smt/smtecho.l" ]; then
+        echo smt/smtecho.l>>_package.lst
+    fi
+    if [ -f "smt/smtecho.i" ]; then
+        echo smt/smtecho.i>>_package.lst
+    fi
+    if [ -f "smt/smtecho.d" ]; then
+        echo smt/smtecho.d>>_package.lst
+    fi
+    if [ -f "smt/smtftpc.l" ]; then
+        echo smt/smtftpc.l>>_package.lst
+    fi
+    if [ -f "smt/smtftpc.i" ]; then
+        echo smt/smtftpc.i>>_package.lst
+    fi
+    if [ -f "smt/smtftpc.d" ]; then
+        echo smt/smtftpc.d>>_package.lst
+    fi
+    if [ -f "smt/smtftpd.l" ]; then
+        echo smt/smtftpd.l>>_package.lst
+    fi
+    if [ -f "smt/smtftpd.i" ]; then
+        echo smt/smtftpd.i>>_package.lst
+    fi
+    if [ -f "smt/smtftpd.d" ]; then
+        echo smt/smtftpd.d>>_package.lst
+    fi
+    if [ -f "smt/smthlog.l" ]; then
+        echo smt/smthlog.l>>_package.lst
+    fi
+    if [ -f "smt/smthlog.i" ]; then
+        echo smt/smthlog.i>>_package.lst
+    fi
+    if [ -f "smt/smthlog.d" ]; then
+        echo smt/smthlog.d>>_package.lst
+    fi
+    if [ -f "smt/smthttp.l" ]; then
+        echo smt/smthttp.l>>_package.lst
+    fi
+    if [ -f "smt/smthttp.i" ]; then
+        echo smt/smthttp.i>>_package.lst
+    fi
+    if [ -f "smt/smthttp.d" ]; then
+        echo smt/smthttp.d>>_package.lst
+    fi
+    if [ -f "smt/smtlog.l" ]; then
+        echo smt/smtlog.l>>_package.lst
+    fi
+    if [ -f "smt/smtlog.i" ]; then
+        echo smt/smtlog.i>>_package.lst
+    fi
+    if [ -f "smt/smtlog.d" ]; then
+        echo smt/smtlog.d>>_package.lst
+    fi
+    if [ -f "smt/smtoper.l" ]; then
+        echo smt/smtoper.l>>_package.lst
+    fi
+    if [ -f "smt/smtoper.i" ]; then
+        echo smt/smtoper.i>>_package.lst
+    fi
+    if [ -f "smt/smtoper.d" ]; then
+        echo smt/smtoper.d>>_package.lst
+    fi
+    if [ -f "smt/smtpipe.l" ]; then
+        echo smt/smtpipe.l>>_package.lst
+    fi
+    if [ -f "smt/smtpipe.i" ]; then
+        echo smt/smtpipe.i>>_package.lst
+    fi
+    if [ -f "smt/smtpipe.d" ]; then
+        echo smt/smtpipe.d>>_package.lst
+    fi
+    if [ -f "smt/smtrdns.l" ]; then
+        echo smt/smtrdns.l>>_package.lst
+    fi
+    if [ -f "smt/smtrdns.i" ]; then
+        echo smt/smtrdns.i>>_package.lst
+    fi
+    if [ -f "smt/smtrdns.d" ]; then
+        echo smt/smtrdns.d>>_package.lst
+    fi
+    if [ -f "smt/smtrdnsl.h" ]; then
+        echo smt/smtrdnsl.h>>_package.lst
+    fi
+    if [ -f "smt/smtsimu.l" ]; then
+        echo smt/smtsimu.l>>_package.lst
+    fi
+    if [ -f "smt/smtsimu.i" ]; then
+        echo smt/smtsimu.i>>_package.lst
+    fi
+    if [ -f "smt/smtsimu.d" ]; then
+        echo smt/smtsimu.d>>_package.lst
+    fi
+    if [ -f "smt/smtslot.l" ]; then
+        echo smt/smtslot.l>>_package.lst
+    fi
+    if [ -f "smt/smtslot.i" ]; then
+        echo smt/smtslot.i>>_package.lst
+    fi
+    if [ -f "smt/smtslot.d" ]; then
+        echo smt/smtslot.d>>_package.lst
+    fi
+    if [ -f "smt/smtsock.l" ]; then
+        echo smt/smtsock.l>>_package.lst
+    fi
+    if [ -f "smt/smtsock.i" ]; then
+        echo smt/smtsock.i>>_package.lst
+    fi
+    if [ -f "smt/smtsock.d" ]; then
+        echo smt/smtsock.d>>_package.lst
+    fi
+    if [ -f "smt/smttime.l" ]; then
+        echo smt/smttime.l>>_package.lst
+    fi
+    if [ -f "smt/smttime.i" ]; then
+        echo smt/smttime.i>>_package.lst
+    fi
+    if [ -f "smt/smttime.d" ]; then
+        echo smt/smttime.d>>_package.lst
+    fi
+    if [ -f "smt/smttran.l" ]; then
+        echo smt/smttran.l>>_package.lst
+    fi
+    if [ -f "smt/smttran.i" ]; then
+        echo smt/smttran.i>>_package.lst
+    fi
+    if [ -f "smt/smttran.d" ]; then
+        echo smt/smttran.d>>_package.lst
+    fi
+    if [ -f "smt/smttst1.l" ]; then
+        echo smt/smttst1.l>>_package.lst
+    fi
+    if [ -f "smt/smttst1.i" ]; then
+        echo smt/smttst1.i>>_package.lst
+    fi
+    if [ -f "smt/smttst1.d" ]; then
+        echo smt/smttst1.d>>_package.lst
+    fi
+    if [ -f "smt/smttst2.l" ]; then
+        echo smt/smttst2.l>>_package.lst
+    fi
+    if [ -f "smt/smttst2.i" ]; then
+        echo smt/smttst2.i>>_package.lst
+    fi
+    if [ -f "smt/smttst2.d" ]; then
+        echo smt/smttst2.d>>_package.lst
+    fi
+    if [ -f "smt/smttst3.l" ]; then
+        echo smt/smttst3.l>>_package.lst
+    fi
+    if [ -f "smt/smttst3.i" ]; then
+        echo smt/smttst3.i>>_package.lst
+    fi
+    if [ -f "smt/smttst3.d" ]; then
+        echo smt/smttst3.d>>_package.lst
+    fi
+    if [ -f "smt/smtupmc.l" ]; then
+        echo smt/smtupmc.l>>_package.lst
+    fi
+    if [ -f "smt/smtupmc.i" ]; then
+        echo smt/smtupmc.i>>_package.lst
+    fi
+    if [ -f "smt/smtupmc.d" ]; then
+        echo smt/smtupmc.d>>_package.lst
+    fi
+    if [ -f "smt/smtupmd.l" ]; then
+        echo smt/smtupmd.l>>_package.lst
+    fi
+    if [ -f "smt/smtupmd.i" ]; then
+        echo smt/smtupmd.i>>_package.lst
+    fi
+    if [ -f "smt/smtupmd.d" ]; then
+        echo smt/smtupmd.d>>_package.lst
+    fi
+    if [ -f "smt/xiddns.l" ]; then
+        echo smt/xiddns.l>>_package.lst
+    fi
+    if [ -f "smt/xiddns.i" ]; then
+        echo smt/xiddns.i>>_package.lst
+    fi
+    if [ -f "smt/xiddns.d" ]; then
+        echo smt/xiddns.d>>_package.lst
+    fi
+    if [ -f "smt/xierror.l" ]; then
+        echo smt/xierror.l>>_package.lst
+    fi
+    if [ -f "smt/xierror.i" ]; then
+        echo smt/xierror.i>>_package.lst
+    fi
+    if [ -f "smt/xierror.d" ]; then
+        echo smt/xierror.d>>_package.lst
+    fi
+    if [ -f "smt/xiredir.l" ]; then
+        echo smt/xiredir.l>>_package.lst
+    fi
+    if [ -f "smt/xiredir.i" ]; then
+        echo smt/xiredir.i>>_package.lst
+    fi
+    if [ -f "smt/xiredir.d" ]; then
+        echo smt/xiredir.d>>_package.lst
+    fi
+    if [ -f "smt/xiimap.l" ]; then
+        echo smt/xiimap.l>>_package.lst
+    fi
+    if [ -f "smt/xiimap.i" ]; then
+        echo smt/xiimap.i>>_package.lst
+    fi
+    if [ -f "smt/xiimap.d" ]; then
+        echo smt/xiimap.d>>_package.lst
+    fi
+    if [ -f "smt/xilrwp.l" ]; then
+        echo smt/xilrwp.l>>_package.lst
+    fi
+    if [ -f "smt/xilrwp.i" ]; then
+        echo smt/xilrwp.i>>_package.lst
+    fi
+    if [ -f "smt/xilrwp.d" ]; then
+        echo smt/xilrwp.d>>_package.lst
+    fi
+    if [ -f "smt/xisuper.l" ]; then
+        echo smt/xisuper.l>>_package.lst
+    fi
+    if [ -f "smt/xisuper.i" ]; then
+        echo smt/xisuper.i>>_package.lst
+    fi
+    if [ -f "smt/xisuper.d" ]; then
+        echo smt/xisuper.d>>_package.lst
+    fi
+    if [ -f "smt/xixlog.l" ]; then
+        echo smt/xixlog.l>>_package.lst
+    fi
+    if [ -f "smt/xixlog.i" ]; then
+        echo smt/xixlog.i>>_package.lst
+    fi
+    if [ -f "smt/xixlog.d" ]; then
+        echo smt/xixlog.d>>_package.lst
+    fi
+    if [ -f "smt/xixssi.l" ]; then
+        echo smt/xixssi.l>>_package.lst
+    fi
+    if [ -f "smt/xixssi.i" ]; then
+        echo smt/xixssi.i>>_package.lst
+    fi
+    if [ -f "smt/xixssi.d" ]; then
+        echo smt/xixssi.d>>_package.lst
+    fi
+    if [ -f "smt/xixxml.l" ]; then
+        echo smt/xixxml.l>>_package.lst
+    fi
+    if [ -f "smt/xixxml.i" ]; then
+        echo smt/xixxml.i>>_package.lst
+    fi
+    if [ -f "smt/xixxml.d" ]; then
+        echo smt/xixxml.d>>_package.lst
+    fi
+    if [ -f "smt/wsxrc.l" ]; then
+        echo smt/wsxrc.l>>_package.lst
+    fi
+    if [ -f "smt/wsxrc.d" ]; then
+        echo smt/wsxrc.d>>_package.lst
+    fi
+    if [ -f "smt/wsxrc.bat" ]; then
+        echo smt/wsxrc.bat>>_package.lst
+    fi
+    if [ -f "smt/smtmsg.c" ]; then
+        echo smt/smtmsg.c>>_package.lst
+    fi
+    if [ -f "smt/smtsslm.c" ]; then
+        echo smt/smtsslm.c>>_package.lst
+    fi
+    if [ -f "smt/xixlogm.c" ]; then
+        echo smt/xixlogm.c>>_package.lst
+    fi
+    if [ -f "smt/xicorpro.d" ]; then
+        echo smt/xicorpro.d>>_package.lst
+    fi
+    if [ -f "smt/xicorpro.i" ]; then
+        echo smt/xicorpro.i>>_package.lst
+    fi
+    if [ -f "smt/xicorstd.d" ]; then
+        echo smt/xicorstd.d>>_package.lst
+    fi
+    if [ -f "smt/xicorstd.i" ]; then
+        echo smt/xicorstd.i>>_package.lst
+    fi
+    if [ -f "smt/boomake" ]; then
+        echo smt/boomake>>_package.lst
+    fi
+    if [ -f "smt/boomake.bat" ]; then
+        echo smt/boomake.bat>>_package.lst
+    fi
+    if [ -f "smt/makefile" ]; then
+        echo smt/makefile>>_package.lst
+    fi
+    echo "Building smt_2_80_src.tar.gz..."
+    tar -czf smt_2_80_src.tar.gz -T _package.lst
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'tar -czf smt_2_80_src.tar.gz -T _package.lst' failed with exit status $status. Stop.
+        exit 1
+    fi
+    rm _package.lst
+}
+
+# -----------------------   CHECK BINARY FILES EXIST   ------------------------
+
+a_check_binary_files_exist() {
+:
+    if [ ! -f "smtdefn.h" ]; then
+        echo "smtdefn.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtlib.h" ]; then
+        echo "smtlib.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtmsg.h" ]; then
+        echo "smtmsg.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsslm.h" ]; then
+        echo "smtsslm.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthttpl.h" ]; then
+        echo "smthttpl.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpl.h" ]; then
+        echo "smtftpl.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlogm.h" ]; then
+        echo "xixlogm.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlog.h" ]; then
+        echo "xixlog.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtschm.c" ]; then
+        echo "smtschm.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wsxrc" ]; then
+        echo "wsxrc is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtexdr.gsl" ]; then
+        echo "smtexdr.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiconfig.gsl" ]; then
+        echo "xiconfig.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiconfig.xml" ]; then
+        echo "xiconfig.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ximodel.gsl" ]; then
+        echo "ximodel.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ximodel.xml" ]; then
+        echo "ximodel.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "libsmt.a" ]; then
+        echo "libsmt.a is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wsxrc.d" ]; then
+        echo "wsxrc.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wsxrc.bat" ]; then
+        echo "wsxrc.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicorpro.d" ]; then
+        echo "xicorpro.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicorpro.i" ]; then
+        echo "xicorpro.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicorstd.d" ]; then
+        echo "xicorstd.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicorstd.i" ]; then
+        echo "xicorstd.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# ------------------------   CHECK OPERATING CONTEXT   ------------------------
+
+a_check_operating_context() {
+:
+    event=source
+    if [ -d "CVS" ]; then
+        event=rawcvs
+    fi
+}
+
+# -----------------------   CHECK PROJECT FILES EXIST   -----------------------
+
+a_check_project_files_exist() {
+:
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtdefn.h" ]; then
+        echo "smtdefn.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtlib.h" ]; then
+        echo "smtlib.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthttpl.h" ]; then
+        echo "smthttpl.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpl.h" ]; then
+        echo "smtftpl.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlog.h" ]; then
+        echo "xixlog.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupm.h" ]; then
+        echo "smtupm.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsimu.h" ]; then
+        echo "smtsimu.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xilrwp.h" ]; then
+        echo "xilrwp.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtschm.c" ]; then
+        echo "smtschm.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtecho.c" ]; then
+        echo "smtecho.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpc.c" ]; then
+        echo "smtftpc.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpd.c" ]; then
+        echo "smtftpd.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpl.c" ]; then
+        echo "smtftpl.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthlog.c" ]; then
+        echo "smthlog.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthttp.c" ]; then
+        echo "smthttp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthttpl.c" ]; then
+        echo "smthttpl.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtlib.c" ]; then
+        echo "smtlib.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtlog.c" ]; then
+        echo "smtlog.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtoper.c" ]; then
+        echo "smtoper.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtpipe.c" ]; then
+        echo "smtpipe.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtrdns.c" ]; then
+        echo "smtrdns.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtrdnsl.c" ]; then
+        echo "smtrdnsl.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsimu.c" ]; then
+        echo "smtsimu.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtslot.c" ]; then
+        echo "smtslot.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsock.c" ]; then
+        echo "smtsock.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttime.c" ]; then
+        echo "smttime.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttran.c" ]; then
+        echo "smttran.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst1.c" ]; then
+        echo "smttst1.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst2.c" ]; then
+        echo "smttst2.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst3.c" ]; then
+        echo "smttst3.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmc.c" ]; then
+        echo "smtupmc.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmd.c" ]; then
+        echo "smtupmd.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiddns.c" ]; then
+        echo "xiddns.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xierror.c" ]; then
+        echo "xierror.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiredir.c" ]; then
+        echo "xiredir.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiimap.c" ]; then
+        echo "xiimap.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xilrwp.c" ]; then
+        echo "xilrwp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xisuper.c" ]; then
+        echo "xisuper.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlog.c" ]; then
+        echo "xixlog.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixssi.c" ]; then
+        echo "xixssi.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixxml.c" ]; then
+        echo "xixxml.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wsxrc" ]; then
+        echo "wsxrc is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtexdr.gsl" ]; then
+        echo "smtexdr.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtmsg.xml" ]; then
+        echo "smtmsg.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsslm.xml" ]; then
+        echo "smtsslm.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlogm.xml" ]; then
+        echo "xixlogm.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiconfig.gsl" ]; then
+        echo "xiconfig.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiconfig.xml" ]; then
+        echo "xiconfig.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ximodel.gsl" ]; then
+        echo "ximodel.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ximodel.xml" ]; then
+        echo "ximodel.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicore.xml" ]; then
+        echo "xicore.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtecho.l" ]; then
+        echo "smtecho.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpc.l" ]; then
+        echo "smtftpc.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpd.l" ]; then
+        echo "smtftpd.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthlog.l" ]; then
+        echo "smthlog.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthttp.l" ]; then
+        echo "smthttp.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtlog.l" ]; then
+        echo "smtlog.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtoper.l" ]; then
+        echo "smtoper.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtpipe.l" ]; then
+        echo "smtpipe.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtrdns.l" ]; then
+        echo "smtrdns.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtrdnsl.h" ]; then
+        echo "smtrdnsl.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsimu.l" ]; then
+        echo "smtsimu.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtslot.l" ]; then
+        echo "smtslot.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsock.l" ]; then
+        echo "smtsock.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttime.l" ]; then
+        echo "smttime.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttran.l" ]; then
+        echo "smttran.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst1.l" ]; then
+        echo "smttst1.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst2.l" ]; then
+        echo "smttst2.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst3.l" ]; then
+        echo "smttst3.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmc.l" ]; then
+        echo "smtupmc.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmd.l" ]; then
+        echo "smtupmd.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiddns.l" ]; then
+        echo "xiddns.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xierror.l" ]; then
+        echo "xierror.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiredir.l" ]; then
+        echo "xiredir.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiimap.l" ]; then
+        echo "xiimap.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xilrwp.l" ]; then
+        echo "xilrwp.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xisuper.l" ]; then
+        echo "xisuper.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlog.l" ]; then
+        echo "xixlog.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixssi.l" ]; then
+        echo "xixssi.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixxml.l" ]; then
+        echo "xixxml.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wsxrc.l" ]; then
+        echo "wsxrc.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wsxrc.bat" ]; then
+        echo "wsxrc.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "makefile" ]; then
+        echo "makefile is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -----------------------   CHECK SOURCE FILES EXIST   ------------------------
+
+a_check_source_files_exist() {
+:
+    if [ ! -f "version.h" ]; then
+        echo "version.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtdefn.h" ]; then
+        echo "smtdefn.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtlib.h" ]; then
+        echo "smtlib.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtmsg.h" ]; then
+        echo "smtmsg.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsslm.h" ]; then
+        echo "smtsslm.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthttpl.h" ]; then
+        echo "smthttpl.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpl.h" ]; then
+        echo "smtftpl.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlogm.h" ]; then
+        echo "xixlogm.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlog.h" ]; then
+        echo "xixlog.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupm.h" ]; then
+        echo "smtupm.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsimu.h" ]; then
+        echo "smtsimu.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xilrwp.h" ]; then
+        echo "xilrwp.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtschm.c" ]; then
+        echo "smtschm.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtecho.c" ]; then
+        echo "smtecho.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpc.c" ]; then
+        echo "smtftpc.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpd.c" ]; then
+        echo "smtftpd.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpl.c" ]; then
+        echo "smtftpl.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthlog.c" ]; then
+        echo "smthlog.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthttp.c" ]; then
+        echo "smthttp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthttpl.c" ]; then
+        echo "smthttpl.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtlib.c" ]; then
+        echo "smtlib.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtlog.c" ]; then
+        echo "smtlog.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtoper.c" ]; then
+        echo "smtoper.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtpipe.c" ]; then
+        echo "smtpipe.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtrdns.c" ]; then
+        echo "smtrdns.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtrdnsl.c" ]; then
+        echo "smtrdnsl.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsimu.c" ]; then
+        echo "smtsimu.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtslot.c" ]; then
+        echo "smtslot.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsock.c" ]; then
+        echo "smtsock.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttime.c" ]; then
+        echo "smttime.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttran.c" ]; then
+        echo "smttran.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst1.c" ]; then
+        echo "smttst1.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst2.c" ]; then
+        echo "smttst2.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst3.c" ]; then
+        echo "smttst3.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmc.c" ]; then
+        echo "smtupmc.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmd.c" ]; then
+        echo "smtupmd.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiddns.c" ]; then
+        echo "xiddns.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xierror.c" ]; then
+        echo "xierror.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiredir.c" ]; then
+        echo "xiredir.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiimap.c" ]; then
+        echo "xiimap.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xilrwp.c" ]; then
+        echo "xilrwp.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xisuper.c" ]; then
+        echo "xisuper.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlog.c" ]; then
+        echo "xixlog.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixssi.c" ]; then
+        echo "xixssi.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixxml.c" ]; then
+        echo "xixxml.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wsxrc" ]; then
+        echo "wsxrc is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtexdr.gsl" ]; then
+        echo "smtexdr.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtmsg.xml" ]; then
+        echo "smtmsg.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsslm.xml" ]; then
+        echo "smtsslm.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlogm.xml" ]; then
+        echo "xixlogm.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiconfig.gsl" ]; then
+        echo "xiconfig.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiconfig.xml" ]; then
+        echo "xiconfig.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiconfig.h" ]; then
+        echo "xiconfig.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ximodel.gsl" ]; then
+        echo "ximodel.gsl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "ximodel.xml" ]; then
+        echo "ximodel.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicore.xml" ]; then
+        echo "xicore.xml is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "project.pdl" ]; then
+        echo "project.pdl is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "readme.txt" ]; then
+        echo "readme.txt is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtecho.l" ]; then
+        echo "smtecho.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtecho.i" ]; then
+        echo "smtecho.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtecho.d" ]; then
+        echo "smtecho.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpc.l" ]; then
+        echo "smtftpc.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpc.i" ]; then
+        echo "smtftpc.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpc.d" ]; then
+        echo "smtftpc.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpd.l" ]; then
+        echo "smtftpd.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpd.i" ]; then
+        echo "smtftpd.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtftpd.d" ]; then
+        echo "smtftpd.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthlog.l" ]; then
+        echo "smthlog.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthlog.i" ]; then
+        echo "smthlog.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthlog.d" ]; then
+        echo "smthlog.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthttp.l" ]; then
+        echo "smthttp.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthttp.i" ]; then
+        echo "smthttp.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smthttp.d" ]; then
+        echo "smthttp.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtlog.l" ]; then
+        echo "smtlog.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtlog.i" ]; then
+        echo "smtlog.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtlog.d" ]; then
+        echo "smtlog.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtoper.l" ]; then
+        echo "smtoper.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtoper.i" ]; then
+        echo "smtoper.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtoper.d" ]; then
+        echo "smtoper.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtpipe.l" ]; then
+        echo "smtpipe.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtpipe.i" ]; then
+        echo "smtpipe.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtpipe.d" ]; then
+        echo "smtpipe.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtrdns.l" ]; then
+        echo "smtrdns.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtrdns.i" ]; then
+        echo "smtrdns.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtrdns.d" ]; then
+        echo "smtrdns.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtrdnsl.h" ]; then
+        echo "smtrdnsl.h is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsimu.l" ]; then
+        echo "smtsimu.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsimu.i" ]; then
+        echo "smtsimu.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsimu.d" ]; then
+        echo "smtsimu.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtslot.l" ]; then
+        echo "smtslot.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtslot.i" ]; then
+        echo "smtslot.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtslot.d" ]; then
+        echo "smtslot.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsock.l" ]; then
+        echo "smtsock.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsock.i" ]; then
+        echo "smtsock.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsock.d" ]; then
+        echo "smtsock.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttime.l" ]; then
+        echo "smttime.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttime.i" ]; then
+        echo "smttime.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttime.d" ]; then
+        echo "smttime.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttran.l" ]; then
+        echo "smttran.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttran.i" ]; then
+        echo "smttran.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttran.d" ]; then
+        echo "smttran.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst1.l" ]; then
+        echo "smttst1.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst1.i" ]; then
+        echo "smttst1.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst1.d" ]; then
+        echo "smttst1.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst2.l" ]; then
+        echo "smttst2.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst2.i" ]; then
+        echo "smttst2.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst2.d" ]; then
+        echo "smttst2.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst3.l" ]; then
+        echo "smttst3.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst3.i" ]; then
+        echo "smttst3.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smttst3.d" ]; then
+        echo "smttst3.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmc.l" ]; then
+        echo "smtupmc.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmc.i" ]; then
+        echo "smtupmc.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmc.d" ]; then
+        echo "smtupmc.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmd.l" ]; then
+        echo "smtupmd.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmd.i" ]; then
+        echo "smtupmd.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtupmd.d" ]; then
+        echo "smtupmd.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiddns.l" ]; then
+        echo "xiddns.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiddns.i" ]; then
+        echo "xiddns.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiddns.d" ]; then
+        echo "xiddns.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xierror.l" ]; then
+        echo "xierror.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xierror.i" ]; then
+        echo "xierror.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xierror.d" ]; then
+        echo "xierror.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiredir.l" ]; then
+        echo "xiredir.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiredir.i" ]; then
+        echo "xiredir.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiredir.d" ]; then
+        echo "xiredir.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiimap.l" ]; then
+        echo "xiimap.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiimap.i" ]; then
+        echo "xiimap.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xiimap.d" ]; then
+        echo "xiimap.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xilrwp.l" ]; then
+        echo "xilrwp.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xilrwp.i" ]; then
+        echo "xilrwp.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xilrwp.d" ]; then
+        echo "xilrwp.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xisuper.l" ]; then
+        echo "xisuper.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xisuper.i" ]; then
+        echo "xisuper.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xisuper.d" ]; then
+        echo "xisuper.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlog.l" ]; then
+        echo "xixlog.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlog.i" ]; then
+        echo "xixlog.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlog.d" ]; then
+        echo "xixlog.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixssi.l" ]; then
+        echo "xixssi.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixssi.i" ]; then
+        echo "xixssi.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixssi.d" ]; then
+        echo "xixssi.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixxml.l" ]; then
+        echo "xixxml.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixxml.i" ]; then
+        echo "xixxml.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixxml.d" ]; then
+        echo "xixxml.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wsxrc.l" ]; then
+        echo "wsxrc.l is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wsxrc.d" ]; then
+        echo "wsxrc.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "wsxrc.bat" ]; then
+        echo "wsxrc.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtmsg.c" ]; then
+        echo "smtmsg.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "smtsslm.c" ]; then
+        echo "smtsslm.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xixlogm.c" ]; then
+        echo "xixlogm.c is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicorpro.d" ]; then
+        echo "xicorpro.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicorpro.i" ]; then
+        echo "xicorpro.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicorstd.d" ]; then
+        echo "xicorstd.d is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "xicorstd.i" ]; then
+        echo "xicorstd.i is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake" ]; then
+        echo "boomake is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "boomake.bat" ]; then
+        echo "boomake.bat is missing, cannot continue"
+        exit 1
+    fi
+    if [ ! -f "makefile" ]; then
+        echo "makefile is missing, cannot continue"
+        exit 1
+    fi
+}
+
+# -------------------------   INSTALL DELIVERABLES   --------------------------
+
+a_install_deliverables() {
+:
+    TARGET=$_IBASE/xitami-25
+    echo "Installing SMT into $TARGET..."
+    if [ ! -d "$TARGET" ]; then
+        if mkdir -p $TARGET; then
+            :
+        else
+            echo "Could not create directory \"$TARGET\". Stop."
+            exit 1
+        fi
+    fi
+    mkdir -p $TARGET/include/
+    cp smtdefn.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp smtdefn.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/smtdefn.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/smtdefn.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp smtlib.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp smtlib.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/smtlib.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/smtlib.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp smtmsg.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp smtmsg.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/smtmsg.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/smtmsg.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp smtsslm.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp smtsslm.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/smtsslm.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/smtsslm.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp smthttpl.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp smthttpl.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/smthttpl.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/smthttpl.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp smtftpl.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp smtftpl.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/smtftpl.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/smtftpl.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp xixlogm.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xixlogm.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/xixlogm.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/xixlogm.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp xixlog.h $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xixlog.h $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/xixlog.h
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/xixlog.h' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/bin/
+    cp smtschm.c $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp smtschm.c $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/smtschm.c
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/smtschm.c' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp wsxrc $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp wsxrc $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0755 $TARGET/bin/wsxrc
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0755 $TARGET/bin/wsxrc' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp smtexdr.gsl $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp smtexdr.gsl $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/smtexdr.gsl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/smtexdr.gsl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp xiconfig.gsl $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xiconfig.gsl $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/xiconfig.gsl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/xiconfig.gsl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp xiconfig.xml $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xiconfig.xml $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/xiconfig.xml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/xiconfig.xml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp ximodel.gsl $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ximodel.gsl $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/ximodel.gsl
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/ximodel.gsl' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp ximodel.xml $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp ximodel.xml $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/ximodel.xml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/ximodel.xml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/lib/
+    cp libsmt.a $TARGET/lib/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp libsmt.a $TARGET/lib/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/lib/libsmt.a
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/lib/libsmt.a' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/bin/
+    mkdir -p $TARGET/doc/SMT/
+    cp readme.txt $TARGET/doc/SMT/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp readme.txt $TARGET/doc/SMT/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/doc/SMT/readme.txt
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/doc/SMT/readme.txt' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/bin/
+    cp wsxrc.d $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp wsxrc.d $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/wsxrc.d
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/wsxrc.d' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp wsxrc.bat $TARGET/bin/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp wsxrc.bat $TARGET/bin/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/bin/wsxrc.bat
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/bin/wsxrc.bat' failed with exit status $status. Stop.
+        exit 1
+    fi
+    mkdir -p $TARGET/include/
+    cp xicorpro.d $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xicorpro.d $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/xicorpro.d
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/xicorpro.d' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp xicorpro.i $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xicorpro.i $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/xicorpro.i
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/xicorpro.i' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp xicorstd.d $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xicorstd.d $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/xicorstd.d
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/xicorstd.d' failed with exit status $status. Stop.
+        exit 1
+    fi
+    cp xicorstd.i $TARGET/include/
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'cp xicorstd.i $TARGET/include/' failed with exit status $status. Stop.
+        exit 1
+    fi
+    chmod 0644 $TARGET/include/xicorstd.i
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'chmod 0644 $TARGET/include/xicorstd.i' failed with exit status $status. Stop.
+        exit 1
+    fi
+
+    if [ ! -f "$TARGET/bin/setvars.sh" ]; then
+        echo "Creating $TARGET/bin/setvars.sh..."
+        echo "if [ -z \"\$INCDIR\" ]; then"          >$TARGET/bin/setvars.sh
+        echo "    INCDIR=$TARGET/include"            >>$TARGET/bin/setvars.sh
+        echo "    LIBDIR=$TARGET/lib"                >>$TARGET/bin/setvars.sh
+        echo "    PATH=$TARGET/bin:\$PATH"           >>$TARGET/bin/setvars.sh
+        echo "    PERLLIB=$TARGET/bin:\$PATH"        >>$TARGET/bin/setvars.sh
+        echo "    export INCDIR LIBDIR PATH PERLLIB" >>$TARGET/bin/setvars.sh
+        echo "fi"                                    >>$TARGET/bin/setvars.sh
+    fi
+}
+
+# ------------------------   PRODUCE GENERATED FILES   ------------------------
+
+a_produce_generated_files() {
+:
+    gsl -q -build_header:1 xiconfig
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'gsl -q -build_header:1 xiconfig' failed with exit status $status. Stop.
+        exit 1
+    fi
+    gsl -q smtmsg.xml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'gsl -q smtmsg.xml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    gsl -q smtsslm.xml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'gsl -q smtsslm.xml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    gsl -q xixlogm.xml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'gsl -q xixlogm.xml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    gsl -q xicore.xml
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'gsl -q xicore.xml' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtecho.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtecho.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtftpc.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtftpc.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtftpd.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtftpd.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smthlog.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smthlog.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smthttp.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smthttp.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtlog.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtlog.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtoper.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtoper.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtpipe.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtpipe.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtrdns.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtrdns.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtsimu.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtsimu.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtslot.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtslot.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtsock.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtsock.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smttime.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smttime.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smttran.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smttran.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smttst1.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smttst1.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smttst2.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smttst2.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smttst3.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smttst3.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtupmc.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtupmc.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr smtupmd.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr smtupmd.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr xiddns.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr xiddns.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr xierror.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr xierror.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr xiredir.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr xiredir.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr xiimap.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr xiimap.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr xilrwp.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr xilrwp.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr xisuper.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr xisuper.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr xixlog.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr xixlog.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr xixssi.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr xixssi.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr xixxml.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr xixxml.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+    lr wsxrc.l
+    status=$?
+    if [ $? -ne 0 ]; then
+        echo boomake: 'lr wsxrc.l' failed with exit status $status. Stop.
+        exit 1
+    fi
+}
+
+# -----------------------   REMOVE GENERATED BINARIES   -----------------------
+
+a_remove_generated_binaries() {
+:
+    rm -f libsmt.a
+    rm -f smtecho.o
+    rm -f smtftpc.o
+    rm -f smtftpd.o
+    rm -f smtftpl.o
+    rm -f smthlog.o
+    rm -f smthttp.o
+    rm -f smthttpl.o
+    rm -f smtlib.o
+    rm -f smtlog.o
+    rm -f smtoper.o
+    rm -f smtpipe.o
+    rm -f smtrdns.o
+    rm -f smtrdnsl.o
+    rm -f smtsimu.o
+    rm -f smtslot.o
+    rm -f smtsock.o
+    rm -f smttime.o
+    rm -f smttran.o
+    rm -f smttst1.o
+    rm -f smttst2.o
+    rm -f smttst3.o
+    rm -f smtupmc.o
+    rm -f smtupmd.o
+    rm -f xiddns.o
+    rm -f xierror.o
+    rm -f xiredir.o
+    rm -f xiimap.o
+    rm -f xilrwp.o
+    rm -f xisuper.o
+    rm -f xixlog.o
+    rm -f xixssi.o
+    rm -f xixxml.o
+    rm -f smtmsg.c.o
+    rm -f smtsslm.c.o
+    rm -f xixlogm.c.o
+    rm -f smtmsg.o
+    rm -f smtsslm.o
+    rm -f xixlogm.o
+}
+
+# -----------------------   REMOVE GENERATED SOURCES   ------------------------
+
+a_remove_generated_sources() {
+:
+    rm -f smtmsg.h
+    rm -f smtsslm.h
+    rm -f xixlogm.h
+    rm -f xiconfig.h
+    rm -f smtecho.i
+    rm -f smtecho.d
+    rm -f smtftpc.i
+    rm -f smtftpc.d
+    rm -f smtftpd.i
+    rm -f smtftpd.d
+    rm -f smthlog.i
+    rm -f smthlog.d
+    rm -f smthttp.i
+    rm -f smthttp.d
+    rm -f smtlog.i
+    rm -f smtlog.d
+    rm -f smtoper.i
+    rm -f smtoper.d
+    rm -f smtpipe.i
+    rm -f smtpipe.d
+    rm -f smtrdns.i
+    rm -f smtrdns.d
+    rm -f smtsimu.i
+    rm -f smtsimu.d
+    rm -f smtslot.i
+    rm -f smtslot.d
+    rm -f smtsock.i
+    rm -f smtsock.d
+    rm -f smttime.i
+    rm -f smttime.d
+    rm -f smttran.i
+    rm -f smttran.d
+    rm -f smttst1.i
+    rm -f smttst1.d
+    rm -f smttst2.i
+    rm -f smttst2.d
+    rm -f smttst3.i
+    rm -f smttst3.d
+    rm -f smtupmc.i
+    rm -f smtupmc.d
+    rm -f smtupmd.i
+    rm -f smtupmd.d
+    rm -f xiddns.i
+    rm -f xiddns.d
+    rm -f xierror.i
+    rm -f xierror.d
+    rm -f xiredir.i
+    rm -f xiredir.d
+    rm -f xiimap.i
+    rm -f xiimap.d
+    rm -f xilrwp.i
+    rm -f xilrwp.d
+    rm -f xisuper.i
+    rm -f xisuper.d
+    rm -f xixlog.i
+    rm -f xixlog.d
+    rm -f xixssi.i
+    rm -f xixssi.d
+    rm -f xixxml.i
+    rm -f xixxml.d
+    rm -f wsxrc.d
+    rm -f smtmsg.c
+    rm -f smtsslm.c
+    rm -f xixlogm.c
+    rm -f xicorpro.d
+    rm -f xicorpro.i
+    rm -f xicorstd.d
+    rm -f xicorstd.i
+}
+
+# ------------------------   REPORT HELP INFORMATION   ------------------------
+
+a_report_help_information() {
+:
+    echo "boomake - Boom! builder for SMT 2.80"
+    echo "Copyright (c) 1991-2003 iMatix Corporation"
+    echo ""
+    echo "This script acts as a project 'make' tool.  Boom! uses an XML-based"
+    echo "project description and generates various make tools (including this"
+    echo "one) from it.  To find out more about Boom!, visit www.imatix.com."
+    echo ""
+    eval "actions_$state"
+}
+
+# -------------------------   RUN REGRESSION TESTS   --------------------------
+
+a_run_regression_tests() {
+:
+    :
+}
+
+actions_initial() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_initial_check() {
+    echo "The actions you can use in this state are:"
+    return
+}
+
+actions_rawcvs() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the raw project sources, produces all generated files, and"
+    echo "    compiles all source files."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the raw project sources, removes all generated"
+    echo "    source and binary files from the project directory."
+    return
+}
+
+actions_source() {
+    echo "The actions you can use in this state are:"
+echo "build:"
+    echo "  "
+    echo "    From the packaged sources, compiles all source files without any"
+    echo "    code generation."
+echo "regen:"
+    echo "  "
+    echo "    Produces all generated files."
+echo "install:"
+    echo "  "
+    echo "    Installs deliverables into the final or temporary install tree."
+    echo "    This action is only valid after a successful build."
+echo "distrib:"
+    echo "  "
+    echo "    Creates a source distribution for the project.  Note that binary"
+    echo "    distributions can only be created at the product level."
+echo "clean:"
+    echo "  "
+    echo "    When working with the packaged sources, removes all generated"
+    echo "    source files from the project directory."
+    return
+}
+
+actions_default() {
+    echo "The actions you can use in this state are:"
+echo "test:"
+    echo "  "
+    echo "    Runs regression tests for the project."
+echo "help:"
+    echo "  "
+    echo "    Shows a list of the available builder commands."
+    return
+}
+
+#   State machine starts here
+#
+firsttime=true
+while [ "$1" -o "$firsttime" ]; do
+  firsttime=
+  state=initial
+  event=ok
+  debug=
+  export state event debug
+  while [ -n "$state" ]; do
+    if [ "$inherit_state" ]; then
+        check_state=$inherit_state
+        inherit_state=
+    else
+        check_state=$state
+    fi
+    case "$check_state" in
+    initial)
+        if [ -n "$debug" ]; then
+            echo "State: initial"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        ok)
+            if [ -n "$debug" ]; then 
+                echo "Event: ok"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check operating context"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_operating_context
+            fi
+            state=initial_check
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    initial_check)
+        if [ -n "$debug" ]; then
+            echo "State: initial check"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        rawcvs)
+            if [ -n "$debug" ]; then 
+                echo "Event: rawcvs"
+            fi
+            event=
+            exception=
+            state=rawcvs
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        source)
+            if [ -n "$debug" ]; then 
+                echo "Event: source"
+            fi
+            event=
+            exception=
+            state=source
+            if [ -n "$exception" ]; then 
+                continue
+            fi
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    rawcvs)
+        if [ -n "$debug" ]; then
+            echo "State: rawcvs"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated sources"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_sources
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    source)
+        if [ -n "$debug" ]; then
+            echo "State: source"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        build)
+            if [ -n "$debug" ]; then 
+                echo "Event: build"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build binary files"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_binary_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        regen)
+            if [ -n "$debug" ]; then 
+                echo "Event: regen"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check project files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_project_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: produce generated files"
+            fi
+            if [ -z "$exception" ]; then
+                a_produce_generated_files
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        install)
+            if [ -n "$debug" ]; then 
+                echo "Event: install"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: install deliverables"
+            fi
+            if [ -z "$exception" ]; then
+                a_install_deliverables
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        distrib)
+            if [ -n "$debug" ]; then 
+                echo "Event: distrib"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check source files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_source_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: build source packages"
+            fi
+            if [ -z "$exception" ]; then
+                a_build_source_packages
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        clean)
+            if [ -n "$debug" ]; then 
+                echo "Event: clean"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: remove generated binaries"
+            fi
+            if [ -z "$exception" ]; then
+                a_remove_generated_binaries
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            inherit_state=default
+        ;;
+        esac
+    ;;
+    default)
+        if [ -n "$debug" ]; then
+            echo "State: default"
+        fi
+        case "$event" in
+        "")
+            if [ -n "$debug" ]; then 
+                echo "Get event from user"
+            fi
+            if [ "$1" ]; then
+                event=$1
+                shift
+            else
+                event=empty
+            fi
+            continue
+        ;;
+        test)
+            if [ -n "$debug" ]; then 
+                echo "Event: test"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: check binary files exist"
+            fi
+            if [ -z "$exception" ]; then
+                a_check_binary_files_exist
+            fi
+            if [ -n "$debug" ]; then
+                echo "Action: run regression tests"
+            fi
+            if [ -z "$exception" ]; then
+                a_run_regression_tests
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        help)
+            if [ -n "$debug" ]; then 
+                echo "Event: help"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        empty)
+            if [ -n "$debug" ]; then 
+                echo "Event: empty"
+            fi
+            event=
+            exception=
+            if [ -n "$debug" ]; then
+                echo "Action: report help information"
+            fi
+            if [ -z "$exception" ]; then
+                a_report_help_information
+            fi
+            if [ -n "$1" -a -z "$exception" ]; then
+                continue 2
+            fi
+            state=
+        ;;
+        *)
+            echo "$event is not allowed here, state=$state"
+            exit 1
+        ;;
+        esac
+    ;;
+    esac
+  done
+done

@@ -1,0 +1,538 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Installing Xitami</TITLE></HEAD>
+<BODY STYLE="font-family: sans-serif">
+<TABLE WIDTH=100%><TR><TD ALIGN=LEFT>
+ | <A href="http://www.imatix.com/">iMatix home page</A><BR>
+ | <A HREF="index.htm"> Xitami home page</A><BR>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index1.htm">&lt;</A>
+ | <A href="index3.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<TD ALIGN=RIGHT>
+<IMG SRC="/images/xitami1.gif" ALT="Xitami" WIDTH=100 HEIGHT=75 ALIGN=RIGHT HSPACE=10>
+<FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+<A NAME="download">&nbsp;</A>
+
+<H2><A NAME="TOC1">Installing Xitami</A></H2>
+
+<P>You can install Xitami in a few minutes on all platforms. For Windows,
+Xitami comes with an installation Wizard. For OS/2 it is supplied as a
+pre-built zip file. For UNIX and OpenVMS, Xitami is provided as a source kit
+- you need an ANSI C compiler to rebuild it.
+
+
+<H3><A NAME="TOC2">Worldwide Mirror Sites</A></H3>
+
+<P>Click on the image that displays first:
+<BR>
+<TABLE><TR>
+
+
+<TD ALIGN="CENTER" VALIGN="TOP">USA<BR><A HREF="ftp://ftp.nlbox.com/xitami">
+<IMG SRC="http://www.nlbox.com/xitami/xitami1.gif" WIDTH=100 HEIGHT=75 ALT="USA"></A>
+<BR><A HREF="ftp://ftp.nlbox.com/xitami">FTP access</A>
+
+<TD ALIGN="CENTER" VALIGN="TOP">Belgium<BR><A HREF="http://users.skynet.be/sky95044/">
+<IMG SRC="http://users.skynet.be/sky95044/xitami1.gif" WIDTH=100 HEIGHT=75 ALT="Belgium"></A>
+
+<TD ALIGN="CENTER" VALIGN="TOP">Mexico<BR><A HREF="http://mmc.unam.mx/server/">
+<IMG SRC="http://mmc.unam.mx/server/xitami1.gif" WIDTH=100 HEIGHT=75 ALT="Mexico"></A>
+
+<TD ALIGN="CENTER" VALIGN="TOP">Thailand<BR><A HREF="http://std.siamu.ac.th/imatix/">
+<IMG SRC="http://std.siamu.ac.th/imatix/xitami1.gif" WIDTH=100 HEIGHT=75 ALT="Thailand"></A>
+</TABLE>
+
+<A NAME="www.imatix.com">&nbsp;</A>
+<H3><A NAME="TOC3">Current Release - 2.5b6</A></H3>
+
+<TABLE BORDER=1 BORDERCOLORDARK=WHITE BORDERCOLORLIGHT=WHITE>
+<TR BGCOLOR=#B0C4DE ALIGN=CENTER>
+<TD BGCOLOR=#FFEFD5>
+<TD>Win 3.x
+<TD>Win 95/NT<BR>standard
+<TD>Win 95<BR>console
+<TD>Win NT<BR>service
+<TD>Win NT<BR>Alpha/AXP
+<TD>OS/2
+<TD>Unix, OpenVMS
+<TR>
+<TD BGCOLOR=#B0C4DE>Install package
+<TD>bw16.exe<BR>N/A
+<TD>bw32.exe<BR>N/A
+<TD>bc32.exe<BR>N/A
+<TD>bs32.exe<BR>N/A
+<TD>baxp.zip<BR>N/A
+<TD>bos2.zip<BR>N/A
+<TD>suni.tgz<BR>N/A
+<TR>
+<TD BGCOLOR=#B0C4DE>Source package<BR>(if separate)
+<TD>
+<TD>
+<TD>swin.zip<BR>N/A
+<TD>
+<TD>
+<TD>swin.zip<BR>N/A
+<TD>
+</TABLE>
+
+<H3><A NAME="TOC4">Previous Release - 2.4d3</A></H3>
+
+<TABLE BORDER=1 BORDERCOLORDARK=WHITE BORDERCOLORLIGHT=WHITE>
+<TR BGCOLOR=#B0C4DE ALIGN=CENTER>
+<TD BGCOLOR=#FFEFD5>
+<TD>Win 3.x
+<TD>Win 95/NT<BR>standard
+<TD>Win 95<BR>console
+<TD>Win NT<BR>service
+<TD>Win NT<BR>Alpha/AXP
+<TD>OS/2
+<TD>Unix, OpenVMS
+<TR>
+<TD BGCOLOR=#B0C4DE>Install package
+<TD>bw1624d3.exe<BR>N/A
+<TD>bw3224d3.exe<BR>N/A
+<TD>bc3224d3.exe<BR>N/A
+<TD>bs3224d3.exe<BR>N/A
+<TD>baxp24d3.zip<BR>N/A
+<TD>bos224d3.zip<BR>N/A
+<TD>suni24d3.tgz<BR>N/A
+<TR>
+<TD BGCOLOR=#B0C4DE>Source package<BR>(if separate)
+<TD>
+<TD>
+<TD>swin24d3.zip<BR>N/A
+<TD>
+<TD>
+<TD>swin24d3.zip<BR>N/A
+<TD>
+</TABLE>
+
+
+<HR>
+<A NAME="win32">&nbsp;</A>
+<H3><A NAME="TOC5">GUI Version for Windows 95/98 or NT</A></H3>
+
+<P>Download and run the <A href="http://users.skynet.be/sky95044/bw32.exe">32-bit Windows package</A>. The
+installation Wizard will prompt you for an installation directory, and will
+build a program group and icons to run Xitami. To run the installation
+Wizard without the iMatix logo display, pass is "-nologo" on the command
+line.
+
+<P>You can uninstall Xitami by double-clicking the Uninstall icon. Under
+Windows 95 and NT 4.x you can also select the 'Add/Remove Programs' option
+in the control panel. Xitami maintains various items in the Windows
+registry which the uninstall script should remove.
+
+<P>When you have installed Xitami, run it, then connect with any web
+browser. You should see the "Welcome To Xitami" test page. If Xitami cannot
+run on its normal port (80), it shows an error message: this can happen if
+another server is using port 80. You can use an alternative HTTP port such
+as 5080. You then connect using the URL <TT>http://localhost:5080/</TT>.
+
+<P>You can also download the <A href="http://users.skynet.be/sky95044/swin.zip">source package</A> for Windows.
+This compiles under MSVC 4.x or 5.x, and is necessary if you want to extend
+the server using the WSX add-on protocol.  To build from the source package,
+unzip it into a directory (e.g. c:\xitami\src) and double click on the
+xitami.mdp file.  This launches MSVC.  Click on the 'Build' button, wait
+until everything compiles, then click on 'Run'.  Note that this source
+package contains the console (DOS box) version of Xitami.  The project
+contains definitions for the GUI versions too, but these won't build unless
+you've purchased the Windows GUI source code from us.
+
+<P>If you use Windows 95, be aware that the earlier versions of this OS
+can get into serious problems when heavily loaded with TCP/IP connections.
+While Win95 is adequate for testing and for small sites, we cannot really
+recommend it for serious sites - use NT or Linux.  If you find that your
+Win95 system shows the classic 'Blue Screen of Death' when the server is
+heavily loaded, consider installing the various patches and upgrades that
+are supplied on the Microsoft site.
+
+<HR>
+<A NAME="win32_console">&nbsp;</A>
+<H3><A NAME="TOC6">Console Version for Windows 95/98 and NT</A></H3>
+
+<P>The console version of Xitami runs in a DOS box. Unlike the Windows GUI
+version, it does not provide a control panel, so you stop the server using
+Ctrl-C. The advantage of the console version is that messages are shown on
+the screen directly, so it's a little easier to use when you're debugging a
+difficult configuration. Otherwise, it's exactly the same Xitami. Download
+and run the <A href="http://users.skynet.be/sky95044/bc32.exe">32-bit Windows console package</A>. The
+installation program will prompt you for an installation directory, and
+will build a program group and icons to run Xitami.
+
+<P>Some users of Windows 98 have reported that the console version of
+Xitami runs more stably than the graphic version. This may be due to the
+MSVC runtime, but in any case: if your GUI version of Xitami crashes after
+heavy use under Win98, try using the console version.
+
+<P>When you have installed Xitami, run xidos32, then connect with any web
+browser. You should see the "Welcome To Xitami" test page. If Xitami cannot
+run on its normal port (80), it shows an error message: this can happen if
+another server is using port 80. To use an alternative HTTP port, use the
+'-b' option. This shifts the standard HTTP and FTP ports by some 'base'. For
+example, '-b 5000' runs the Xitami HTTP service on port 5080 and the FTP
+service on port 5021. You would then connect using
+<TT>http://localhost:5080/</TT>.
+
+<P>To halt Xitami, press Ctrl-C. This shuts-down the server cleanly.
+
+<P>You can uninstall Xitami by double-clicking the Uninstall icon. Under
+Windows 95 and NT 4.x you can also select the 'Add/Remove Programs' option
+in the control panel.
+
+<H4><A NAME="TOC7">Using Xitami as a Service Under Windows 95</A></H4>
+<P>You can also install the console version as a service under Windows
+95/98.  This is a little-known ability of Win95/98, and it allows you to
+automatically run Xitami when the computer boots, rather than when a user
+logs in.  The Xitami console version installation package asks whether you
+want to install it as a Win95 service.  If you choose this option, it
+creates a small dispatcher, called "C:\Service.bat" which simply changes to
+the Xitami directory and then runs Xitami.
+
+<P>To start the dispatcher, the installation script adds an entry to the
+registry, under "SOFTWARE\Microsoft\Windows\CurrentVersion\RunServices".
+You can delete this entry at any time.  You can also edit service.bat to
+remove the call to xidos32.exe.
+
+<HR>
+<A NAME="win32_service">&nbsp;</A>
+<H3><A NAME="TOC8">Xitami Service for Windows NT</A></H3>
+
+<P>Download and run the <A href="http://users.skynet.be/sky95044/bs32.exe">NT service package</A>.  The
+installation program will prompt you for an installation directory, and will
+install Xitami as an NT service. You can start and stop the service using
+the Service Control Manager or the Xitami control panel (in the Control
+Panel window).
+
+<P>We recommend that you log-on as administrator before you install Xitami.
+If you install Xitami in a directory that contains a space, you will find
+that the service does not start correctly.  You can fix this by editing the
+registry (ugh!) to put quotes around the filename
+<A href="index18.htm#start_service">as described in the faq</A> or by installing in Progra~1
+instead of in 'Program Files'.
+
+<P>The Xitami Service version accepts various command-line arguments when
+run in a Dos window:
+<TABLE BORDER=1 WIDTH=80%>
+<TR><TH>Argument:
+<TH>Has this purpose:
+<TR><TD>-i
+<TD>Installs Xitami as a service.
+<TR><TD>-u
+<TD>Uninstalls the Xitami service.
+<TR><TD>-d
+<TD>Run Xitami as a console program.
+<TR><TD>-d -h
+<TD>Show help for command-line arguments.
+</TABLE>
+
+<P>You can pass any command-line arguments except -i, -u, and -d in the
+'Startup Parameters' field in the Service Control Manager. When you run the
+Xitami service as a command-line program, it acts identically to the vanilla
+console version. You can use the service version on Windows 95, although the
+-i and -u switches will not work.
+
+<P>The Xitami service version has the same performance as the normal 32-bits
+version, but will continue to work after you log off. Xitami runs on NT 3.51
+and later versions.
+
+<P>Under Windows NT 4.0 and later you can select the 'Add/Remove Programs'
+option in the control panel to de-install Xitami. A bug in NT means that the
+control panel itself (xiwinntc.cpl) will not be deleted. Xitami maintains
+various items in the Windows registry, but these can be removed at any time
+without affecting the server.
+
+<H4><A NAME="TOC9">Manual Installation Of The Xitami NT Service</A></H4>
+
+<P>On some (broken) NT systems that have problems running 16-bit code, the
+self-installing .exe file may cause an error. In such a case you can install
+the NT service by hand. Unzip the .exe install file (use WinZip or similar)
+into a directory like C:\Program Files\Xitami.
+
+<P>In a DOS box, in the Xitami directory, run 'xiwinnt -i' to install the
+Xitami service. Then copy xiwinntc.cpl to the Windows NT system32 directory.
+You can check that this works by using the NT service manager to stop/start
+Xitami, and using the Xitami Control Panel.
+
+<HR>
+<A NAME="win16">&nbsp;</A>
+<H3><A NAME="TOC10">Xitami for Windows 3.1 or 3.11</A></H3>
+
+<P>To run Xitami on a Windows 3.x PC you must have a 386 or higher
+processor. Xitami will run on a modest system; 4Mb RAM is enough if you do
+not run any large applications.
+
+<P>Download and run the <A href="http://users.skynet.be/sky95044/bw16.exe">16-bit Windows package</A>. The
+installation program will prompt you for an installation directory, and will
+build a program group and icons to run Xitami. To uninstall Xitami,
+double-click the Uninstall icon. Xitami does not create any files in the
+Windows directories.
+
+<P>When you have installed Xitami, run it, then connect with any web
+browser. You should see the "Welcome To Xitami" test page. If another web
+server is already using port 80, Xitami will not start. In that case, you
+can choose a new port (e.g. 5080) and then connect using the URL
+<TT>http://localhost:5080/</TT>.
+
+<P>We have tested Xitami with some 16-bit Winsock libraries, but these are
+notoriously unstable.  Our best recommendation are the Microsoft winsock
+libraries, supplied with recent 16-bit versions Explorer. Windows 3.11 is
+also reasonably robust.
+
+<P>The limitations of 16-bit Windows mean that Xitami does not support CGI
+programs under Windows 3.x. If someone tries to run a CGI program, Xitami
+will show an error page.
+
+<P>You can also run the <A href="http://users.skynet.be/sky95044/bc32.exe">32-bit console version</A> of
+Xitami if you install Win32s.  This version has all the functionality of the
+Windows 95 and NT versions (including FTP and browser-based admin) except
+CGI.  This configuration lets you build web applications using the LRWP
+protocol.
+
+<HR>
+<A NAME="os2">&nbsp;</A>
+<H3><A NAME="TOC11">Xitami for OS/2</A></H3>
+
+<P>The OS/2 version of Xitami was built using GCC 2.7.2.1 and runs with the
+EMX 0.9c environment. The EMX DLLs will be required, and are available from
+fine FTP sites everywhere (e.g. ftp.leo.org, ftp.cdrom.com,
+hobbes.nmsu.edu). Compiled with assertions and gdb debugging information
+disabled. The OS/2 version of Xitami was built by Ewen McNeill
+<ewen@naos.co.nz> who also ported SFL and SMT to OS/2.
+
+<P>The current distribution of Xitami for OS/2 was built for EMX 0.9c fix 2,
+and will work with releases up to EMX 0.9c fix 4.
+
+<P>Download the <A href="http://users.skynet.be/sky95044/bos2.zip">OS/2 binary package</A> -- you'll need an
+<A href="http://www.cdrom.com/pub/infozip/">unzip</A> tool to extract the archive. You can also build the
+server from the <A href="http://users.skynet.be/sky95044/swin.zip">Windows source package</A>, using the supplied
+xibuild.cmd file.
+
+<P>To install an Desktop icon for Xitami, run install.cmd.
+
+<P>When you have installed Xitami, run xitami.exe, then connect with any web
+browser. You should see the "Welcome To Xitami" test page. If Xitami cannot
+run on its normal port (80), it shows an error message: this can happen if
+another server is using port 80. To use an alternative HTTP port, use the
+'-b' option. This shifts the standard HTTP and FTP ports by some 'base'. For
+example, '-b 5000' runs the Xitami HTTP service on port 5080 and the FTP
+service on port 5021. You would then connect using
+<TT>http://localhost:5080/</TT>.
+
+<P>To halt Xitami, press Ctrl-C. This shuts-down the server cleanly.
+
+<H4><A NAME="TOC12">Using TCP/IP With OS/2</A></H4>
+<UL>
+<LI>OS/2 Warp Connect and OS/2 Warp 4 (Merlin) are set-up for network-based
+(LAN) TCP/IP automatically. In those cases it is just a matter of enabling
+the loop-back connection, which can be done in the TCP/IP configuration
+page, and then the address http://127.0.0.1/ can be used to access pages on
+the same system. <LI>With OS/2 Warp 3 (i.e. not the connect version) only
+serial-based TCP/IP is supplied but the loop-back connection can be enabled
+using the <TT>ifconfig</TT> command:
+<PRE>ifconfig lo 127.0.0.1 up
+</PRE>
+<LI>With OS/2 2.x there is no TCP/IP software supplied by default.
+However, there is an extra package available from IBM (even today, we
+think), which adds TCP/IP networking.  OS/2 1.x (16 bit code) doesn't
+support TCP/IP at all as far as we know.
+</UL>
+
+<P>In all cases where TCP/IP is bundled with OS/2, it is an installation
+option. Obviously the TCP/IP software must be installed to use TCP/IP-based
+programs like Xitami.
+
+<P>As far as we know, OS/2 can be used without a nameserver available (we
+use a Linux machine as the nameserver for our network), if a 'hosts' file is
+set up in the %ETC% directory (i.e. the directory pointed at by the ETC
+environment variable. This directory is typically d:\tcpip\etc, or
+d:\mptn\etc, where d: is the boot drive). The 'hosts' file should contain
+the normal host information, i.e. the IP address, and then the name
+associated with that IP address, on the same line separated by (one or more)
+spaces. OS/2 can be told to use the hosts file before checking DNS by
+setting the environment variable; set this line in config.sys and reboot:
+<PRE>USE_HOSTS_FIRST=1
+</PRE>
+
+<A NAME="emx">&nbsp;</A>
+<H4><A NAME="TOC13">Configuring The EMX System</A></H4>
+
+<P>The default number of file handles for an EMX is around 20-40. This is
+too little for a heavily-used server, and you may get errors logged as "out
+of file handles".
+
+<P>The number of file handles available in programs that use EMX can be
+controlled via a runtime settable environment variable, EMXOPT.
+
+<P>From the EMX runtime documentation (emxrt.doc):
+<PRE>7 emx options
+=============
+
+You can customize emx by setting the EMXOPT environment variable. This
+environment variable contains a list of options, similar to command line
+options. The options must be separated by at least one blank.  Example:
+
+    set emxopt=-c -h40
+
+7.1 emx options (OS/2)
+----------------------
+
+-c      Disable core dumps caused by signals and exceptions
+
+-h#     Set OS/2 file handle limit to #.  The number # must be between
+        10 and 65536
+[...]
+</PRE>
+
+<P>For a busy web server, a good value would be 120:
+<PRE>set EMXOPT=-h120</PRE>
+
+<H4><A NAME="TOC14">Source Installation For OS/2</A></H4>
+
+<P>With the EMX development system (including the GNU C compiler) you can
+rebuild Xitami on your OS/2 system. You must have installed EMX (we
+recommend version 0.9c) including these packages: emxrt.zip, bsddev.zip,
+gnudev1.zip, gnudev2.zip, emxdev1.zip, emxdev2.zip.
+
+<P>To rebuild Xitami, first unzip the source package in a suitable
+directory, e.g. C:\Xitami.  This creates a source tree and also installs the
+various files and subdirectories that are needed for running Xitami.  The
+sources are in src\sfl and src\smt.  You can build the executable using the
+command file 'xibuild'.  If this fails, for some reason, you must build SFL
+and SMT manually, but this is fairly simple:
+<OL>
+<LI>Open an OS/2 command window and cd to src\sfl, and type the command
+'build'. If all goes well, this will compile the SFL library, and link a
+number of test programs. The two files that you really need are libsfl.a (or
+libsfl.lib, depending on how EMX is configured) and sfl.h.
+<LI>Copy these two files into src\smt.  Now type 'build' in that directory
+too.  This creates a number of files, but the two you really need are
+xitami.exe and xixlat.exe.
+<LI>Copy these two files into .... (the main Xitami directory).  You can
+now type 'xitami' to start the web server.
+</OL>
+
+<HR>
+<A NAME="unix">&nbsp;</A>
+<H3><A NAME="TOC15">Source Installation For UNIX</A></H3>
+
+<P>With an ANSI C compiler, you can rebuild Xitami on your system. Note that
+the Xitami sources are ANSI C/POSIX compatible, and should build cleanly on
+the majority of UNIX systems.  We and other people have tested Xitami on
+these systems:
+<UL>
+<LI>Linux
+<LI>IBM RS/6000 AIX
+<LI>HP/UX
+<LI>Digital UNIX (OSF/1)
+<LI>SunOS and Solaris
+<LI>SCO UNIXWare and OpenServer
+<LI>SGI Irix
+<LI>FreeBSD, BSD/OS, NetBSD
+</UL>
+
+<P>To install the source kit you need about 15Mb of disk space. You can
+download the Xitami sources as a compressed tar file (.tgz). To unpack
+a tgz file you need GNU gunzip.  Download the
+<A href="http://users.skynet.be/sky95044/suni.tgz">suni.tgz</A> source kit.  To unpack the compressed file,
+give these commands:
+<PRE>gunzip suni.tgz
+tar -xvf suni.tar
+</PRE>
+
+<P>The resulting directory structure includes the full sources for Xitami
+(basically the <A href="http://www.imatix.com/html/sfl/">SFL</A> and <A href="http://www.imatix.com/html/smt/">SMT</A> packages), plus a build script,
+<TT>xibuild</TT>, plus the directories and web pages you need to get started
+with Xitami.
+
+<P>The <TT>xibuild</TT> script compiles Xitami and installs the executable
+program in the top directory (where <TT>xibuild</TT> is located). To run
+<TT>xibuild</TT>, give these commands:
+
+<PRE>chmod +x xibuild
+./xibuild</PRE>
+
+<P>When you have built Xitami, run xitami, then connect with any web
+browser. You should see the "Welcome To Xitami" test page. If Xitami cannot
+run on its normal port (80), it shows an error message: this can happen if
+another server is using port 80. To use an alternative HTTP port, use the
+'-b' option. This shifts the standard HTTP and FTP ports by some 'base'. For
+example, '-b 5000' runs the Xitami HTTP service on port 5080 and the FTP
+service on port 5021. You would then connect using
+<TT>http://localhost:5080/</TT>.
+
+<P>If Xitami does not build cleanly on your system, the problem will usually
+lie in non-standard code in the SFL library upon which Xitami is based. It's
+possible that your system (or compiler) does not do what SFL expects. In
+general the only file which you may need to change is the prelude.h file in
+the SFL directory. Read the SFL doc if you think you want to make changes to
+this library (it's pretty simple, really, and many people done this).
+
+<HR>
+<A NAME="vms">&nbsp;</A>
+<H3><A NAME="TOC16">Source Installation For OpenVMS</A></H3>
+
+<P>With UCX and Vax C or Dec C, you can rebuild Xitami on your OpenVMS
+system. OpenVMS 6.1 or prior may not work correctly.  Note that the Xitami
+sources are ANSI C/POSIX compatible, and depend on support from the OpenVMS
+system libraries to some extent. These were not fully POSIX in OpenVMS prior
+to 7.0, through Xitami (actually, SFL, which provides the portability layer)
+gets around the most blatant differences.
+
+<P>The section on building Xitami must still be completed.  However, the
+process is fairly simple:
+<UL>
+<LI>Install the UNIX source kit.
+<LI>Build the SFL library by compiling all the files sfl*.c in the src/sfl
+directory.  Create a library libsfl.olb containing the resulting objects.
+You should find that the command @build.txt does this.
+<LI>Build the SMT library by compiling all the files smt*.c (except
+smtschm.c) and all the files xi*.c.  Create a library libsmt.old containing
+the resulting objects.
+<LI>Link xitami.obj with these two libraries to give xitami.exe and copy
+this to the root install directory.
+<LI>Define an external command:
+<PRE>$ xitami :== $disk_whatever:[root.install.dir]xitami.exe
+</PRE>
+<LI>Run xitami with arguments '-b 5000' to start it on port 5080.
+</UL>
+
+<P>Xitami runs fully, except for a couple of restrictions. The directory
+list functions do not (yet) work. To run a CGI program you must define an
+external command before starting the server. This is necessary so that
+Xitami can pass arguments to the program. For example:
+<PRE>$ testcgi :== $DKA300:[.cgi-bin]testcgi.exe
+$ xitami -b 5000
+</PRE>
+
+<HR><TABLE WIDTH=100%><TR><TD ALIGN=LEFT WIDTH=60%>
+ | <A href="index.htm">&lt;&lt;</A> | <A href="index1.htm">&lt;</A>
+ | <A href="index3.htm">&gt;</A> | <A href="license.htm">&gt;&gt;</A>
+<BR><FONT SIZE=2>
+| <A href="index.htm">Welcome To Xitami</A>
+| <A href="index1.htm">Table Of Contents</A>
+| <EM>Installing Xitami</EM>
+| <A href="index3.htm">Administration</A>
+| <A href="index4.htm">Configuration</A>
+| <A href="index5.htm">Using The Common Gateway Interface (CGI)</A>
+| <A href="index6.htm">Server-Side Includes (SSI)</A>
+| <A href="index7.htm">Using Filters</A>
+| <A href="index8.htm">Server-Side XML Processing</A>
+| <A href="index9.htm">Server-Side GSL Scripting</A>
+| <A href="index10.htm">Image Maps</A>
+| <A href="index11.htm">Virtual Hosts</A>
+| <A href="index12.htm">The FTP Service</A>
+| <A href="index13.htm">The Dynamic DNS Feature</A>
+| <A href="index14.htm">Throttle Pipes</A>
+| <A href="index15.htm">A Beginner's Guide</A>
+| <A href="index16.htm">Writing Web Server Extension (WSX) Agents</A>
+| <A href="index17.htm">Extending Xitami with External Peer Processes</A>
+| <A href="index18.htm">FAQ</A>
+| <A href="index19.htm">Getting Support</A>
+| <A href="index20.htm">Credits</A>
+| <A href="index21.htm">Release History</A>
+| <A href="license.htm">License Agreement</A>
+<TD ALIGN=RIGHT NOWRAP>
+<A HREF="/index.htm"><IMG SRC="/images/imatix.gif" WIDTH=96 HEIGHT=36 ALT="iMatix" BORDER=0></A>
+<BR><FONT SIZE=2>Copyright &#169; 1996-2002 iMatix Corporation</TABLE>
+</BODY></HTML>

@@ -1,0 +1,5 @@
+#   This is the goodbye text file for the FTP service.
+#   Lines starting with '#' are ignored.
+#
+
+Thank you for using this Xitami webserver.

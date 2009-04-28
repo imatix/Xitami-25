@@ -1,0 +1,216 @@
+#============================================================================
+#                                                                             
+#   fmlgen.fmt - FMLgen code generation formats                               
+#                                                                             
+#   Copyright (c) 1991-2003 iMatix Corporation                                
+#                                                                             
+#   ------------------ GPL Licensed Source Code ------------------            
+#   iMatix makes this software available under the GNU General                
+#   Public License (GPL) license for open source projects.  For               
+#   details of the GPL license please see www.gnu.org or read the             
+#   file license.gpl provided in this package.                                
+#                                                                             
+#   This program is free software; you can redistribute it and/or             
+#   modify it under the terms of the GNU General Public License as            
+#   published by the Free Software Foundation; either version 2 of            
+#   the License, or (at your option) any later version.                       
+#                                                                             
+#   This program is distributed in the hope that it will be useful,           
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of            
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             
+#   GNU General Public License for more details.                              
+#                                                                             
+#   You should have received a copy of the GNU General Public                 
+#   License along with this program in the file 'license.gpl'; if             
+#   not, write to the Free Software Foundation, Inc., 59 Temple               
+#   Place - Suite 330, Boston, MA 02111-1307, USA.                            
+#                                                                             
+#   You can also license this software under iMatix's General Terms           
+#   of Business (GTB) for commercial projects.  If you have not               
+#   explicitly licensed this software under the iMatix GTB you may            
+#   only use it under the terms of the GNU General Public License.            
+#                                                                             
+#   For more information, send an email to info@imatix.com.                   
+#   --------------------------------------------------------------            
+#============================================================================  
+
+format OUTPUT_HEAD =
+/*---------------------------------------------------------------------------
+@*
+" *  $codefile - HTML form definition"
+ *
+@*
+" *  Generated $date, $time by fxgen $version"
+ *  See Studio on-line help pages at <http://www.imatix.com>.
+ *---------------------------------------------------------------------------*/
+
+@*
+"#ifndef __FORM_\U$formname\E__"
+@*
+"#define __FORM_\U$formname\E__"
+
+@*
+"#include \"sfl.h\""
+@*
+"#include \"formio.h\""
+
+
+.
+
+format FORM_CONSTANTS_HEAD =
+/*  Constants defining size of tables, etc.                                  */
+
+.
+
+format FORM_CONSTANT =
+@*
+sprintf ("#define %-35s %s", $name, $value)
+.
+
+format FORM_CONSTANTS_FOOT =
+
+.
+
+format FORM_BLOCKS_HEAD =
+/*  This table contains each block in the form                               */
+
+@*
+"static byte $formname"."_blocks [] = {"
+.
+
+format FORM_BLOCK_COMMENT =
+    /*  @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  */
+        $_
+.
+
+format FORM_BLOCK_DATA =
+    ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    $_
+~~  ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    $_
+.
+
+format FORM_BLOCKS_FOOT =
+    0, 0, 0
+    };
+
+.
+
+format FORM_FIELDS_HEAD =
+@*
+"static FIELD_DEFN $formname"."_fields [] = {"
+.
+
+format FORM_FIELD =
+@*
+sprintf ("    %-36s/*  %-32s*/", "{ $offset, $block, $max },", $field_name)
+.
+
+format FORM_FIELDS_FOOT =
+@*
+sprintf ("    %-36s/*  %-32s*/", "{ $offset, 0, 0 },", "-- sentinel --")
+    };
+
+.
+
+format FORM_DATA_HEAD =
+/*  The data of a form is a list of attributes and fields                    */
+
+typedef struct {
+.
+
+format FORM_DATA_ATTR =
+@*
+"    byte   $flong_a".($ftimes? " [$ftimes]":"")." ;"
+.
+
+format FORM_DATA_TEXTUAL =
+@*
+"    char   $flong".($ftimes? " [$ftimes]":"")." [$fmax + 1];"
+.
+
+format FORM_DATA_FILE =
+@*
+"    char   $flong".($ftimes? " [$ftimes]":"")." [$fmax + 1];"
+.
+
+format FORM_DATA_NUMERIC =
+@*
+"    char   $flong".($ftimes? " [$ftimes]":"")." [$fmax + 1];"
+.
+
+format FORM_DATA_DATE =
+@*
+"    char   $flong".($ftimes? " [$ftimes]":"")." [8 + 1];"
+.
+
+format FORM_DATA_TIME =
+@*
+"    char   $flong".($ftimes? " [$ftimes]":"")." [8 + 1];"
+.
+
+format FORM_DATA_TEXTBOX =
+@*
+"    char   $flong".($ftimes? " [$ftimes]":"")." [$fmax + 1];"
+.
+
+format FORM_DATA_BOOLEAN =
+@*
+"    char   $flong".($ftimes? " [$ftimes]":"")." [1 + 1];"
+.
+
+format FORM_DATA_SELECT =
+@*
+"    char   $flong".($ftimes? " [$ftimes]":"")." [3 + 1];"
+.
+
+format FORM_DATA_RADIO =
+@*
+"    char   $flong".($ftimes? " [$ftimes]":"")." [3 + 1];"
+.
+
+format FORM_DATA_IMAGE =
+@*
+"    char   $flong".($ftimes? " [$ftimes]":"")." [$fmax + 1];"
+.
+
+format FORM_ACTION_ATTR =
+@*
+"    byte   $fname".($ftimes? " [$ftimes]":"").";"
+.
+
+format FORM_DATA_FOOT =
+@*
+"    } \U$formname\E_DATA;"
+
+.
+
+format FORM_DEFINITION =
+/*  The form definition collects these tables into a header                  */
+
+@*
+"static FORM_DEFN form_$formname = {"
+@*
+"    $formname"."_blocks,"
+@*
+"    $formname"."_fields,"
+@*
+sprintf ("    %-36s/*  %-32s*/", "$block_count,", "Number of blocks in form")
+@*
+sprintf ("    %-36s/*  %-32s*/", "$field_count,", "Number of fields in form")
+@*
+sprintf ("    %-36s/*  %-32s*/", "$action_count,", "Number of actions in form")
+@*
+sprintf ("    %-36s/*  %-32s*/", "$fields_size,", "Size of fields")
+@*
+sprintf ("    %-36s/*  %-32s*/", "\"$formname\",", "Name of form")
+    };
+
+.
+
+format OUTPUT_FOOT =
+@*
+"#endif                                  /*  End included file               */"
+.
+
+1;                                      #   Return a True value

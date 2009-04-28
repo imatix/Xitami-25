@@ -1,0 +1,373 @@
+#============================================================================
+#                                                                             
+#   fdlgen.fmt - FDLgen code generation formats                               
+#                                                                             
+#   Copyright (c) 1991-2003 iMatix Corporation                                
+#                                                                             
+#   ------------------ GPL Licensed Source Code ------------------            
+#   iMatix makes this software available under the GNU General                
+#   Public License (GPL) license for open source projects.  For               
+#   details of the GPL license please see www.gnu.org or read the             
+#   file license.gpl provided in this package.                                
+#                                                                             
+#   This program is free software; you can redistribute it and/or             
+#   modify it under the terms of the GNU General Public License as            
+#   published by the Free Software Foundation; either version 2 of            
+#   the License, or (at your option) any later version.                       
+#                                                                             
+#   This program is distributed in the hope that it will be useful,           
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of            
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             
+#   GNU General Public License for more details.                              
+#                                                                             
+#   You should have received a copy of the GNU General Public                 
+#   License along with this program in the file 'license.gpl'; if             
+#   not, write to the Free Software Foundation, Inc., 59 Temple               
+#   Place - Suite 330, Boston, MA 02111-1307, USA.                            
+#                                                                             
+#   You can also license this software under iMatix's General Terms           
+#   of Business (GTB) for commercial projects.  If you have not               
+#   explicitly licensed this software under the iMatix GTB you may            
+#   only use it under the terms of the GNU General Public License.            
+#                                                                             
+#   For more information, send an email to info@imatix.com.                   
+#   --------------------------------------------------------------            
+#============================================================================  
+
+format FORM_START =
+<FORM METHOD=POST ACTION="#(proto)#(host)#(uri)">
+<INPUT TYPE=HIDDEN NAME=jsaction VALUE="">
+.
+
+format FORM_MULTI_START =
+<FORM METHOD=POST ACTION="#(proto)#(host)#(uri)" ENCTYPE="multipart/form-data">
+<INPUT TYPE=HIDDEN NAME=jsaction VALUE="">
+.
+
+format FORM_END =
+.formend
+<!--FML FIELD=message_to_user SIZE=120 TEXTUAL HIDDEN -->
+<!--FML /FIELD -->
+</FORM>
+.
+
+format CONSTANT =
+@*
+"<!--FML CONST=$fname VALUE=$fvalue -->"
+<!--FML /CONST -->
+.
+
+format FIELDS_START =
+@*
+"<TABLE WIDTH=\"$table_width\"$border$compact$attrs>"
+.
+format FIELDS_END =
+</TABLE>
+.
+
+format BODY_TEXT_FIELD =
+@*
+"<TR><TD COLSPAN=99 ALIGN=$lalign VALIGN=$valign CLASS=tdbody>"
+.
+
+format LABEL_NEW_LINE =
+@*
+"<TR><TD ALIGN=$lalign VALIGN=$valign NOWRAP CLASS=tdlabel>"
+@*
+"<!--FML FIELD=F$fnumber TEXTUAL $flattr NAME=L_$fname VALUE=\"$flabel\" -->"
+@*
+"$flabel"
+@*
+"<!--FML /FIELD-->"
+@*
+"</TD><TD VALIGN=$valign ALIGN=$falign$fwrap$fwidth CLASS=tdvalue>"
+.
+
+format LABEL_NEW_LINE_EMPTY =
+@*
+"<TR><TD></TD><TD VALIGN=$valign ALIGN=$falign$fwrap$fwidth CLASS=tdvalue>"
+.
+
+format LABEL_SAME_LINE =
+@*
+"<!--FML FIELD=F$fnumber TEXTUAL $flattr NAME=L_$fname VALUE=\"$flabel\" -->"
+@*
+"$flabel"
+@*
+"<!--FML /FIELD-->"
+.
+
+format TEXTUAL_FIELD =
+@*
+"<!--FML FIELD=F$fnumber TEXTUAL $fattr NAME=$fname"
+@*
+"SIZE=$fsize MAX=$fmax UPPER=$fupper ATTR=\"$ffattr\" VALUE=\"$fvalue\" -->"
+@*
+"<INPUT TYPE=TEXT SIZE=$fsize VALUE=\"$fvalue\" $ffattr>"
+@*
+"<!--FML /FIELD-->"
+.
+
+format FILE_FIELD =
+@*
+"<!--FML FIELD=F$fnumber FILE $fattr NAME=$fname"
+@*
+"SIZE=$fsize MAX=$fmax ATTR=\"$ffattr\" VALUE=\"$fvalue\" -->"
+@*
+"<INPUT TYPE=FILE SIZE=$fsize VALUE=\"$fvalue\" $ffattr>"
+@*
+"<!--FML /FIELD-->"
+.
+
+format TEXTBOX_FIELD =
+@*
+"<!--FML FIELD=F$fnumber TEXTBOX $fattr NAME=$fname"
+@*
+"ROWS=$frows COLS=$fcols MAX=$fmax UPPER=$fupper ATTR=\"$ffattr\" VALUE=\"$fvalue\" -->"
+@*
+"<TEXTAREA ROWS=$frows COLS=$fcols WRAP=\"VIRTUAL\" $ffattr>$fvalue</TEXTAREA>"
+@*
+"<!--FML /FIELD-->"
+.
+
+format NUMERIC_FIELD =
+@*
+"<!--FML FIELD=F$fnumber NUMERIC $fattr NAME=$fname"
+@*
+"SIGN=$fsign DECS=$fdecs DECFMT=$fdecfmt FILL=$ffill BLANK=$fblank"
+@*
+"COMMA=$fcomma SIZE=$fsize MAX=$fmax ATTR=\"$ffattr\" VALUE=\"$fvalue\" -->"
+@*
+"<INPUT TYPE=TEXT SIZE=$fsize VALUE=\"$fvalue\" $ffattr>"
+@*
+"<!--FML /FIELD-->"
+.
+
+format DATE_FIELD =
+@*
+"<!--FML FIELD=F$fnumber DATE $fattr NAME=$fname"
+@*
+"PICTURE=\"$fpicture\" SHOW=$fshow FORMAT=$fformat SIZE=15"
+@*
+"YEAR=$fyear MONTH=$fmonth DAY=$fday ATTR=\"$ffattr\" VALUE=\"$fvalue\" -->"
+@*
+"<INPUT TYPE=TEXT SIZE=15 VALUE=\"$fvalue\" $ffattr>"
+@*
+"<!--FML /FIELD-->"
+.
+
+format TIME_FIELD =
+@*
+"<!--FML FIELD=F$fnumber TIME $fattr NAME=$fname"
+@*
+"PICTURE=\"$fpicture\" SIZE=$fsize MAX=$fmax ATTR=\"$ffattr\" VALUE=\"$fvalue\" -->"
+@*
+"<INPUT TYPE=TEXT SIZE=8 VALUE=\"$fvalue\" $ffattr>"
+@*
+"<!--FML /FIELD-->"
+.
+
+format BOOLEAN_FIELD =
+@*
+"<!--FML FIELD=F$fnumber BOOLEAN $fattr NAME=$fname"
+@*
+"TRUE=$ftrue FALSE=$ffalse ATTR=\"$ffattr\" VALUE=$fvalue -->"
+@*
+"<INPUT TYPE=CHECKBOX $ffattr>"
+@*
+"<!--FML /FIELD-->"
+.
+
+format SELECT_HEAD =
+@*
+"<!--FML FIELD=F$fnumber SELECT $fattr NAME=$fname SIZE=$fsize VALUE=$fvalue"
+@*
+"CHANGE=$fchange ATTR=\"$ffattr\" TYPE=$ftype 0=\"$fvalue_0\" $fvalue_list -->"
+@*
+"<SELECT SIZE=$fsize $ffattr>"
+@*
+"<OPTION>$fvalue_0"
+.
+format SELECT_ENTRY =
+@*
+"<OPTION>$option_value"
+.
+format SELECT_FOOT =
+@*
+"</SELECT>"
+@*
+"<!--FML /FIELD-->"
+.
+
+format RADIO_HEAD =
+@*
+"<!--FML FIELD=F$fnumber RADIO $fattr NAME=$fname COLUMN=$fcolumn VALUE=$fvalue"
+@*
+"CHANGE=$fchange ATTR=\"$ffattr\" TYPE=$ftype 0=\"$fvalue_0\" $fvalue_list -->"
+.
+format RADIO_ENTRY =
+@*
+"$radio_break<INPUT TYPE=RADIO NAME=$fname>$option_value"
+.
+format RADIO_BREAK =
+<BR>
+.
+format RADIO_FOOT =
+@*
+"<!--FML /FIELD-->"
+.
+
+format ACTION_FIELD_BUTTON =
+@*
+"<!--FML ACTION=$fname LABEL=\"$fvalue\" EVENT=$fevent CONFIRM=\"$fconfirm\" ATTR=\"$ffattr\" TYPE=BUTTON -->"
+@*
+"<INPUT TYPE=SUBMIT NAME=\"$fname\" VALUE=\"$fvalue\" $ffattr>"
+@*
+"<!--FML /ACTION-->"
+.
+format ACTION_FIELD_PLAIN =
+@*
+"<!--FML ACTION=$fname LABEL=\"$fvalue\" EVENT=$fevent CONFIRM=\"$fconfirm\" ATTR=\"$ffattr\" TYPE=PLAIN -->"
+@*
+"<A HREF=$fhref $ffattr>$fvalue</A>"
+@*
+"<!--FML /ACTION-->"
+.
+format ACTION_FIELD_IMAGE =
+@*
+"<!--FML ACTION=$fname LABEL=\"$fvalue\" EVENT=$fevent CONFIRM=\"$fconfirm\" ATTR=\"$ffattr\" TYPE=IMAGE"
+@*
+"HEIGHT=$fheight WIDTH=\"$fwidth\" ROLLOVER=\"$frollover\"-->"
+@*
+"<A HREF=$fhref $ffattr><IMG ALIGN=\"top\" SRC=\"$fvalue\" BORDER=0></A>"
+@*
+"<!--FML /ACTION-->"
+.
+
+format INDEX_FIELD =
+@*
+"<!--FML FIELD=$fname NUMERIC BLANK SIZE=4 VALUE=$fvalue-->"
+@*
+"<!--FML /FIELD-->"
+.
+
+format CLOSE_FIELD =
+</TD></TR>
+.
+
+format FIX_TABLE_START =
+@*
+"<TABLE WIDTH=\"$table_width\" $border$compact$attrs>"
+.
+format FIX_TABLE_TITLE_HEAD =
+<TR>
+.
+format FIX_TABLE_TITLE =
+@*
+"<TH ALIGN=$lalign VALIGN=$valign$fwrap$fwidth>"
+@*
+"<!--FML FIELD=F$fnumber TEXTUAL LABEL NAME=L_$fname VALUE=\"$flabel\" -->"
+@*
+"$flabel"
+@*
+"<!--FML /FIELD-->"
+@*
+"</TH>"
+.
+format FIX_TABLE_TITLE_EMPTY =
+@*
+"<TH ALIGN=$lalign VALIGN=$valign$fwrap$fwidth></TH>"
+.
+format FIX_TABLE_TITLE_FOOT =
+</TR>
+.
+format FIX_TABLE_ITEM_HEAD =
+<TR>
+.
+format FIX_TABLE_ITEM_START =
+@*
+"<TD ALIGN=$falign VALIGN=$valign$fwrap CLASS=tdfield>"
+.
+format FIX_TABLE_ITEM_END =
+</TD>
+.
+format FIX_TABLE_ITEM_FOOT =
+</TR>
+.
+format FIX_TABLE_END =
+</TABLE>
+.
+
+format VAR_TABLE_START =
+@*
+"<TABLE WIDTH=\"$table_width\" $border$compact$attrs>"
+.
+format VAR_TABLE_TITLE_HEAD =
+<TR>
+.
+format VAR_TABLE_TITLE =
+@*
+"<TH ALIGN=$lalign VALIGN=$valign$fwrap$fwidth>"
+@*
+"<!--FML FIELD=F$fnumber TEXTUAL LABEL NAME=L_$fname VALUE=\"$flabel\" -->"
+@*
+"$flabel"
+@*
+"<!--FML /FIELD-->"
+@*
+"</TH>"
+.
+format VAR_TABLE_TITLE_EMPTY =
+@*
+"<TH ALIGN=$lalign VALIGN=$valign$fwrap$fwidth></TH>"
+.
+format VAR_TABLE_TITLE_FOOT =
+@*
+"<!--FML REPEAT=$table_name ROWS=$table_rows -->"
+</TR>
+.
+format VAR_TABLE_ITEM_HEAD =
+<TR>
+.
+format VAR_TABLE_ITEM_START =
+@*
+"<TD ALIGN=$falign VALIGN=$valign$fwrap CLASS=tdfield>"
+.
+format VAR_TABLE_ITEM_END =
+</TD>
+.
+format VAR_TABLE_ITEM_FOOT =
+</TR>
+.
+format VAR_TABLE_END =
+<!--FML /REPEAT--></TABLE>
+.
+
+format DO_START_IF =
+@*
+"<!--FML IF=$fname VALUE=$fvalue-->"
+.
+
+format DO_END_IF =
+<!--FML /IF-->
+.
+
+format DO_START_UNLESS =
+@*
+"<!--FML UNLESS=$fname VALUE=$fvalue-->"
+.
+
+format DO_END_UNLESS =
+<!--FML /UNLESS-->
+.
+
+format DO_START_REPEAT =
+@*
+"<!--FML REPEAT=$fname ROWS=$frows -->"
+.
+
+format DO_END_REPEAT =
+<!--FML /REPEAT-->
+.
+
+1;                                      #   Return a True value

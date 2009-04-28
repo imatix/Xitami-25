@@ -1,0 +1,249 @@
+<HTML><HEAD><!--Revised: 22 Jul, 2004 By: iMatix Corporation-->
+<TITLE>Xitami installation for OS/2</TITLE></HEAD>
+<TABLE WIDTH=100%><TR>
+<TD ALIGN=LEFT><A href="http://www.imatix.com/">iMatix home page</A>
+<TD ALIGN=RIGHT><FONT SIZE=4><B>Xitami</B><BR><FONT SIZE=2>Version 2.5b6
+</TABLE>
+<HR>
+<H3><A NAME="TOC11">Xitami for OS/2</A></H3>
+
+
+
+<P>The OS/2 version of Xitami was built using GCC 2.7.2.1 and runs with the
+
+EMX 0.9c environment. The EMX DLLs will be required, and are available from
+
+fine FTP sites everywhere (e.g. ftp.leo.org, ftp.cdrom.com,
+
+hobbes.nmsu.edu). Compiled with assertions and gdb debugging information
+
+disabled. The OS/2 version of Xitami was built by Ewen McNeill
+
+<ewen@naos.co.nz> who also ported SFL and SMT to OS/2.
+
+
+
+<P>The current distribution of Xitami for OS/2 was built for EMX 0.9c fix 2,
+
+and will work with releases up to EMX 0.9c fix 4.
+
+
+
+<P>Download the <A href="http://users.skynet.be/sky95044/bos2.zip">OS/2 binary package</A> -- you'll need an
+
+<A href="http://www.cdrom.com/pub/infozip/">unzip</A> tool to extract the archive. You can also build the
+
+server from the <A href="http://users.skynet.be/sky95044/swin.zip">Windows source package</A>, using the supplied
+
+xibuild.cmd file.
+
+
+
+<P>To install an Desktop icon for Xitami, run install.cmd.
+
+
+
+<P>When you have installed Xitami, run xitami.exe, then connect with any web
+
+browser. You should see the "Welcome To Xitami" test page. If Xitami cannot
+
+run on its normal port (80), it shows an error message: this can happen if
+
+another server is using port 80. To use an alternative HTTP port, use the
+
+'-b' option. This shifts the standard HTTP and FTP ports by some 'base'. For
+
+example, '-b 5000' runs the Xitami HTTP service on port 5080 and the FTP
+
+service on port 5021. You would then connect using
+
+<TT>http://localhost:5080/</TT>.
+
+
+
+<P>To halt Xitami, press Ctrl-C. This shuts-down the server cleanly.
+
+
+
+<H4><A NAME="TOC12">Using TCP/IP With OS/2</A></H4>
+
+<UL>
+
+<LI>OS/2 Warp Connect and OS/2 Warp 4 (Merlin) are set-up for network-based
+
+(LAN) TCP/IP automatically. In those cases it is just a matter of enabling
+
+the loop-back connection, which can be done in the TCP/IP configuration
+
+page, and then the address http://127.0.0.1/ can be used to access pages on
+
+the same system. <LI>With OS/2 Warp 3 (i.e. not the connect version) only
+
+serial-based TCP/IP is supplied but the loop-back connection can be enabled
+
+using the <TT>ifconfig</TT> command:
+
+<PRE>ifconfig lo 127.0.0.1 up
+
+</PRE>
+
+<LI>With OS/2 2.x there is no TCP/IP software supplied by default.
+
+However, there is an extra package available from IBM (even today, we
+
+think), which adds TCP/IP networking.  OS/2 1.x (16 bit code) doesn't
+
+support TCP/IP at all as far as we know.
+
+</UL>
+
+
+
+<P>In all cases where TCP/IP is bundled with OS/2, it is an installation
+
+option. Obviously the TCP/IP software must be installed to use TCP/IP-based
+
+programs like Xitami.
+
+
+
+<P>As far as we know, OS/2 can be used without a nameserver available (we
+
+use a Linux machine as the nameserver for our network), if a 'hosts' file is
+
+set up in the %ETC% directory (i.e. the directory pointed at by the ETC
+
+environment variable. This directory is typically d:\tcpip\etc, or
+
+d:\mptn\etc, where d: is the boot drive). The 'hosts' file should contain
+
+the normal host information, i.e. the IP address, and then the name
+
+associated with that IP address, on the same line separated by (one or more)
+
+spaces. OS/2 can be told to use the hosts file before checking DNS by
+
+setting the environment variable; set this line in config.sys and reboot:
+
+<PRE>USE_HOSTS_FIRST=1
+
+</PRE>
+
+
+
+<A NAME="emx">&nbsp;</A>
+
+<H4><A NAME="TOC13">Configuring The EMX System</A></H4>
+
+
+
+<P>The default number of file handles for an EMX is around 20-40. This is
+
+too little for a heavily-used server, and you may get errors logged as "out
+
+of file handles".
+
+
+
+<P>The number of file handles available in programs that use EMX can be
+
+controlled via a runtime settable environment variable, EMXOPT.
+
+
+
+<P>From the EMX runtime documentation (emxrt.doc):
+
+<PRE>7 emx options
+
+=============
+
+
+
+You can customize emx by setting the EMXOPT environment variable. This
+
+environment variable contains a list of options, similar to command line
+
+options. The options must be separated by at least one blank.  Example:
+
+
+
+    set emxopt=-c -h40
+
+
+
+7.1 emx options (OS/2)
+
+----------------------
+
+
+
+-c      Disable core dumps caused by signals and exceptions
+
+
+
+-h#     Set OS/2 file handle limit to #.  The number # must be between
+
+        10 and 65536
+
+[...]
+
+</PRE>
+
+
+
+<P>For a busy web server, a good value would be 120:
+
+<PRE>set EMXOPT=-h120</PRE>
+
+
+
+<H4><A NAME="TOC14">Source Installation For OS/2</A></H4>
+
+
+
+<P>With the EMX development system (including the GNU C compiler) you can
+
+rebuild Xitami on your OS/2 system. You must have installed EMX (we
+
+recommend version 0.9c) including these packages: emxrt.zip, bsddev.zip,
+
+gnudev1.zip, gnudev2.zip, emxdev1.zip, emxdev2.zip.
+
+
+
+<P>To rebuild Xitami, first unzip the source package in a suitable
+
+directory, e.g. C:\Xitami.  This creates a source tree and also installs the
+
+various files and subdirectories that are needed for running Xitami.  The
+
+sources are in src\sfl and src\smt.  You can build the executable using the
+
+command file 'xibuild'.  If this fails, for some reason, you must build SFL
+
+and SMT manually, but this is fairly simple:
+
+<OL>
+
+<LI>Open an OS/2 command window and cd to src\sfl, and type the command
+
+'build'. If all goes well, this will compile the SFL library, and link a
+
+number of test programs. The two files that you really need are libsfl.a (or
+
+libsfl.lib, depending on how EMX is configured) and sfl.h.
+
+<LI>Copy these two files into src\smt.  Now type 'build' in that directory
+
+too.  This creates a number of files, but the two you really need are
+
+xitami.exe and xixlat.exe.
+
+<LI>Copy these two files into .... (the main Xitami directory).  You can
+
+now type 'xitami' to start the web server.
+
+</OL>
+
+<HR><FONT SIZE=2>Copyright &#169; 1996-99 iMatix Corporation
+</BODY></HTML>
